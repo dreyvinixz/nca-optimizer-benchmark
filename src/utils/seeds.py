@@ -1,0 +1,22 @@
+"""Utilities for reproducible experiment execution."""
+
+from __future__ import annotations
+
+import os
+import random
+
+import numpy as np
+
+
+def set_global_seed(seed: int) -> None:
+    """Set Python, NumPy, and TensorFlow seeds when TensorFlow is available."""
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+
+    try:
+        import tensorflow as tf  # type: ignore
+
+        tf.random.set_seed(seed)
+    except Exception:
+        pass

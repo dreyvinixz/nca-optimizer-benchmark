@@ -1,0 +1,26 @@
+assets:
+  - symbol: WIN
+    name: Mini Index Futures
+    exchange: B3
+    status: legacy_primary
+    notes: Initial benchmark asset represented by data/raw/merged_output.csv.
+  - symbol: IND
+    name: Full Index Futures
+    exchange: B3
+    status: planned
+    notes: Future multi-asset extension.
+  - symbol: WDO
+    name: Mini Dollar Futures
+    exchange: B3
+    status: planned
+    notes: Future multi-asset extension.
+  - symbol: DOL
+    name: Full Dollar Futures
+    exchange: B3
+    status: planned
+    notes: Future multi-asset extension.
+
+current_scope:
+  primary_asset: WIN
+  frequency: 5-minute legacy data
+  dataset_path: data/raw/merged_output.csv

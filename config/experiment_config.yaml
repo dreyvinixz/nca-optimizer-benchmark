@@ -1,0 +1,54 @@
+experiment:
+  name: nca_optimizer_benchmark_v1
+  target_journal: Neural Computing and Applications
+  contribution: controlled optimizer benchmark for neural intraday trend classification
+
+data:
+  datetime_column: datetime
+  target_column: trend
+  label_mapping:
+    downtrend: 0
+    uptrend: 1
+  selected_feature_set: InfoGain_7
+  selected_feature_indices: [30, 52, 31, 53, 42, 33, 41]
+
+split:
+  protocol: temporal_holdout
+  train_size: 0.60
+  validation_size: 0.20
+  test_size: 0.20
+  shuffle: false
+
+model:
+  type: mlp
+  backend: auto
+  activation: tanh
+  output_activation: sigmoid
+  optimizer: rmsprop
+  loss: binary_crossentropy
+  max_epochs: 10
+  early_stopping_patience: 3
+  validation_metric: val_loss
+
+objective:
+  fitness:
+    mcc_weight: 0.60
+    f1_weight: 0.40
+  threshold: 0.50
+
+benchmark:
+  seeds: [42, 123, 2024, 2025, 777]
+  evaluations_per_seed: 100
+  ga:
+    population_size: 10
+    generations: 10
+    crossover_probability: 0.80
+    mutation_probability: 0.20
+    mutation_scale: 0.10
+    tournament_size: 3
+  pso:
+    particles: 10
+    iterations: 10
+    inertia: 0.70
+    cognitive: 1.50
+    social: 1.50

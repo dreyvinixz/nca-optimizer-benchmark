@@ -1,0 +1,27 @@
+# Local environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Legacy experiments are reference material and should not be required by the clean pipeline.
+experiments/
+
+# Runtime caches and temporary files
+.pytest_cache/
+.mypy_cache/
+logs/experiments/*.log
+
+# Large generated model artifacts
+*.h5
+*.pkl
+
+# Reproducible generated benchmark outputs
+outputs/metrics/*.csv
+outputs/metrics/convergence/*.csv
+outputs/predictions/*.csv
+outputs/tables/*.csv
+outputs/reports/*.md
+outputs/statistical_tests/*.csv
+outputs/figures/*.png
+article/figures/*.png

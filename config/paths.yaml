@@ -1,0 +1,26 @@
+dataset:
+  merged_output: data/raw/merged_output.csv
+  legacy_merged_output: data/raw/merged_output.csv
+
+outputs:
+  root: outputs
+  metrics: outputs/metrics
+  convergence: outputs/metrics/convergence
+  predictions: outputs/predictions
+  figures: outputs/figures
+  tables: outputs/tables
+  reports: outputs/reports
+  statistical_tests: outputs/statistical_tests
+  backtests: outputs/backtests
+
+checkpoints:
+  root: checkpoints
+  ga: checkpoints/ga
+  pso: checkpoints/pso
+  final_models: checkpoints/final_models
+
+logs:
+  root: logs
+  experiments: logs/experiments
+  ga: logs/ga
+  pso: logs/pso

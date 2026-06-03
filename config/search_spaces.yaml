@@ -1,0 +1,22 @@
+mlp:
+  hidden_neurons:
+    type: int
+    min: 5
+    max: 500
+  learning_rate:
+    type: float
+    min: 1.0e-8
+    max: 1.0e-2
+    scale: log10
+  l2_alpha:
+    type: float
+    min: 1.0e-8
+    max: 1.0e-2
+    scale: log10
+  dropout_rate:
+    type: float
+    min: 0.0
+    max: 0.10
+  batch_size:
+    type: categorical
+    values: [16, 32, 64, 80, 112, 128]
