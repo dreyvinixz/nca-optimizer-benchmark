@@ -37,6 +37,14 @@ Seeds: 5
 Evaluations per seed: 100
 ```
 
+## Installation
+
+To run the official benchmark experiments, you must install the required dependencies (including TensorFlow/Keras). Run:
+
+```powershell
+pip install tensorflow scikit-learn pandas numpy pyyaml matplotlib
+```
+
 ## Commands
 
 ```powershell

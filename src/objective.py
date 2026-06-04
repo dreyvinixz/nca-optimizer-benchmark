@@ -1,144 +1,224 @@
-"""Central candidate evaluation shared by all optimizers."""
+"""Central candidate evaluation shared by all optimizers and models."""
 
 from __future__ import annotations
 
 import time
+import json
+from pathlib import Path
 from typing import Any
 
 import numpy as np
 
 from src.evaluation.metrics import compute_classification_metrics
 from src.models.mlp import fit_predict_mlp
+from src.models.svm_model import fit_predict_svm
+from src.models.rf_model import fit_predict_rf
+from src.models.cnn import fit_predict_cnn
+
+def get_bounds(search_space: dict[str, Any], model_type: str) -> tuple[np.ndarray, np.ndarray, list[str]]:
+    """Return lower bounds, upper bounds, and variable types for a model's search space."""
+    space = search_space.get(model_type, {})
+    lower = []
+    upper = []
+    types = []
+    for key, spec in space.items():
+        if spec["type"] == "categorical":
+            lower.append(0.0)
+            upper.append(float(len(spec["values"]) - 1))
+            types.append("categorical")
+        elif spec["type"] == "int":
+            lower.append(float(spec["min"]))
+            upper.append(float(spec["max"]))
+            types.append("int")
+        elif spec["type"] == "float":
+            if spec.get("scale") == "log10":
+                lower.append(np.log10(float(spec["min"])))
+                upper.append(np.log10(float(spec["max"])))
+            else:
+                lower.append(float(spec["min"]))
+                upper.append(float(spec["max"]))
+            types.append("float")
+    return np.array(lower), np.array(upper), types
+
+def normalize_candidate(candidate: dict[str, Any], search_space: dict[str, Any], model_type: str) -> dict[str, Any]:
+    """Clamp and cast candidate hyperparameters to valid search-space values with discrete mapping."""
+    space = search_space.get(model_type, {})
+    normalized = {}
+    
+    for key, spec in space.items():
+        if key not in candidate and f"{key}_index" not in candidate:
+            continue
+            
+        val_type = spec["type"]
+        
+        if val_type == "categorical":
+            values = spec["values"]
+            idx_key = f"{key}_index"
+            
+            # If the candidate was provided via continuous optimizer (index)
+            if idx_key in candidate:
+                idx = int(round(float(candidate[idx_key])))
+                idx = max(0, min(len(values) - 1, idx))
+                normalized[key] = values[idx]
+            # If it's already categorical (GA might provide it directly if using mixed representation)
+            elif key in candidate:
+                val = candidate[key]
+                if val in values:
+                    normalized[key] = val
+                else:
+                    # Treat as index if it's numeric but key doesn't have _index
+                    try:
+                        idx = int(round(float(val)))
+                        idx = max(0, min(len(values) - 1, idx))
+                        normalized[key] = values[idx]
+                    except (ValueError, TypeError):
+                        normalized[key] = values[0]
+                        
+        elif val_type == "int":
+            val = int(round(float(candidate[key])))
+            normalized[key] = max(int(spec["min"]), min(int(spec["max"]), val))
+            
+        elif val_type == "float":
+            val = float(candidate[key])
+            normalized[key] = max(float(spec["min"]), min(float(spec["max"]), val))
+            
+    return normalized
 
 
-def normalize_candidate(candidate: dict[str, Any], search_space: dict[str, Any]) -> dict[str, Any]:
-    """Clamp and cast candidate hyperparameters to valid MLP search-space values."""
-    mlp_space = search_space["mlp"]
-    batch_values = list(mlp_space["batch_size"]["values"])
-
-    hidden = int(round(float(candidate["hidden_neurons"])))
-    hidden = max(int(mlp_space["hidden_neurons"]["min"]), min(int(mlp_space["hidden_neurons"]["max"]), hidden))
-
-    learning_rate = float(candidate["learning_rate"])
-    learning_rate = max(float(mlp_space["learning_rate"]["min"]), min(float(mlp_space["learning_rate"]["max"]), learning_rate))
-
-    l2_alpha = float(candidate["l2_alpha"])
-    l2_alpha = max(float(mlp_space["l2_alpha"]["min"]), min(float(mlp_space["l2_alpha"]["max"]), l2_alpha))
-
-    dropout = float(candidate["dropout_rate"])
-    dropout = max(float(mlp_space["dropout_rate"]["min"]), min(float(mlp_space["dropout_rate"]["max"]), dropout))
-
-    if "batch_size_index" in candidate:
-        idx = int(round(float(candidate["batch_size_index"])))
-        batch_size = batch_values[max(0, min(len(batch_values) - 1, idx))]
-    else:
-        batch_size = int(candidate["batch_size"])
-        batch_size = min(batch_values, key=lambda value: abs(value - batch_size))
-
-    return {
-        "hidden_neurons": hidden,
-        "learning_rate": learning_rate,
-        "l2_alpha": l2_alpha,
-        "dropout_rate": dropout,
-        "batch_size": int(batch_size),
-    }
-
-
-def vector_to_candidate(vector: np.ndarray, search_space: dict[str, Any]) -> dict[str, Any]:
-    """Decode a continuous optimizer vector into an MLP candidate."""
-    return normalize_candidate(
-        {
-            "hidden_neurons": vector[0],
-            "learning_rate": 10 ** float(vector[1]),
-            "l2_alpha": 10 ** float(vector[2]),
-            "dropout_rate": vector[3],
-            "batch_size_index": vector[4],
-        },
-        search_space,
-    )
-
-
-def candidate_to_log(candidate: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "hidden_neurons": int(candidate["hidden_neurons"]),
-        "learning_rate": float(candidate["learning_rate"]),
-        "l2_alpha": float(candidate["l2_alpha"]),
-        "dropout_rate": float(candidate["dropout_rate"]),
-        "batch_size": int(candidate["batch_size"]),
-    }
+def vector_to_candidate(vector: np.ndarray, search_space: dict[str, Any], model_type: str) -> dict[str, Any]:
+    """Decode a continuous optimizer vector into a candidate dictionary."""
+    space = search_space.get(model_type, {})
+    cand = {}
+    for i, (key, spec) in enumerate(space.items()):
+        val = float(vector[i])
+        if spec["type"] == "categorical":
+            cand[f"{key}_index"] = val
+        elif spec["type"] == "float" and spec.get("scale") == "log10":
+            cand[key] = 10 ** val
+        else:
+            cand[key] = val
+    return normalize_candidate(cand, search_space, model_type)
 
 
 def evaluate_candidate(
-    candidate: dict[str, Any],
-    data: Any,
-    config: dict[str, Any],
-    seed: int,
-    evaluation_id: int,
+    model_type: str,
     optimizer_name: str,
+    candidate: dict[str, Any],
+    seed: int,
+    config: dict[str, Any],
+    prepared_data: Any,
+    evaluation_id: int,
 ) -> dict[str, Any]:
     """Train on temporal train split and score on validation split."""
-    candidate = normalize_candidate(candidate, config["search_spaces"])
+    candidate = normalize_candidate(candidate, config["search_spaces"], model_type)
+    
     started = time.perf_counter()
-    y_pred, y_proba, _, _, backend = fit_predict_mlp(
-        data.X_train,
-        data.y_train,
-        data.X_val,
-        candidate,
-        config["experiment"]["model"],
-        seed + evaluation_id,
-    )
-    runtime = time.perf_counter() - started
-    metrics = compute_classification_metrics(data.y_val, y_pred, y_proba)
+    if model_type == "mlp":
+        y_pred, y_proba, _, backend = fit_predict_mlp(
+            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, config["experiment"]["model"], seed + evaluation_id
+        )
+    elif model_type == "svm":
+        y_pred, y_proba, _, backend = fit_predict_svm(
+            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, config["experiment"]["model"], seed + evaluation_id
+        )
+    elif model_type == "rf":
+        y_pred, y_proba, _, backend = fit_predict_rf(
+            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, config["experiment"]["model"], seed + evaluation_id
+        )
+    elif model_type == "cnn":
+        y_pred, y_proba, _, backend = fit_predict_cnn(
+            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, config["experiment"]["model"], seed + evaluation_id
+        )
+    else:
+        raise ValueError(f"Unknown model_type: {model_type}")
+        
+    train_time = time.perf_counter() - started
+    metrics = compute_classification_metrics(prepared_data.y_val, y_pred, y_proba)
     weights = config["experiment"]["objective"]["fitness"]
     fitness = weights["mcc_weight"] * metrics["mcc"] + weights["f1_weight"] * metrics["f1"]
 
     row = {
-        "experiment_name": config["experiment"]["experiment"]["name"],
+        "model_type": model_type,
         "optimizer": optimizer_name,
         "seed": seed,
-        "evaluation_id": evaluation_id,
+        "candidate_id": evaluation_id,
         "fitness": float(fitness),
-        "runtime_seconds": float(runtime),
-        "backend": backend,
+        "mcc": float(metrics["mcc"]),
+        "f1": float(metrics["f1"]),
+        "auc_roc": float(metrics["auc_roc"]),
+        "auc_pr": float(metrics["auc_pr"]),
+        "accuracy": float(metrics["accuracy"]),
+        "precision": float(metrics["precision"]),
+        "recall": float(metrics["recall"]),
+        "train_time_seconds": float(train_time),
+        "eval_time_seconds": 0.0, # Handled jointly with fit_predict
+        "model_backend": backend,
+        "official_experiment": config["experiment"]["benchmark"].get("official_experiment", False),
+        "cache_hit": False,
+        "cache_key": "",
+        "parallel_enabled": config["experiment"]["benchmark"].get("parallel_enabled", False),
+        "n_jobs": config["experiment"]["benchmark"].get("n_jobs", 1),
+        "parallel_backend": config["experiment"]["benchmark"].get("parallel_backend", "none"),
+        "fitness_formula": f"{weights['mcc_weight']} * MCC + {weights['f1_weight']} * F1",
+        "decoded_hyperparameters": json.dumps(candidate)
     }
-    row.update({f"{key}_val": value for key, value in metrics.items()})
-    row.update(candidate_to_log(candidate))
     return row
 
 
 def evaluate_best_on_test(
-    candidate: dict[str, Any],
-    data: Any,
-    config: dict[str, Any],
-    seed: int,
+    model_type: str,
     optimizer_name: str,
+    candidate: dict[str, Any],
+    seed: int,
+    config: dict[str, Any],
+    data: Any,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Retrain on train+validation data and score the untouched test split."""
-    candidate = normalize_candidate(candidate, config["search_spaces"])
+    candidate = normalize_candidate(candidate, config["search_spaces"], model_type)
     X_train_full = np.vstack([data.X_train, data.X_val])
     y_train_full = np.concatenate([data.y_train, data.y_val])
 
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    X_train_full_scaled = scaler.fit_transform(X_train_full).astype("float32")
+    X_test_scaled = scaler.transform(data.X_test).astype("float32")
+
     started = time.perf_counter()
-    y_pred, y_proba, _, _, backend = fit_predict_mlp(
-        X_train_full,
-        y_train_full,
-        data.X_test,
-        candidate,
-        config["experiment"]["model"],
-        seed + 100000,
-    )
+    if model_type == "mlp":
+        y_pred, y_proba, model, backend = fit_predict_mlp(
+            X_train_full_scaled, y_train_full, X_test_scaled, candidate, config["experiment"]["model"], seed + 100000
+        )
+    elif model_type == "svm":
+        y_pred, y_proba, _, backend = fit_predict_svm(
+            X_train_full_scaled, y_train_full, X_test_scaled, candidate, config["experiment"]["model"], seed + 100000
+        )
+    elif model_type == "rf":
+        y_pred, y_proba, _, backend = fit_predict_rf(
+            X_train_full_scaled, y_train_full, X_test_scaled, candidate, config["experiment"]["model"], seed + 100000
+        )
+    elif model_type == "cnn":
+        y_pred, y_proba, model, backend = fit_predict_cnn(
+            X_train_full_scaled, y_train_full, X_test_scaled, candidate, config["experiment"]["model"], seed + 100000
+        )
+    else:
+        raise ValueError(f"Unknown model_type: {model_type}")
+
     runtime = time.perf_counter() - started
     metrics = compute_classification_metrics(data.y_test, y_pred, y_proba)
+    weights = config["experiment"]["objective"]["fitness"]
+    fitness = weights["mcc_weight"] * metrics["mcc"] + weights["f1_weight"] * metrics["f1"]
 
     summary = {
-        "experiment_name": config["experiment"]["experiment"]["name"],
+        "model_type": model_type,
         "optimizer": optimizer_name,
         "seed": seed,
         "runtime_seconds_test": float(runtime),
-        "backend": backend,
+        "model_backend": backend,
+        "official_experiment": config["experiment"]["benchmark"].get("official_experiment", False),
+        "fitness_formula": f"{weights['mcc_weight']} * MCC + {weights['f1_weight']} * F1",
+        "decoded_hyperparameters": json.dumps(candidate)
     }
     summary.update({f"{key}_test": value for key, value in metrics.items()})
-    summary.update(candidate_to_log(candidate))
 
     predictions: list[dict[str, Any]] = []
     datetime_column = config["experiment"]["data"]["datetime_column"]
@@ -146,6 +226,7 @@ def evaluate_best_on_test(
         meta = data.test_metadata.iloc[idx].to_dict()
         predictions.append(
             {
+                "model_type": model_type,
                 "optimizer": optimizer_name,
                 "seed": seed,
                 "row_id": idx,
@@ -155,4 +236,16 @@ def evaluate_best_on_test(
                 "y_proba": float(proba),
             }
         )
+        
+    if hasattr(model, "_keras_history") and model._keras_history:
+        try:
+            import pandas as pd
+            history_df = pd.DataFrame(model._keras_history)
+            metrics_path = Path(config["paths"]["outputs"]["metrics"])
+            metrics_path.mkdir(parents=True, exist_ok=True)
+            history_df.to_csv(metrics_path / f"{model_type}_{optimizer_name}_seed{seed}_keras_history.csv", index=False)
+        except Exception as e:
+            import logging
+            logging.getLogger("objective").warning(f"Failed to save keras history: {e}")
+
     return summary, predictions

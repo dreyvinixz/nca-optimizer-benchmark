@@ -52,6 +52,18 @@ def save_csv(rows: list[dict[str, Any]], path: str | Path) -> None:
     pd.DataFrame(rows).to_csv(resolved, index=False)
 
 
+def append_csv(rows: list[dict[str, Any]], path: str | Path) -> None:
+    if not rows:
+        return
+    resolved = project_path(path)
+    resolved.parent.mkdir(parents=True, exist_ok=True)
+    df = pd.DataFrame(rows)
+    if resolved.exists():
+        df.to_csv(resolved, mode="a", index=False, header=False)
+    else:
+        df.to_csv(resolved, index=False, header=True)
+
+
 def write_text(path: str | Path, content: str) -> None:
     resolved = project_path(path)
     resolved.parent.mkdir(parents=True, exist_ok=True)

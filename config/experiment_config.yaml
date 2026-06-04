@@ -22,6 +22,7 @@ split:
 model:
   type: mlp
   backend: auto
+  allow_numpy_fallback: false
   activation: tanh
   output_activation: sigmoid
   optimizer: rmsprop
@@ -37,18 +38,47 @@ objective:
   threshold: 0.50
 
 benchmark:
-  seeds: [42, 123, 2024, 2025, 777]
-  evaluations_per_seed: 100
+  parallel_enabled: true
+  n_jobs: -1
+  parallel_backend: loky
+  tf_intraop_threads: 1
+  tf_interop_threads: 1
+  experiment_mode: quick_test
+  
+  quick_test:
+    seeds: [1]
+    generations: 10
+    iterations: 10
+    evaluations_per_seed: 100
+    official_experiment: false
+    
+  validation_run:
+    seeds: [1, 2, 3]
+    evaluations_per_seed: 100
+    official_experiment: false
+    
+  official_run:
+    seeds: [1, 2, 3, 4, 5]
+    evaluations_per_seed: 1000
+    generations: 100
+    iterations: 100
+    official_experiment: true
+
   ga:
     population_size: 10
-    generations: 10
     crossover_probability: 0.80
     mutation_probability: 0.20
     mutation_scale: 0.10
     tournament_size: 3
   pso:
     particles: 10
-    iterations: 10
     inertia: 0.70
     cognitive: 1.50
     social: 1.50
+  de:
+    population_size: 10
+    mutation_factor: 0.80
+    crossover_rate: 0.90
+    strategy: "best/1/bin"
+  gwo:
+    wolves: 10

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -18,6 +19,10 @@ class TemporalSplit:
     y_test: np.ndarray
     test_metadata: pd.DataFrame
     feature_names: list[str]
+    X_train_scaled: np.ndarray | None = None
+    X_val_scaled: np.ndarray | None = None
+    X_test_scaled: np.ndarray | None = None
+    scaler: Any = None
 
 
 def make_temporal_split(

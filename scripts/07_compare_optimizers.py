@@ -111,6 +111,11 @@ def main() -> None:
         "- Split: temporal holdout, 60% train, 20% validation, 20% test",
         "- Fitness: `0.60 * MCC + 0.40 * F1`",
         "- X-axis for convergence: fitness evaluations",
+        "",
+        "## Official Experiment Status",
+        "",
+        f"- Model Backend: `{best['backend'].iloc[0] if 'backend' in best.columns else 'unknown'}`",
+        f"- Official Experiment: `{bool(best['official_experiment'].iloc[0]) if 'official_experiment' in best.columns else False}`",
     ]
     write_text(f"{paths['reports']}/optimizer_benchmark_summary.md", "\n".join(summary_lines))
     logger.info("Optimizer comparison outputs saved")

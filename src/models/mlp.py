@@ -4,8 +4,14 @@ from __future__ import annotations
 
 from typing import Any
 
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["TF_NUM_INTRAOP_THREADS"] = "1"
+os.environ["TF_NUM_INTEROP_THREADS"] = "1"
+
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 
 from src.utils.seeds import set_global_seed
 
@@ -22,6 +28,9 @@ def _train_with_tensorflow(
 ) -> tuple[np.ndarray, np.ndarray, Any]:
     import tensorflow as tf  # type: ignore
 
+    tf.config.threading.set_intra_op_parallelism_threads(1)
+    tf.config.threading.set_inter_op_parallelism_threads(1)
+
     set_global_seed(seed)
     hidden_neurons = int(candidate["hidden_neurons"])
     l2_alpha = float(candidate["l2_alpha"])
@@ -29,20 +38,29 @@ def _train_with_tensorflow(
     learning_rate = float(candidate["learning_rate"])
     batch_size = int(candidate["batch_size"])
 
+    activation = candidate.get("activation", model_config.get("activation", "tanh"))
+    optimizer_name = candidate.get("optimizer", model_config.get("optimizer", "rmsprop")).lower()
+
     model = tf.keras.Sequential(
         [
             tf.keras.layers.Input(shape=(X_train.shape[1],)),
             tf.keras.layers.Dense(
                 hidden_neurons,
-                activation=model_config.get("activation", "tanh"),
+                activation=activation,
                 kernel_regularizer=tf.keras.regularizers.l2(l2_alpha),
             ),
             tf.keras.layers.Dropout(dropout_rate),
             tf.keras.layers.Dense(1, activation="sigmoid"),
         ]
     )
+
+    if optimizer_name == "adam":
+        opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+    else:
+        opt = tf.keras.optimizers.RMSprop(learning_rate=learning_rate)
+
     model.compile(
-        optimizer=tf.keras.optimizers.RMSprop(learning_rate=learning_rate),
+        optimizer=opt,
         loss="binary_crossentropy",
         metrics=["accuracy"],
     )
@@ -54,7 +72,7 @@ def _train_with_tensorflow(
             verbose=0,
         )
     ]
-    model.fit(
+    history = model.fit(
         X_train,
         y_train,
         epochs=int(model_config.get("max_epochs", 10)),
@@ -66,6 +84,11 @@ def _train_with_tensorflow(
     )
     proba = model.predict(X_eval, verbose=0).reshape(-1)
     pred = (proba >= 0.5).astype(int)
+    
+    # Save history before clearing session
+    model._keras_history = history.history
+    
+    tf.keras.backend.clear_session()
     return pred, proba, model
 
 
@@ -128,27 +151,29 @@ def fit_predict_mlp(
     candidate: dict[str, Any],
     model_config: dict[str, Any],
     seed: int,
-) -> tuple[np.ndarray, np.ndarray, Any, StandardScaler, str]:
-    """Fit scaler on training data only, train the MLP, and predict evaluation data."""
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train).astype("float32")
-    X_eval_scaled = scaler.transform(X_eval).astype("float32")
-
+) -> tuple[np.ndarray, np.ndarray, Any, str]:
+    """Train the MLP and predict evaluation data."""
     global _TENSORFLOW_AVAILABLE
     backend = model_config.get("backend", "auto")
     if backend in {"auto", "tensorflow"} and _TENSORFLOW_AVAILABLE is not False:
         try:
             pred, proba, model = _train_with_tensorflow(
-                X_train_scaled, y_train, X_eval_scaled, candidate, model_config, seed
+                X_train, y_train, X_eval, candidate, model_config, seed
             )
             _TENSORFLOW_AVAILABLE = True
-            return pred, proba, model, scaler, "tensorflow"
+            return pred, proba, model, "tensorflow"
         except Exception:
             _TENSORFLOW_AVAILABLE = False
             if backend == "tensorflow":
                 raise
+            if not model_config.get("allow_numpy_fallback", False):
+                raise RuntimeError(
+                    "TensorFlow is required for official experiments. "
+                    "NumPy fallback is only allowed for software smoke tests. "
+                    "Please install TensorFlow or set 'allow_numpy_fallback: true' in experiment_config.yaml."
+                )
 
     pred, proba, model = _train_with_numpy_mlp(
-        X_train_scaled, y_train, X_eval_scaled, candidate, model_config, seed
+        X_train, y_train, X_eval, candidate, model_config, seed
     )
-    return pred, proba, model, scaler, "numpy_mlp"
+    return pred, proba, model, "numpy_mlp"

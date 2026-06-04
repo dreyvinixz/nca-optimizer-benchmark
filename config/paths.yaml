@@ -3,15 +3,15 @@ dataset:
   legacy_merged_output: data/raw/merged_output.csv
 
 outputs:
-  root: outputs
-  metrics: outputs/metrics
-  convergence: outputs/metrics/convergence
-  predictions: outputs/predictions
-  figures: outputs/figures
-  tables: outputs/tables
-  reports: outputs/reports
-  statistical_tests: outputs/statistical_tests
-  backtests: outputs/backtests
+  root: outputs/phase2
+  metrics: outputs/phase2/metrics
+  convergence: outputs/phase2/metrics/convergence
+  predictions: outputs/phase2/predictions
+  figures: outputs/phase2/figures
+  tables: outputs/phase2/tables
+  reports: outputs/phase2/reports
+  statistical_tests: outputs/phase2/statistical_tests
+  backtests: outputs/phase2/backtests
 
 checkpoints:
   root: checkpoints
