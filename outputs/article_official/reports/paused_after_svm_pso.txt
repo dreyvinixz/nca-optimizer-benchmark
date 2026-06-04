@@ -1,0 +1,6 @@
+paused_at=2026-06-04T17:10:24
+reason=SVM/PSO completed; user will run SVM/DE and SVM/GWO elsewhere; CNN later.
+svm_pso_runs=5000
+svm_pso_best=5
+terminated_pids=[311, 420]
+status_current={'model': 'svm', 'optimizer': 'de'}

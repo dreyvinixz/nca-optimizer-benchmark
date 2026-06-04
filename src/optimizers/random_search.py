@@ -12,6 +12,7 @@ from joblib import Parallel, delayed  # type: ignore
 
 from src.benchmark import append_optimizer_outputs, clear_optimizer_outputs
 from src.objective import evaluate_best_on_test, evaluate_candidate, vector_to_candidate, get_bounds
+from src.optimizers.parallel import get_parallel_settings
 
 
 def run_random_search(data: Any, config: dict[str, Any], model_type: str) -> None:
@@ -43,7 +44,7 @@ def run_random_search(data: Any, config: dict[str, Any], model_type: str) -> Non
             feature_set = config["experiment"]["data"]["selected_feature_set"]
             return f"random_search|{model_type}|{seed}|{backend}|{feature_set}|{cand_str}"
 
-        with Parallel(n_jobs=-1, backend="loky", prefer="processes") as parallel:
+        with Parallel(**get_parallel_settings(config)) as parallel:
             # Batching to mimic generations logging
             chunk_size = 10
             for chunk_start in range(0, evaluations_per_seed, chunk_size):

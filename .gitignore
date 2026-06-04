@@ -1,5 +1,6 @@
 # Local environments
 .venv/
+.venv_wsl/
 venv/
 __pycache__/
 *.pyc
@@ -15,6 +16,7 @@ logs/experiments/*.log
 # Large generated model artifacts
 *.h5
 *.pkl
+*.so
 
 # Reproducible generated benchmark outputs
 outputs/metrics/*.csv

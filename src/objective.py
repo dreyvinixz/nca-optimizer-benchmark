@@ -10,7 +10,7 @@ from typing import Any
 import numpy as np
 
 from src.evaluation.metrics import compute_classification_metrics
-from src.models.mlp import fit_predict_mlp
+from src.models.mlp import fit_predict_mlp as fit_predict_mlp_cpu
 from src.models.svm_model import fit_predict_svm
 from src.models.rf_model import fit_predict_rf
 from src.models.cnn import fit_predict_cnn
@@ -111,23 +111,31 @@ def evaluate_candidate(
 ) -> dict[str, Any]:
     """Train on temporal train split and score on validation split."""
     candidate = normalize_candidate(candidate, config["search_spaces"], model_type)
+    model_config = config["experiment"]["model"]
     
     started = time.perf_counter()
     if model_type == "mlp":
-        y_pred, y_proba, _, backend = fit_predict_mlp(
-            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, config["experiment"]["model"], seed + evaluation_id
-        )
+        if model_config.get("backend") == "cuda":
+            from src.models.mlp_cuda import fit_predict_mlp_cuda
+
+            y_pred, y_proba, _, backend = fit_predict_mlp_cuda(
+                prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
+            )
+        else:
+            y_pred, y_proba, _, backend = fit_predict_mlp_cpu(
+                prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
+            )
     elif model_type == "svm":
         y_pred, y_proba, _, backend = fit_predict_svm(
-            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, config["experiment"]["model"], seed + evaluation_id
+            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
         )
     elif model_type == "rf":
         y_pred, y_proba, _, backend = fit_predict_rf(
-            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, config["experiment"]["model"], seed + evaluation_id
+            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
         )
     elif model_type == "cnn":
         y_pred, y_proba, _, backend = fit_predict_cnn(
-            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, config["experiment"]["model"], seed + evaluation_id
+            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
         )
     else:
         raise ValueError(f"Unknown model_type: {model_type}")
@@ -175,6 +183,7 @@ def evaluate_best_on_test(
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Retrain on train+validation data and score the untouched test split."""
     candidate = normalize_candidate(candidate, config["search_spaces"], model_type)
+    model_config = config["experiment"]["model"]
     X_train_full = np.vstack([data.X_train, data.X_val])
     y_train_full = np.concatenate([data.y_train, data.y_val])
 
@@ -184,21 +193,29 @@ def evaluate_best_on_test(
     X_test_scaled = scaler.transform(data.X_test).astype("float32")
 
     started = time.perf_counter()
+    model: Any = None
     if model_type == "mlp":
-        y_pred, y_proba, model, backend = fit_predict_mlp(
-            X_train_full_scaled, y_train_full, X_test_scaled, candidate, config["experiment"]["model"], seed + 100000
-        )
+        if model_config.get("backend") == "cuda":
+            from src.models.mlp_cuda import fit_predict_mlp_cuda
+
+            y_pred, y_proba, model, backend = fit_predict_mlp_cuda(
+                X_train_full_scaled, y_train_full, X_test_scaled, candidate, model_config, seed + 100000
+            )
+        else:
+            y_pred, y_proba, model, backend = fit_predict_mlp_cpu(
+                X_train_full_scaled, y_train_full, X_test_scaled, candidate, model_config, seed + 100000
+            )
     elif model_type == "svm":
         y_pred, y_proba, _, backend = fit_predict_svm(
-            X_train_full_scaled, y_train_full, X_test_scaled, candidate, config["experiment"]["model"], seed + 100000
+            X_train_full_scaled, y_train_full, X_test_scaled, candidate, model_config, seed + 100000
         )
     elif model_type == "rf":
         y_pred, y_proba, _, backend = fit_predict_rf(
-            X_train_full_scaled, y_train_full, X_test_scaled, candidate, config["experiment"]["model"], seed + 100000
+            X_train_full_scaled, y_train_full, X_test_scaled, candidate, model_config, seed + 100000
         )
     elif model_type == "cnn":
         y_pred, y_proba, model, backend = fit_predict_cnn(
-            X_train_full_scaled, y_train_full, X_test_scaled, candidate, config["experiment"]["model"], seed + 100000
+            X_train_full_scaled, y_train_full, X_test_scaled, candidate, model_config, seed + 100000
         )
     else:
         raise ValueError(f"Unknown model_type: {model_type}")

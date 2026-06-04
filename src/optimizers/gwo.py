@@ -12,6 +12,7 @@ from joblib import Parallel, delayed  # type: ignore
 
 from src.benchmark import append_optimizer_outputs, clear_optimizer_outputs
 from src.objective import evaluate_best_on_test, evaluate_candidate, vector_to_candidate, get_bounds
+from src.optimizers.parallel import get_parallel_settings
 
 
 def run_gwo(data: Any, config: dict[str, Any], model_type: str) -> None:
@@ -53,7 +54,7 @@ def run_gwo(data: Any, config: dict[str, Any], model_type: str) -> None:
             feature_set = config["experiment"]["data"]["selected_feature_set"]
             return f"gwo|{model_type}|{seed}|{backend}|{feature_set}|{cand_str}"
 
-        with Parallel(n_jobs=-1, backend="loky", prefer="processes") as parallel:
+        with Parallel(**get_parallel_settings(config)) as parallel:
             for iteration in range(iterations):
                 logger.info(f"Model {model_type} - Seed {seed} - Iteration {iteration + 1}/{iterations}")
 
