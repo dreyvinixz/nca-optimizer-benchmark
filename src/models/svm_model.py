@@ -7,6 +7,9 @@ import numpy as np
 from sklearn.svm import SVC
 
 from src.utils.seeds import set_global_seed
+import logging
+
+logger = logging.getLogger(__name__)
 
 def fit_predict_svm(
     X_train: np.ndarray,
@@ -24,17 +27,45 @@ def fit_predict_svm(
     # Linear kernel should ignore gamma
     gamma = float(candidate["gamma"]) if kernel == "rbf" else "scale"
     
-    model = SVC(
-        C=C,
-        gamma=gamma,
-        kernel=kernel,
-        probability=True,
-        random_state=seed,
-        max_iter=50000,
-    )
+    backend = model_config.get("backend", "cpu").lower()
+    
+    if backend == "cuda":
+        try:
+            from cuml.svm import SVC
+            model = SVC(
+                C=C,
+                gamma=gamma,
+                kernel=kernel,
+                probability=True,
+                max_iter=50000,
+            )
+            backend_used = "cuml"
+        except ImportError:
+            logger.warning("cuML not installed or import failed. Falling back to sklearn SVM on CPU.")
+            from sklearn.svm import SVC
+            model = SVC(
+                C=C,
+                gamma=gamma,
+                kernel=kernel,
+                probability=True,
+                random_state=seed,
+                max_iter=50000,
+            )
+            backend_used = "scikit-learn"
+    else:
+        from sklearn.svm import SVC
+        model = SVC(
+            C=C,
+            gamma=gamma,
+            kernel=kernel,
+            probability=True,
+            random_state=seed,
+            max_iter=50000,
+        )
+        backend_used = "scikit-learn"
     
     model.fit(X_train, y_train)
     proba = model.predict_proba(X_eval)[:, 1]
     pred = model.predict(X_eval)
     
-    return pred, proba, model, "scikit-learn"
+    return pred, proba, model, backend_used
