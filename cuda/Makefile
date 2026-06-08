@@ -9,20 +9,26 @@ ARCH       = -arch=$(CUDA_ARCH)
 NVCCFLAGS  = -O3 -std=c++17 -Xcompiler -fPIC -lineinfo
 LDFLAGS    = -shared
 LDLIBS     = -lcublas -lcurand
-TARGET     = libmlp_cuda.so
-SRC        = mlp_cuda.cu
+TARGET_MLP = libmlp_cuda.so
+SRC_MLP    = mlp_cuda.cu
+TARGET_CNN = libcnn_cuda.so
+SRC_CNN    = cnn_cuda.cu
 
 .PHONY: all clean test
 
-all: $(TARGET)
+all: $(TARGET_MLP) $(TARGET_CNN)
 
-$(TARGET): $(SRC) mlp_cuda.h
+$(TARGET_MLP): $(SRC_MLP) mlp_cuda.h
 	$(NVCC) $(ARCH) $(NVCCFLAGS) $(LDFLAGS) -o $@ $< $(LDLIBS)
-	@echo "Built $(TARGET) successfully."
+	@echo "Built $(TARGET_MLP) successfully."
+
+$(TARGET_CNN): $(SRC_CNN) cnn_cuda.h
+	$(NVCC) $(ARCH) $(NVCCFLAGS) $(LDFLAGS) -o $@ $< $(LDLIBS)
+	@echo "Built $(TARGET_CNN) successfully."
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET_MLP) $(TARGET_CNN)
 
-test: $(TARGET)
+test: all
 	@echo "Running quick smoke test..."
-	python3 -c "import ctypes; lib = ctypes.CDLL('./$(TARGET)'); print('Library loaded OK')"
+	python3 -c "import ctypes, pathlib; [ctypes.CDLL(str(pathlib.Path(p).resolve())) for p in ('./$(TARGET_MLP)', './$(TARGET_CNN)')]; print('CUDA libraries loaded OK')"

@@ -134,9 +134,16 @@ def evaluate_candidate(
             prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
         )
     elif model_type == "cnn":
-        y_pred, y_proba, _, backend = fit_predict_cnn(
-            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
-        )
+        if model_config.get("backend") == "cuda":
+            from src.models.cnn_cuda import fit_predict_cnn_cuda
+
+            y_pred, y_proba, _, backend = fit_predict_cnn_cuda(
+                prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
+            )
+        else:
+            y_pred, y_proba, _, backend = fit_predict_cnn(
+                prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
+            )
     else:
         raise ValueError(f"Unknown model_type: {model_type}")
         
@@ -214,9 +221,16 @@ def evaluate_best_on_test(
             X_train_full_scaled, y_train_full, X_test_scaled, candidate, model_config, seed + 100000
         )
     elif model_type == "cnn":
-        y_pred, y_proba, model, backend = fit_predict_cnn(
-            X_train_full_scaled, y_train_full, X_test_scaled, candidate, model_config, seed + 100000
-        )
+        if model_config.get("backend") == "cuda":
+            from src.models.cnn_cuda import fit_predict_cnn_cuda
+
+            y_pred, y_proba, model, backend = fit_predict_cnn_cuda(
+                X_train_full_scaled, y_train_full, X_test_scaled, candidate, model_config, seed + 100000
+            )
+        else:
+            y_pred, y_proba, model, backend = fit_predict_cnn(
+                X_train_full_scaled, y_train_full, X_test_scaled, candidate, model_config, seed + 100000
+            )
     else:
         raise ValueError(f"Unknown model_type: {model_type}")
 

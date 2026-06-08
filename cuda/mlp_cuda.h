@@ -2,11 +2,11 @@
  * mlp_cuda.h — CUDA MLP Training Library
  *
  * NCA Optimizer Benchmark — GPU-accelerated MLP training.
- * Supports single-model and batched multi-model training via CUDA streams.
+ * Supports single-model training and a batched convenience API.
  *
  * Architecture: Input → Dense(hidden, tanh|relu) → Dropout → Dense(1, sigmoid)
  * Optimizers:   RMSProp, Adam
- * Loss:         Binary Cross-Entropy + L2 Regularization
+ * Loss:         Binary Cross-Entropy + L2 on the hidden Dense kernel
  */
 
 #ifndef MLP_CUDA_H
@@ -48,11 +48,11 @@ int mlp_train_predict(
 );
 
 /*
- * Train N models concurrently on the GPU using CUDA streams.
+ * Train N models through the CUDA backend.
  *
  * All models share the same training/eval data but use different
- * hyper-parameters. This is the key speedup for population-based
- * optimizers (GA, PSO, DE, GWO): evaluate all candidates at once.
+ * hyper-parameters. The current implementation evaluates candidates
+ * sequentially to fit 4 GB GPUs reliably.
  *
  * Returns 0 on success, -1 on error.
  */

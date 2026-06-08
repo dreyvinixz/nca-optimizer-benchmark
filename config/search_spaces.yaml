@@ -4,8 +4,6 @@ mlp:
   l2_alpha: {type: float, min: 1.0e-8, max: 1.0e-2, scale: log10}
   dropout_rate: {type: float, min: 0.0, max: 0.10}
   batch_size: {type: categorical, values: [16, 32, 64, 80, 112, 128]}
-  activation: {type: categorical, values: ['tanh', 'relu']}
-  optimizer: {type: categorical, values: ['rmsprop', 'adam']}
 
 svm:
   C: {type: float, min: 1.0e-3, max: 1.0e3, scale: log10}
@@ -28,5 +26,3 @@ cnn:
   l2_alpha: {type: float, min: 1.0e-8, max: 1.0e-2, scale: log10}
   dropout_rate: {type: float, min: 0.0, max: 0.10}
   batch_size: {type: categorical, values: [16, 32, 64, 80, 112, 128]}
-  activation: {type: categorical, values: ['relu', 'tanh']}
-  optimizer: {type: categorical, values: ['adam', 'rmsprop']}

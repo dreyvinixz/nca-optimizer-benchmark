@@ -1,0 +1,6 @@
+2026-06-08 18:21:36,361 - INFO - Running Preliminary Structural Benchmark: RMSPROP + RELU
+2026-06-08 18:21:36,381 - INFO - Running Random Search for MLP on rmsprop+relu with backend=cuda
+2026-06-08 18:21:36,382 - INFO - Starting Random Search for model: mlp...
+2026-06-08 18:22:00,118 - INFO - Model mlp - Seed 42 - Cache hits: 0/50
+2026-06-08 18:22:08,199 - INFO - Model mlp - Seed 123 - Cache hits: 0/50
+2026-06-08 18:22:16,634 - INFO - Model mlp - Seed 2024 - Cache hits: 0/50

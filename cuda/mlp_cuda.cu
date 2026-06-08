@@ -5,8 +5,8 @@
  * Full backpropagation, mini-batch SGD, RMSProp/Adam, dropout,
  * L2 regularization, early stopping.
  *
- * Supports concurrent multi-model training via CUDA streams for
- * population-based optimizers (GA, PSO, DE, GWO).
+ * Supports single-model training and a sequential batched convenience API
+ * for population-based optimizers (GA, PSO, DE, GWO).
  *
  * Compile:  nvcc -O3 -arch=sm_75 -Xcompiler -fPIC -shared
  *                -lcublas -lcurand -o libmlp_cuda.so mlp_cuda.cu
@@ -58,6 +58,15 @@
 } while (0)
 
 #define GRID(n) (((n) + BLOCK - 1) / BLOCK)
+
+#define KC() do {                                           \
+    cudaError_t e = cudaGetLastError();                     \
+    if (e != cudaSuccess) {                                 \
+        fprintf(stderr, "CUDA kernel %s:%d  %s\n",          \
+                __FILE__, __LINE__, cudaGetErrorString(e)); \
+        return -1;                                          \
+    }                                                       \
+} while (0)
 
 /* ================================================================
  *  Activation kernels
@@ -177,14 +186,30 @@ __global__ void k_bce(const float *y, const float *a,
     }
 }
 
-/* Simple sum-reduce on host after small kernel writes */
-static float reduce_sum_host(float *d_buf, int n) {
+/* Simple sum-reduce on host after small kernel writes. */
+static int reduce_sum_host(float *d_buf, int n, float *sum_out) {
+    if (n <= 0 || sum_out == NULL) {
+        fprintf(stderr, "Invalid reduction size\n");
+        return -1;
+    }
     float *h = (float *)malloc(n * sizeof(float));
-    cudaMemcpy(h, d_buf, n * sizeof(float), cudaMemcpyDeviceToHost);
+    if (h == NULL) {
+        fprintf(stderr, "Host allocation failed in reduce_sum_host\n");
+        return -1;
+    }
+    cudaError_t e = cudaMemcpy(h, d_buf, n * sizeof(float),
+                               cudaMemcpyDeviceToHost);
+    if (e != cudaSuccess) {
+        fprintf(stderr, "CUDA memcpy reduce_sum_host: %s\n",
+                cudaGetErrorString(e));
+        free(h);
+        return -1;
+    }
     double s = 0.0;
     for (int i = 0; i < n; i++) s += (double)h[i];
     free(h);
-    return (float)s;
+    *sum_out = (float)s;
+    return 0;
 }
 
 /* ================================================================
@@ -319,7 +344,7 @@ static void xavier_init(float *buf, int fan_in, int fan_out,
 }
 
 /* ================================================================
- *  Internal: train one MLP on a given CUDA stream
+ *  Internal: train one MLP
  * ================================================================ */
 
 typedef struct {
@@ -350,13 +375,11 @@ static int ctx_alloc(MLPContext *ctx, int max_batch) {
     int H = ctx->hidden;
     int D = ctx->input_dim;
     int B = max_batch;  /* largest buffer needed */
-    int NT = ctx->n_train_actual;
     int NV = ctx->n_val_internal;
     int NE = ctx->n_eval;
-    int max_samples = NT;
+    int max_samples = B;
     if (NV > max_samples) max_samples = NV;
     if (NE > max_samples) max_samples = NE;
-    if (B  > max_samples) max_samples = B;
     /* Use max_samples for activation buffers */
     int abuf = max_samples;
 
@@ -438,6 +461,7 @@ static int forward(MLPContext *ctx, cublasHandle_t cublas,
     CB(matmul(cublas, d_X, ctx->W1, ctx->Z1, N, D, H, 1.0f, 0.0f));
     /* Z1 += b1 */
     k_add_bias<<<GRID(N * H), BLOCK>>>(ctx->Z1, ctx->b1, N, H);
+    KC();
 
     /* A1 = activation(Z1) */
     int nH = N * H;
@@ -445,21 +469,25 @@ static int forward(MLPContext *ctx, cublasHandle_t cublas,
         k_tanh_fwd<<<GRID(nH), BLOCK>>>(ctx->Z1, ctx->A1, nH);
     else
         k_relu_fwd<<<GRID(nH), BLOCK>>>(ctx->Z1, ctx->A1, nH);
+    KC();
 
     /* Dropout (training only) */
     if (training && ctx->dropout > 0.0f) {
         k_dropout_fwd<<<GRID(nH), BLOCK>>>(
             ctx->A1, ctx->mask, ctx->seed + 777ULL,
             dropout_offset, ctx->dropout, nH);
+        KC();
     }
 
     /* Z2[N,1] = A1[N,H] @ W2[H,1] */
     CB(matmul(cublas, ctx->A1, ctx->W2, ctx->Z2, N, H, 1, 1.0f, 0.0f));
     /* Z2 += b2 */
     k_add_bias<<<GRID(N), BLOCK>>>(ctx->Z2, ctx->b2, N, 1);
+    KC();
 
     /* A2 = sigmoid(Z2) */
     k_sigmoid<<<GRID(N), BLOCK>>>(ctx->Z2, ctx->A2, N);
+    KC();
 
     return 0;
 }
@@ -472,37 +500,43 @@ static int backward(MLPContext *ctx, cublasHandle_t cublas,
 
     /* dZ2 = (A2 - y) / N */
     k_output_grad<<<GRID(N), BLOCK>>>(ctx->A2, d_y, ctx->dZ2, N);
+    KC();
 
     /* dW2[H,1] = A1^T[H,N] @ dZ2[N,1] */
     CB(matmul_atb(cublas, ctx->A1, ctx->dZ2, ctx->dW2,
                   N, H, 1, 1.0f, 0.0f));
     /* db2 = sum(dZ2); dZ2 is already scaled by 1/N */
     k_bias_grad<<<GRID(1), BLOCK>>>(ctx->dZ2, ctx->db2, N, 1);
+    KC();
 
     /* dA1[N,H] = dZ2[N,1] @ W2^T[1,H] */
     CB(matmul_abt(cublas, ctx->dZ2, ctx->W2, ctx->dA1,
                   N, 1, H, 1.0f, 0.0f));
 
     /* Dropout backward */
-    if (ctx->dropout > 0.0f)
+    if (ctx->dropout > 0.0f) {
         k_dropout_bwd<<<GRID(nH), BLOCK>>>(ctx->dA1, ctx->mask, nH);
+        KC();
+    }
 
     /* dZ1 = dA1 * activation'(Z1) */
     if (ctx->use_tanh)
         k_tanh_bwd<<<GRID(nH), BLOCK>>>(ctx->dA1, ctx->Z1, ctx->dZ1, nH);
     else
         k_relu_bwd<<<GRID(nH), BLOCK>>>(ctx->dA1, ctx->Z1, ctx->dZ1, nH);
+    KC();
 
     /* dW1[D,H] = X^T[D,N] @ dZ1[N,H] */
     CB(matmul_atb(cublas, d_X, ctx->dZ1, ctx->dW1,
                   N, D, H, 1.0f, 0.0f));
     /* db1 = sum(dZ1); dZ1 is already scaled by 1/N */
     k_bias_grad<<<GRID(H), BLOCK>>>(ctx->dZ1, ctx->db1, N, H);
+    KC();
 
-    /* L2 regularization */
+    /* Keras model applies L2 only to the hidden Dense kernel. */
     if (ctx->l2 > 0.0f) {
         k_add_l2<<<GRID(D * H), BLOCK>>>(ctx->dW1, ctx->W1, ctx->l2, D * H);
-        k_add_l2<<<GRID(H), BLOCK>>>(ctx->dW2, ctx->W2, ctx->l2, H);
+        KC();
     }
 
     return 0;
@@ -524,6 +558,7 @@ static int update_params(MLPContext *ctx, int step) {
                                     ctx->lr, b1, b2, b1t, b2t, H);
         k_adam<<<GRID(1), BLOCK>>>(ctx->b2, ctx->db2, ctx->cb2, ctx->vb2,
                                     ctx->lr, b1, b2, b1t, b2t, 1);
+        KC();
     } else {
         float rho = 0.9f;
         k_rmsprop<<<GRID(D*H), BLOCK>>>(ctx->W1, ctx->dW1, ctx->cW1,
@@ -534,15 +569,33 @@ static int update_params(MLPContext *ctx, int step) {
                                         ctx->lr, rho, H);
         k_rmsprop<<<GRID(1), BLOCK>>>(ctx->b2, ctx->db2, ctx->cb2,
                                         ctx->lr, rho, 1);
+        KC();
     }
     return 0;
 }
 
-/* Compute BCE loss on device data d_y[N]. Must call forward() first. */
-static float compute_bce(MLPContext *ctx, const float *d_y, int N) {
+/* Compute validation loss on device data d_y[N]. Must call forward() first. */
+static int compute_loss(MLPContext *ctx, cublasHandle_t cublas,
+                        const float *d_y, int N, float *loss_out) {
+    if (loss_out == NULL) return -1;
     k_bce<<<GRID(N), BLOCK>>>(d_y, ctx->A2, ctx->loss_buf, N);
-    cudaDeviceSynchronize();
-    return reduce_sum_host(ctx->loss_buf, N) / (float)N;
+    KC();
+    CK(cudaDeviceSynchronize());
+
+    float bce_sum = 0.0f;
+    if (reduce_sum_host(ctx->loss_buf, N, &bce_sum) != 0)
+        return -1;
+
+    float reg = 0.0f;
+    if (ctx->l2 > 0.0f) {
+        float w1_sq = 0.0f;
+        CB(cublasSdot(cublas, ctx->input_dim * ctx->hidden,
+                      ctx->W1, 1, ctx->W1, 1, &w1_sq));
+        reg = ctx->l2 * w1_sq;
+    }
+
+    *loss_out = bce_sum / (float)N + reg;
+    return 0;
 }
 
 /* ================================================================
@@ -599,6 +652,17 @@ int mlp_train_predict(
     float *y_pred_out, float *y_proba_out,
     float *train_time_out, float *val_loss_out)
 {
+    if (X_train_h == NULL || y_train_h == NULL || X_eval_h == NULL ||
+        y_pred_out == NULL || y_proba_out == NULL ||
+        train_time_out == NULL || val_loss_out == NULL ||
+        n_train < 2 || n_eval < 1 || input_dim < 1 ||
+        hidden_neurons < 1 || batch_size < 1 || max_epochs < 1 ||
+        patience < 0 || learning_rate <= 0.0f || l2_alpha < 0.0f ||
+        dropout_rate < 0.0f || dropout_rate >= 1.0f) {
+        fprintf(stderr, "Invalid MLP CUDA training arguments\n");
+        return -1;
+    }
+
     /* ---- Internal train/val split (last 15% for early stopping) ---- */
     int n_val_int = (int)(0.15f * (float)n_train);
     if (n_val_int < 1) n_val_int = 1;
@@ -635,7 +699,6 @@ int mlp_train_predict(
     int max_batch = batch_size;
     if (n_val_int > max_batch) max_batch = n_val_int;
     if (n_eval > max_batch) max_batch = n_eval;
-    if (n_train_act > max_batch) max_batch = n_train_act;
 
     if (ctx_alloc(&ctx, max_batch) != 0) return -1;
 
@@ -664,6 +727,11 @@ int mlp_train_predict(
     float *h_b1 = (float *)calloc(H, sizeof(float));
     float *h_W2 = (float *)malloc(H * sizeof(float));
     float  h_b2 = 0.0f;
+    if (h_W1 == NULL || h_b1 == NULL || h_W2 == NULL) {
+        fprintf(stderr, "Host allocation failed during MLP initialization\n");
+        free(h_W1); free(h_b1); free(h_W2);
+        return -1;
+    }
 
     xavier_init(h_W1, D, H, seed);
     xavier_init(h_W2, H, 1, seed + 1);
@@ -705,7 +773,9 @@ int mlp_train_predict(
         /* Validation loss for early stopping */
         if (forward(&ctx, cublas, ctx.d_Xval, n_val_int, 0, 0) != 0)
             return -1;
-        float vl = compute_bce(&ctx, ctx.d_yval, n_val_int);
+        float vl = 0.0f;
+        if (compute_loss(&ctx, cublas, ctx.d_yval, n_val_int, &vl) != 0)
+            return -1;
 
         if (vl < best_val_loss) {
             best_val_loss = vl;
@@ -750,7 +820,7 @@ int mlp_train_predict(
 }
 
 /* ================================================================
- *  PUBLIC: Batch-train N models concurrently via CUDA streams
+ *  PUBLIC: Batch-train N models sequentially through the CUDA backend
  * ================================================================ */
 
 extern "C"
@@ -776,11 +846,8 @@ int mlp_train_predict_batch(
 {
     /*
      * For simplicity and reliability on the GTX 1650 (4 GB),
-     * we train candidates sequentially but keep all data on GPU.
-     * This avoids OOM from N concurrent allocations.
-     *
-     * If the GPU has more memory, candidates could be run on
-     * separate CUDA streams for true concurrency.
+     * candidates are evaluated sequentially. A future version can
+     * factor out data uploads and use separate streams for overlap.
      */
     for (int c = 0; c < n_candidates; c++) {
         int rc = mlp_train_predict(

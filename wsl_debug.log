@@ -1,0 +1,12 @@
+2026-06-08 18:04:15,033 - INFO - Running Preliminary Structural Benchmark: ADAM + RELU
+2026-06-08 18:04:15,048 - INFO - Skipping MLP for adam+relu (already exists)
+2026-06-08 18:04:15,049 - INFO - Skipping CNN for adam+relu (already exists)
+2026-06-08 18:04:15,050 - INFO - Running Preliminary Structural Benchmark: ADAM + TANH
+2026-06-08 18:04:15,065 - INFO - Running Random Search for MLP on adam+tanh with backend=cuda
+2026-06-08 18:04:15,065 - INFO - Starting Random Search for model: mlp...
+2026-06-08 18:04:40,229 - INFO - Model mlp - Seed 42 - Cache hits: 0/50
+2026-06-08 18:04:48,912 - INFO - Model mlp - Seed 123 - Cache hits: 0/50
+2026-06-08 18:04:57,154 - INFO - Model mlp - Seed 2024 - Cache hits: 0/50
+2026-06-08 18:04:57,482 - INFO - Random Search for mlp completed.
+2026-06-08 18:04:57,484 - INFO - Running Random Search for CNN on adam+tanh with backend=tensorflow
+2026-06-08 18:04:57,484 - INFO - Starting Random Search for model: cnn...
