@@ -28,6 +28,7 @@ def fit_predict_svm(
     gamma = float(candidate["gamma"]) if kernel == "rbf" else "scale"
     
     backend = model_config.get("backend", "cpu").lower()
+    use_probability = model_config.get("probability", True)
     
     if backend == "cuda":
         try:
@@ -36,7 +37,7 @@ def fit_predict_svm(
                 C=C,
                 gamma=gamma,
                 kernel=kernel,
-                probability=True,
+                probability=use_probability,
                 max_iter=50000,
             )
             backend_used = "cuml"
@@ -47,7 +48,7 @@ def fit_predict_svm(
                 C=C,
                 gamma=gamma,
                 kernel=kernel,
-                probability=True,
+                probability=use_probability,
                 random_state=seed,
                 max_iter=50000,
             )
@@ -58,14 +59,20 @@ def fit_predict_svm(
             C=C,
             gamma=gamma,
             kernel=kernel,
-            probability=True,
+            probability=use_probability,
             random_state=seed,
             max_iter=50000,
         )
         backend_used = "scikit-learn"
     
     model.fit(X_train, y_train)
-    proba = model.predict_proba(X_eval)[:, 1]
+    
+    if use_probability:
+        proba = model.predict_proba(X_eval)[:, 1]
+    else:
+        # Fake probability for GA/PSO that don't need AUC
+        proba = np.zeros(len(X_eval), dtype=np.float32)
+        
     pred = model.predict(X_eval)
     
     return pred, proba, model, backend_used

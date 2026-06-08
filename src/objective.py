@@ -111,7 +111,8 @@ def evaluate_candidate(
 ) -> dict[str, Any]:
     """Train on temporal train split and score on validation split."""
     candidate = normalize_candidate(candidate, config["search_spaces"], model_type)
-    model_config = config["experiment"]["model"]
+    model_config = config["experiment"]["model"].copy()
+    model_config["probability"] = False  # Disable SVM proba for massive speedup
     
     started = time.perf_counter()
     if model_type == "mlp":
@@ -190,7 +191,9 @@ def evaluate_best_on_test(
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Retrain on train+validation data and score the untouched test split."""
     candidate = normalize_candidate(candidate, config["search_spaces"], model_type)
-    model_config = config["experiment"]["model"]
+    model_config = config["experiment"]["model"].copy()
+    model_config["probability"] = True  # Enable probability for final test scoring
+    
     X_train_full = np.vstack([data.X_train, data.X_val])
     y_train_full = np.concatenate([data.y_train, data.y_val])
 

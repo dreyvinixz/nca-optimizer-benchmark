@@ -118,6 +118,7 @@ def run_random_search(data: Any, config: dict[str, Any], model_type: str) -> Non
         best_candidate = vector_to_candidate(best_vector, config["search_spaces"], model_type)
         best_test, seed_predictions = evaluate_best_on_test(model_type, "random_search", best_candidate, int(seed), config, data)
         best_test["best_validation_fitness"] = float(best_fitness)
+        best_test["worst_validation_fitness"] = float(min((r["fitness"] for r in rows), default=0.0))
         
         seed_results = {
             "runs": rows,

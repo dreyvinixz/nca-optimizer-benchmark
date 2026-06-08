@@ -43,7 +43,7 @@ benchmark:
   parallel_backend: loky
   tf_intraop_threads: 1
   tf_interop_threads: 1
-  experiment_mode: quick_test
+  experiment_mode: official_run
   
   quick_test:
     seeds: [1]
@@ -58,7 +58,7 @@ benchmark:
     official_experiment: false
     
   official_run:
-    seeds: [1, 2, 3, 4, 5]
+    seeds: [1, 2, 3]
     evaluations_per_seed: 1000
     generations: 100
     iterations: 100

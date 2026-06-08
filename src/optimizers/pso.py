@@ -132,6 +132,7 @@ def run_pso(data: Any, config: dict[str, Any], model_type: str) -> None:
         best_candidate = vector_to_candidate(gbest_position, config["search_spaces"], model_type)
         best_test, seed_predictions = evaluate_best_on_test(model_type, "pso", best_candidate, int(seed), config, data)
         best_test["best_validation_fitness"] = float(gbest_fitness)
+        best_test["worst_validation_fitness"] = float(min((r["fitness"] for r in rows), default=0.0))
 
         seed_results = {
             "runs": rows,

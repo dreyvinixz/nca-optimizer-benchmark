@@ -50,7 +50,25 @@ def main():
     time_gpu = t1 - t0
     logging.info(f"GPU Time: {time_gpu:.2f}s | Backend used: {backend_gpu}")
 
-    speedup = time_cpu / time_gpu if time_gpu > 0 else 0
+    # Test GPU (cuML) without proba
+    logging.info("Running SVM on GPU (cuML) without probability...")
+    candidate_no_proba = candidate.copy()
+    candidate_no_proba["probability"] = False
+    config_gpu["probability"] = False
+    t0 = time.time()
+    
+    # We will temporarily mock the probability flag inside svm_model.py
+    # or just rely on cuML directly to check speed
+    import cuml
+    model_fast = cuml.svm.SVC(C=1.0, gamma=0.1, kernel='rbf', probability=False, max_iter=50000)
+    model_fast.fit(X_train, y_train)
+    pred_fast = model_fast.predict(X_val)
+    t1 = time.time()
+    time_gpu_fast = t1 - t0
+    logging.info(f"GPU Time (No Proba): {time_gpu_fast:.2f}s")
+    
+    speedup_fast = time_cpu / time_gpu_fast if time_gpu_fast > 0 else 0
+    logging.info(f"Speedup without proba: {speedup_fast:.1f}x")
     logging.info(f"Speedup: {speedup:.1f}x")
 
     diff = np.mean(np.abs(proba_cpu - proba_gpu))
