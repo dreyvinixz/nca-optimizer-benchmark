@@ -32,6 +32,7 @@ model:
   validation_metric: val_loss
 
 objective:
+  fitness_mode: mcc_f1
   fitness:
     mcc_weight: 0.60
     f1_weight: 0.40

@@ -1,12 +1,9 @@
 {
-  "started_at": "2026-06-04T01:03:34",
+  "started_at": "2026-06-09T01:20:27",
   "output_root": "/mnt/c/mysystems/projects/nca-optimizer-benchmark/outputs/article_official",
-  "log_path": "/mnt/c/mysystems/projects/nca-optimizer-benchmark/logs/experiments/article_official_20260604_010334.log",
+  "log_path": "/mnt/c/mysystems/projects/nca-optimizer-benchmark/logs/experiments/article_official_20260609_012026.log",
   "models": [
-    "mlp",
-    "rf",
-    "svm",
-    "cnn"
+    "rf"
   ],
   "optimizers": [
     "random_search",
@@ -15,92 +12,35 @@
     "de",
     "gwo"
   ],
-  "expected_rows_per_combination": 5000,
+  "expected_rows_per_combination": 3000,
   "completed": [
     {
-      "model": "mlp",
-      "optimizer": "random_search",
-      "elapsed_seconds": 735.883,
-      "complete": true
-    },
-    {
-      "model": "mlp",
-      "optimizer": "ga",
-      "elapsed_seconds": 51.14,
-      "complete": true
-    },
-    {
-      "model": "mlp",
-      "optimizer": "pso",
-      "elapsed_seconds": 469.189,
-      "complete": true
-    },
-    {
-      "model": "mlp",
-      "optimizer": "de",
-      "elapsed_seconds": 212.143,
-      "complete": true
-    },
-    {
-      "model": "mlp",
-      "optimizer": "gwo",
-      "elapsed_seconds": 470.981,
-      "complete": true
-    },
-    {
       "model": "rf",
       "optimizer": "random_search",
-      "elapsed_seconds": 7382.915,
-      "complete": true
-    },
-    {
-      "model": "rf",
-      "optimizer": "ga",
-      "elapsed_seconds": 752.328,
-      "complete": true
-    },
-    {
-      "model": "rf",
-      "optimizer": "pso",
-      "elapsed_seconds": 2462.961,
-      "complete": true
-    },
-    {
-      "model": "rf",
-      "optimizer": "de",
-      "elapsed_seconds": 1191.924,
-      "complete": true
-    },
-    {
-      "model": "rf",
-      "optimizer": "gwo",
-      "elapsed_seconds": 2705.188,
-      "complete": true
-    },
-    {
-      "model": "svm",
-      "optimizer": "random_search",
-      "elapsed_seconds": 16482.326,
-      "complete": true
-    },
-    {
-      "model": "svm",
-      "optimizer": "ga",
-      "elapsed_seconds": 2368.449,
-      "complete": true
-    },
-    {
-      "model": "svm",
-      "optimizer": "pso",
-      "elapsed_seconds": 22714.561,
+      "elapsed_seconds": 4508.669,
       "complete": true
     }
   ],
-  "skipped": [],
+  "skipped": [
+    {
+      "model": "rf",
+      "optimizer": "ga"
+    },
+    {
+      "model": "rf",
+      "optimizer": "pso"
+    },
+    {
+      "model": "rf",
+      "optimizer": "de"
+    },
+    {
+      "model": "rf",
+      "optimizer": "gwo"
+    }
+  ],
   "failed": [],
-  "current": {
-    "model": "svm",
-    "optimizer": "de"
-  },
-  "updated_at": "2026-06-04T17:10:15"
+  "current": null,
+  "updated_at": "2026-06-09T02:35:35",
+  "finished_at": "2026-06-09T02:35:36"
 }

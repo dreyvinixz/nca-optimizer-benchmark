@@ -59,6 +59,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--evaluations-per-seed", type=int, default=1000)
     parser.add_argument("--generations", type=int, default=None)
     parser.add_argument("--iterations", type=int, default=None)
+    parser.add_argument("--fitness-mode", choices=["mcc_f1", "accuracy_cv"], default="mcc_f1")
     return parser
 
 
@@ -111,14 +112,20 @@ def _configure_official_budget(config: dict[str, Any], args: argparse.Namespace)
 def _configure_hardware(config: dict[str, Any], model_type: str, cpu_jobs: int) -> None:
     benchmark = config["experiment"]["benchmark"]
     model = config["experiment"]["model"]
-    if model_type == "mlp":
+    if model_type in ("mlp", "svm"):
         model["backend"] = "cuda"
         benchmark["parallel_enabled"] = False
         benchmark["n_jobs"] = 1
         benchmark["parallel_backend"] = "loky"
         benchmark["parallel_prefer"] = "processes"
+    elif model_type == "rf":
+        model["backend"] = "cuda"
+        benchmark["parallel_enabled"] = True
+        benchmark["n_jobs"] = 4
+        benchmark["parallel_backend"] = "loky"
+        benchmark["parallel_prefer"] = "processes"
     elif model_type == "cnn":
-        model["backend"] = "tensorflow"
+        model["backend"] = "cuda"
         benchmark["parallel_enabled"] = False
         benchmark["n_jobs"] = 1
         benchmark["parallel_backend"] = "loky"
@@ -180,11 +187,18 @@ def _write_status(output_root: Path, status: dict[str, Any]) -> None:
 
 def main() -> None:
     args = _build_parser().parse_args()
+    if args.fitness_mode == "accuracy_cv" and args.output_root == "outputs/article_official":
+        args.output_root = "outputs/article_official_accuracy"
+        
     output_root = ROOT / args.output_root
     output_root.mkdir(parents=True, exist_ok=True)
     log_path = _configure_logging(output_root)
 
     data, base_config = prepare_benchmark()
+    if "objective" not in base_config["experiment"]:
+        base_config["experiment"]["objective"] = {}
+    base_config["experiment"]["objective"]["fitness_mode"] = args.fitness_mode
+    
     _configure_outputs(base_config, output_root)
     _configure_official_budget(base_config, args)
 

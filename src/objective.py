@@ -100,6 +100,38 @@ def vector_to_candidate(vector: np.ndarray, search_space: dict[str, Any], model_
     return normalize_candidate(cand, search_space, model_type)
 
 
+def _dispatch_model(
+    model_type: str,
+    X_train: np.ndarray,
+    y_train: np.ndarray,
+    X_eval: np.ndarray,
+    candidate: dict[str, Any],
+    model_config: dict[str, Any],
+    seed: int,
+) -> tuple[np.ndarray, np.ndarray, dict[str, Any], str]:
+    if model_type == "mlp":
+        if model_config.get("backend") == "cuda":
+            from src.models.mlp_cuda import fit_predict_mlp_cuda
+            return fit_predict_mlp_cuda(X_train, y_train, X_eval, candidate, model_config, seed)
+        else:
+            from src.models.mlp import fit_predict_mlp as fit_predict_mlp_cpu
+            return fit_predict_mlp_cpu(X_train, y_train, X_eval, candidate, model_config, seed)
+    elif model_type == "svm":
+        from src.models.svm_model import fit_predict_svm
+        return fit_predict_svm(X_train, y_train, X_eval, candidate, model_config, seed)
+    elif model_type == "rf":
+        from src.models.rf_model import fit_predict_rf
+        return fit_predict_rf(X_train, y_train, X_eval, candidate, model_config, seed)
+    elif model_type == "cnn":
+        if model_config.get("backend") == "cuda":
+            from src.models.cnn_cuda import fit_predict_cnn_cuda
+            return fit_predict_cnn_cuda(X_train, y_train, X_eval, candidate, model_config, seed)
+        else:
+            from src.models.cnn import fit_predict_cnn
+            return fit_predict_cnn(X_train, y_train, X_eval, candidate, model_config, seed)
+    else:
+        raise ValueError(f"Unknown model_type: {model_type}")
+
 def evaluate_candidate(
     model_type: str,
     optimizer_name: str,
@@ -109,49 +141,70 @@ def evaluate_candidate(
     prepared_data: Any,
     evaluation_id: int,
 ) -> dict[str, Any]:
-    """Train on temporal train split and score on validation split."""
+    """Train on temporal train split and score on validation split, or use CV."""
     candidate = normalize_candidate(candidate, config["search_spaces"], model_type)
     model_config = config["experiment"]["model"].copy()
     model_config["probability"] = False  # Disable SVM proba for massive speedup
     
+    fitness_mode = config["experiment"]["objective"].get("fitness_mode", "mcc_f1")
+    
     started = time.perf_counter()
-    if model_type == "mlp":
-        if model_config.get("backend") == "cuda":
-            from src.models.mlp_cuda import fit_predict_mlp_cuda
-
-            y_pred, y_proba, _, backend = fit_predict_mlp_cuda(
-                prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
-            )
-        else:
-            y_pred, y_proba, _, backend = fit_predict_mlp_cpu(
-                prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
-            )
-    elif model_type == "svm":
-        y_pred, y_proba, _, backend = fit_predict_svm(
-            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
-        )
-    elif model_type == "rf":
-        y_pred, y_proba, _, backend = fit_predict_rf(
-            prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
-        )
-    elif model_type == "cnn":
-        if model_config.get("backend") == "cuda":
-            from src.models.cnn_cuda import fit_predict_cnn_cuda
-
-            y_pred, y_proba, _, backend = fit_predict_cnn_cuda(
-                prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
-            )
-        else:
-            y_pred, y_proba, _, backend = fit_predict_cnn(
-                prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled, candidate, model_config, seed + evaluation_id
-            )
-    else:
-        raise ValueError(f"Unknown model_type: {model_type}")
+    
+    if fitness_mode == "accuracy_cv":
+        from sklearn.model_selection import TimeSeriesSplit
+        from sklearn.metrics import accuracy_score
         
+        X_full_train_scaled = np.vstack([prepared_data.X_train_scaled, prepared_data.X_val_scaled])
+        y_full_train = np.concatenate([prepared_data.y_train, prepared_data.y_val])
+        
+        tscv = TimeSeriesSplit(n_splits=3)
+        fold_fitnesses = []
+        acc_trains = []
+        acc_vals = []
+        
+        backend = "unknown"
+        for train_idx, val_idx in tscv.split(X_full_train_scaled):
+            X_tr, X_v = X_full_train_scaled[train_idx], X_full_train_scaled[val_idx]
+            y_tr, y_v = y_full_train[train_idx], y_full_train[val_idx]
+            
+            X_eval_combined = np.vstack([X_tr, X_v])
+            y_pred_comb, _, _, backend = _dispatch_model(
+                model_type, X_tr, y_tr, X_eval_combined, candidate, model_config, seed + evaluation_id
+            )
+            
+            y_pred_tr = y_pred_comb[:len(X_tr)]
+            y_pred_v = y_pred_comb[len(X_tr):]
+            
+            acc_tr = float(accuracy_score(y_tr, y_pred_tr))
+            acc_v = float(accuracy_score(y_v, y_pred_v))
+            
+            fold_fitness = 0.4 * acc_tr + 0.6 * acc_v
+            fold_fitnesses.append(fold_fitness)
+            acc_trains.append(acc_tr)
+            acc_vals.append(acc_v)
+            
+        fitness = float(np.mean(fold_fitnesses))
+        acc_train_mean = float(np.mean(acc_trains))
+        acc_val_mean = float(np.mean(acc_vals))
+        
+        metrics = {
+            "mcc": 0.0, "f1": 0.0, "auc_roc": 0.0, "auc_pr": 0.0,
+            "accuracy": acc_val_mean, "precision": 0.0, "recall": 0.0
+        }
+        fitness_formula = "mean(0.4*Acc_tr + 0.6*Acc_val)"
+        
+    else:
+        y_pred, y_proba, _, backend = _dispatch_model(
+            model_type, prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled,
+            candidate, model_config, seed + evaluation_id
+        )
+        metrics = compute_classification_metrics(prepared_data.y_val, y_pred, y_proba)
+        weights = config["experiment"]["objective"]["fitness"]
+        fitness = float(weights["mcc_weight"] * metrics["mcc"] + weights["f1_weight"] * metrics["f1"])
+        fitness_formula = f"{weights['mcc_weight']} * MCC + {weights['f1_weight']} * F1"
+        acc_train_mean = 0.0
+
     train_time = time.perf_counter() - started
-    metrics = compute_classification_metrics(prepared_data.y_val, y_pred, y_proba)
-    weights = config["experiment"]["objective"]["fitness"]
-    fitness = weights["mcc_weight"] * metrics["mcc"] + weights["f1_weight"] * metrics["f1"]
 
     row = {
         "model_type": model_type,
@@ -175,7 +228,9 @@ def evaluate_candidate(
         "parallel_enabled": config["experiment"]["benchmark"].get("parallel_enabled", False),
         "n_jobs": config["experiment"]["benchmark"].get("n_jobs", 1),
         "parallel_backend": config["experiment"]["benchmark"].get("parallel_backend", "none"),
-        "fitness_formula": f"{weights['mcc_weight']} * MCC + {weights['f1_weight']} * F1",
+        "fitness_formula": fitness_formula,
+        "fitness_mode": fitness_mode,
+        "acc_train": acc_train_mean,
         "decoded_hyperparameters": json.dumps(candidate)
     }
     return row
