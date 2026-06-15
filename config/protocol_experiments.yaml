@@ -1,0 +1,55 @@
+protocol:
+  name: professor_2x2_validation_fitness_protocol
+  description: >
+    Two validation protocols crossed with two fitness functions. The blind
+    X_test split is held out for final comparison in every experiment.
+
+common:
+  models: [mlp, rf, svm, cnn]
+  optimizers: [random_search, ga, pso, de, gwo]
+  seeds: [1, 2, 3]
+  evaluations_per_seed: 1000
+  final_test: X_test blind 20 percent split
+
+experiments:
+  exp_1_holdout_mcc_f1:
+    status: already_run
+    fitness_mode: mcc_f1
+    output_root: outputs/article_official
+    validation_protocol: temporal_holdout_60_20_20
+    fitness_formula: 0.6 * MCC_val + 0.4 * F1_val
+    notes: Current official MCC/F1 experiment.
+
+  exp_2_holdout_accuracy:
+    status: ready_not_run
+    fitness_mode: accuracy_holdout
+    output_root: outputs/article_official_accuracy_holdout
+    validation_protocol: temporal_holdout_60_20_20
+    fitness_formula: 0.4 * Acc_train + 0.6 * Acc_val
+    run_command: >
+      python scripts/run_article_official_benchmark.py
+      --fitness-mode accuracy_holdout
+      --seeds 1 2 3
+      --evaluations-per-seed 1000
+
+  exp_3_cv_mcc_f1:
+    status: ready_not_run
+    fitness_mode: mcc_f1_cv
+    output_root: outputs/article_official_mcc_f1_cv
+    validation_protocol: temporal_cross_validation_on_train_validation_block
+    n_splits: 3
+    fitness_formula: mean(0.6 * MCC_val_fold + 0.4 * F1_val_fold)
+    run_command: >
+      python scripts/run_article_official_benchmark.py
+      --fitness-mode mcc_f1_cv
+      --seeds 1 2 3
+      --evaluations-per-seed 1000
+
+  exp_4_cv_accuracy:
+    status: already_run
+    fitness_mode: accuracy_cv
+    output_root: outputs/article_official_accuracy
+    validation_protocol: temporal_cross_validation_on_train_validation_block
+    n_splits: 3
+    fitness_formula: mean(0.4 * Acc_train_fold + 0.6 * Acc_val_fold)
+    notes: Current official Accuracy-CV experiment.

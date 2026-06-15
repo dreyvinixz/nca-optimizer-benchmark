@@ -1,0 +1,7 @@
+item,value
+Seeds,"1, 2, 3"
+Orcamento oficial,1000 avaliacoes de fitness por seed
+GA/DE,populacao = 10
+PSO,10 particulas; inertia=0.70; cognitive/social=1.50
+GWO,10 lobos
+MLP/CNN,tanh + rmsprop + binary_crossentropy; max_epochs=10; early stopping patience=3

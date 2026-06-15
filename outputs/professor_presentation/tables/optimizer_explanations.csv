@@ -1,0 +1,6 @@
+optimizer,how_it_works
+Random Search,Amostra candidatos aleatorios; baseline simples para medir ganho dos metaheuristicos.
+GA,"Populacao evolui por selecao, crossover e mutacao; bom para busca combinatoria mista."
+PSO,Particulas ajustam posicao pela melhor experiencia individual e coletiva; explora continuidade do espaco.
+DE,Gera candidatos por diferencas entre vetores; forte para parametros continuos.
+GWO,Hierarquia alfa/beta/delta guia lobos; equilibra exploracao e intensificacao.

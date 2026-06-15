@@ -1,0 +1,5 @@
+model,role
+MLP,Rede neural densa para padroes nao lineares nas features tecnicas.
+CNN,Rede convolucional 1D para padroes locais nas sequencias de indicadores.
+SVM,Classificador de margem com kernel linear/RBF.
+Random Forest,Ensemble de arvores para robustez e interacoes nao lineares.

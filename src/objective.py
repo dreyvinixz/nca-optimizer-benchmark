@@ -15,6 +15,8 @@ from src.models.svm_model import fit_predict_svm
 from src.models.rf_model import fit_predict_rf
 from src.models.cnn import fit_predict_cnn
 
+CV_FOLDS = 3
+
 def get_bounds(search_space: dict[str, Any], model_type: str) -> tuple[np.ndarray, np.ndarray, list[str]]:
     """Return lower bounds, upper bounds, and variable types for a model's search space."""
     space = search_space.get(model_type, {})
@@ -132,6 +134,37 @@ def _dispatch_model(
     else:
         raise ValueError(f"Unknown model_type: {model_type}")
 
+
+def _mcc_f1_fitness(metrics: dict[str, Any], config: dict[str, Any]) -> tuple[float, str]:
+    weights = config["experiment"]["objective"]["fitness"]
+    fitness = float(weights["mcc_weight"] * metrics["mcc"] + weights["f1_weight"] * metrics["f1"])
+    formula = f"{weights['mcc_weight']} * MCC + {weights['f1_weight']} * F1"
+    return fitness, formula
+
+
+def _accuracy_holdout_fitness(acc_train: float, acc_val: float) -> tuple[float, str]:
+    return float(0.4 * acc_train + 0.6 * acc_val), "0.4*Acc_train + 0.6*Acc_val"
+
+
+def _fitness_formula_for_mode(fitness_mode: str, config: dict[str, Any]) -> str:
+    if fitness_mode == "mcc_f1":
+        return _mcc_f1_fitness({"mcc": 0.0, "f1": 0.0}, config)[1]
+    if fitness_mode == "accuracy_holdout":
+        return "0.4*Acc_train + 0.6*Acc_val"
+    if fitness_mode == "mcc_f1_cv":
+        return "mean(0.6*MCC_val_fold + 0.4*F1_val_fold)"
+    if fitness_mode == "accuracy_cv":
+        return "mean(0.4*Acc_train_fold + 0.6*Acc_val_fold)"
+    return fitness_mode
+
+
+def _mean_metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    keys = ["mcc", "f1", "auc_roc", "auc_pr", "accuracy", "precision", "recall", "balanced_accuracy"]
+    return {
+        key: float(np.nanmean([row.get(key, np.nan) for row in rows]))
+        for key in keys
+    }
+
 def evaluate_candidate(
     model_type: str,
     optimizer_name: str,
@@ -189,20 +222,76 @@ def evaluate_candidate(
         
         metrics = {
             "mcc": 0.0, "f1": 0.0, "auc_roc": 0.0, "auc_pr": 0.0,
-            "accuracy": acc_val_mean, "precision": 0.0, "recall": 0.0
+            "accuracy": acc_val_mean, "precision": 0.0, "recall": 0.0,
+            "balanced_accuracy": 0.0,
         }
         fitness_formula = "mean(0.4*Acc_tr + 0.6*Acc_val)"
+
+    elif fitness_mode == "mcc_f1_cv":
+        from sklearn.model_selection import TimeSeriesSplit
+
+        X_full_train_scaled = np.vstack([prepared_data.X_train_scaled, prepared_data.X_val_scaled])
+        y_full_train = np.concatenate([prepared_data.y_train, prepared_data.y_val])
+
+        tscv = TimeSeriesSplit(n_splits=CV_FOLDS)
+        fold_fitnesses = []
+        fold_metrics = []
+        acc_trains = []
+
+        backend = "unknown"
+        for train_idx, val_idx in tscv.split(X_full_train_scaled):
+            X_tr, X_v = X_full_train_scaled[train_idx], X_full_train_scaled[val_idx]
+            y_tr, y_v = y_full_train[train_idx], y_full_train[val_idx]
+
+            X_eval_combined = np.vstack([X_tr, X_v])
+            y_pred_comb, y_proba_comb, _, backend = _dispatch_model(
+                model_type, X_tr, y_tr, X_eval_combined, candidate, model_config, seed + evaluation_id
+            )
+
+            y_pred_tr = y_pred_comb[:len(X_tr)]
+            y_pred_v = y_pred_comb[len(X_tr):]
+            y_proba_v = y_proba_comb[len(X_tr):]
+
+            metrics_v = compute_classification_metrics(y_v, y_pred_v, y_proba_v)
+            fold_fitness, _ = _mcc_f1_fitness(metrics_v, config)
+            fold_fitnesses.append(fold_fitness)
+            fold_metrics.append(metrics_v)
+            acc_trains.append(float(np.mean(y_pred_tr == y_tr)))
+
+        fitness = float(np.mean(fold_fitnesses))
+        metrics = _mean_metrics(fold_metrics)
+        acc_train_mean = float(np.mean(acc_trains))
+        fitness_formula = "mean(0.6*MCC_val_fold + 0.4*F1_val_fold)"
+
+    elif fitness_mode == "accuracy_holdout":
+        from sklearn.metrics import accuracy_score
+
+        X_eval_combined = np.vstack([prepared_data.X_train_scaled, prepared_data.X_val_scaled])
+        y_pred_comb, y_proba_comb, _, backend = _dispatch_model(
+            model_type, prepared_data.X_train_scaled, prepared_data.y_train, X_eval_combined,
+            candidate, model_config, seed + evaluation_id
+        )
+        y_pred_train = y_pred_comb[:len(prepared_data.X_train_scaled)]
+        y_pred_val = y_pred_comb[len(prepared_data.X_train_scaled):]
+        y_proba_val = y_proba_comb[len(prepared_data.X_train_scaled):]
+
+        acc_train_mean = float(accuracy_score(prepared_data.y_train, y_pred_train))
+        metrics = compute_classification_metrics(prepared_data.y_val, y_pred_val, y_proba_val)
+        fitness, fitness_formula = _accuracy_holdout_fitness(acc_train_mean, float(metrics["accuracy"]))
         
-    else:
+    elif fitness_mode == "mcc_f1":
         y_pred, y_proba, _, backend = _dispatch_model(
             model_type, prepared_data.X_train_scaled, prepared_data.y_train, prepared_data.X_val_scaled,
             candidate, model_config, seed + evaluation_id
         )
         metrics = compute_classification_metrics(prepared_data.y_val, y_pred, y_proba)
-        weights = config["experiment"]["objective"]["fitness"]
-        fitness = float(weights["mcc_weight"] * metrics["mcc"] + weights["f1_weight"] * metrics["f1"])
-        fitness_formula = f"{weights['mcc_weight']} * MCC + {weights['f1_weight']} * F1"
+        fitness, fitness_formula = _mcc_f1_fitness(metrics, config)
         acc_train_mean = 0.0
+    else:
+        raise ValueError(
+            "Unknown fitness_mode: "
+            f"{fitness_mode}. Expected one of: mcc_f1, accuracy_holdout, mcc_f1_cv, accuracy_cv."
+        )
 
     train_time = time.perf_counter() - started
 
@@ -294,8 +383,7 @@ def evaluate_best_on_test(
 
     runtime = time.perf_counter() - started
     metrics = compute_classification_metrics(data.y_test, y_pred, y_proba)
-    weights = config["experiment"]["objective"]["fitness"]
-    fitness = weights["mcc_weight"] * metrics["mcc"] + weights["f1_weight"] * metrics["f1"]
+    fitness_mode = config["experiment"]["objective"].get("fitness_mode", "mcc_f1")
 
     summary = {
         "model_type": model_type,
@@ -304,7 +392,8 @@ def evaluate_best_on_test(
         "runtime_seconds_test": float(runtime),
         "model_backend": backend,
         "official_experiment": config["experiment"]["benchmark"].get("official_experiment", False),
-        "fitness_formula": f"{weights['mcc_weight']} * MCC + {weights['f1_weight']} * F1",
+        "fitness_mode": fitness_mode,
+        "fitness_formula": _fitness_formula_for_mode(fitness_mode, config),
         "decoded_hyperparameters": json.dumps(candidate)
     }
     summary.update({f"{key}_test": value for key, value in metrics.items()})

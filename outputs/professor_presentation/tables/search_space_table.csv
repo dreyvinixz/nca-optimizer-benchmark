@@ -1,0 +1,22 @@
+model,hyperparameter,type,domain
+MLP,hidden_neurons,int,5 - 500
+MLP,learning_rate,float,1e-08 - 0.01 (log10)
+MLP,l2_alpha,float,1e-08 - 0.01 (log10)
+MLP,dropout_rate,float,0.0 - 0.1
+MLP,batch_size,categorical,"16, 32, 64, 80, 112, 128"
+SVM,C,float,0.001 - 1.0e3 (log10)
+SVM,gamma,float,1e-05 - 1.0e1 (log10)
+SVM,kernel,categorical,"linear, rbf"
+RF,n_estimators,int,50 - 500
+RF,max_depth,int,5 - 50
+RF,min_samples_split,int,2 - 20
+RF,min_samples_leaf,int,1 - 20
+RF,max_features,categorical,"sqrt, log2, None"
+RF,class_weight,categorical,"None, balanced"
+CNN,n_filters,int,8 - 128
+CNN,kernel_size,int,2 - 5
+CNN,dense_neurons,int,16 - 256
+CNN,learning_rate,float,1e-08 - 0.01 (log10)
+CNN,l2_alpha,float,1e-08 - 0.01 (log10)
+CNN,dropout_rate,float,0.0 - 0.1
+CNN,batch_size,categorical,"16, 32, 64, 80, 112, 128"

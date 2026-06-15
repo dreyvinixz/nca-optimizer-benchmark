@@ -38,6 +38,12 @@ from src.optimizers.random_search import run_random_search
 
 MODELS = ["mlp", "rf", "svm", "cnn"]
 OPTIMIZERS = ["random_search", "ga", "pso", "de", "gwo"]
+FITNESS_OUTPUT_ROOTS = {
+    "mcc_f1": "outputs/article_official",
+    "accuracy_holdout": "outputs/article_official_accuracy_holdout",
+    "mcc_f1_cv": "outputs/article_official_mcc_f1_cv",
+    "accuracy_cv": "outputs/article_official_accuracy",
+}
 RUNNERS: dict[str, Callable[[Any, dict[str, Any], str], None]] = {
     "random_search": run_random_search,
     "ga": run_ga,
@@ -51,15 +57,19 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--models", nargs="+", default=MODELS, choices=MODELS)
     parser.add_argument("--optimizers", nargs="+", default=OPTIMIZERS, choices=OPTIMIZERS)
-    parser.add_argument("--output-root", default="outputs/article_official")
+    parser.add_argument("--output-root", default=None)
     parser.add_argument("--force", action="store_true", help="Archive and rerun completed outputs too.")
     parser.add_argument("--stop-on-error", action="store_true")
     parser.add_argument("--cpu-jobs", type=int, default=-1)
-    parser.add_argument("--seeds", nargs="+", type=int, default=[1, 2, 3, 4, 5])
+    parser.add_argument("--seeds", nargs="+", type=int, default=[1, 2, 3])
     parser.add_argument("--evaluations-per-seed", type=int, default=1000)
     parser.add_argument("--generations", type=int, default=None)
     parser.add_argument("--iterations", type=int, default=None)
-    parser.add_argument("--fitness-mode", choices=["mcc_f1", "accuracy_cv"], default="mcc_f1")
+    parser.add_argument(
+        "--fitness-mode",
+        choices=["mcc_f1", "accuracy_holdout", "mcc_f1_cv", "accuracy_cv"],
+        default="mcc_f1",
+    )
     return parser
 
 
@@ -187,8 +197,8 @@ def _write_status(output_root: Path, status: dict[str, Any]) -> None:
 
 def main() -> None:
     args = _build_parser().parse_args()
-    if args.fitness_mode == "accuracy_cv" and args.output_root == "outputs/article_official":
-        args.output_root = "outputs/article_official_accuracy"
+    if args.output_root is None:
+        args.output_root = FITNESS_OUTPUT_ROOTS[args.fitness_mode]
         
     output_root = ROOT / args.output_root
     output_root.mkdir(parents=True, exist_ok=True)
@@ -206,8 +216,10 @@ def main() -> None:
         "started_at": datetime.now().isoformat(timespec="seconds"),
         "output_root": str(output_root),
         "log_path": str(log_path),
+        "fitness_mode": args.fitness_mode,
         "models": args.models,
         "optimizers": args.optimizers,
+        "seeds": args.seeds,
         "expected_rows_per_combination": _expected_rows(base_config),
         "completed": [],
         "skipped": [],
@@ -222,6 +234,7 @@ def main() -> None:
         len(args.seeds),
         _expected_rows(base_config),
     )
+    logging.info("Fitness mode: %s", args.fitness_mode)
     logging.info("Model order: %s", args.models)
     logging.info("Optimizer order: %s", args.optimizers)
 

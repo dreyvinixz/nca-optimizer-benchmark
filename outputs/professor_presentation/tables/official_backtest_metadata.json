@@ -1,0 +1,22 @@
+{
+  "model": "MLP",
+  "optimizer": "GWO",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "transaction_cost_points": 5.0,
+  "alignment": "predictions row_id aligned to reconstructed chronological X_test frame",
+  "rows_per_seed": 3012,
+  "test_start": "2024-05-20 15:25:00",
+  "test_end": "2024-06-28 17:50:00",
+  "outputs": {
+    "trades": "outputs\\professor_presentation\\tables\\official_backtest_trades.csv",
+    "summary_by_seed": "outputs\\professor_presentation\\tables\\official_backtest_summary_by_seed.csv",
+    "summary": "outputs\\professor_presentation\\tables\\official_backtest_summary.csv",
+    "statistical_tests": "outputs\\professor_presentation\\tables\\official_backtest_statistical_tests.csv",
+    "equity_curve": "outputs\\professor_presentation\\figures\\official_backtest_equity_curve.png",
+    "metrics": "outputs\\professor_presentation\\figures\\official_backtest_metrics.png"
+  }
+}

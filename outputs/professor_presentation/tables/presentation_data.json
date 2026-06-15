@@ -1,0 +1,102 @@
+{
+  "dataset": {
+    "n_rows": 15057,
+    "n_columns": 70,
+    "start": "2024-01-02 09:40:00",
+    "end": "2024-06-28 17:50:00",
+    "split_rows": [
+      {
+        "split": "Treino",
+        "rows": 9034,
+        "share": 0.5999867171415288,
+        "start": "2024-01-02 09:40:00",
+        "end": "2024-04-09 17:50:00",
+        "uptrend": 4766,
+        "downtrend": 4268
+      },
+      {
+        "split": "Validacao",
+        "rows": 3011,
+        "share": 0.19997343428305772,
+        "start": "2024-04-09 17:50:00",
+        "end": "2024-05-20 15:20:00",
+        "uptrend": 1592,
+        "downtrend": 1419
+      },
+      {
+        "split": "Teste",
+        "rows": 3012,
+        "share": 0.20003984857541343,
+        "start": "2024-05-20 15:25:00",
+        "end": "2024-06-28 17:50:00",
+        "uptrend": 1535,
+        "downtrend": 1477
+      }
+    ],
+    "features": [
+      {
+        "index": 30,
+        "feature": "EMA_5-3"
+      },
+      {
+        "index": 52,
+        "feature": "EMA_5-3_normalized"
+      },
+      {
+        "index": 31,
+        "feature": "EMA_7-3"
+      },
+      {
+        "index": 53,
+        "feature": "EMA_7-3_normalized"
+      },
+      {
+        "index": 42,
+        "feature": "SMA_9_normalized"
+      },
+      {
+        "index": 33,
+        "feature": "EMA_9-3"
+      },
+      {
+        "index": 41,
+        "feature": "EMA_7_normalized"
+      }
+    ]
+  },
+  "figures": {
+    "dataset_split": "outputs\\professor_presentation\\figures\\dataset_temporal_split.png",
+    "structural_pretest": "outputs\\professor_presentation\\figures\\structural_pretest_best_fitness.png",
+    "convergence_mcc_f1": "outputs\\professor_presentation\\figures\\convergence_mcc_f1_mlp_cnn.png",
+    "convergence_accuracy_cv": "outputs\\professor_presentation\\figures\\convergence_accuracy_cv_mlp_cnn.png",
+    "train_signal_mcc_f1": "outputs\\professor_presentation\\figures\\train_signal_vs_test_accuracy_mcc_f1.png",
+    "train_signal_accuracy_cv": "outputs\\professor_presentation\\figures\\train_signal_vs_test_accuracy_accuracy_cv.png",
+    "mcc_f1_mcc_by_model_optimizer": "outputs\\professor_presentation\\figures\\mcc_f1_mcc_test_by_model_optimizer_clean.png",
+    "mcc_f1_accuracy_by_model_optimizer": "outputs\\professor_presentation\\figures\\mcc_f1_accuracy_test_by_model_optimizer_clean.png",
+    "accuracy_cv_mcc_by_model_optimizer": "outputs\\professor_presentation\\figures\\accuracy_cv_mcc_test_by_model_optimizer_clean.png",
+    "accuracy_cv_accuracy_by_model_optimizer": "outputs\\professor_presentation\\figures\\accuracy_cv_accuracy_test_by_model_optimizer_clean.png",
+    "best_model_metrics": "outputs\\professor_presentation\\figures\\best_model_metrics_mlp_gwo.png",
+    "fitness_side_by_side_accuracy": "outputs\\professor_presentation\\figures\\fitness_side_by_side_accuracy_test.png",
+    "gap_accuracy": "outputs\\professor_presentation\\figures\\gap_heatmap_accuracy_test.png",
+    "gap_mcc": "outputs\\professor_presentation\\figures\\gap_heatmap_mcc_test.png",
+    "official_backtest_equity": "outputs\\professor_presentation\\figures\\official_backtest_equity_curve.png",
+    "official_backtest_metrics": "outputs\\professor_presentation\\figures\\official_backtest_metrics.png"
+  },
+  "tables": {
+    "dataset_split": "outputs\\professor_presentation\\tables\\dataset_split_summary.csv",
+    "features": "outputs\\professor_presentation\\tables\\infogain7_features.csv",
+    "search_space": "outputs\\professor_presentation\\tables\\search_space_table.csv",
+    "official_summary": "outputs\\professor_presentation\\tables\\official_model_optimizer_summary.csv",
+    "global_summary": "outputs\\professor_presentation\\tables\\official_global_summary.csv",
+    "best_model_metrics": "outputs\\professor_presentation\\tables\\best_model_metric_comparison.csv",
+    "validation_signal": "outputs\\professor_presentation\\tables\\best_model_validation_signal.csv",
+    "structural_pretest": "outputs\\professor_presentation\\tables\\structural_pretest_summary.csv",
+    "official_backtest_summary": "outputs\\professor_presentation\\tables\\official_backtest_summary.csv",
+    "official_backtest_tests": "outputs\\professor_presentation\\tables\\official_backtest_statistical_tests.csv",
+    "official_backtest_metadata": "outputs\\professor_presentation\\tables\\official_backtest_metadata.json"
+  },
+  "notes": {
+    "train_signal": "For MCC/F1 the available adjustment signal is validation accuracy from the best validation candidate; for Accuracy-CV the available training signal is mean CV train accuracy.",
+    "primary_conclusion": "MCC/F1 is recommended because it slightly leads Accuracy-CV on mean X_test accuracy and MCC."
+  }
+}
