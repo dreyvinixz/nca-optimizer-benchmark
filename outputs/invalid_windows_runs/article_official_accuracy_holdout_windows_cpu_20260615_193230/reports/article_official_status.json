@@ -1,0 +1,47 @@
+{
+  "started_at": "2026-06-15T19:16:36",
+  "output_root": "C:\\mysystems\\projects\\nca-optimizer-benchmark\\outputs\\article_official_accuracy_holdout",
+  "log_path": "C:\\mysystems\\projects\\nca-optimizer-benchmark\\logs\\experiments\\article_official_20260615_191636.log",
+  "fitness_mode": "accuracy_holdout",
+  "backend_policy": "cpu",
+  "models": [
+    "mlp",
+    "rf",
+    "svm",
+    "cnn"
+  ],
+  "optimizers": [
+    "random_search",
+    "ga",
+    "pso",
+    "de",
+    "gwo"
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "expected_rows_per_combination": 3000,
+  "completed": [
+    {
+      "model": "mlp",
+      "optimizer": "random_search",
+      "elapsed_seconds": 363.963,
+      "complete": true
+    },
+    {
+      "model": "mlp",
+      "optimizer": "ga",
+      "elapsed_seconds": 46.046,
+      "complete": true
+    }
+  ],
+  "skipped": [],
+  "failed": [],
+  "current": {
+    "model": "mlp",
+    "optimizer": "pso"
+  },
+  "updated_at": "2026-06-15T19:23:26"
+}

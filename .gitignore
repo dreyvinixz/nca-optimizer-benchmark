@@ -1,9 +1,15 @@
 # Local environments
 .venv/
 .venv_wsl/
+.venv_transcricao/
 venv/
 __pycache__/
 *.pyc
+
+# Local secrets
+.env
+.env.*
+!.env.example
 
 # Legacy experiments are reference material and should not be required by the clean pipeline.
 experiments/
@@ -12,6 +18,10 @@ experiments/
 .pytest_cache/
 .mypy_cache/
 logs/experiments/*.log
+
+# Local WhatsApp transcription artifacts
+saida_transcricao/
+WhatsApp Ptt*.ogg
 
 # Large generated model artifacts
 *.h5

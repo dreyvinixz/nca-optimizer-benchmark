@@ -66,6 +66,12 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--generations", type=int, default=None)
     parser.add_argument("--iterations", type=int, default=None)
     parser.add_argument(
+        "--backend-policy",
+        choices=["official", "cpu"],
+        default="official",
+        help="Use official GPU/CUDA policy or force CPU-safe backends for local runs.",
+    )
+    parser.add_argument(
         "--fitness-mode",
         choices=["mcc_f1", "accuracy_holdout", "mcc_f1_cv", "accuracy_cv"],
         default="mcc_f1",
@@ -119,9 +125,21 @@ def _configure_official_budget(config: dict[str, Any], args: argparse.Namespace)
     benchmark["official_run"]["official_experiment"] = True
 
 
-def _configure_hardware(config: dict[str, Any], model_type: str, cpu_jobs: int) -> None:
+def _configure_hardware(config: dict[str, Any], model_type: str, cpu_jobs: int, backend_policy: str = "official") -> None:
     benchmark = config["experiment"]["benchmark"]
     model = config["experiment"]["model"]
+    if backend_policy == "cpu":
+        model["backend"] = "cpu"
+        if model_type in ("mlp", "cnn"):
+            benchmark["parallel_enabled"] = False
+            benchmark["n_jobs"] = 1
+        else:
+            benchmark["parallel_enabled"] = True
+            benchmark["n_jobs"] = cpu_jobs
+        benchmark["parallel_backend"] = "loky"
+        benchmark["parallel_prefer"] = "processes"
+        return
+
     if model_type in ("mlp", "svm"):
         model["backend"] = "cuda"
         benchmark["parallel_enabled"] = False
@@ -217,6 +235,7 @@ def main() -> None:
         "output_root": str(output_root),
         "log_path": str(log_path),
         "fitness_mode": args.fitness_mode,
+        "backend_policy": args.backend_policy,
         "models": args.models,
         "optimizers": args.optimizers,
         "seeds": args.seeds,
@@ -235,13 +254,14 @@ def main() -> None:
         _expected_rows(base_config),
     )
     logging.info("Fitness mode: %s", args.fitness_mode)
+    logging.info("Backend policy: %s", args.backend_policy)
     logging.info("Model order: %s", args.models)
     logging.info("Optimizer order: %s", args.optimizers)
 
     for model_type in args.models:
         for optimizer in args.optimizers:
             config = deepcopy(base_config)
-            _configure_hardware(config, model_type, args.cpu_jobs)
+            _configure_hardware(config, model_type, args.cpu_jobs, args.backend_policy)
             combo = {"model": model_type, "optimizer": optimizer}
             status["current"] = combo
             _write_status(output_root, status)

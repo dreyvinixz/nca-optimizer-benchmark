@@ -1,0 +1,153 @@
+{
+  "started_at": "2026-06-15T19:36:47",
+  "output_root": "/mnt/c/mysystems/projects/nca-optimizer-benchmark/outputs/article_official_accuracy_holdout",
+  "log_path": "/mnt/c/mysystems/projects/nca-optimizer-benchmark/logs/experiments/article_official_20260615_193647.log",
+  "fitness_mode": "accuracy_holdout",
+  "backend_policy": "official",
+  "models": [
+    "mlp",
+    "rf",
+    "svm",
+    "cnn"
+  ],
+  "optimizers": [
+    "random_search",
+    "ga",
+    "pso",
+    "de",
+    "gwo"
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "expected_rows_per_combination": 3000,
+  "completed": [
+    {
+      "model": "mlp",
+      "optimizer": "random_search",
+      "elapsed_seconds": 428.165,
+      "complete": true
+    },
+    {
+      "model": "mlp",
+      "optimizer": "ga",
+      "elapsed_seconds": 46.018,
+      "complete": true
+    },
+    {
+      "model": "mlp",
+      "optimizer": "pso",
+      "elapsed_seconds": 381.054,
+      "complete": true
+    },
+    {
+      "model": "mlp",
+      "optimizer": "de",
+      "elapsed_seconds": 172.445,
+      "complete": true
+    },
+    {
+      "model": "mlp",
+      "optimizer": "gwo",
+      "elapsed_seconds": 379.344,
+      "complete": true
+    },
+    {
+      "model": "rf",
+      "optimizer": "random_search",
+      "elapsed_seconds": 4811.478,
+      "complete": true
+    },
+    {
+      "model": "rf",
+      "optimizer": "ga",
+      "elapsed_seconds": 812.02,
+      "complete": true
+    },
+    {
+      "model": "rf",
+      "optimizer": "pso",
+      "elapsed_seconds": 1925.983,
+      "complete": true
+    },
+    {
+      "model": "rf",
+      "optimizer": "de",
+      "elapsed_seconds": 3095.055,
+      "complete": true
+    },
+    {
+      "model": "rf",
+      "optimizer": "gwo",
+      "elapsed_seconds": 7207.182,
+      "complete": true
+    },
+    {
+      "model": "svm",
+      "optimizer": "random_search",
+      "elapsed_seconds": 798.912,
+      "complete": true
+    },
+    {
+      "model": "svm",
+      "optimizer": "ga",
+      "elapsed_seconds": 53.583,
+      "complete": true
+    },
+    {
+      "model": "svm",
+      "optimizer": "pso",
+      "elapsed_seconds": 1529.719,
+      "complete": true
+    },
+    {
+      "model": "svm",
+      "optimizer": "de",
+      "elapsed_seconds": 363.209,
+      "complete": true
+    },
+    {
+      "model": "svm",
+      "optimizer": "gwo",
+      "elapsed_seconds": 1091.774,
+      "complete": false
+    },
+    {
+      "model": "cnn",
+      "optimizer": "random_search",
+      "elapsed_seconds": 768.461,
+      "complete": true
+    },
+    {
+      "model": "cnn",
+      "optimizer": "ga",
+      "elapsed_seconds": 121.431,
+      "complete": true
+    },
+    {
+      "model": "cnn",
+      "optimizer": "pso",
+      "elapsed_seconds": 742.968,
+      "complete": true
+    },
+    {
+      "model": "cnn",
+      "optimizer": "de",
+      "elapsed_seconds": 171.383,
+      "complete": true
+    },
+    {
+      "model": "cnn",
+      "optimizer": "gwo",
+      "elapsed_seconds": 647.985,
+      "complete": true
+    }
+  ],
+  "skipped": [],
+  "failed": [],
+  "current": null,
+  "updated_at": "2026-06-16T02:42:37",
+  "finished_at": "2026-06-16T02:42:37"
+}

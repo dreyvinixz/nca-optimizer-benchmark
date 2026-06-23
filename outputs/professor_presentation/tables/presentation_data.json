@@ -79,6 +79,9 @@
     "fitness_side_by_side_accuracy": "outputs\\professor_presentation\\figures\\fitness_side_by_side_accuracy_test.png",
     "gap_accuracy": "outputs\\professor_presentation\\figures\\gap_heatmap_accuracy_test.png",
     "gap_mcc": "outputs\\professor_presentation\\figures\\gap_heatmap_mcc_test.png",
+    "advisor_chart_1_mcc": "outputs\\professor_presentation\\figures\\advisor_chart_1_mcc_protocol.png",
+    "advisor_chart_2_holdout": "outputs\\professor_presentation\\figures\\advisor_chart_2_holdout_protocol.png",
+    "advisor_chart_3_cv": "outputs\\professor_presentation\\figures\\advisor_chart_3_cv_protocol.png",
     "official_backtest_equity": "outputs\\professor_presentation\\figures\\official_backtest_equity_curve.png",
     "official_backtest_metrics": "outputs\\professor_presentation\\figures\\official_backtest_metrics.png"
   },

@@ -1,0 +1,2 @@
+model_type,optimizer,seed,evaluation_id,best_fitness_so_far,mean_fitness_so_far
+mlp,random_search,1,1,0.6418170935041737,0.6418170935041737

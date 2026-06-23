@@ -263,6 +263,7 @@ Experimento 2, holdout + Accuracy:
 ```powershell
 .\.venv\Scripts\python.exe scripts\run_article_official_benchmark.py `
   --fitness-mode accuracy_holdout `
+  --backend-policy cpu `
   --seeds 1 2 3 `
   --evaluations-per-seed 1000
 ```
@@ -285,6 +286,7 @@ Experimento 3, cross-validation + MCC/F1:
 ```powershell
 .\.venv\Scripts\python.exe scripts\run_article_official_benchmark.py `
   --fitness-mode mcc_f1_cv `
+  --backend-policy cpu `
   --seeds 1 2 3 `
   --evaluations-per-seed 1000
 ```
@@ -305,3 +307,8 @@ Acompanhar status:
 Observacao de implementacao:
 
 > Para manter consistencia com o experimento 4 ja executado (`Accuracy-CV`), o modo cross-validation usa o bloco `treino + validacao` como area interna de folds temporais e deixa apenas o `X_test` cego totalmente fora da otimizacao.
+
+Nota de execucao local:
+
+> No Windows, usamos `--backend-policy cpu` para evitar o backend CUDA/C do MLP, que depende de binario Linux/WSL. Isso nao altera a funcao de ativacao nem o otimizador de treinamento das redes: MLP/CNN continuam com `tanh + rmsprop`.
+

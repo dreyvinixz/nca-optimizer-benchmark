@@ -1,0 +1,30 @@
+{
+  "started_at": "2026-06-15T19:36:13",
+  "output_root": "/mnt/c/mysystems/projects/nca-optimizer-benchmark/outputs/wsl_smoke_accuracy_holdout",
+  "log_path": "/mnt/c/mysystems/projects/nca-optimizer-benchmark/logs/experiments/article_official_20260615_193612.log",
+  "fitness_mode": "accuracy_holdout",
+  "backend_policy": "official",
+  "models": [
+    "mlp"
+  ],
+  "optimizers": [
+    "random_search"
+  ],
+  "seeds": [
+    1
+  ],
+  "expected_rows_per_combination": 1,
+  "completed": [
+    {
+      "model": "mlp",
+      "optimizer": "random_search",
+      "elapsed_seconds": 1.093,
+      "complete": true
+    }
+  ],
+  "skipped": [],
+  "failed": [],
+  "current": null,
+  "updated_at": "2026-06-15T19:36:14",
+  "finished_at": "2026-06-15T19:36:14"
+}
