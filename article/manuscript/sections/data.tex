@@ -1,0 +1,60 @@
+% ============================================================
+% Section 3 — Data Description
+% ============================================================
+\section{Data Description}
+\label{sec:data}
+
+This section details the financial intraday dataset, feature selection procedure, and temporal partitioning protocol used in the benchmark experiments.
+
+% --- 3.1 Dataset overview ---
+\subsection{Dataset Overview}
+\label{sec:data_overview}
+
+The empirical dataset consists of high-frequency 5-minute intraday candlestick bars of the Brazilian Mini-Index futures contract (symbol: WIN), traded on the B3 exchange (B3 -- Brasil, Bolsa, Balcão). The Mini-Index contract is one of the most liquid financial instruments in Latin America, making it an ideal benchmark asset for algorithmic trading research.
+
+Each 5-minute bar contains Open, High, Low, Close prices, and Volume (OHLCV). From the raw price series, technical analysis indicators spanning momentum, trend, volatility, and volume categories were calculated, yielding an initial pool of 66 feature variables. Target labels were constructed as binary trend indicators:
+\begin{equation}
+y_t = \begin{cases} 
+1 & \text{if } \text{Close}_{t+1} > \text{Close}_t \\
+0 & \text{if } \text{Close}_{t+1} \le \text{Close}_t
+\end{cases}
+\end{equation}
+where $y_t = 1$ denotes an upward price trend in the subsequent 5-minute interval, and $y_t = 0$ denotes a non-positive movement.
+
+% --- 3.2 Feature selection ---
+\subsection{Feature Selection}
+\label{sec:data_features}
+
+To mitigate the curse of dimensionality and eliminate collinear features, we adopt the Information Gain (IG) feature selection subset derived in precursor work \cite{souza2025iccsa}. Information Gain measures the reduction in entropy of the target variable $Y$ given feature $X$:
+\begin{equation}
+IG(Y, X) = H(Y) - H(Y \mid X)
+\end{equation}
+where $H(Y)$ is the marginal entropy and $H(Y \mid X)$ is the conditional entropy.
+
+The 7 top-ranked technical indicators selected by Information Gain are:
+\begin{enumerate}
+    \item Exponential Moving Average (EMA, 9 periods)
+    \item Relative Strength Index (RSI, 14 periods)
+    \item Moving Average Convergence Divergence (MACD histogram)
+    \item Stochastic Oscillator (\%K, 14 periods)
+    \item Average True Range (ATR, 14 periods)
+    \item Bollinger Bands (\%B bandwidth)
+    \item On-Balance Volume (OBV trend rate)
+\end{enumerate}
+
+All 7 continuous features were standardized using z-score normalization ($\mu = 0, \sigma = 1$), computed strictly on the training partition to prevent look-ahead bias.
+
+% --- 3.3 Temporal split ---
+\subsection{Temporal Split Protocol}
+\label{sec:data_split}
+
+Financial time series exhibit strong temporal dependencies and non-stationarity. Applying randomized $k$-fold cross-validation or random train-test splitting introduces look-ahead bias and severe data leakage, leading to unrealistically optimistic model metrics.
+
+To ensure strict experimental integrity, data samples are partitioned sequentially into three non-overlapping chronological subsets:
+\begin{itemize}
+    \item \textbf{Training Set (60\%)}: Used exclusively for gradient-based weight optimization of the MLP models during backpropagation.
+    \item \textbf{Validation Set (20\%)}: Used by metaheuristic optimizers to evaluate candidate hyperparameter solutions (fitness calculation).
+    \item \textbf{Test Set (20\%)}: Held out completely during hyperparameter search; used exclusively for final out-of-sample performance evaluation and financial backtesting.
+\end{itemize}
+
+No shuffling or random permutation is applied at any stage.

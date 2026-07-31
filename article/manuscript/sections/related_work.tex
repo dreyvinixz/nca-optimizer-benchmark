@@ -1,0 +1,72 @@
+% ============================================================
+% Section 2 — Related Work
+% ============================================================
+\section{Related Work}
+\label{sec:related_work}
+
+This section reviews the relevant literature across metaheuristic optimization for neural networks, financial time-series prediction, and benchmark methodology. Finally, a comparative synthesis highlights the specific research gaps addressed by this work.
+
+% --- 2.1 Metaheuristic optimization for neural networks ---
+\subsection{Metaheuristic Optimization for Neural Networks}
+\label{sec:rw_metaheuristic}
+
+Artificial Neural Networks (ANNs), particularly Multilayer Perceptrons (MLPs), require careful configuration of hyperparameter values—such as learning rate, hidden layer topology, regularization terms, and activation functions—to achieve optimal generalization performance. While gradient-based methods excel at tuning weight parameters during backpropagation, hyperparameter spaces are typically non-convex, multimodal, and non-differentiable \cite{rajwar2023exhaustive_review}. Consequently, metaheuristic optimization algorithms have emerged as powerful tools to navigate high-dimensional hyperparameter landscapes.
+
+Metaheuristics are broadly categorized into evolutionary algorithms (EAs) and swarm intelligence (SI) techniques \cite{gad2022pso_comprehensive}. Evolutionary approaches, exemplified by Genetic Algorithms (GA) \cite{goldberg1989ga} and Differential Evolution (DE) \cite{storn1997de}, simulate natural selection and genetic recombination. GAs use selection, crossover, and mutation operators to evolve candidate solution populations, demonstrating robustness in global search. DE enhances continuous parameter optimization by utilizing vector difference vectors for mutation, promoting efficient exploration of complex search spaces.
+
+Conversely, Swarm Intelligence algorithms model the collective self-organizing behavior of social organisms. Particle Swarm Optimization (PSO) \cite{kennedy1995pso, wang2018pso_comprehensive} simulates bird flocking, where individual particles update velocity and position based on personal best ($pbest$) and global best ($gbest$) experiences. PSO is recognized for rapid early-stage convergence and low algorithmic complexity. Grey Wolf Optimizer (GWO) \cite{mirjalili2014gwo, faris2018gwo_review} mimics the social hierarchy and hunting mechanism of grey wolves ($\alpha, \beta, \delta$), providing a structured balance between exploration and exploitation. Despite these distinct theoretical mechanisms, comparative studies evaluating these algorithms under strictly controlled, identical evaluation budgets for neural network tuning remain limited.
+
+% --- 2.2 Financial time series prediction with neural models ---
+\subsection{Financial Time Series Prediction with Neural Models}
+\label{sec:rw_financial}
+
+Predicting financial asset dynamics is a classic high-noise, non-stationary classification problem \cite{henrique2019stock_review}. Intraday trend classification—predicting whether a price movement over a short horizon (e.g., 5 minutes) will be positive or negative—presents distinct challenges due to market microstructure noise, order flow dynamics, and rapid regime shifts.
+
+To capture intraday patterns, technical analysis indicators (e.g., RSI, MACD, Bollinger Bands, Moving Averages) are routinely transformed into feature vectors for machine learning models. Previous conference precursors established that feature selection via Information Gain significantly improves signal-to-noise ratio in Brazilian futures contracts (WIN mini-index) \cite{souza2025iccsa}. Subsequent efforts applied Genetic Algorithms to tune hyperparameter spaces for Random Forest, Support Vector Machine, and MLP classifiers \cite{souza2026ijcnn}. However, financial ML studies frequently encounter severe pitfalls: (i) temporal data leakage resulting from randomized k-fold cross-validation, (ii) over-reliance on accuracy metrics in class-imbalanced settings, and (iii) evaluation of classification outputs without assessing realistic transaction costs and financial drawdown risks.
+
+% --- 2.3 Benchmark studies and optimizer comparisons ---
+\subsection{Benchmark Studies and Optimizer Comparisons}
+\label{sec:rw_benchmark}
+
+Rigorous algorithm benchmarking requires standardized protocols to ensure empirical validity. In recent energy forecasting literature, Dhingra et al. \cite{benchmark_nca_solar2025} emphasized that comparing optimizers across deep learning models requires holding computational budgets constant (i.e., fixed number of fitness evaluations) while systematically evaluating robustness under missing data and multi-site conditions.
+
+In metaheuristic optimization, improper benchmarking often leads to misleading claims—such as declaring an algorithm superior simply because it was allowed more function evaluations or more aggressive parameter tuning. As demonstrated by Dem{\v{s}}ar \cite{demsar2006statistical}, rigorous multi-seed comparison requires non-parametric statistical testing (e.g., Friedman test) accompanied by post-hoc pairwise corrections (e.g., Wilcoxon signed-rank test with Holm adjustment) to establish statistical significance.
+
+% --- 2.4 Summary and research gap ---
+\subsection{Summary and Research Gap}
+\label{sec:rw_gap}
+
+Table~\ref{tab:lit_comparison} synthesizes representative studies in metaheuristic optimization and financial machine learning, highlighting the specific limitations that frame the present work.
+
+\begin{table}[htbp]
+\caption{Representative literature on metaheuristic optimizer benchmarks and financial prediction, highlighting reported limitations and unaddressed research gaps.}
+\label{tab:lit_comparison}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lllll}
+\toprule
+Study & Model & Optimizer(s) & Domain / Data & Reported limitation / gap \\
+\midrule
+Gad \cite{gad2022pso_comprehensive} & Various & PSO variants & General benchmarks & Systematic review; lacks head-to-head empirical testing \\
+Faris et al. \cite{faris2018gwo_review} & ANN / SVM & GWO & Classification / Benchmark & Review focused on GWO; no budget-controlled EA comparison \\
+Rajwar et al. \cite{rajwar2023exhaustive_review} & Various & Metaheuristics & Optimization taxonomy & Theoretical survey; no financial time-series application \\
+Dhingra et al. \cite{benchmark_nca_solar2025} & LSTM / CNN & Adam, RAdam, etc. & Solar PV forecasting & Evaluates gradient optimizers; excludes metaheuristics \\
+Souza et al. \cite{souza2025iccsa} & RF & Default & WIN futures (5-min) & Focuses solely on feature selection; no hyperparameter tuning \\
+Souza et al. \cite{souza2026ijcnn} & RF/SVM/MLP & GA & WIN futures (5-min) & Uses single optimizer (GA); lacks multi-optimizer benchmark \\
+\midrule
+\textbf{Present Work} & \textbf{MLP} & \textbf{RS, GA, PSO, DE, GWO} & \textbf{WIN futures (5-min)} & \textbf{Addressed: Equal budget, 5 optimizers, temporal split,} \\
+ & & & & \textbf{MCC metric, stat. testing, and financial evaluation} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+A synthesis of the existing literature reveals four primary open issues:
+\begin{enumerate}
+    \item \textbf{Lack of controlled equal-budget benchmarks}: Existing financial ML papers typically test a single metaheuristic (e.g., GA or PSO) without benchmarking against rival optimizer families under strict, identical evaluation limits.
+    \item \textbf{Data leakage in financial validation}: Many benchmarks apply standard random cross-validation, which corrupts temporal autocorrelation and produces artificially inflated metrics.
+    \item \textbf{Inadequate metric selection}: Standard accuracy fails to account for class imbalance and false signal costs in trading; robust metrics such as Matthews Correlation Coefficient (MCC) \cite{chicco2020mcc} are rarely prioritized as fitness objectives.
+    \item \textbf{Disconnect between predictive metrics and economic value}: High predictive accuracy does not guarantee profitability under non-zero transaction costs. Benchmark studies rarely connect optimization metrics directly to backtested financial performance.
+\end{enumerate}
+
+This study explicitly addresses these four open issues through a controlled, reproducible benchmark protocol.

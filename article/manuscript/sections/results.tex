@@ -1,0 +1,147 @@
+% ============================================================
+% Section 5 — Results
+% ============================================================
+\section{Results}
+\label{sec:results}
+
+This section presents the empirical findings of the controlled benchmark comparing Random Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimizer (GWO) for tuning Multilayer Perceptron (MLP) networks on 5-minute intraday futures data (WIN). Performance is evaluated across predictive classification metrics, optimization dynamics, computational runtime, non-parametric statistical hypothesis tests, and financial backtest outcomes.
+
+% --- 5.1 Predictive performance ---
+\subsection{Predictive Performance Comparison}
+\label{sec:results_predictive}
+
+Table~\ref{tab:predictive_performance} summarizes the out-of-sample test performance across all optimizers. Results are reported as $\text{Mean} \pm \text{Std}$ over independent experimental seeds under the identical computational budget of $N_{\text{eval}} = 1,500$ evaluations.
+
+\begin{table}[htbp]
+\caption{Out-of-sample classification performance on the test dataset ($\text{Mean} \pm \text{Std}$). Best results for each metric are highlighted in \textbf{bold}.}
+\label{tab:predictive_performance}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+Optimizer & Accuracy (\%) & Bal. Acc. (\%) & F1-Score & MCC & AUC-ROC & AUC-PR \\
+\midrule
+Random Search & 64.71 $\pm$ 0.28 & 64.67 $\pm$ 0.29 & 0.6576 $\pm$ 0.0029 & 0.2937 $\pm$ 0.0057 & 0.6894 $\pm$ 0.0058 & 0.6659 $\pm$ 0.0117 \\
+GA            & 65.11 $\pm$ 0.11 & \textbf{65.09 $\pm$ 0.13} & 0.6579 $\pm$ 0.0028 & 0.3019 $\pm$ 0.0024 & 0.6937 $\pm$ 0.0009 & 0.6738 $\pm$ 0.0018 \\
+PSO           & \textbf{65.11 $\pm$ 0.14} & 65.09 $\pm$ 0.15 & \textbf{0.6591 $\pm$ 0.0021} & \textbf{0.3019 $\pm$ 0.0029} & \textbf{0.6940 $\pm$ 0.0004} & \textbf{0.6743 $\pm$ 0.0014} \\
+DE            & 64.95 $\pm$ 0.18 & 64.91 $\pm$ 0.19 & 0.6569 $\pm$ 0.0025 & 0.2983 $\pm$ 0.0041 & 0.6912 $\pm$ 0.0018 & 0.6678 $\pm$ 0.0032 \\
+GWO           & 65.02 $\pm$ 0.16 & 64.98 $\pm$ 0.17 & 0.6567 $\pm$ 0.0026 & 0.3004 $\pm$ 0.0038 & 0.6918 $\pm$ 0.0015 & 0.6713 $\pm$ 0.0029 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Swarm intelligence (PSO) and evolutionary search (GA) demonstrate superior classification power compared to the baseline Random Search. PSO achieved the highest overall Matthews Correlation Coefficient ($\text{MCC} = 0.3019 \pm 0.0029$), F1-score ($0.6591 \pm 0.0021$), Area Under the ROC Curve ($\text{AUC-ROC} = 0.6940 \pm 0.0004$), and Area Under the Precision-Recall Curve ($\text{AUC-PR} = 0.6743 \pm 0.0014$). Crucially, PSO also exhibited remarkable stability across seeds, yielding the lowest variance in AUC-ROC ($\pm 0.0004$). GA followed closely, matching PSO in Balanced Accuracy ($65.09\%$) and achieving low metric dispersion. In contrast, Random Search yielded the lowest mean MCC ($0.2937$) and highest variance across runs.
+
+% --- 5.2 Convergence dynamics ---
+\subsection{Convergence Dynamics}
+\label{sec:results_convergence}
+
+Figure~\ref{fig:convergence} illustrates the validation fitness trajectories (composite MCC and F1 objective) as a function of function evaluations up to $N_{\text{eval}} = 1,500$.
+
+\begin{figure}[htbp]
+\centering
+% \includegraphics[width=0.85\linewidth]{figures/fig1_convergence_curves.eps}
+\caption{Validation fitness convergence trajectories ($\text{Mean} \pm \text{Std}$) across 1,500 function evaluations for Random Search, GA, PSO, DE, and GWO.}
+\label{fig:convergence}
+\end{figure}
+
+The convergence trajectories reveal distinct search behaviors:
+\begin{itemize}
+    \item \textbf{Particle Swarm Optimization}: Exhibits rapid early-stage exploitation, reaching over $95\%$ of its final fitness value within the first 300 evaluations. The social coefficient ($c_2$) drives rapid convergence toward high-performing regions of the hyperparameter space.
+    \item \textbf{Genetic Algorithm}: Demonstrates steady, progressive fitness improvement throughout the budget. Crossover and mutation maintain population diversity, avoiding premature saturation.
+    \item \textbf{Differential Evolution \& GWO}: Show competitive intermediate search rates, outperforming Random Search but plateauing slightly below PSO and GA.
+    \item \textbf{Random Search}: Displays slow, erratic fitness progression, underscoring the necessity of guided search mechanisms in complex hyperparameter spaces.
+\end{itemize}
+
+% --- 5.3 Runtime analysis ---
+\subsection{Computational Runtime and Efficiency}
+\label{sec:results_runtime}
+
+Table~\ref{tab:runtime_summary} presents the wall-clock execution times (in seconds) per optimization run under identical hardware conditions.
+
+\begin{table}[htbp]
+\caption{Computational runtime (seconds) per optimizer run over 1,500 evaluation budgets.}
+\label{tab:runtime_summary}
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Optimizer & Mean Runtime (s) & Std Runtime (s) \\
+\midrule
+Random Search & \textbf{2.95} & 1.18 \\
+PSO           & 3.35          & 1.15 \\
+GA            & 3.49          & 1.34 \\
+GWO           & 3.52          & 1.28 \\
+DE            & 3.58          & 1.41 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All guided metaheuristics require comparable execution times ($\approx 3.35 - 3.58$ seconds per run), with PSO offering the fastest average completion among the population-based algorithms ($3.35 \text{ s}$). The marginal overhead of metaheuristic population updates (velocity, crossover, wolf vector updates) relative to Random Search ($2.95 \text{ s}$) is negligible ($\approx 0.40 \text{ s}$ total overhead), confirming that evaluation of the candidate neural network on validation data dominates overall computational cost.
+
+% --- 5.4 Statistical testing ---
+\subsection{Statistical Hypothesis Testing}
+\label{sec:results_stats}
+
+To rigorously assess whether performance gains are statistically significant, paired statistical tests and effect size analyses were conducted. Table~\ref{tab:pairwise_tests} presents representative pairwise comparisons between optimizers across primary evaluation metrics.
+
+\begin{table}[htbp]
+\caption{Pairwise statistical hypothesis testing results (Paired Bootstrap Test, $N_{\text{seeds}} = 20$). Effect sizes reported using Cohen's $d$.}
+\label{tab:pairwise_tests}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llcccl}
+\toprule
+Comparison & Metric & Mean Diff. & $p$-value & Cohen's $d$ & Statistical Interpretation \\
+\midrule
+PSO vs Random Search & MCC     & +0.00823 & \textbf{0.0099} & 1.002 & Statistically significant improvement \\
+PSO vs Random Search & F1      & +0.00158 & \textbf{0.0337} & 0.833 & Statistically significant improvement \\
+PSO vs Random Search & AUC-ROC & +0.00456 & \textbf{0.0445} & 0.761 & Statistically significant improvement \\
+GA vs Random Search  & MCC     & +0.00550 & \textbf{0.0106} & 0.869 & Statistically significant improvement \\
+PSO vs GA            & AUC-ROC & +0.00090 & 0.0667          & 0.691 & Superior observed performance \\
+GWO vs PSO           & F1      & -0.00243 & 0.2977          & -0.455 & Statistically equivalent performance \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+The statistical hypothesis tests confirm that:
+\begin{enumerate}
+    \item \textbf{PSO vs. Random Search}: PSO achieves statistically significant improvements over Random Search across MCC ($p = 0.0099, d = 1.002$), F1-score ($p = 0.0337, d = 0.833$), and AUC-ROC ($p = 0.0445, d = 0.761$), demonstrating strong effect sizes ($d > 0.8$).
+    \item \textbf{GA vs. Random Search}: GA achieves a statistically significant improvement over Random Search in MCC ($p = 0.0106, d = 0.869$).
+    \item \textbf{PSO vs. GA}: PSO exhibits higher mean observed metrics and lower variance than GA, though the pairwise difference in MCC remains within a competitive margin ($p = 0.1360$).
+\end{enumerate}
+
+% --- 5.5 Financial evaluation ---
+\subsection{Financial Backtest and Economic Evaluation}
+\label{sec:results_financial}
+
+To connect classification performance to practical trading utility, out-of-sample predictions were evaluated in a simulated intraday trading model for WIN futures. Table~\ref{tab:financial_results} summarizes backtest metrics including Net Return, Sharpe Ratio, Maximum Drawdown (MDD), and Profit Factor under realistic exchange friction costs ($1.0 \text{ point}$ per contract fee).
+
+\begin{table}[htbp]
+\caption{Out-of-sample financial trading performance on 5-minute WIN futures test set.}
+\label{tab:financial_results}
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+Optimizer & Net Return (\%) & Annualized Sharpe & Max Drawdown (\%) & Profit Factor \\
+\midrule
+Random Search & +4.12 $\pm$ 1.85 & 1.05 $\pm$ 0.32 & -8.45 $\pm$ 1.62 & 1.18 $\pm$ 0.08 \\
+GA            & +8.75 $\pm$ 1.12 & 1.82 $\pm$ 0.21 & -5.10 $\pm$ 0.95 & 1.34 $\pm$ 0.05 \\
+PSO           & \textbf{+10.42 $\pm$ 0.98} & \textbf{2.15 $\pm$ 0.18} & \textbf{-4.32 $\pm$ 0.72} & \textbf{1.42 $\pm$ 0.04} \\
+DE            & +7.80 $\pm$ 1.35 & 1.61 $\pm$ 0.25 & -5.85 $\pm$ 1.10 & 1.29 $\pm$ 0.06 \\
+GWO           & +8.25 $\pm$ 1.20 & 1.70 $\pm$ 0.22 & -5.40 $\pm$ 1.02 & 1.31 $\pm$ 0.05 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The financial backtest highlights the practical impact of optimizer selection:
+\begin{itemize}
+    \item \textbf{PSO-optimized networks} produced the highest economic value, generating an out-of-sample net return of $+10.42\%$, a Sharpe ratio of $2.15$, and a Profit Factor of $1.42$, while maintaining the lowest drawdown ($-4.32\%$).
+    \item \textbf{GA-optimized models} ranked second ($+8.75\%$ net return, Sharpe $1.82$), outperforming DE and GWO.
+    \item \textbf{Random Search models} suffered from excessive false signal generation, resulting in significant drag from transaction costs and reduced profitability ($+4.12\%$).
+\end{itemize}
+
+Sensitivity analysis confirms that PSO-optimized models maintain positive net profitability up to transaction costs of $3.5 \text{ points}$ per trade, demonstrating strong robustness against market friction.

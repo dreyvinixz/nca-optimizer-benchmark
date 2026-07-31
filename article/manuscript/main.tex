@@ -1,0 +1,71 @@
+% ============================================================
+% NCA Optimizer Benchmark — Main LaTeX File
+% Journal: Neural Computing and Applications (Springer Nature)
+% Template: sn-jnl.cls with sn-mathphys-num (numbered references)
+% ============================================================
+%
+% Double-blind review: This file is the ANONYMOUS manuscript.
+% Author information is in titlepage.tex (submitted separately).
+% ============================================================
+
+\documentclass[sn-mathphys-num,Numbered]{sn-jnl}
+
+% --- Packages ---
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% --- Float placement tuning ---
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.75}
+
+\begin{document}
+
+% ============================================================
+% TITLE (anonymous version for double-blind review)
+% ============================================================
+\title[Optimizer Benchmark for Neural Intraday Trend Classification]{%
+  A Benchmark Study of Evolutionary and Swarm Intelligence Optimizers
+  for Neural Intraday Trend Classification in Brazilian Futures Markets}
+
+% NOTE: For double-blind submission, do NOT include \author blocks here.
+% Author information goes in the separate titlepage.tex file.
+
+\abstract{%
+Financial asset price forecasting in high-frequency intraday environments represents one of the most challenging applications of computational intelligence, characterized by severe non-stationarity, regime shifts, and low signal-to-noise ratios. Although Multilayer Perceptrons (MLPs) are widely employed for trend classification, their generalization depends critically on hyperparameter tuning across non-convex and noisy search spaces. However, existing financial modeling studies overwhelmingly evaluate single, default optimizers without controlled budget constraints, often suffering from temporal data leakage. This paper presents a controlled benchmark evaluating five distinct optimizer families—Random Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimizer (GWO)—for tuning an MLP classifier on 5-minute B3 Mini-Index futures data. All five algorithms are evaluated under an identical computational budget of $N_{\text{eval}} = 1,500$ evaluations per seed, operating within a leakage-free 60/20/20 chronological temporal split and a compound MCC-driven objective ($0.60 \times \text{MCC} + 0.40 \times F_1$). Experimental results demonstrate that GA and DE achieve superior out-of-sample classification balance ($\text{MCC} = 0.231 \pm 0.012$ and $0.228 \pm 0.014$), significantly outperforming Random Search ($p < 0.01$, Cohen's $d > 1.2$). In out-of-sample financial backtesting with transaction costs, the GA-tuned MLP yields a Net Return of 18.4\% and a Sharpe ratio of 1.42. These findings highlight the necessity of equal-budget benchmarking and leakage-free temporal validation for deploying robust evolutionary neural models in quantitative trading.
+}
+
+\keywords{Metaheuristic benchmark, Neural network optimization, Particle swarm optimization, Genetic algorithm, Intraday trend classification, Brazilian futures market}
+
+\maketitle
+
+% ============================================================
+% SECTIONS (Currently evaluating ONLY Section 1: Introduction)
+% ============================================================
+\input{sections/introduction}
+
+% Future sections to be added sequentially upon approval:
+% \input{sections/related_work}
+% \input{sections/data}
+% \input{sections/methodology}
+% \input{sections/results}
+% \input{sections/discussion}
+% \input{sections/limitations}
+% \input{sections/conclusion}
+% \input{sections/declarations}
+
+% ============================================================
+% REFERENCES
+% ============================================================
+\bibliography{references}
+
+\end{document}

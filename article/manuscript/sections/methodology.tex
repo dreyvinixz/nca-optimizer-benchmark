@@ -1,0 +1,137 @@
+% ============================================================
+% Section 4 — Methodology
+% ============================================================
+\section{Methodology}
+\label{sec:methodology}
+
+This section describes the Multilayer Perceptron (MLP) base model, hyperparameter search space, composite fitness function, mathematical formulation of the five optimizers, experimental control protocol, statistical testing framework, and financial backtesting model.
+
+% --- 4.1 Multilayer Perceptron model ---
+\subsection{Multilayer Perceptron Architecture and Search Space}
+\label{sec:method_mlp}
+
+A fully connected feedforward Multilayer Perceptron (MLP) network serves as the base classification model. Given an input vector $\mathbf{x} \in \mathbb{R}^7$ (the 7 Information Gain technical features), the network maps inputs to a binary probability prediction $\hat{y} \in [0, 1]$:
+\begin{equation}
+\mathbf{h}^{(1)} = \sigma_1(\mathbf{W}^{(1)} \mathbf{x} + \mathbf{b}^{(1)})
+\end{equation}
+\begin{equation}
+\mathbf{h}^{(2)} = \sigma_2(\mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}) \quad (\text{if } L=2)
+\end{equation}
+\begin{equation}
+\hat{y} = \text{sigmoid}(\mathbf{W}^{(out)} \mathbf{h}^{(L)} + \mathbf{b}^{(out)})
+\end{equation}
+
+Table~\ref{tab:search_space} details the 6-dimensional discrete-continuous hyperparameter search space $\Theta$ configured for optimizer exploration.
+
+\begin{table}[htbp]
+\caption{Hyperparameter search space $\Theta$ for MLP neural network optimization.}
+\label{tab:search_space}
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+Hyperparameter & Type & Search Domain / Candidate Values \\
+\midrule
+Hidden Layers ($L$) & Discrete & $\{1, 2\}$ \\
+Neurons per Layer ($N_1, N_2$) & Discrete & $\{8, 16, 32, 64, 128\}$ \\
+Activation Function ($\sigma$) & Categorical & $\{\text{ReLU}, \text{Tanh}, \text{ELU}\}$ \\
+Internal Optimizer & Categorical & $\{\text{Adam}, \text{RMSprop}, \text{SGD}\}$ \\
+Initial Learning Rate ($\eta$) & Continuous (Log) & $[10^{-4}, 10^{-1}]$ \\
+L2 Regularization ($\lambda$) & Continuous (Log) & $[10^{-6}, 10^{-2}]$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% --- 4.2 Fitness function ---
+\subsection{Fitness Function Formulation}
+\label{sec:method_fitness}
+
+Standard binary accuracy is susceptible to class imbalance and false signal distortions. To prioritize balanced, reliable classification, candidate hyperparameter solutions $\boldsymbol{\theta} \in \Theta$ are evaluated using a composite fitness objective calculated strictly on the validation partition $\mathcal{D}_{val}$:
+\begin{equation}
+f(\boldsymbol{\theta}) = 0.60 \times \text{MCC}(\boldsymbol{\theta}) + 0.40 \times F_1(\boldsymbol{\theta})
+\end{equation}
+where $\text{MCC}$ is the Matthews Correlation Coefficient:
+\begin{equation}
+\text{MCC} = \frac{TP \times TN - FP \times FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
+\end{equation}
+and $F_1$ is the harmonic mean of precision and recall. Higher values of $f(\boldsymbol{\theta})$ indicate superior validation quality.
+
+% --- 4.3 Optimizer descriptions ---
+\subsection{Optimization Algorithms}
+\label{sec:method_optimizers}
+
+All five optimizers operate on the hyperparameter decision vector $\boldsymbol{\theta} \in \mathbb{R}^6$ mapped into normalized hypercube boundaries $[0, 1]^6$.
+
+\subsubsection{Random Search (RS)}
+Random Search samples candidate configurations independently from a uniform distribution:
+\begin{equation}
+\boldsymbol{\theta}_i \sim \mathcal{U}(\boldsymbol{\theta}_{min}, \boldsymbol{\theta}_{max}), \quad i = 1, \dots, N_{eval}
+\end{equation}
+RS serves as a non-guided baseline.
+
+\subsubsection{Genetic Algorithm (GA)}
+The Genetic Algorithm maintains a population of $N_p = 30$ chromosomes. In each generation, parents are selected via tournament selection ($k=3$), followed by uniform crossover ($p_c = 0.8$) and Gaussian mutation ($p_m = 0.1, \sigma = 0.1$). Elitism ($e=2$) preserves top solutions.
+
+\subsubsection{Particle Swarm Optimization (PSO)}
+PSO maintains a swarm of $N_p = 30$ particles with position $\mathbf{x}_i$ and velocity $\mathbf{v}_i$. Velocity and position updates follow:
+\begin{equation}
+\mathbf{v}_i^{(t+1)} = w \mathbf{v}_i^{(t)} + c_1 r_1 (\mathbf{pbest}_i - \mathbf{x}_i^{(t)}) + c_2 r_2 (\mathbf{gbest} - \mathbf{x}_i^{(t)})
+\end{equation}
+\begin{equation}
+\mathbf{x}_i^{(t+1)} = \mathbf{x}_i^{(t)} + \mathbf{v}_i^{(t+1)}
+\end{equation}
+where inertia weight $w = 0.7298$, cognitive coefficient $c_1 = 1.49618$, social coefficient $c_2 = 1.49618$, and $r_1, r_2 \sim \mathcal{U}(0, 1)$.
+
+\subsubsection{Differential Evolution (DE)}
+DE employs a DE/rand/1/bin scheme with population $N_p = 30$. Mutation vectors are generated via:
+\begin{equation}
+\mathbf{v}_i^{(t)} = \mathbf{x}_{r1}^{(t)} + F (\mathbf{x}_{r2}^{(t)} - \mathbf{x}_{r3}^{(t)})
+\end{equation}
+with differential weight $F = 0.5$ and crossover rate $CR = 0.7$.
+
+\subsubsection{Grey Wolf Optimizer (GWO)}
+GWO models the wolf pack hierarchy ($\alpha, \beta, \delta$). Particle position updates are guided by the average position vector toward the three leading wolves:
+\begin{equation}
+\mathbf{x}_i^{(t+1)} = \frac{\mathbf{x}_1 + \mathbf{x}_2 + \mathbf{x}_3}{3}
+\end{equation}
+where $\mathbf{x}_1, \mathbf{x}_2, \mathbf{x}_3$ are position vectors computed relative to $\alpha, \beta, \delta$ leadership positions.
+
+% --- 4.4 Experimental protocol ---
+\subsection{Experimental Protocol}
+\label{sec:method_protocol}
+
+To ensure strict experimental control:
+\begin{enumerate}
+    \item \textbf{Equal Evaluation Budget}: Every optimizer run is terminated at exactly $N_{eval} = 1,500$ fitness evaluations.
+    \item \textbf{Multi-Seed Replication}: Experiments are repeated across 20 independent random seeds to assess variance and statistical stability.
+    \item \textbf{Hardware Standardization}: All runs execute on identical compute environments to record comparable wall-clock runtimes.
+\end{enumerate}
+
+% --- 4.5 Statistical testing ---
+\subsection{Statistical Analysis Framework}
+\label{sec:method_stats}
+
+Statistical significance is evaluated using non-parametric hypothesis tests. The Friedman test assesses overall differences across optimizer ranks. Upon rejection of the null hypothesis ($p < 0.05$), pairwise Wilcoxon signed-rank tests are conducted with Holm-Bonferroni step-down correction for family-wise error control. Effect sizes are quantified using Cohen's $d$.
+
+% --- 4.6 Financial evaluation ---
+\subsection{Financial Backtesting Model}
+\label{sec:method_financial}
+
+Out-of-sample test predictions $\hat{y}_t \in \{0, 1\}$ generate simulated trading signals for 5-minute WIN futures:
+\begin{equation}
+pos_t = \begin{cases} 
++1 & \text{if } \hat{y}_t = 1 \text{ (Long position)} \\
+0  & \text{if } \hat{y}_t = 0 \text{ (Out of market)}
+\end{cases}
+\end{equation}
+
+Gross returns are calculated from 5-minute price differences:
+\begin{equation}
+R_t^{gross} = pos_t \times (\text{Close}_{t+1} - \text{Close}_t)
+\end{equation}
+Net returns subtract fixed transaction friction $c_{cost} = 1.0 \text{ point}$ per trade entry/exit:
+\begin{equation}
+R_t^{net} = R_t^{gross} - c_{cost} \cdot |\Delta pos_t|
+\end{equation}
+
+Performance is evaluated via Cumulative Net Return (\%), Annualized Sharpe Ratio, Maximum Drawdown (MDD \%), and Profit Factor.

@@ -1,0 +1,72 @@
+This is BibTeX, Version 0.99e
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+Reallocating 'name_of_file' (item size: 1) to 16 items.
+The style file: sn-mathphys-num.bst
+Reallocating 'name_of_file' (item size: 1) to 11 items.
+Reallocating 'glb_str_end' (item size: 4) to 20 items.
+Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
+Reallocating 'global_strs' (item size: 1) to 4000000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Database file #1: references.bib
+Warning--I didn't find a database entry for "dhingra2025solar"
+Reallocating 'wiz_functions' (item size: 4) to 9000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+You've used 16 entries,
+            7480 wiz_defined-function locations,
+            1290 strings with 13188 characters,
+and the built_in function-call counts, 205914 in all, are:
+= -- 36755
+> -- 597
+< -- 274
++ -- 21424
+- -- 188
+* -- 5903
+:= -- 36276
+add.period$ -- 18
+call.type$ -- 16
+change.case$ -- 107
+chr.to.int$ -- 739
+cite$ -- 16
+duplicate$ -- 789
+empty$ -- 3941
+format.name$ -- 426
+if$ -- 52490
+int.to.chr$ -- 1
+int.to.str$ -- 27
+missing$ -- 0
+newline$ -- 284
+num.names$ -- 80
+pop$ -- 372
+preamble$ -- 1
+purify$ -- 74
+quote$ -- 0
+skip$ -- 22420
+stack$ -- 0
+substring$ -- 20440
+swap$ -- 459
+text.length$ -- 222
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 681
+warning$ -- 0
+while$ -- 516
+width$ -- 0
+write$ -- 378
+(There was 1 warning)
