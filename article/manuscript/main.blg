@@ -23,50 +23,53 @@ Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Database file #1: references.bib
 Warning--I didn't find a database entry for "dhingra2025solar"
+Warning--I didn't find a database entry for "makridakis2018statistical"
+Warning--I didn't find a database entry for "chicco2021matthews"
+Warning--I didn't find a database entry for "bergstra2012random_search"
 Reallocating 'wiz_functions' (item size: 4) to 9000 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
-You've used 16 entries,
+You've used 17 entries,
             7480 wiz_defined-function locations,
-            1290 strings with 13188 characters,
-and the built_in function-call counts, 205914 in all, are:
-= -- 36755
-> -- 597
-< -- 274
-+ -- 21424
-- -- 188
-* -- 5903
-:= -- 36276
-add.period$ -- 18
-call.type$ -- 16
-change.case$ -- 107
-chr.to.int$ -- 739
-cite$ -- 16
-duplicate$ -- 789
-empty$ -- 3941
-format.name$ -- 426
-if$ -- 52490
+            1299 strings with 13403 characters,
+and the built_in function-call counts, 208224 in all, are:
+= -- 37056
+> -- 621
+< -- 289
++ -- 21499
+- -- 191
+* -- 6013
+:= -- 36725
+add.period$ -- 19
+call.type$ -- 17
+change.case$ -- 112
+chr.to.int$ -- 779
+cite$ -- 17
+duplicate$ -- 827
+empty$ -- 4066
+format.name$ -- 436
+if$ -- 53068
 int.to.chr$ -- 1
-int.to.str$ -- 27
+int.to.str$ -- 28
 missing$ -- 0
-newline$ -- 284
-num.names$ -- 80
-pop$ -- 372
+newline$ -- 296
+num.names$ -- 85
+pop$ -- 384
 preamble$ -- 1
-purify$ -- 74
+purify$ -- 78
 quote$ -- 0
-skip$ -- 22420
+skip$ -- 22614
 stack$ -- 0
-substring$ -- 20440
-swap$ -- 459
-text.length$ -- 222
+substring$ -- 20628
+swap$ -- 481
+text.length$ -- 232
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 681
+type$ -- 726
 warning$ -- 0
-while$ -- 516
+while$ -- 539
 width$ -- 0
-write$ -- 378
-(There was 1 warning)
+write$ -- 396
+(There were 4 warnings)

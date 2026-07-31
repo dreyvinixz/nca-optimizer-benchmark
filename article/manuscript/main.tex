@@ -41,7 +41,7 @@
 % Author information goes in the separate titlepage.tex file.
 
 \abstract{%
-Financial asset price forecasting in high-frequency intraday environments represents one of the most challenging applications of computational intelligence, characterized by severe non-stationarity, regime shifts, and low signal-to-noise ratios. Although Multilayer Perceptrons (MLPs) are widely employed for trend classification, their generalization depends critically on hyperparameter tuning across non-convex and noisy search spaces. However, existing financial modeling studies overwhelmingly evaluate single, default optimizers without controlled budget constraints, often suffering from temporal data leakage. This paper presents a controlled benchmark evaluating five distinct optimizer families—Random Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimizer (GWO)—for tuning an MLP classifier on 5-minute B3 Mini-Index futures data. All five algorithms are evaluated under an identical computational budget of $N_{\text{eval}} = 1,500$ evaluations per seed, operating within a leakage-free 60/20/20 chronological temporal split and a compound MCC-driven objective ($0.60 \times \text{MCC} + 0.40 \times F_1$). Experimental results demonstrate that GA and DE achieve superior out-of-sample classification balance ($\text{MCC} = 0.231 \pm 0.012$ and $0.228 \pm 0.014$), significantly outperforming Random Search ($p < 0.01$, Cohen's $d > 1.2$). In out-of-sample financial backtesting with transaction costs, the GA-tuned MLP yields a Net Return of 18.4\% and a Sharpe ratio of 1.42. These findings highlight the necessity of equal-budget benchmarking and leakage-free temporal validation for deploying robust evolutionary neural models in quantitative trading.
+Financial asset price forecasting in high-frequency intraday environments represents one of the most challenging applications of computational intelligence, characterized by severe non-stationarity, regime shifts, and low signal-to-noise ratios. Although Multilayer Perceptrons (MLPs) are widely employed for trend classification, their generalization depends critically on hyperparameter tuning across non-convex search spaces. However, existing financial modeling studies overwhelmingly evaluate single, default optimizers without controlled budget constraints, often suffering from temporal data leakage. This paper presents a controlled benchmark evaluating five distinct optimizer families—Random Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimizer (GWO)—for tuning an MLP classifier on 5-minute B3 Mini-Index futures data. All five algorithms are evaluated under an identical computational budget of $N_{\text{eval}} = 1,500$ evaluations per seed, operating within a leakage-free 60/20/20 chronological temporal split and a compound MCC-driven objective ($0.60 \times \text{MCC} + 0.40 \times F_1$). Experimental results demonstrate that GA and DE achieve superior out-of-sample classification balance ($\text{MCC} = 0.231 \pm 0.012$ and $0.228 \pm 0.014$), significantly outperforming Random Search ($p < 0.01$, Cohen's $d > 1.2$). In out-of-sample financial backtesting with transaction costs, the GA-tuned MLP yields a Net Return of 18.4\% and a Sharpe ratio of 1.42. These findings highlight the necessity of equal-budget benchmarking and leakage-free temporal validation for deploying robust evolutionary neural models in quantitative trading.
 }
 
 \keywords{Metaheuristic benchmark, Neural network optimization, Particle swarm optimization, Genetic algorithm, Intraday trend classification, Brazilian futures market}
@@ -49,19 +49,20 @@ Financial asset price forecasting in high-frequency intraday environments repres
 \maketitle
 
 % ============================================================
-% SECTIONS (Currently evaluating ONLY Section 1: Introduction)
+% SECTIONS
 % ============================================================
 \input{sections/introduction}
+\input{sections/related_work}
+\input{sections/data}
+\input{sections/methodology}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
 
-% Future sections to be added sequentially upon approval:
-% \input{sections/related_work}
-% \input{sections/data}
-% \input{sections/methodology}
-% \input{sections/results}
-% \input{sections/discussion}
-% \input{sections/limitations}
-% \input{sections/conclusion}
-% \input{sections/declarations}
+% ============================================================
+% DECLARATIONS
+% ============================================================
+\input{sections/declarations}
 
 % ============================================================
 % REFERENCES

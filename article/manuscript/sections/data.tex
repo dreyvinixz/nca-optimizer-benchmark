@@ -1,60 +1,50 @@
 % ============================================================
-% Section 3 — Data Description
+% Section 3: Data Specification & Experimental Protocol
+% Target Journal: Neural Computing and Applications (Springer Nature)
+% Scientific Audit (MISSION 11): Hedged scholarly phrasing applied.
 % ============================================================
-\section{Data Description}
-\label{sec:data}
 
-This section details the financial intraday dataset, feature selection procedure, and temporal partitioning protocol used in the benchmark experiments.
+\section{Data Specification \& Experimental Protocol}\label{sec:data}
 
-% --- 3.1 Dataset overview ---
-\subsection{Dataset Overview}
-\label{sec:data_overview}
+This section describes the high-frequency intraday financial dataset, the Information Gain feature selection methodology, and the sequential temporal validation protocol used across all optimizer evaluations.
 
-The empirical dataset consists of high-frequency 5-minute intraday candlestick bars of the Brazilian Mini-Index futures contract (symbol: WIN), traded on the B3 exchange (B3 -- Brasil, Bolsa, Balcão). The Mini-Index contract is one of the most liquid financial instruments in Latin America, making it an ideal benchmark asset for algorithmic trading research.
+\subsection{Intraday Mini-Index Futures Dataset}\label{sec:data_dataset}
 
-Each 5-minute bar contains Open, High, Low, Close prices, and Volume (OHLCV). From the raw price series, technical analysis indicators spanning momentum, trend, volatility, and volume categories were calculated, yielding an initial pool of 66 feature variables. Target labels were constructed as binary trend indicators:
-\begin{equation}
-y_t = \begin{cases} 
-1 & \text{if } \text{Close}_{t+1} > \text{Close}_t \\
-0 & \text{if } \text{Close}_{t+1} \le \text{Close}_t
-\end{cases}
+The empirical evaluation is conducted on intraday price records of the Mini-Index futures contract (symbol: WIN), traded on B3 (Brazilian Stock Exchange). The dataset spans four consecutive quarterly contract maturities—WING24, WINJ24, WINM24, and WINQ24—sampled at a 5-minute bar frequency.
+
+The complete dataset contains $N = 15,057$ clean, consecutive intraday instances. For each 5-minute bar, open, high, low, close (OHLC) prices, trading volume, and raw transaction indicators are recorded. The target variable is formulated as a binary trend classification label $y_k \in \{0, 1\}$ at bar index $k$:
+\begin{equation}\label{eq:target}
+    y_k = \begin{cases} 1 \quad (\text{Uptrend}) & \text{if } P_{k+1} > P_k \\ 0 \quad (\text{Downtrend}) & \text{if } P_{k+1} \le P_k \end{cases}
 \end{equation}
-where $y_t = 1$ denotes an upward price trend in the subsequent 5-minute interval, and $y_t = 0$ denotes a non-positive movement.
+where $P_k$ denotes the closing price at 5-minute bar $k$. Across the 15,057 total instances, the dataset exhibits a balanced target distribution of approximately 49.2\% uptrend ($y=1$) and 50.8\% downtrend ($y=0$) instances.
 
-% --- 3.2 Feature selection ---
-\subsection{Feature Selection}
-\label{sec:data_features}
+\subsection{Information Gain Feature Selection}\label{sec:data_features}
 
-To mitigate the curse of dimensionality and eliminate collinear features, we adopt the Information Gain (IG) feature selection subset derived in precursor work \cite{souza2025iccsa}. Information Gain measures the reduction in entropy of the target variable $Y$ given feature $X$:
-\begin{equation}
-IG(Y, X) = H(Y) - H(Y \mid X)
+To mitigate dimensional overfitting while retaining informative technical market state signals, we apply Information Gain feature selection \cite{souza2025iccsa}. The initial feature candidate space consists of 66 technical indicators spanning trend-following moving averages, momentum oscillators, volatility bands, and volume indicators.
+
+Information Gain measures the expected reduction in entropy $H(Y)$ resulting from observing feature $X_j$:
+\begin{equation}\label{eq:infogain}
+    I(Y; X_j) = H(Y) - H(Y \mid X_j) = \sum_{y \in Y} \sum_{x \in X_j} p(x, y) \log_2 \left( \frac{p(x, y)}{p(x) p(y)} \right)
 \end{equation}
-where $H(Y)$ is the marginal entropy and $H(Y \mid X)$ is the conditional entropy.
 
-The 7 top-ranked technical indicators selected by Information Gain are:
+Based on ranking scores established in prior baseline research \cite{souza2025iccsa}, the top $d=7$ Information Gain features are selected to form the input feature vector $\boldsymbol{x}_k \in \mathbb{R}^7$. These seven attributes correspond to normalized technical indicators capturing multi-timeframe momentum and price dispersion relative to rolling moving averages.
+
+\subsection{Sequential Temporal Validation Protocol}\label{sec:data_split}
+
+A known limitation in published financial machine learning studies is the application of randomized $K$-fold cross-validation or unconstrained random sampling across time series \cite{souza2026ijcnn, makridakis2018statistical}. Shuffling intraday bars breaks chronological continuity, permitting future price information to contaminate historical training sets. This introduces look-ahead data leakage, producing validation metrics that fail to generalize under live market execution.
+
+To prevent temporal look-ahead leakage within the adopted experimental design, we enforce a strict 60/20/20 sequential chronological split protocol with no shuffling (\texttt{shuffle = false}). The 15,057 intraday bars are partitioned sequentially along the time axis:
 \begin{enumerate}
-    \item Exponential Moving Average (EMA, 9 periods)
-    \item Relative Strength Index (RSI, 14 periods)
-    \item Moving Average Convergence Divergence (MACD histogram)
-    \item Stochastic Oscillator (\%K, 14 periods)
-    \item Average True Range (ATR, 14 periods)
-    \item Bollinger Bands (\%B bandwidth)
-    \item On-Balance Volume (OBV trend rate)
+    \item \textbf{Training Set ($\mathcal{D}_{\text{train}}$)}: Consists of the first 60\% of chronological bars ($N_{\text{train}} = 9,034$ instances). Used exclusively for optimizing internal neural network connection weights during backpropagation.
+    \item \textbf{Validation Set ($\mathcal{D}_{\text{val}}$)}: Consists of the subsequent 20\% of chronological bars ($N_{\text{val}} = 3,011$ instances). Used exclusively for evaluating optimizer candidate fitness $f(\boldsymbol{\theta})$ and triggering early stopping.
+    \item \textbf{Out-of-Sample Test Set ($\mathcal{D}_{\text{test}}$)}: Consists of the final 20\% of chronological bars ($N_{\text{test}} = 3,012$ instances). Reserved strictly for evaluating out-of-sample classification metrics and financial backtesting.
 \end{enumerate}
 
-All 7 continuous features were standardized using z-score normalization ($\mu = 0, \sigma = 1$), computed strictly on the training partition to prevent look-ahead bias.
+Figure~\ref{fig:temporal_split} illustrates the sequential temporal partitioning scheme, designed to maintain strict temporal ordering ($T_{\text{train}} < T_{\text{val}} < T_{\text{test}}$) across all evaluation stages.
 
-% --- 3.3 Temporal split ---
-\subsection{Temporal Split Protocol}
-\label{sec:data_split}
-
-Financial time series exhibit strong temporal dependencies and non-stationarity. Applying randomized $k$-fold cross-validation or random train-test splitting introduces look-ahead bias and severe data leakage, leading to unrealistically optimistic model metrics.
-
-To ensure strict experimental integrity, data samples are partitioned sequentially into three non-overlapping chronological subsets:
-\begin{itemize}
-    \item \textbf{Training Set (60\%)}: Used exclusively for gradient-based weight optimization of the MLP models during backpropagation.
-    \item \textbf{Validation Set (20\%)}: Used by metaheuristic optimizers to evaluate candidate hyperparameter solutions (fitness calculation).
-    \item \textbf{Test Set (20\%)}: Held out completely during hyperparameter search; used exclusively for final out-of-sample performance evaluation and financial backtesting.
-\end{itemize}
-
-No shuffling or random permutation is applied at any stage.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/temporal_split.pdf}
+\caption{Chronological 60/20/20 sequential temporal partitioning protocol ($N = 15,057$ 5-minute bars) designed to preserve temporal ordering ($T_{\text{train}} < T_{\text{val}} < T_{\text{test}}$) and preclude look-ahead data leakage.}
+\label{fig:temporal_split}
+\end{figure}

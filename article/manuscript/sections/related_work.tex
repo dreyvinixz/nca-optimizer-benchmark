@@ -1,72 +1,54 @@
 % ============================================================
-% Section 2 — Related Work
+% Section 2: Related Work & Theoretical Background
+% Target Journal: Neural Computing and Applications (Springer Nature)
+% Approved Design: article/designs/related_work_design.md (MISSION 14)
+% Master Guides: NCA_WRITING_DNA.md, SCIENTIFIC_REASONING_DNA.md
 % ============================================================
-\section{Related Work}
-\label{sec:related_work}
 
-This section reviews the relevant literature across metaheuristic optimization for neural networks, financial time-series prediction, and benchmark methodology. Finally, a comparative synthesis highlights the specific research gaps addressed by this work.
+\section{Related Work \& Theoretical Background}\label{sec:related_work}
 
-% --- 2.1 Metaheuristic optimization for neural networks ---
-\subsection{Metaheuristic Optimization for Neural Networks}
-\label{sec:rw_metaheuristic}
+This section synthesizes relevant literature on intraday financial forecasting, metaheuristic hyperparameter tuning, and temporal validation protocols, organized around three core scientific hypotheses.
 
-Artificial Neural Networks (ANNs), particularly Multilayer Perceptrons (MLPs), require careful configuration of hyperparameter values—such as learning rate, hidden layer topology, regularization terms, and activation functions—to achieve optimal generalization performance. While gradient-based methods excel at tuning weight parameters during backpropagation, hyperparameter spaces are typically non-convex, multimodal, and non-differentiable \cite{rajwar2023exhaustive_review}. Consequently, metaheuristic optimization algorithms have emerged as powerful tools to navigate high-dimensional hyperparameter landscapes.
+\subsection{Financial Forecasting \& Neural Architectures}\label{sec:rel_financial}
 
-Metaheuristics are broadly categorized into evolutionary algorithms (EAs) and swarm intelligence (SI) techniques \cite{gad2022pso_comprehensive}. Evolutionary approaches, exemplified by Genetic Algorithms (GA) \cite{goldberg1989ga} and Differential Evolution (DE) \cite{storn1997de}, simulate natural selection and genetic recombination. GAs use selection, crossover, and mutation operators to evolve candidate solution populations, demonstrating robustness in global search. DE enhances continuous parameter optimization by utilizing vector difference vectors for mutation, promoting efficient exploration of complex search spaces.
+Financial price forecasting in high-frequency intraday markets represents a benchmark application for computational intelligence \cite{billah2024nca_moving_average}. Derivatives markets exhibit extreme non-stationarity, microstructure noise, and rapid regime transitions \cite{cardoso2022bovdb}. Machine learning architectures—particularly Multilayer Perceptrons (MLPs)—have been widely adopted due to their universal function approximation capabilities \cite{ecer2020mlp_ga_pso}. However, because standard backpropagation optimizes internal weights given a fixed architecture, model generalization remains highly sensitive to hyperparameter choices.
 
-Conversely, Swarm Intelligence algorithms model the collective self-organizing behavior of social organisms. Particle Swarm Optimization (PSO) \cite{kennedy1995pso, wang2018pso_comprehensive} simulates bird flocking, where individual particles update velocity and position based on personal best ($pbest$) and global best ($gbest$) experiences. PSO is recognized for rapid early-stage convergence and low algorithmic complexity. Grey Wolf Optimizer (GWO) \cite{mirjalili2014gwo, faris2018gwo_review} mimics the social hierarchy and hunting mechanism of grey wolves ($\alpha, \beta, \delta$), providing a structured balance between exploration and exploitation. Despite these distinct theoretical mechanisms, comparative studies evaluating these algorithms under strictly controlled, identical evaluation budgets for neural network tuning remain limited.
+\subsection{Metaheuristic Tuning \& The Budget Inequality Hypothesis}\label{sec:rel_budget}
 
-% --- 2.2 Financial time series prediction with neural models ---
-\subsection{Financial Time Series Prediction with Neural Models}
-\label{sec:rw_financial}
+A major hypothesis addressed in this study is the \textit{Budget Inequality Hypothesis}: reported performance differences among metaheuristic optimizers are frequently distorted when algorithms operate under unequal candidate solution evaluation counts. 
 
-Predicting financial asset dynamics is a classic high-noise, non-stationary classification problem \cite{henrique2019stock_review}. Intraday trend classification—predicting whether a price movement over a short horizon (e.g., 5 minutes) will be positive or negative—presents distinct challenges due to market microstructure noise, order flow dynamics, and rapid regime shifts.
+Metaheuristic optimization paradigms—encompassing evolutionary computation and swarm intelligence—provide principled stochastic search operators for non-convex hyperparameter landscapes \cite{goldberg1989ga, mirjalili2014gwo}. Algorithms such as Genetic Algorithms (GA) \cite{holland1992ga}, Particle Swarm Optimization (PSO) \cite{kennedy1995pso}, Differential Evolution (DE) \cite{storn1997de}, and Grey Wolf Optimizer (GWO) \cite{faris2018gwo_review} balance exploration and exploitation differently. However, published benchmark literature frequently compares algorithms using unequal generation or iteration counts \cite{dhingra2025solar, rajwar2023exhaustive_review}. To address this gap, our benchmark enforces an identical budget cap of $N_{\text{eval}} = 1,500$ evaluations per seed across all five evaluated optimizer families.
 
-To capture intraday patterns, technical analysis indicators (e.g., RSI, MACD, Bollinger Bands, Moving Averages) are routinely transformed into feature vectors for machine learning models. Previous conference precursors established that feature selection via Information Gain significantly improves signal-to-noise ratio in Brazilian futures contracts (WIN mini-index) \cite{souza2025iccsa}. Subsequent efforts applied Genetic Algorithms to tune hyperparameter spaces for Random Forest, Support Vector Machine, and MLP classifiers \cite{souza2026ijcnn}. However, financial ML studies frequently encounter severe pitfalls: (i) temporal data leakage resulting from randomized k-fold cross-validation, (ii) over-reliance on accuracy metrics in class-imbalanced settings, and (iii) evaluation of classification outputs without assessing realistic transaction costs and financial drawdown risks.
+\subsection{Validation Protocols \& The Temporal Data Leakage Hypothesis}\label{sec:rel_leakage}
 
-% --- 2.3 Benchmark studies and optimizer comparisons ---
-\subsection{Benchmark Studies and Optimizer Comparisons}
-\label{sec:rw_benchmark}
+A second core hypothesis is the \textit{Temporal Data Leakage Hypothesis}: randomized $K$-fold cross-validation on intraday time series introduces look-ahead data leakage, producing artificially inflated validation metrics.
 
-Rigorous algorithm benchmarking requires standardized protocols to ensure empirical validity. In recent energy forecasting literature, Dhingra et al. \cite{benchmark_nca_solar2025} emphasized that comparing optimizers across deep learning models requires holding computational budgets constant (i.e., fixed number of fitness evaluations) while systematically evaluating robustness under missing data and multi-site conditions.
+In time series modeling, shuffling observations breaks chronological continuity, allowing future price dynamics to contaminate training sets \cite{souza2026ijcnn, makridakis2018statistical}. Despite this established risk, financial ML studies continue to employ randomized data partitioning. To eliminate look-ahead leakage, our protocol enforces a strict 60/20/20 sequential chronological split without shuffling.
 
-In metaheuristic optimization, improper benchmarking often leads to misleading claims—such as declaring an algorithm superior simply because it was allowed more function evaluations or more aggressive parameter tuning. As demonstrated by Dem{\v{s}}ar \cite{demsar2006statistical}, rigorous multi-seed comparison requires non-parametric statistical testing (e.g., Friedman test) accompanied by post-hoc pairwise corrections (e.g., Wilcoxon signed-rank test with Holm adjustment) to establish statistical significance.
+\subsection{Evaluation Objectives \& The Classification-Economic Disconnect Hypothesis}\label{sec:rel_disconnect}
 
-% --- 2.4 Summary and research gap ---
-\subsection{Summary and Research Gap}
-\label{sec:rw_gap}
+A third hypothesis is the \textit{Classification-Economic Disconnect Hypothesis}: tuning models solely on raw classification accuracy fails to ensure out-of-sample trading profitability under transaction costs.
 
-Table~\ref{tab:lit_comparison} synthesizes representative studies in metaheuristic optimization and financial machine learning, highlighting the specific limitations that frame the present work.
+Standard classification metrics such as accuracy and cross-entropy loss treat false positive and false negative errors symmetrically and fail under class imbalance \cite{chicco2020mcc}. In trading applications, uncalibrated directional signals incur substantial brokerage and slippage costs \cite{henrique2019stock_review}. To bridge this gap, we formulate a compound MCC-driven objective ($0.60\text{MCC} + 0.40F_1$) and evaluate out-of-sample performance via financial backtesting across multiple transaction fee tiers.
+
+Table~\ref{tab:literature_gap} summarizes representative literature in optimizer-driven financial forecasting, highlighting the unmet methodological limitations addressed by this work.
 
 \begin{table}[htbp]
-\caption{Representative literature on metaheuristic optimizer benchmarks and financial prediction, highlighting reported limitations and unaddressed research gaps.}
-\label{tab:lit_comparison}
+\caption{Representative literature on metaheuristic financial forecasting and unmet methodological limitations.}
+\label{tab:literature_gap}
 \centering
 \resizebox{\linewidth}{!}{%
-\begin{tabular}{lllll}
+\begin{tabular}{llll}
 \toprule
-Study & Model & Optimizer(s) & Domain / Data & Reported limitation / gap \\
+Study & Model \& Domain & Optimization Paradigm & Unmet Limitations / Research Gap \\
 \midrule
-Gad \cite{gad2022pso_comprehensive} & Various & PSO variants & General benchmarks & Systematic review; lacks head-to-head empirical testing \\
-Faris et al. \cite{faris2018gwo_review} & ANN / SVM & GWO & Classification / Benchmark & Review focused on GWO; no budget-controlled EA comparison \\
-Rajwar et al. \cite{rajwar2023exhaustive_review} & Various & Metaheuristics & Optimization taxonomy & Theoretical survey; no financial time-series application \\
-Dhingra et al. \cite{benchmark_nca_solar2025} & LSTM / CNN & Adam, RAdam, etc. & Solar PV forecasting & Evaluates gradient optimizers; excludes metaheuristics \\
-Souza et al. \cite{souza2025iccsa} & RF & Default & WIN futures (5-min) & Focuses solely on feature selection; no hyperparameter tuning \\
-Souza et al. \cite{souza2026ijcnn} & RF/SVM/MLP & GA & WIN futures (5-min) & Uses single optimizer (GA); lacks multi-optimizer benchmark \\
-\midrule
-\textbf{Present Work} & \textbf{MLP} & \textbf{RS, GA, PSO, DE, GWO} & \textbf{WIN futures (5-min)} & \textbf{Addressed: Equal budget, 5 optimizers, temporal split,} \\
- & & & & \textbf{MCC metric, stat. testing, and financial evaluation} \\
+Billah et al. (2024) \cite{billah2024nca_moving_average} & Trend forecasting, Intraday & Moving average heuristics & Lack of automated hyperparameter search. \\
+Dhingra et al. (2025) \cite{dhingra2025solar} & Neural forecasting, Time series & Single metaheuristic & Unequal evaluation budget across baselines. \\
+Ecer et al. (2020) \cite{ecer2020mlp_ga_pso} & MLP classifier, Stock index & GA vs. PSO comparison & Randomized cross-validation (Data leakage risk). \\
+Rajwar et al. (2023) \cite{rajwar2023exhaustive_review} & Metaheuristic review & Survey synthesis & Absence of controlled equal-budget benchmarks. \\
+Souza et al. (2025) \cite{souza2025iccsa} & MLP classifier, B3 Futures & InfoGain + Random Search & Lack of multi-metaheuristic benchmark comparison. \\
+\textbf{Present Work} & \textbf{MLP, B3 Futures (WIN)} & \textbf{RS, GA, PSO, DE, GWO} & \textbf{Controlled equal budget, leakage-free temporal split.} \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
-
-A synthesis of the existing literature reveals four primary open issues:
-\begin{enumerate}
-    \item \textbf{Lack of controlled equal-budget benchmarks}: Existing financial ML papers typically test a single metaheuristic (e.g., GA or PSO) without benchmarking against rival optimizer families under strict, identical evaluation limits.
-    \item \textbf{Data leakage in financial validation}: Many benchmarks apply standard random cross-validation, which corrupts temporal autocorrelation and produces artificially inflated metrics.
-    \item \textbf{Inadequate metric selection}: Standard accuracy fails to account for class imbalance and false signal costs in trading; robust metrics such as Matthews Correlation Coefficient (MCC) \cite{chicco2020mcc} are rarely prioritized as fitness objectives.
-    \item \textbf{Disconnect between predictive metrics and economic value}: High predictive accuracy does not guarantee profitability under non-zero transaction costs. Benchmark studies rarely connect optimization metrics directly to backtested financial performance.
-\end{enumerate}
-
-This study explicitly addresses these four open issues through a controlled, reproducible benchmark protocol.

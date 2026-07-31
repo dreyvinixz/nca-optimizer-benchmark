@@ -1,16 +1,34 @@
 % ============================================================
-% Section 6 — Discussion
+% Section 6: Discussion & Practical Implications
+% Target Journal: Neural Computing and Applications (Springer Nature)
+% Approved Design: article/designs/discussion_design.md (MISSION 13)
+% Master Guides: NCA_WRITING_DNA.md, SCIENTIFIC_REASONING_DNA.md
 % ============================================================
-\section{Discussion}
-\label{sec:discussion}
 
-% --- Key topics to discuss ---
-% 1. Which optimizer family performed best and why?
-% 2. Convergence speed vs final performance trade-offs
-% 3. Stability across seeds — which optimizer is most robust?
-% 4. Financial viability — do better classifiers yield better trading?
-% 5. Comparison with previous ICCSA/IJCNN results
-% 6. Practical recommendations for optimizer selection
-% 7. Relation to existing benchmark studies (reference paper)
-% 8. Implications for other financial instruments (WDO, DOL, IND)
-% TODO: Write discussion
+\section{Discussion \& Practical Implications}\label{sec:discussion}
+
+This section interprets the empirical benchmark findings, analyzing the underlying search mechanics, practical meaningfulness of statistical outcomes, operational guidelines for quantitative trading, scope limitations, and avenues for future research.
+
+\subsection{Emergence of Performance Disparities}\label{sec:disc_emergence}
+
+The observed performance divergence between population-guided metaheuristics and unguided stochastic sampling emerges from the structural topology of the hyperparameter search space. In 6D neural optimization, strong non-linear interactions exist between architecture parameters, learning rates, and regularization coefficients. Guided search algorithms succeed because they exploit structural correlations across candidate solutions, propagating high-fitness hyperparameter combinations across successive iterations. While an alternative view might suggest that unguided uniform sampling simply failed to encounter favorable candidate points due to budget constraints, the statistical evidence across independent stochastic runs indicates that metaheuristic superiority is driven by systematic exploration rather than random sampling chance. Nevertheless, this search advantage remains fundamentally bounded by the quality and informativeness of the underlying feature representation. Having established why guided metaheuristics outperform unguided sampling, it becomes essential to examine the specific algorithmic operators responsible for these search dynamics.
+
+\subsection{Underlying Optimization Search Mechanics}\label{sec:disc_mechanics}
+
+The comparative dynamics observed across population-based paradigms reflect fundamental differences in their exploration-exploitation operators. Evolutionary crossover in Genetic Algorithms and vector differencing in Differential Evolution maintain population diversity across search generations, enabling sustained exploration of non-convex solution spaces. Conversely, Grey Wolf Optimizer relies on leadership attraction vectors that pull candidate solutions toward the current best triad, promoting rapid early convergence but increasing susceptibility to premature local trapping in noisy multimodal landscapes. Although one could argue that adjusting GWO parameter decay schedules might mitigate this plateauing, the wolf position update mechanism inherently contracts population variance toward current leaders, limiting late-stage space coverage. This mechanic illustrates that recombination-driven diversification provides greater resilience against local sub-optima in noisy financial loss surfaces than pure leader-driven attraction. Understanding these search mechanics provides a foundation for evaluating whether observed statistical differences translate into meaningful practical impact.
+
+\subsection{Practical Meaningfulness of Statistical Outcomes}\label{sec:disc_stats_meaning}
+
+The statistical significance established across out-of-sample evaluation metrics bears direct practical relevance for quantitative financial modeling. Beyond raw inferential $p$-values, the magnitude of performance gains demonstrates that anchoring hyperparameter optimization to a compound objective combining Matthews Correlation Coefficient with macro-$F_1$ directly mitigates directional prediction bias. One might hypothesize that statistical classification gains would dissipate under real-world execution friction such as brokerage fees and market slippage. However, economic simulation across multiple transaction cost tiers confirms that models tuned via compound classification objectives preserve positive net profitability after accounting for transaction costs. This utility remains valid provided market liquidity remains sufficient to execute signals near prevailing bar closing prices. Demonstrating practical economic utility leads directly to actionable guidelines for quantitative trading system design.
+
+\subsection{Practical Implications for Quantitative Trading Systems}\label{sec:disc_implications}
+
+For quantitative finance practitioners, these findings yield concrete architectural guidelines for constructing neural forecasting pipelines. Offline metaheuristic hyperparameter tuning should be prioritized over default configurations or manual parameter selection, as the computational overhead introduced by population updates is negligible relative to candidate model training time and is heavily offset by out-of-sample trading performance. Practitioners might consider manual grid search preferable due to implementation simplicity; however, grid search scales exponentially with search space dimension and lacks adaptive guidance. Enforcing an explicit, equal evaluation budget cap allows practitioners to select search algorithms based on true search efficiency rather than arbitrary computational expenditure. While these practical implications offer clear guidance, the generalizability of these findings must be interpreted within explicit boundary limitations.
+
+\subsection{Methodological Boundaries \& Limitations}\label{sec:disc_limitations}
+
+The conclusions of this study must be interpreted within the scope of its experimental boundaries. The benchmark is restricted to 5-minute intraday records of Brazilian Mini-Index futures, a single neural architecture family (Multilayer Perceptrons), a 7-attribute Information Gain feature subset, and a fixed evaluation budget cap of 1,500 candidate evaluations per seed. While one might be inclined to extrapolate these results to deep recurrent architectures or global equity markets, high-frequency time series exhibit unique microstructure noise, tick density, and volatility dynamics that vary substantially across asset classes and sampling frequencies. Consequently, generalizability to multi-asset universes or complex deep learning topologies requires independent empirical verification. Identifying these boundaries highlights precise directions for future research.
+
+\subsection{Future Research Directions}\label{sec:disc_future}
+
+Future research should extend this benchmark framework along three primary avenues. First, the experimental protocol should be expanded to a multi-asset universe encompassing Full Index, Mini-Dollar, and equity futures across sub-minute execution horizons to evaluate cross-asset optimizer stability. Second, hybrid metaheuristic paradigms—such as combining Particle Swarm Optimization's initial convergence speed with Genetic Algorithm crossover diversification—should be investigated to optimize search efficiency. Third, hyperparameter selection should be re-framed as a Pareto multi-objective optimization problem, simultaneously evaluating classification performance, financial risk-adjusted return, and computational execution latency. Concluding these discussion points completes the scientific interpretation of the benchmark framework.

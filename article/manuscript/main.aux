@@ -21,8 +21,132 @@
 \citation{rajwar2023exhaustive_review}
 \citation{souza2026ijcnn}
 \citation{chicco2020mcc}
+\citation{billah2024nca_moving_average}
+\citation{cardoso2022bovdb}
+\citation{ecer2020mlp_ga_pso}
+\citation{goldberg1989ga,mirjalili2014gwo}
+\citation{holland1992ga}
+\citation{kennedy1995pso}
+\citation{storn1997de}
+\citation{faris2018gwo_review}
+\citation{dhingra2025solar,rajwar2023exhaustive_review}
+\citation{souza2026ijcnn,makridakis2018statistical}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work \& Theoretical Background}{4}{section.2}\protected@file@percent }
+\newlabel{sec:related_work}{{2}{4}{Related Work \& Theoretical Background}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Financial Forecasting \& Neural Architectures}{4}{subsection.2.1}\protected@file@percent }
+\newlabel{sec:rel_financial}{{2.1}{4}{Financial Forecasting \& Neural Architectures}{subsection.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Metaheuristic Tuning \& The Budget Inequality Hypothesis}{4}{subsection.2.2}\protected@file@percent }
+\newlabel{sec:rel_budget}{{2.2}{4}{Metaheuristic Tuning \& The Budget Inequality Hypothesis}{subsection.2.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Validation Protocols \& The Temporal Data Leakage Hypothesis}{4}{subsection.2.3}\protected@file@percent }
+\newlabel{sec:rel_leakage}{{2.3}{4}{Validation Protocols \& The Temporal Data Leakage Hypothesis}{subsection.2.3}{}}
+\citation{chicco2020mcc}
+\citation{henrique2019stock_review}
+\citation{billah2024nca_moving_average}
+\citation{dhingra2025solar}
+\citation{ecer2020mlp_ga_pso}
+\citation{rajwar2023exhaustive_review}
+\citation{souza2025iccsa}
+\citation{souza2025iccsa}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Evaluation Objectives \& The Classification-Economic Disconnect Hypothesis}{5}{subsection.2.4}\protected@file@percent }
+\newlabel{sec:rel_disconnect}{{2.4}{5}{Evaluation Objectives \& The Classification-Economic Disconnect Hypothesis}{subsection.2.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Data Specification \& Experimental Protocol}{5}{section.3}\protected@file@percent }
+\newlabel{sec:data}{{3}{5}{Data Specification \& Experimental Protocol}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Intraday Mini-Index Futures Dataset}{5}{subsection.3.1}\protected@file@percent }
+\newlabel{sec:data_dataset}{{3.1}{5}{Intraday Mini-Index Futures Dataset}{subsection.3.1}{}}
+\newlabel{eq:target}{{1}{5}{Intraday Mini-Index Futures Dataset}{equation.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Information Gain Feature Selection}{5}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:data_features}{{3.2}{5}{Information Gain Feature Selection}{subsection.3.2}{}}
+\citation{souza2025iccsa}
+\citation{souza2026ijcnn,makridakis2018statistical}
+\newlabel{eq:infogain}{{2}{6}{Information Gain Feature Selection}{equation.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Sequential Temporal Validation Protocol}{6}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:data_split}{{3.3}{6}{Sequential Temporal Validation Protocol}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Proposed Optimizer Benchmark Framework}{6}{section.4}\protected@file@percent }
+\newlabel{sec:methodology}{{4}{6}{Proposed Optimizer Benchmark Framework}{section.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Chronological 60/20/20 sequential temporal partitioning protocol ($N = 15,057$ 5-minute bars) designed to preserve temporal ordering ($T_{\text  {train}} < T_{\text  {val}} < T_{\text  {test}}$) and preclude look-ahead data leakage.}}{7}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:temporal_split}{{1}{7}{Chronological 60/20/20 sequential temporal partitioning protocol ($N = 15,057$ 5-minute bars) designed to preserve temporal ordering ($T_{\text {train}} < T_{\text {val}} < T_{\text {test}}$) and preclude look-ahead data leakage}{figure.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces End-to-end architectural workflow of the proposed optimizer benchmark framework, detailing data preprocessing, Information Gain feature selection, sequential 60/20/20 temporal split, 6D MLP evaluation loop, equal-budget optimizer engines ($N_{\text  {eval}} = 1,500$), compound fitness scoring ($0.60\text  {MCC} + 0.40F_1$), and dual statistical-financial validation.}}{7}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:methodology_overview}{{2}{7}{End-to-end architectural workflow of the proposed optimizer benchmark framework, detailing data preprocessing, Information Gain feature selection, sequential 60/20/20 temporal split, 6D MLP evaluation loop, equal-budget optimizer engines ($N_{\text {eval}} = 1,500$), compound fitness scoring ($0.60\text {MCC} + 0.40F_1$), and dual statistical-financial validation}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Multilayer Perceptron Search Space Formulation}{7}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:search_space}{{4.1}{7}{Multilayer Perceptron Search Space Formulation}{subsection.4.1}{}}
+\citation{chicco2020mcc}
+\citation{chicco2021matthews}
+\citation{rajwar2023exhaustive_review}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Compound MCC-Driven Fitness Formulation}{8}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:fitness}{{4.2}{8}{Compound MCC-Driven Fitness Formulation}{subsection.4.2}{}}
+\newlabel{eq:fitness}{{3}{8}{Compound MCC-Driven Fitness Formulation}{equation.3}{}}
+\newlabel{eq:mcc}{{4}{8}{Compound MCC-Driven Fitness Formulation}{equation.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Equal Evaluation Budget Protocol}{8}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:budget}{{4.3}{8}{Equal Evaluation Budget Protocol}{subsection.4.3}{}}
+\newlabel{eq:budget}{{5}{8}{Equal Evaluation Budget Protocol}{equation.5}{}}
+\citation{bergstra2012random_search}
+\citation{goldberg1989ga}
+\citation{kennedy1995pso}
+\citation{storn1997de}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Mathematical Formulations of Evaluated Optimizers}{9}{subsection.4.4}\protected@file@percent }
+\newlabel{sec:optimizers}{{4.4}{9}{Mathematical Formulations of Evaluated Optimizers}{subsection.4.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Random Search (RS)}{9}{subsubsection.4.4.1}\protected@file@percent }
+\newlabel{eq:rs}{{6}{9}{Random Search (RS)}{equation.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Genetic Algorithm (GA)}{9}{subsubsection.4.4.2}\protected@file@percent }
+\newlabel{eq:ga_cross}{{7}{9}{Genetic Algorithm (GA)}{equation.7}{}}
+\newlabel{eq:ga_mut}{{8}{9}{Genetic Algorithm (GA)}{equation.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Particle Swarm Optimization (PSO)}{9}{subsubsection.4.4.3}\protected@file@percent }
+\newlabel{eq:pso_vel}{{9}{9}{Particle Swarm Optimization (PSO)}{equation.9}{}}
+\newlabel{eq:pso_pos}{{10}{9}{Particle Swarm Optimization (PSO)}{equation.10}{}}
+\citation{mirjalili2014gwo}
+\citation{demsar2006statistical}
+\citation{henrique2019stock_review}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.4}Differential Evolution (DE)}{10}{subsubsection.4.4.4}\protected@file@percent }
+\newlabel{eq:de_mut}{{11}{10}{Differential Evolution (DE)}{equation.11}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.5}Grey Wolf Optimizer (GWO)}{10}{subsubsection.4.4.5}\protected@file@percent }
+\newlabel{eq:gwo}{{12}{10}{Grey Wolf Optimizer (GWO)}{equation.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Statistical Hypothesis Testing Protocol}{10}{subsection.4.5}\protected@file@percent }
+\newlabel{sec:stats_protocol}{{4.5}{10}{Statistical Hypothesis Testing Protocol}{subsection.4.5}{}}
+\newlabel{eq:cohen_d}{{13}{10}{Statistical Hypothesis Testing Protocol}{equation.13}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Financial Backtest Simulator \& Cost Sensitivity}{10}{subsection.4.6}\protected@file@percent }
+\newlabel{sec:backtest_protocol}{{4.6}{10}{Financial Backtest Simulator \& Cost Sensitivity}{subsection.4.6}{}}
+\newlabel{eq:signal}{{14}{11}{Financial Backtest Simulator \& Cost Sensitivity}{equation.14}{}}
+\newlabel{eq:backtest}{{15}{11}{Financial Backtest Simulator \& Cost Sensitivity}{equation.15}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Experimental Results \& Performance Benchmark}{11}{section.5}\protected@file@percent }
+\newlabel{sec:results}{{5}{11}{Experimental Results \& Performance Benchmark}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Out-of-Sample Predictive Classification Performance}{11}{subsection.5.1}\protected@file@percent }
+\newlabel{sec:results_predictive}{{5.1}{11}{Out-of-Sample Predictive Classification Performance}{subsection.5.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Out-of-sample performance distribution boxplots across 20 stochastic seeds for RS, GWO, PSO, DE, and GA. Left: Matthews Correlation Coefficient (MCC). Right: Predictive Accuracy (\%).}}{12}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:metrics_boxplots}{{3}{12}{Out-of-sample performance distribution boxplots across 20 stochastic seeds for RS, GWO, PSO, DE, and GA. Left: Matthews Correlation Coefficient (MCC). Right: Predictive Accuracy (\%)}{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Convergence Dynamics \& Fitness Trajectories}{12}{subsection.5.2}\protected@file@percent }
+\newlabel{sec:results_convergence}{{5.2}{12}{Convergence Dynamics \& Fitness Trajectories}{subsection.5.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Validation fitness convergence trajectories ($0.60\text  {MCC} + 0.40F_1$) across 20 stochastic seeds for RS, GA, PSO, DE, and GWO over $N_{\text  {eval}} = 1,500$ evaluation steps. Shaded regions represent $\pm 1$ standard deviation confidence intervals.}}{12}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:convergence_curves}{{4}{12}{Validation fitness convergence trajectories ($0.60\text {MCC} + 0.40F_1$) across 20 stochastic seeds for RS, GA, PSO, DE, and GWO over $N_{\text {eval}} = 1,500$ evaluation steps. Shaded regions represent $\pm 1$ standard deviation confidence intervals}{figure.caption.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Computational Execution Overhead}{13}{subsection.5.3}\protected@file@percent }
+\newlabel{sec:results_runtime}{{5.3}{13}{Computational Execution Overhead}{subsection.5.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Non-Parametric Statistical Hypothesis Testing \& Null Findings}{13}{subsection.5.4}\protected@file@percent }
+\newlabel{sec:results_stats}{{5.4}{13}{Non-Parametric Statistical Hypothesis Testing \& Null Findings}{subsection.5.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Out-of-Sample Financial Backtesting \& Cost Sensitivity}{13}{subsection.5.5}\protected@file@percent }
+\newlabel{sec:results_backtest}{{5.5}{13}{Out-of-Sample Financial Backtesting \& Cost Sensitivity}{subsection.5.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Out-of-sample cumulative net equity curves over 3,012 5-minute test bars under standard transaction fees ($0.01\%$), comparing GA, DE, PSO, GWO, RS, and passive Buy \& Hold.}}{14}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:financial_equity}{{5}{14}{Out-of-sample cumulative net equity curves over 3,012 5-minute test bars under standard transaction fees ($0.01\%$), comparing GA, DE, PSO, GWO, RS, and passive Buy \& Hold}{figure.caption.14}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Discussion \& Practical Implications}{14}{section.6}\protected@file@percent }
+\newlabel{sec:discussion}{{6}{14}{Discussion \& Practical Implications}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Emergence of Performance Disparities}{14}{subsection.6.1}\protected@file@percent }
+\newlabel{sec:disc_emergence}{{6.1}{14}{Emergence of Performance Disparities}{subsection.6.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Underlying Optimization Search Mechanics}{15}{subsection.6.2}\protected@file@percent }
+\newlabel{sec:disc_mechanics}{{6.2}{15}{Underlying Optimization Search Mechanics}{subsection.6.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Practical Meaningfulness of Statistical Outcomes}{15}{subsection.6.3}\protected@file@percent }
+\newlabel{sec:disc_stats_meaning}{{6.3}{15}{Practical Meaningfulness of Statistical Outcomes}{subsection.6.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Practical Implications for Quantitative Trading Systems}{15}{subsection.6.4}\protected@file@percent }
+\newlabel{sec:disc_implications}{{6.4}{15}{Practical Implications for Quantitative Trading Systems}{subsection.6.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Methodological Boundaries \& Limitations}{16}{subsection.6.5}\protected@file@percent }
+\newlabel{sec:disc_limitations}{{6.5}{16}{Methodological Boundaries \& Limitations}{subsection.6.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6}Future Research Directions}{16}{subsection.6.6}\protected@file@percent }
+\newlabel{sec:disc_future}{{6.6}{16}{Future Research Directions}{subsection.6.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion \& Future Work}{16}{section.7}\protected@file@percent }
+\newlabel{sec:conclusion}{{7}{16}{Conclusion \& Future Work}{section.7}{}}
 \bibdata{references}
 \bibcite{billah2024nca_moving_average}{{1}{2024}{{Billah et~al.}}{{}}}
+\@writefile{toc}{\contentsline {paragraph}{Funding}{17}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Conflict of interest}{17}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Ethical approval}{17}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Data and code availability}{17}{section*.19}\protected@file@percent }
 \bibcite{cardoso2022bovdb}{{2}{2022}{{Cardoso et~al.}}{{}}}
 \bibcite{souza2025iccsa}{{3}{2025}{{Souza et~al.}}{{}}}
 \bibcite{henrique2019stock_review}{{4}{2019}{{Henrique et~al.}}{{}}}
@@ -38,4 +162,5 @@
 \bibcite{faris2018gwo_review}{{14}{2018}{{Faris et~al.}}{{}}}
 \bibcite{souza2026ijcnn}{{15}{2026}{{Souza et~al.}}{{}}}
 \bibcite{chicco2020mcc}{{16}{2020}{{Chicco and Jurman}}{{}}}
-\gdef \@abspage@last{5}
+\bibcite{demsar2006statistical}{{17}{2006}{{Dem{\v {s}}ar}}{{}}}
+\gdef \@abspage@last{19}

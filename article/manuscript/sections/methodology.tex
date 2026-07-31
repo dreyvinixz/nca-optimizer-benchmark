@@ -1,137 +1,127 @@
 % ============================================================
-% Section 4 — Methodology
+% Section 4: Methodology & Proposed Optimizer Benchmark Framework
+% Target Journal: Neural Computing and Applications (Springer Nature)
+% Master Guides: NCA_WRITING_DNA.md, SCIENTIFIC_REASONING_DNA.md
 % ============================================================
-\section{Methodology}
-\label{sec:methodology}
 
-This section describes the Multilayer Perceptron (MLP) base model, hyperparameter search space, composite fitness function, mathematical formulation of the five optimizers, experimental control protocol, statistical testing framework, and financial backtesting model.
+\section{Proposed Optimizer Benchmark Framework}\label{sec:methodology}
 
-% --- 4.1 Multilayer Perceptron model ---
-\subsection{Multilayer Perceptron Architecture and Search Space}
-\label{sec:method_mlp}
+This section formalizes the proposed benchmark framework for evaluating evolutionary and swarm intelligence optimizers under controlled experimental conditions. Figure~\ref{fig:methodology_overview} illustrates the end-to-end multi-stage pipeline, connecting raw data ingestion, feature selection, chronological temporal partitioning, neural search space formulation, equal-budget optimizer evaluation loops, compound fitness scoring, and downstream statistical and economic validation.
 
-A fully connected feedforward Multilayer Perceptron (MLP) network serves as the base classification model. Given an input vector $\mathbf{x} \in \mathbb{R}^7$ (the 7 Information Gain technical features), the network maps inputs to a binary probability prediction $\hat{y} \in [0, 1]$:
-\begin{equation}
-\mathbf{h}^{(1)} = \sigma_1(\mathbf{W}^{(1)} \mathbf{x} + \mathbf{b}^{(1)})
-\end{equation}
-\begin{equation}
-\mathbf{h}^{(2)} = \sigma_2(\mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}) \quad (\text{if } L=2)
-\end{equation}
-\begin{equation}
-\hat{y} = \text{sigmoid}(\mathbf{W}^{(out)} \mathbf{h}^{(L)} + \mathbf{b}^{(out)})
-\end{equation}
-
-Table~\ref{tab:search_space} details the 6-dimensional discrete-continuous hyperparameter search space $\Theta$ configured for optimizer exploration.
-
-\begin{table}[htbp]
-\caption{Hyperparameter search space $\Theta$ for MLP neural network optimization.}
-\label{tab:search_space}
+\begin{figure}[htbp]
 \centering
-\small
-\begin{tabular}{lll}
-\toprule
-Hyperparameter & Type & Search Domain / Candidate Values \\
-\midrule
-Hidden Layers ($L$) & Discrete & $\{1, 2\}$ \\
-Neurons per Layer ($N_1, N_2$) & Discrete & $\{8, 16, 32, 64, 128\}$ \\
-Activation Function ($\sigma$) & Categorical & $\{\text{ReLU}, \text{Tanh}, \text{ELU}\}$ \\
-Internal Optimizer & Categorical & $\{\text{Adam}, \text{RMSprop}, \text{SGD}\}$ \\
-Initial Learning Rate ($\eta$) & Continuous (Log) & $[10^{-4}, 10^{-1}]$ \\
-L2 Regularization ($\lambda$) & Continuous (Log) & $[10^{-6}, 10^{-2}]$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=0.95\linewidth]{figures/methodology_overview.pdf}
+\caption{End-to-end architectural workflow of the proposed optimizer benchmark framework, detailing data preprocessing, Information Gain feature selection, sequential 60/20/20 temporal split, 6D MLP evaluation loop, equal-budget optimizer engines ($N_{\text{eval}} = 1,500$), compound fitness scoring ($0.60\text{MCC} + 0.40F_1$), and dual statistical-financial validation.}
+\label{fig:methodology_overview}
+\end{figure}
 
-% --- 4.2 Fitness function ---
-\subsection{Fitness Function Formulation}
-\label{sec:method_fitness}
+\subsection{Multilayer Perceptron Search Space Formulation}\label{sec:search_space}
 
-Standard binary accuracy is susceptible to class imbalance and false signal distortions. To prioritize balanced, reliable classification, candidate hyperparameter solutions $\boldsymbol{\theta} \in \Theta$ are evaluated using a composite fitness objective calculated strictly on the validation partition $\mathcal{D}_{val}$:
-\begin{equation}
-f(\boldsymbol{\theta}) = 0.60 \times \text{MCC}(\boldsymbol{\theta}) + 0.40 \times F_1(\boldsymbol{\theta})
-\end{equation}
-where $\text{MCC}$ is the Matthews Correlation Coefficient:
-\begin{equation}
-\text{MCC} = \frac{TP \times TN - FP \times FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
-\end{equation}
-and $F_1$ is the harmonic mean of precision and recall. Higher values of $f(\boldsymbol{\theta})$ indicate superior validation quality.
+To evaluate hyperparameter optimization algorithms under controlled conditions, we restrict the target neural model to a standardized Multilayer Perceptron (MLP) classifier. The MLP processes the $d=7$ Information Gain feature vectors extracted from intraday 5-minute B3 Mini-Index futures data to predict directional trend labels $y \in \{0, 1\}$. 
 
-% --- 4.3 Optimizer descriptions ---
-\subsection{Optimization Algorithms}
-\label{sec:method_optimizers}
-
-All five optimizers operate on the hyperparameter decision vector $\boldsymbol{\theta} \in \mathbb{R}^6$ mapped into normalized hypercube boundaries $[0, 1]^6$.
-
-\subsubsection{Random Search (RS)}
-Random Search samples candidate configurations independently from a uniform distribution:
-\begin{equation}
-\boldsymbol{\theta}_i \sim \mathcal{U}(\boldsymbol{\theta}_{min}, \boldsymbol{\theta}_{max}), \quad i = 1, \dots, N_{eval}
-\end{equation}
-RS serves as a non-guided baseline.
-
-\subsubsection{Genetic Algorithm (GA)}
-The Genetic Algorithm maintains a population of $N_p = 30$ chromosomes. In each generation, parents are selected via tournament selection ($k=3$), followed by uniform crossover ($p_c = 0.8$) and Gaussian mutation ($p_m = 0.1, \sigma = 0.1$). Elitism ($e=2$) preserves top solutions.
-
-\subsubsection{Particle Swarm Optimization (PSO)}
-PSO maintains a swarm of $N_p = 30$ particles with position $\mathbf{x}_i$ and velocity $\mathbf{v}_i$. Velocity and position updates follow:
-\begin{equation}
-\mathbf{v}_i^{(t+1)} = w \mathbf{v}_i^{(t)} + c_1 r_1 (\mathbf{pbest}_i - \mathbf{x}_i^{(t)}) + c_2 r_2 (\mathbf{gbest} - \mathbf{x}_i^{(t)})
-\end{equation}
-\begin{equation}
-\mathbf{x}_i^{(t+1)} = \mathbf{x}_i^{(t)} + \mathbf{v}_i^{(t+1)}
-\end{equation}
-where inertia weight $w = 0.7298$, cognitive coefficient $c_1 = 1.49618$, social coefficient $c_2 = 1.49618$, and $r_1, r_2 \sim \mathcal{U}(0, 1)$.
-
-\subsubsection{Differential Evolution (DE)}
-DE employs a DE/rand/1/bin scheme with population $N_p = 30$. Mutation vectors are generated via:
-\begin{equation}
-\mathbf{v}_i^{(t)} = \mathbf{x}_{r1}^{(t)} + F (\mathbf{x}_{r2}^{(t)} - \mathbf{x}_{r3}^{(t)})
-\end{equation}
-with differential weight $F = 0.5$ and crossover rate $CR = 0.7$.
-
-\subsubsection{Grey Wolf Optimizer (GWO)}
-GWO models the wolf pack hierarchy ($\alpha, \beta, \delta$). Particle position updates are guided by the average position vector toward the three leading wolves:
-\begin{equation}
-\mathbf{x}_i^{(t+1)} = \frac{\mathbf{x}_1 + \mathbf{x}_2 + \mathbf{x}_3}{3}
-\end{equation}
-where $\mathbf{x}_1, \mathbf{x}_2, \mathbf{x}_3$ are position vectors computed relative to $\alpha, \beta, \delta$ leadership positions.
-
-% --- 4.4 Experimental protocol ---
-\subsection{Experimental Protocol}
-\label{sec:method_protocol}
-
-To ensure strict experimental control:
+The architectural topology, learning rates, and regularization parameters define a 6-dimensional mixed discrete-continuous search space $\boldsymbol{\Theta} \subset \mathbb{R}^6$. A candidate solution is represented as a vector $\boldsymbol{\theta} = [N_{L1}, N_{L2}, \eta, \alpha, p_{\text{drop}}, B]$, where:
 \begin{enumerate}
-    \item \textbf{Equal Evaluation Budget}: Every optimizer run is terminated at exactly $N_{eval} = 1,500$ fitness evaluations.
-    \item \textbf{Multi-Seed Replication}: Experiments are repeated across 20 independent random seeds to assess variance and statistical stability.
-    \item \textbf{Hardware Standardization}: All runs execute on identical compute environments to record comparable wall-clock runtimes.
+    \item $N_{L1} \in [16, 256] \subset \mathbb{Z}^+$ denotes the number of hidden units in the first hidden layer.
+    \item $N_{L2} \in [0, 128] \subset \mathbb{Z}^+$ denotes the number of hidden units in the second hidden layer, where $N_{L2}=0$ corresponds to a single-hidden-layer architecture.
+    \item $\eta \in [10^{-4}, 10^{-1}] \subset \mathbb{R}^+$ represents the learning rate, sampled on a logarithmic ($\log_{10}$) scale.
+    \item $\alpha \in [10^{-6}, 10^{-2}] \subset \mathbb{R}^+$ represents the $L_2$ weight regularization penalty coefficient, sampled on a logarithmic scale.
+    \item $p_{\text{drop}} \in [0.0, 0.50] \subset \mathbb{R}$ represents the dropout probability applied to hidden layer activations.
+    \item $B \in \{32, 64, 128, 256\}$ represents the mini-batch size used during stochastic gradient updates.
 \end{enumerate}
 
-% --- 4.5 Statistical testing ---
-\subsection{Statistical Analysis Framework}
-\label{sec:method_stats}
+All candidate models are trained using the RMSprop optimization algorithm with binary cross-entropy loss over a maximum of 50 epochs, incorporating early stopping with a patience parameter of 3 validation epochs to mitigate overfitting.
 
-Statistical significance is evaluated using non-parametric hypothesis tests. The Friedman test assesses overall differences across optimizer ranks. Upon rejection of the null hypothesis ($p < 0.05$), pairwise Wilcoxon signed-rank tests are conducted with Holm-Bonferroni step-down correction for family-wise error control. Effect sizes are quantified using Cohen's $d$.
+\subsection{Compound MCC-Driven Fitness Formulation}\label{sec:fitness}
 
-% --- 4.6 Financial evaluation ---
-\subsection{Financial Backtesting Model}
-\label{sec:method_financial}
+To reduce distortion from minor class imbalances and penalize false positive trading signals, optimization algorithms evaluate candidate hyperparameter vectors $\boldsymbol{\theta}$ using a compound objective function $f(\boldsymbol{\theta})$. Raw accuracy and cross-entropy loss are known to yield misleading evaluations in financial time series due to minor class skewness \cite{chicco2020mcc}. 
 
-Out-of-sample test predictions $\hat{y}_t \in \{0, 1\}$ generate simulated trading signals for 5-minute WIN futures:
-\begin{equation}
-pos_t = \begin{cases} 
-+1 & \text{if } \hat{y}_t = 1 \text{ (Long position)} \\
-0  & \text{if } \hat{y}_t = 0 \text{ (Out of market)}
-\end{cases}
+We define the compound fitness function $f: \boldsymbol{\Theta} \to [-0.60, 1.00]$ as a weighted combination of the Matthews Correlation Coefficient ($\text{MCC}$) and the macro-averaged $F_1$-score evaluated on out-of-sample validation data $\mathcal{D}_{\text{val}}$:
+\begin{equation}\label{eq:fitness}
+    f(\boldsymbol{\theta}) = 0.60 \times \text{MCC}(\boldsymbol{\theta}) + 0.40 \times F_1(\boldsymbol{\theta})
 \end{equation}
 
-Gross returns are calculated from 5-minute price differences:
-\begin{equation}
-R_t^{gross} = pos_t \times (\text{Close}_{t+1} - \text{Close}_t)
+The Matthews Correlation Coefficient is expressed as:
+\begin{equation}\label{eq:mcc}
+    \text{MCC} = \frac{TP \times TN - FP \times FN}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}
 \end{equation}
-Net returns subtract fixed transaction friction $c_{cost} = 1.0 \text{ point}$ per trade entry/exit:
-\begin{equation}
-R_t^{net} = R_t^{gross} - c_{cost} \cdot |\Delta pos_t|
+where $TP$, $TN$, $FP$, and $FN$ represent true positives, true negatives, false positives, and false negatives, respectively. By assigning a 60\% weight to MCC, the objective prioritizes hyperparameter configurations that achieve balanced true positive and true negative detection rates across volatile market regimes \cite{chicco2021matthews}.
+
+\subsection{Equal Evaluation Budget Protocol}\label{sec:budget}
+
+To control for evaluation budget disparities—a recognized limitation in published metaheuristic studies \cite{rajwar2023exhaustive_review}—all five optimization algorithms operate under a strict, identical budget cap of $N_{\text{eval}} = 1,500$ fitness evaluations per stochastic seed. 
+
+Rather than comparing algorithms based on arbitrary generation or iteration counts, the unit of computational effort is fixed across all population-based paradigms:
+\begin{equation}\label{eq:budget}
+    N_{\text{eval}} = N_{\text{pop}} \times T = 1,500
+\end{equation}
+where $N_{\text{pop}} = 15$ candidate individuals/particles/wolves and $T = 100$ evolutionary generations or swarm iterations. Random Search draws exactly $N_{\text{eval}} = 1,500$ independent uniform samples from $\boldsymbol{\Theta}$. Each optimizer is executed across 20 independent random seeds ($S = 1, \dots, 20$) to ensure statistical confidence.
+
+\subsection{Mathematical Formulations of Evaluated Optimizers}\label{sec:optimizers}
+
+We benchmark five representative optimization paradigms spanning stochastic sampling, evolutionary computation, and swarm intelligence:
+
+\subsubsection{Random Search (RS)}
+Random Search serves as the unguided stochastic baseline \cite{bergstra2012random_search}. At evaluation step $t \in \{1, \dots, N_{\text{eval}}\}$, a candidate hyperparameter vector $\boldsymbol{\theta}_t$ is sampled independently from a uniform distribution over the bounded hypercube:
+\begin{equation}\label{eq:rs}
+    \boldsymbol{\theta}_t \sim \mathcal{U}(\boldsymbol{\Theta}_{\text{min}}, \boldsymbol{\Theta}_{\text{max}})
+\end{equation}
+The optimal vector $\boldsymbol{\theta}^*_{\text{RS}}$ is retained as $\arg\max_{t} f(\boldsymbol{\theta}_t)$.
+
+\subsubsection{Genetic Algorithm (GA)}
+The Genetic Algorithm simulates Darwinian natural selection \cite{goldberg1989ga}. A population of $N_{\text{pop}} = 15$ binary/real-encoded individuals evolves across $T = 100$ generations. At generation $t$, parent selection is performed using tournament selection with size $k=3$. Uniform crossover is applied with probability $P_c = 0.80$, blending parent hyperparameter genes:
+\begin{equation}\label{eq:ga_cross}
+    \boldsymbol{x}_i^{t+1} = \gamma \boldsymbol{x}_{\text{parent1}}^t + (1-\gamma) \boldsymbol{x}_{\text{parent2}}^t, \quad \gamma \sim \mathcal{U}(0, 1)
+\end{equation}
+Gaussian mutation is applied to offspring genes with probability $P_m = 0.20$:
+\begin{equation}\label{eq:ga_mut}
+    \boldsymbol{x}_{i, j}^{t+1} = \boldsymbol{x}_{i, j}^{t+1} + \mathcal{N}(0, \sigma^2)
+\end{equation}
+where $\sigma = 0.10 \times (\boldsymbol{\Theta}_{\text{max}, j} - \boldsymbol{\Theta}_{\text{min}, j})$. Elitism preserves the top single individual into generation $t+1$.
+
+\subsubsection{Particle Swarm Optimization (PSO)}
+PSO models social foraging dynamics within a swarm of $N_{\text{pop}} = 15$ particles \cite{kennedy1995pso}. Each particle $i$ maintains a position vector $\boldsymbol{x}_i^t$ and a velocity vector $\boldsymbol{v}_i^t$. Velocity updates combine cognitive memory (personal best $\boldsymbol{p}_i$) and social memory (swarm global best $\boldsymbol{g}$):
+\begin{equation}\label{eq:pso_vel}
+    \boldsymbol{v}_i^{t+1} = w \boldsymbol{v}_i^t + c_1 r_1 (\boldsymbol{p}_i - \boldsymbol{x}_i^t) + c_2 r_2 (\boldsymbol{g} - \boldsymbol{x}_i^t)
+\end{equation}
+\begin{equation}\label{eq:pso_pos}
+    \boldsymbol{x}_i^{t+1} = \boldsymbol{x}_i^t + \boldsymbol{v}_i^{t+1}
+\end{equation}
+where inertia weight $w = 0.70$, cognitive parameter $c_1 = 1.50$, social parameter $c_2 = 1.50$, and $r_1, r_2 \sim \mathcal{U}(0, 1)$.
+
+\subsubsection{Differential Evolution (DE)}
+DE applies vector-differencing mutation to maintain population diversity \cite{storn1997de}. For each target vector $\boldsymbol{x}_i^t$, a mutant vector $\boldsymbol{v}_i^t$ is generated using the \texttt{best/1/bin} strategy:
+\begin{equation}\label{eq:de_mut}
+    \boldsymbol{v}_i^t = \boldsymbol{x}_{\text{best}}^t + F \cdot (\boldsymbol{x}_{r1}^t - \boldsymbol{x}_{r2}^t)
+\end{equation}
+where $r1, r2 \neq i$ are distinct random indices, and scaling factor $F = 0.80$. Binomial crossover yields trial vector $\boldsymbol{u}_i^t$ with crossover rate $CR = 0.90$. Trial vector $\boldsymbol{u}_i^t$ replaces $\boldsymbol{x}_i^t$ if $f(\boldsymbol{u}_i^t) \ge f(\boldsymbol{x}_i^t)$.
+
+\subsubsection{Grey Wolf Optimizer (GWO)}
+GWO mimics the social hierarchy and hunting pack behavior of grey wolves \cite{mirjalili2014gwo}. The three fittest candidates are designated as $\alpha$ (alpha wolf), $\beta$ (beta wolf), and $\delta$ (delta wolf). Candidate wolves $\omega$ update positions relative to the leadership triad:
+\begin{equation}\label{eq:gwo}
+    \boldsymbol{x}_i^{t+1} = \frac{\boldsymbol{x}_1 + \boldsymbol{x}_2 + \boldsymbol{x}_3}{3}
+\end{equation}
+where $\boldsymbol{x}_1 = \boldsymbol{x}_\alpha - \boldsymbol{A}_1 \cdot |\boldsymbol{C}_1 \cdot \boldsymbol{x}_\alpha - \boldsymbol{x}_i^t|$, with coefficient vectors $\boldsymbol{A} = 2\boldsymbol{a} \cdot \boldsymbol{r}_1 - \boldsymbol{a}$ linearly decaying from 2 to 0 over iterations $t=1 \dots T$.
+
+\subsection{Statistical Hypothesis Testing Protocol}\label{sec:stats_protocol}
+
+To evaluate out-of-sample classification disparities across the 20 stochastic seeds, non-parametric statistical hypothesis tests are conducted \cite{demsar2006statistical}:
+1. **Friedman Omnibus Test**: Applied at $\alpha = 0.05$ level to test the null hypothesis that all five optimizers exhibit identical performance distributions.
+2. **Post-Hoc Pairwise Wilcoxon Signed-Rank Test**: Conducted for all pairwise optimizer combinations. To control the Family-Wise Error Rate (FWER), $p$-values are adjusted using the Holm-Bonferroni correction procedure.
+3. **Cohen's $d$ Effect Size**: Measured to quantify the practical magnitude of performance gains:
+\begin{equation}\label{eq:cohen_d}
+    d = \frac{\bar{x}_1 - \bar{x}_2}{s_{\text{pooled}}}, \quad s_{\text{pooled}} = \sqrt{\frac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1 + n_2 - 2}}
+\end{equation}
+Effect sizes are classified as small ($|d| \ge 0.20$), medium ($|d| \ge 0.50$), and large ($|d| \ge 0.80$).
+
+\subsection{Financial Backtest Simulator \& Cost Sensitivity}\label{sec:backtest_protocol}
+
+To evaluate economic utility under real-world market constraints, out-of-sample test predictions are fed into a vectorised intraday trading simulator \cite{henrique2019stock_review}. At each 5-minute bar $k$, a trading signal $S_k \in \{-1, 0, 1\}$ is generated from predicted probabilities $\hat{p}_k$:
+\begin{equation}\label{eq:signal}
+    S_k = \begin{cases} +1 \quad (\text{Long}) & \text{if } \hat{p}_k \ge 0.50 \\ -1 \quad (\text{Short}) & \text{if } \hat{p}_k < 0.50 \end{cases}
 \end{equation}
 
-Performance is evaluated via Cumulative Net Return (\%), Annualized Sharpe Ratio, Maximum Drawdown (MDD \%), and Profit Factor.
+Net period return $R_{\text{net}}$ accounts for brokerage fees and exchange slippage costs $c_{\text{fee}}$:
+\begin{equation}\label{eq:backtest}
+    R_{\text{net}, k} = S_k \cdot r_k - |S_k - S_{k-1}| \cdot c_{\text{fee}}
+\end{equation}
+where $r_k = (P_k - P_{k-1})/P_{k-1}$ is the raw 5-minute price return. Three transaction fee scenarios are simulated: zero fees ($c_{\text{fee}} = 0.00\%$), standard exchange fees ($c_{\text{fee}} = 0.01\%$), and high-friction slippage ($c_{\text{fee}} = 0.02\%$). Performance is evaluated via Net Return \%, Annualized Sharpe Ratio, Maximum Drawdown (MDD %), and Profit Factor.

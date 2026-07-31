@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{16}
+\begin{thebibliography}{17}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -293,6 +293,18 @@ Precursor manuscript (2026)
 \bfpage{6}
 (\byear{2020})
 \doiurl{10.1186/s12864-019-6413-7}
+\end{barticle}
+\endbibitem
+
+%%% 17
+\bibitem[\protect\citeauthoryear{Dem{\v{s}}ar}{2006}]{demsar2006statistical}
+\begin{barticle}
+\bauthor{\bsnm{Dem{\v{s}}ar}, \binits{J.}}:
+\batitle{Statistical comparisons of classifiers over multiple data sets}.
+\bjtitle{Journal of Machine Learning Research}
+\bvolume{7},
+\bfpage{1}--\blpage{30}
+(\byear{2006})
 \end{barticle}
 \endbibitem
 
