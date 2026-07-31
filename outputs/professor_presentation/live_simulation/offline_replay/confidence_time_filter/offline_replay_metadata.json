@@ -1,0 +1,12 @@
+{
+  "cost_points": 5.0,
+  "min_confidence": 0.55,
+  "stop_points": null,
+  "target_points": null,
+  "max_trades_per_day": 20,
+  "start_time": "10:00",
+  "end_time": "17:00",
+  "ambiguous_policy": "stop_first",
+  "signal_execution_rule": "signal at row i enters on row i+1 open and exits on that candle",
+  "missing_prediction_files": []
+}

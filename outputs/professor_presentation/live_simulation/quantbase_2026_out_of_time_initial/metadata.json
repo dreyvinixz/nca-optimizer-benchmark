@@ -1,0 +1,25 @@
+{
+  "new_dataset": "data\\external\\quantbase_win_2026_06_22_24_5m_model_ready.csv",
+  "experiment_root": "C:\\mysystems\\projects\\nca-optimizer-benchmark\\outputs\\article_official",
+  "selected_features": [
+    "EMA_5-3",
+    "EMA_5-3_normalized",
+    "EMA_7-3",
+    "EMA_7-3_normalized",
+    "SMA_9_normalized",
+    "EMA_9-3",
+    "EMA_7_normalized"
+  ],
+  "train_rows": 12045,
+  "new_rows": 342,
+  "cost_points": 5.0,
+  "min_confidence": 0.55,
+  "stop_points": null,
+  "target_points": null,
+  "combos": [
+    "mlp:gwo",
+    "rf:gwo",
+    "cnn:de",
+    "svm:gwo"
+  ]
+}

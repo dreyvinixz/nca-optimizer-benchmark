@@ -1,0 +1,2 @@
+model_type,optimizer,seed,total_trades,total_profit_points,mean_trade_points,win_rate,profit_factor,max_drawdown_points,sharpe_ratio_annualized
+rf,gwo,3.0,302.4,5394.0,17.83219624025411,0.5244666031318863,1.380029885800236,-2283.0,31.109958640537563

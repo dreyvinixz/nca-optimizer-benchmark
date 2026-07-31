@@ -1,0 +1,22 @@
+scope,metric,best_model_by_mean,comparison,n_blocks,mean_difference,median_difference,wilcoxon_p_value,holm_p_value,significant_0_05,original_metric
+economic_all_experiments_optimizer_seed_blocks,total_profit_points,mlp,mlp vs cnn,45,2067.777777777778,2150.0,9.126873806053482e-06,1.1419774750720535e-05,True,total_profit_points
+economic_all_experiments_optimizer_seed_blocks,total_profit_points,mlp,mlp vs rf,45,2361.5555555555557,4260.0,2.2895505935593974e-08,6.868651780678192e-08,True,total_profit_points
+economic_all_experiments_optimizer_seed_blocks,total_profit_points,mlp,mlp vs svm,45,14167.777777777777,14210.0,5.7098873753602675e-06,1.1419774750720535e-05,True,total_profit_points
+economic_all_experiments_optimizer_seed_blocks,profit_factor,mlp,mlp vs cnn,45,0.0486021569493946,0.04975769811016395,9.126873806053482e-06,1.8253747612106963e-05,True,profit_factor
+economic_all_experiments_optimizer_seed_blocks,profit_factor,mlp,mlp vs rf,45,0.06849547979429303,0.09690868305689104,2.5314932372566545e-08,7.594479711769964e-08,True,profit_factor
+economic_all_experiments_optimizer_seed_blocks,profit_factor,mlp,mlp vs svm,45,0.2430827641495196,0.28717239765833114,1.6303956613228365e-05,1.8253747612106963e-05,True,profit_factor
+economic_all_experiments_optimizer_seed_blocks,sharpe_ratio_annualized,mlp,mlp vs cnn,45,3.4035445770401256,3.7130077712901954,9.582095117366407e-10,2.874628535209922e-09,True,sharpe_ratio_annualized
+economic_all_experiments_optimizer_seed_blocks,sharpe_ratio_annualized,mlp,mlp vs rf,45,0.0911703487437437,0.9978452892896073,0.0006849665251706938,0.0006849665251706938,True,sharpe_ratio_annualized
+economic_all_experiments_optimizer_seed_blocks,sharpe_ratio_annualized,mlp,mlp vs svm,45,6.871189674447216,6.858027819796781,8.782592431089142e-08,1.7565184862178285e-07,True,sharpe_ratio_annualized
+economic_all_experiments_optimizer_seed_blocks,max_drawdown_points,rf,rf vs cnn,45,1694.0,560.0,5.5358941518513e-09,1.66076824555539e-08,True,max_drawdown_points
+economic_all_experiments_optimizer_seed_blocks,max_drawdown_points,rf,rf vs mlp,45,1250.111111111111,160.0,0.0013993543374188836,0.0013993543374188836,True,max_drawdown_points
+economic_all_experiments_optimizer_seed_blocks,max_drawdown_points,rf,rf vs svm,45,5126.666666666667,2525.0,1.8348837232625332e-08,3.6697674465250665e-08,True,max_drawdown_points
+economic_exp1_holdout_mcc_f1,total_profit_points,rf,rf vs cnn,15,6496.0,1910.0,0.041259765625,0.123779296875,False,total_profit_points
+economic_exp1_holdout_mcc_f1,total_profit_points,rf,rf vs mlp,15,4355.333333333333,-10.0,0.359130859375,0.71826171875,False,total_profit_points
+economic_exp1_holdout_mcc_f1,total_profit_points,rf,rf vs svm,15,9448.666666666666,-150.0,0.638671875,0.71826171875,False,total_profit_points
+economic_exp2_holdout_accuracy,total_profit_points,mlp,mlp vs cnn,15,876.6666666666666,1710.0,0.1688232421875,0.1688232421875,False,total_profit_points
+economic_exp2_holdout_accuracy,total_profit_points,mlp,mlp vs rf,15,5764.666666666667,6150.0,6.103515625e-05,0.00018310546875,True,total_profit_points
+economic_exp2_holdout_accuracy,total_profit_points,mlp,mlp vs svm,15,16297.333333333334,19000.0,0.00152587890625,0.0030517578125,True,total_profit_points
+economic_exp3_cv_accuracy,total_profit_points,mlp,mlp vs cnn,15,3186.0,3010.0,6.103515625e-05,0.00018310546875,True,total_profit_points
+economic_exp3_cv_accuracy,total_profit_points,mlp,mlp vs rf,15,5675.333333333333,5860.0,6.103515625e-05,0.00018310546875,True,total_profit_points
+economic_exp3_cv_accuracy,total_profit_points,mlp,mlp vs svm,15,21112.666666666668,15720.0,6.103515625e-05,0.00018310546875,True,total_profit_points
