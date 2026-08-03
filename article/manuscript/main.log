@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  31 JUL 2026 17:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  3 AUG 2026 16:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -430,6 +430,16 @@ LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
+(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/tools\bm.sty
+Package: bm 2025/10/21 v1.2g Bold Symbol Support (DPC/FMi)
+\symboldoperators=\mathgroup6
+\symboldletters=\mathgroup7
+\symboldsymbols=\mathgroup8
+Package bm Info: No bold for \OMX/cmex/m/n, using \pmb.
+Package bm Info: No bold for \U/msa/m/n, using \pmb.
+Package bm Info: No bold for \U/msb/m/n, using \pmb.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 149.
+)
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen197
@@ -457,6 +467,27 @@ Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
 \multirow@dima=\skip66
 \bigstrutjot=\dimen266
 )
+(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/tools\tabularx.sty
+Package: tabularx 2023/12/11 v2.12a `tabularx' package (DPC)
+
+(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
+Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
+\col@sep=\dimen267
+\ar@mcellbox=\box74
+\extrarowheight=\dimen268
+\NC@list=\toks31
+\extratabsurround=\skip67
+\backup@length=\skip68
+\ar@cellbox=\box75
+)
+\TX@col@width=\dimen269
+\TX@old@table=\dimen270
+\TX@old@col=\dimen271
+\TX@target=\dimen272
+\TX@delta=\dimen273
+\TX@cols=\count332
+\TX@ftn=\toks32
+)
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.sty
 Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
 
@@ -465,14 +496,14 @@ Package: caption 2023/08/05 v3.6o Customizing captions (AR)
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
-\caption@tempdima=\dimen267
-\captionmargin=\dimen268
-\caption@leftmargin=\dimen269
-\caption@rightmargin=\dimen270
-\caption@width=\dimen271
-\caption@indent=\dimen272
-\caption@parindent=\dimen273
-\caption@hangindent=\dimen274
+\caption@tempdima=\dimen274
+\captionmargin=\dimen275
+\caption@leftmargin=\dimen276
+\caption@rightmargin=\dimen277
+\caption@width=\dimen278
+\caption@indent=\dimen279
+\caption@parindent=\dimen280
+\caption@hangindent=\dimen281
 Package caption Info: Unknown document class (or package),
 (caption)             standard defaults will be used.
 Package caption Info: \@makecaption = \long macro:#1#2->\ifx \FigName \@captype
@@ -484,24 +515,24 @@ Package caption Warning: Unknown document class (or package),
 (caption)                standard defaults will be used.
 See the caption package documentation for explanation.
 
-\c@caption@flags=\count332
-\c@continuedfloat=\count333
+\c@caption@flags=\count333
+\c@continuedfloat=\count334
 Package caption Info: hyperref package is loaded.
 Package caption Info: rotating package is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: wrapfig package is loaded.
 )
 Package caption Info: New subtype `subfigure' on input line 238.
-\c@subfigure=\count334
+\c@subfigure=\count335
 Package caption Info: New subtype `subtable' on input line 238.
-\c@subtable=\count335
+\c@subtable=\count336
 ) (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count336
-\float@exts=\toks31
-\float@box=\box74
-\@float@everytoks=\toks32
-\@floatcapt=\box75
+\c@float@type=\count337
+\float@exts=\toks33
+\float@box=\box76
+\@float@everytoks=\toks34
+\@floatcapt=\box77
 )
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/placeins\placeins.sty
 Package: placeins 2005/04/18  v 2.2
@@ -509,44 +540,44 @@ Package: placeins 2005/04/18  v 2.2
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithm.sty
 Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
 nment
-\@float@every@algorithm=\toks33
-\c@algorithm=\count337
+\@float@every@algorithm=\toks35
+\c@algorithm=\count338
 )
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithmic.s
 ty
 Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
-\c@ALC@unique=\count338
-\c@ALC@line=\count339
-\c@ALC@rem=\count340
-\c@ALC@depth=\count341
-\ALC@tlm=\skip67
-\algorithmicindent=\skip68
+\c@ALC@unique=\count339
+\c@ALC@line=\count340
+\c@ALC@rem=\count341
+\c@ALC@depth=\count342
+\ALC@tlm=\skip69
+\algorithmicindent=\skip70
 )
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdft
 ex.def
 File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count342
+\l__color_backend_stack_int=\count343
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -587,17 +618,17 @@ LaTeX Font Info:    ... okay on input line 31.
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mki
 i
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count343
-\scratchdimen=\dimen275
-\scratchbox=\box76
-\nofMPsegments=\count344
-\nofMParguments=\count345
-\everyMPshowfont=\toks34
-\MPscratchCnt=\count346
-\MPscratchDim=\dimen276
-\MPnumerator=\count347
-\makeMPintoPDFobject=\count348
-\everyMPtoPDFconversion=\toks35
+\scratchcounter=\count344
+\scratchdimen=\dimen282
+\scratchbox=\box78
+\nofMPsegments=\count345
+\nofMParguments=\count346
+\everyMPshowfont=\toks36
+\MPscratchCnt=\count347
+\MPscratchDim=\dimen283
+\MPnumerator=\count348
+\makeMPintoPDFobject=\count349
+\everyMPtoPDFconversion=\toks37
 )
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-ba
 se.sty
@@ -617,7 +648,7 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 Package color Info: Driver file: pdftex.def on input line 149.
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx))
-Package hyperref Info: Link coloring ON on input line 31.
+Package hyperref Info: Link coloring ON on input line 35.
 (main.out) (main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
@@ -625,32 +656,44 @@ Package hyperref Info: Link coloring ON on input line 31.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 50.
+LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 54.
 
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 50.
+(Font)              size <5> substituted on input line 54.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.51686> not available
-(Font)              size <5> substituted on input line 50.
+(Font)              size <5> substituted on input line 54.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 50.
+(Font)              size <5> substituted on input line 54.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 50.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 54.
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 50.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 54.
 
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+
+LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.51686> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.51686> not available
+(Font)              size <5> substituted on input line 54.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.51686> not available
+(Font)              size <5> substituted on input line 54.
+
 (sections/introduction.tex
 LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 7.
 
@@ -663,1011 +706,163 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [1
 
 {C:/Users/User/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-
-Package natbib Warning: Citation `dhingra2025solar' on page 2 undefined on inpu
-t line 15.
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [2])
-(sections/related_work.tex
+(sections/methodology.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [3]
-
-Package natbib Warning: Citation `dhingra2025solar' on page 4 undefined on inpu
-t line 20.
-
-
-Package natbib Warning: Citation `makridakis2018statistical' on page 4 undefine
-d on input line 26.
-
+ [3{C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-sup
+er-ts1.enc}]
+<figures/methodology_overview.pdf, id=213, 638.59366pt x 269.5671pt>
+File: figures/methodology_overview.pdf Graphic file (type pdf)
+<use figures/methodology_overview.pdf>
+Package pdftex.def Info: figures/methodology_overview.pdf  used on input line 2
+9.
+(pdftex.def)             Requested size: 334.79773pt x 141.33151pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4]
-
-LaTeX Warning: Reference `tab:literature_gap' on page 5 undefined on input line
- 34.
-
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 53.
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 53.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.015> not available
-(Font)              size <5> substituted on input line 53.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 53.
-
-
-Package natbib Warning: Citation `dhingra2025solar' on page 5 undefined on inpu
-t line 53.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.53 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.53 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.53 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.53 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.53 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-! LaTeX Error: \begin{threeparttable} on input line 36 ended by \end{tabular}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.53 }
-      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.53 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-! Package graphics Error: Division by 0.
-
-See the graphics package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.53 }
-      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.54 \end{table}
-                
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Extra }, or forgotten \endgroup.
-\TPT@close ...\unskip \fi \color@endgroup \egroup 
-                                                  
-l.54 \end{table}
-                
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-
-! LaTeX Error: \begin{table} on input line 36 ended by \end{threeparttable}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.54 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! LaTeX Error: \begin{document} ended by \end{center}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.54 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.54 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-\@endfloatbox ...pagefalse \outer@nobreak \egroup 
-                                                  \color@endbox 
-l.54 \end{table}
-                
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-! Extra \endgroup.
-\color@endgroup ->\endgraf \@endpefalse \endgroup 
-                                                  
-l.54 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-\color@endbox ->\color@endgroup \egroup 
-                                        
-l.54 \end{table}
-                
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-
-! LaTeX Error: \begin{document} ended by \end{tableorg}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.54 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.54 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-
-! LaTeX Error: \begin{document} ended by \end{table}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.54 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.54 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-) (sections/data.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [5]
-
-Package natbib Warning: Citation `makridakis2018statistical' on page 6 undefine
-d on input line 34.
-
-<figures/temporal_split.pdf, id=274, 581.61008pt x 202.2619pt>
+ [4 <./figures/methodology_overview.pdf>]
+<figures/temporal_split.pdf, id=292, 581.61008pt x 182.25928pt>
 File: figures/temporal_split.pdf Graphic file (type pdf)
 <use figures/temporal_split.pdf>
 Package pdftex.def Info: figures/temporal_split.pdf  used on input line 47.
-(pdftex.def)             Requested size: 316.20227pt x 109.96358pt.
-) (sections/methodology.tex
-<figures/methodology_overview.pdf, id=276, 638.59366pt x 283.24086pt>
-File: figures/methodology_overview.pdf Graphic file (type pdf)
-<use figures/methodology_overview.pdf>
-Package pdftex.def Info: figures/methodology_overview.pdf  used on input line 1
-3.
-(pdftex.def)             Requested size: 353.39886pt x 156.75105pt.
+(pdftex.def)             Requested size: 316.20227pt x 99.08876pt.
 
+
+LaTeX Warning: Float too large for page by 12.01457pt on input line 77.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--102
+[]|\OT1/cmr/m/n/9 Domain
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--102
+[]|\OT1/cmr/m/n/9 Search Bound-aries /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--102
+[]|\OT1/cmr/m/n/9 Float
+ []
+
+
+Underfull \hbox (badness 6412) in paragraph at lines 102--102
+[]|\OT1/cmr/m/n/9 Initial learn-ing rate for
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--102
+[]|\OT1/cmr/m/n/9 L2 Reg-u-lar-iza-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--102
+[]|\OT1/cmr/m/n/9 Float
+ []
+
+
+Overfull \hbox (9.11682pt too wide) in alignment at lines 102--102
+[][][][][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5 <./figures/temporal_split.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [6]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [7 <./figures/temporal_split.pdf> <./figures/methodology_overview.pdf>]
-
-Package natbib Warning: Citation `chicco2021matthews' on page 8 undefined on in
-put line 47.
+ [7]
+Overfull \hbox (8.94078pt too wide) in paragraph at lines 191--191
+[]|$[]$| 
+ []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8]
+ [8])
+(sections/results.tex
+Overfull \hbox (4.0046pt too wide) in paragraph at lines 31--31
+ []|$[]$| 
+ []
 
-Package natbib Warning: Citation `bergstra2012random_search' on page 9 undefine
-d on input line 64.
 
+Overfull \hbox (9.32953pt too wide) in paragraph at lines 31--31
+ []|$[]$| 
+ []
+
+
+Overfull \hbox (9.32953pt too wide) in paragraph at lines 31--31
+ []|$[]$| 
+ []
+
+
+Overfull \hbox (9.32953pt too wide) in paragraph at lines 31--31
+ []|$[]$| 
+ []
+
+
+Overfull \hbox (9.32953pt too wide) in paragraph at lines 31--31
+ []|$[]$| 
+ []
+
+<figures/convergence_curves.pdf, id=447, 536.57906pt x 298.18588pt>
+File: figures/convergence_curves.pdf Graphic file (type pdf)
+<use figures/convergence_curves.pdf>
+Package pdftex.def Info: figures/convergence_curves.pdf  used on input line 42.
+
+(pdftex.def)             Requested size: 316.20227pt x 175.72339pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [9]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10])
-(sections/results.tex
-
-LaTeX Warning: Reference `tab:predictive_results' on page 11 undefined on input
- line 13.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 31.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.31 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.31 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.31 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.31 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.31 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-! LaTeX Error: \begin{threeparttable} on input line 15 ended by \end{tabular}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.31 }
-      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.31 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-! Package graphics Error: Division by 0.
-
-See the graphics package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.31 }
-      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.32 \end{table}
-                
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Extra }, or forgotten \endgroup.
-\TPT@close ...\unskip \fi \color@endgroup \egroup 
-                                                  
-l.32 \end{table}
-                
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-
-! LaTeX Error: \begin{table} on input line 15 ended by \end{threeparttable}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.32 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! LaTeX Error: \begin{document} ended by \end{center}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.32 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.32 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-\@endfloatbox ...pagefalse \outer@nobreak \egroup 
-                                                  \color@endbox 
-l.32 \end{table}
-                
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-! Extra \endgroup.
-\color@endgroup ->\endgraf \@endpefalse \endgroup 
-                                                  
-l.32 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-\color@endbox ->\color@endgroup \egroup 
-                                        
-l.32 \end{table}
-                
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-
-! LaTeX Error: \begin{document} ended by \end{tableorg}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.32 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.32 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-
-! LaTeX Error: \begin{document} ended by \end{table}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.32 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.32 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-<figures/metrics_boxplots.pdf, id=475, 644.98405pt x 284.05939pt>
+ [10 <./figures/convergence_curves.pdf>]
+<figures/metrics_boxplots.pdf, id=542, 644.98405pt x 269.37259pt>
 File: figures/metrics_boxplots.pdf Graphic file (type pdf)
 <use figures/metrics_boxplots.pdf>
-Package pdftex.def Info: figures/metrics_boxplots.pdf  used on input line 36.
-(pdftex.def)             Requested size: 334.79773pt x 147.45166pt.
-<figures/convergence_curves.pdf, id=477, 536.57906pt x 319.82613pt>
-File: figures/convergence_curves.pdf Graphic file (type pdf)
-<use figures/convergence_curves.pdf>
-Package pdftex.def Info: figures/convergence_curves.pdf  used on input line 54.
-
-(pdftex.def)             Requested size: 316.20227pt x 188.47617pt.
+Package pdftex.def Info: figures/metrics_boxplots.pdf  used on input line 78.
+(pdftex.def)             Requested size: 334.79773pt x 139.82793pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [11]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [12 <./figures/metrics_boxplots.pdf> <./figures/convergence_curves.pdf>]
-
-LaTeX Warning: Reference `tab:predictive_results' on page 13 undefined on input
- line 68.
-
-
-LaTeX Warning: Reference `tab:pairwise_results' on page 13 undefined on input l
-ine 74.
-
-
-Underfull \hbox (badness 2197) in paragraph at lines 74--75
-\OT1/cmr/m/n/10 To con-firm whether per-for-mance dis-par-i-ties are sta-tis-ti
--cally sig-nif-i-cant, non-
- []
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.94 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.94 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.94 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.94 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.94 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-! LaTeX Error: \begin{threeparttable} on input line 76 ended by \end{tabular}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.94 }
-      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.94 }
-      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-! Package graphics Error: Division by 0.
-
-See the graphics package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.94 }
-      
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.95 \end{table}
-                
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Extra }, or forgotten \endgroup.
-\TPT@close ...\unskip \fi \color@endgroup \egroup 
-                                                  
-l.95 \end{table}
-                
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-
-! LaTeX Error: \begin{table} on input line 76 ended by \end{threeparttable}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.95 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! LaTeX Error: \begin{document} ended by \end{center}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.95 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.95 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-\@endfloatbox ...pagefalse \outer@nobreak \egroup 
-                                                  \color@endbox 
-l.95 \end{table}
-                
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-! Extra \endgroup.
-\color@endgroup ->\endgraf \@endpefalse \endgroup 
-                                                  
-l.95 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-\color@endbox ->\color@endgroup \egroup 
-                                        
-l.95 \end{table}
-                
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-
-! LaTeX Error: \begin{document} ended by \end{tableorg}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.95 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.95 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-
-! LaTeX Error: \begin{document} ended by \end{table}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.95 \end{table}
-                
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.95 \end{table}
-                
-Things are pretty mixed up, but I think the worst is over.
-
-
-LaTeX Warning: Reference `tab:backtest_results' on page 13 undefined on input l
-ine 104.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.125 }
-       
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.125 }
-       
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.125 }
-       
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.125 }
-       
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.125 }
-       
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-! LaTeX Error: \begin{threeparttable} on input line 106 ended by \end{tabular}.
-
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.125 }
-       
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.125 }
-       
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-! Package graphics Error: Division by 0.
-
-See the graphics package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.125 }
-       
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.126 \end{table}
-                 
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Extra }, or forgotten \endgroup.
-\TPT@close ...\unskip \fi \color@endgroup \egroup 
-                                                  
-l.126 \end{table}
-                 
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-
-! LaTeX Error: \begin{table} on input line 106 ended by \end{threeparttable}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.126 \end{table}
-                 
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [13{C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-su
-per-ts1.enc}]
-
-! LaTeX Error: \begin{document} ended by \end{center}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.126 \end{table}
-                 
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.126 \end{table}
-                 
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-\@endfloatbox ...pagefalse \outer@nobreak \egroup 
-                                                  \color@endbox 
-l.126 \end{table}
-                 
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-! Extra \endgroup.
-\color@endgroup ->\endgraf \@endpefalse \endgroup 
-                                                  
-l.126 \end{table}
-                 
-Things are pretty mixed up, but I think the worst is over.
-
-! Too many }'s.
-\color@endbox ->\color@endgroup \egroup 
-                                        
-l.126 \end{table}
-                 
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-
-! LaTeX Error: \begin{document} ended by \end{tableorg}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.126 \end{table}
-                 
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.126 \end{table}
-                 
-Things are pretty mixed up, but I think the worst is over.
-
-
-! LaTeX Error: \begin{document} ended by \end{table}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.126 \end{table}
-                 
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.126 \end{table}
-                 
-Things are pretty mixed up, but I think the worst is over.
-
-<figures/financial_equity_curves.pdf, id=648, 608.8352pt x 298.1037pt>
+<figures/financial_equity_curves.pdf, id=550, 608.8352pt x 283.69048pt>
 File: figures/financial_equity_curves.pdf Graphic file (type pdf)
 <use figures/financial_equity_curves.pdf>
 Package pdftex.def Info: figures/financial_equity_curves.pdf  used on input lin
-e 130.
-(pdftex.def)             Requested size: 334.79773pt x 163.93024pt.
-) (sections/discussion.tex
+e 113.
+(pdftex.def)             Requested size: 334.79773pt x 156.00426pt.
+)
+(sections/discussion.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [14 <./figures/financial_equity_curves.pdf>]
+ [12 <./figures/metrics_boxplots.pdf> <./figures/financial_equity_curves.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [15])
-(sections/conclusion.tex
+ [13]
+Underfull \hbox (badness 1484) in paragraph at lines 17--18
+\OT1/cmr/m/n/10 tic recom-bi-na-tion oper-a-tors (two-point crossover in GA and
+ vec-tor muta-tion
+ []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [16])
+ [14])
+(sections/conclusion.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [15]
 (sections/declarations.tex
 
 Package hyperref Warning: Difference (3) between bookmark levels is greater 
@@ -1680,20 +875,16 @@ Package hyperref Warning: Difference (2) between bookmark levels is greater
 ) (main.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [17]
+ [16]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [18])
-
-Package natbib Warning: There were undefined citations.
-
-
+ [17])
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [19]
+ [18]
 (main.aux)
  ***********
 LaTeX2e <2025-11-01>
@@ -1702,53 +893,86 @@ L3 programming layer <2026-03-20>
 
 
 LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 0.985pt have occurred.
+(Font)              up to 0.48314pt have occurred.
 
 
-LaTeX Warning: There were undefined references.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: ECA172F0997254DCC7BE2E8FB208F30D;10198.
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: 3566F49AE4187777326D92561FAF83F1;8446
+(rerunfilecheck)             After:  1CCE09D629D09D74739B6E72EA2B707F;8446.
  ) 
 Here is how much of TeX's memory you used:
- 14055 strings out of 467691
- 224695 string characters out of 5415471
- 645357 words of memory out of 5000000
- 42737 multiletter control sequences out of 15000+600000
- 642339 words of font info for 96 fonts, out of 8000000 for 9000
+ 14239 strings out of 467691
+ 227326 string characters out of 5415471
+ 663185 words of memory out of 5000000
+ 42926 multiletter control sequences out of 15000+600000
+ 642955 words of font info for 98 fonts, out of 8000000 for 9000
  1151 hyphenation exceptions out of 8191
- 90i,15n,131p,1744b,633s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
-mbx10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmbx12.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmbx7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><C:/Users/User/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/User/AppData
-/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/User
-/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Use
-rs/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb>
-<C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmm
-i9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmmib10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/amsfonts/cm/cmr10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/amsfonts/cm/cmr17.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/User/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/User/AppData/Local/Programs
-/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/User/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/User/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/User/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/
-User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:
-/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10
-.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmtt10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/am
-sfonts/symbols/msbm10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/cm-super/sfrm1000.pfb>
-Output written on main.pdf (19 pages, 711767 bytes).
+ 90i,17n,131p,1744b,639s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+pdfTeX warning (dest): name{figure.caption.15} has been referenced but does not
+ exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{table.caption.14} has been referenced but does not 
+exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{table.caption.9} has been referenced but does not e
+xist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.5} has been referenced but does not 
+exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.4} has been referenced but does not 
+exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section*.20} has been referenced but does not exist
+, replaced by a fixed one
+
+<C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmb
+x10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmbx12.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmbx7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><C:/Users/User/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/User/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmex9.pfb><C:/Users/Us
+er/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/
+Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.p
+fb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmmi7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmmi9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/amsfonts/cm/cmmib10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmr10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/f
+onts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/User/AppData/Local/Programs/M
+iKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/User/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/User/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/User/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/User/
+AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users
+/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
+C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy
+7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmsy9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/am
+sfonts/cm/cmti10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmtt10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/User/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Users/User/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on main.pdf (18 pages, 723124 bytes).
 PDF statistics:
- 928 PDF objects out of 1000 (max. 8388607)
- 127 named destinations out of 1000 (max. 500000)
- 346 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 905 PDF objects out of 1000 (max. 8388607)
+ 118 named destinations out of 1000 (max. 500000)
+ 298 words of extra memory for PDF output out of 10000 (max. 10000000)
 

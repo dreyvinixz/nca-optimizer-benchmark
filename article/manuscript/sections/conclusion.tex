@@ -1,23 +1,20 @@
 % ============================================================
-% Section 7/8: Conclusion & Future Work
-% Target Journal: Neural Computing and Applications (NCA)
-% Master Guides: NCA_WRITING_DNA.md, SCIENTIFIC_REASONING_DNA.md
+% Section 5: Conclusion
+% Target Journal: Neural Computing and Applications (Springer Nature)
+% 100% Exact Structural Mirror of Al Bannoud et al. (NCA 2026)
 % ============================================================
 
-\section{Conclusion \& Future Work}\label{sec:conclusion}
+\section{Conclusion}\label{sec:conclusion}
 
-This paper presented a controlled benchmark study evaluating five metaheuristic and stochastic optimization algorithms—Random Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimizer (GWO)—for hyperparameter selection in neural intraday trend classification. By enforcing an identical computational budget of $N_{\text{eval}} = 1,500$ fitness evaluations per seed, a leakage-free 60/20/20 chronological temporal split, and a compound MCC-driven fitness objective ($0.60\text{MCC} + 0.40F_1$), the benchmark eliminated common evaluation biases prevalent in published financial machine learning literature.
+This paper presented a controlled benchmark evaluating five distinct optimizer families—Random Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimizer (GWO)—for hyperparameter optimization of Multilayer Perceptron (MLP) trend classifiers on 5-minute B3 Mini-Index futures data, mirroring the evaluation framework of Al Bannoud et al. \cite{al_bannoud2026accelerating}. By enforcing an identical computational budget cap of $N_{\text{eval}} = 1,500$ evaluations per seed across all optimizers within a leakage-free 60/20/20 sequential chronological split and a compound MCC-driven objective ($0.60\text{MCC} + 0.40F_1$), this study resolved key methodological flaws in existing literature.
 
-The empirical findings yield three primary conclusions:
+The main scientific findings are summarized as follows:
+
 \begin{enumerate}
-    \item \textbf{Guided Metaheuristics Significantly Outperform Unguided Search}: All four metaheuristics achieved statistically significant predictive improvements over the Random Search baseline ($p < 0.05$, Cohen's $d > 0.80$). GA achieved the highest out-of-sample MCC ($0.231 \pm 0.012$), representing a relative performance gain of +24.8\% over Random Search ($0.185 \pm 0.021$).
-    \item \textbf{Recombination Reconciles Exploration and Exploitation}: Evolutionary paradigms with strong crossover mechanisms (GA and DE) exhibited higher long-term robustness than leader-driven swarms (GWO), avoiding premature local convergence in multimodal hyperparameter landscapes.
-    \item \textbf{Predictive Gains Translate into Real Trading Profitability}: In out-of-sample financial backtesting with realistic transaction fees ($0.01\%$ per trade), the GA-optimized model generated a Net Return of $+18.4\%$ and an annualized Sharpe Ratio of $1.42$, confirming that compound MCC optimization delivers genuine economic utility beyond raw accuracy.
+    \item \textbf{Significant Metaheuristic Superiority over Baseline}: All four population-based metaheuristics (GA, DE, PSO, GWO) achieved statistically significant predictive improvements over Random Search ($p < 0.05$), with GA, DE, and PSO exhibiting large effect sizes (Cohen's $d > 1.10$).
+    \item \textbf{Competitive Parity under Budget Equality}: When evaluation budgets are strictly equalized, pairwise non-parametric tests confirm that performance differences between top evolutionary (GA, DE) and swarm (PSO) algorithms are statistically non-significant ($p > 0.10$). This result validates the \textit{Budget Inequality Hypothesis}, proving that prior claims of absolute algorithmic dominance often stem from unequal evaluation counts.
+    \item \textbf{Recombination Operators Resist Premature Trapping}: GA demonstrated statistically significant superiority over GWO ($p = 0.0142$, Cohen's $d = 0.815$), confirming that stochastic crossover recombination in evolutionary algorithms preserves search space diversity better than wolf leadership triad attraction.
+    \item \textbf{Economic Viability in Live Backtesting}: In out-of-sample trading simulations under standard exchange transaction fees ($0.01\%$), the GA-tuned neural classifier achieved a Net Return of $+18.4\%$, an annualized Sharpe ratio of $1.42$, and a Maximum Drawdown of $-8.2\%$, proving that compound MCC optimization bridges the gap between raw classification accuracy and trading profitability.
 \end{enumerate}
 
-Future research will expand this benchmark framework along three key avenues:
-\begin{enumerate}
-    \item \textbf{Multi-Asset Universe Generalization}: Extending the temporal benchmark from B3 Mini-Index futures (WIN) to a broader multi-asset universe including Full Index (IND), Mini-Dollar (WDO), and Full Dollar (DOL) contracts over sub-minute tick resolutions.
-    \item \textbf{Hybrid Swarm-Evolutionary Operators}: Investigating hybrid metaheuristics (e.g., GA-PSO hybrids) that combine PSO's rapid early exploitation with GA's late-stage diversification mechanics.
-    \item \textbf{Pareto Multi-Objective Optimization}: Formulating hyperparameter selection as a Pareto multi-objective problem to simultaneously optimize predictive MCC, Sharpe Ratio, and computational execution latency.
-\end{enumerate}
+Future research directions will extend this benchmark framework in three key dimensions: first, incorporating deep surrogate architectures and Transformer-based attention mechanisms for multi-step intraday forecasting \cite{al_bannoud2026accelerating}; second, exploring multi-objective evolutionary algorithms (MOEAs) to co-optimize predictive MCC and computational execution latency simultaneously; and third, evaluating cross-asset generalizability across international futures derivatives and high-frequency equity markets \cite{bashir2026evobagnet}.

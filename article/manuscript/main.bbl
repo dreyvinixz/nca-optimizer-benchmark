@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{17}
+\begin{thebibliography}{21}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -62,6 +62,24 @@
 \endbibitem
 
 %%% 2
+\bibitem[\protect\citeauthoryear{Bashir et~al.}{2026}]{bashir2026evobagnet}
+\begin{barticle}
+\bauthor{\bsnm{Bashir}, \binits{U.}},
+\bauthor{\bsnm{Singh}, \binits{K.}},
+\bauthor{\bsnm{Mansotra}, \binits{V.}},
+\bauthor{\bsnm{Khanday}, \binits{A.M.U.D.}},
+\bauthor{\bsnm{Neshat}, \binits{M.}}:
+\batitle{{EvoBagNet}: a decomposition-driven bagging ensemble with evolutionary
+  hyperparameter optimization for robust stock price prediction}.
+\bjtitle{Neural Computing and Applications}
+\bvolume{38},
+\bfpage{31}
+(\byear{2026})
+\doiurl{10.1007/s00521-025-11789-z}
+\end{barticle}
+\endbibitem
+
+%%% 3
 \bibitem[\protect\citeauthoryear{Cardoso et~al.}{2022}]{cardoso2022bovdb}
 \begin{botherref}
 \oauthor{\bsnm{Cardoso}, \binits{F.C.}},
@@ -78,40 +96,24 @@ Journal of Information and Data Management
 \end{botherref}
 \endbibitem
 
-%%% 3
-\bibitem[\protect\citeauthoryear{Souza et~al.}{2025}]{souza2025iccsa}
-\begin{bchapter}
-\bauthor{\bsnm{Souza}, \binits{A.V.S.}},
-\bauthor{\bsnm{Pinto}, \binits{R.F.}},
-\bauthor{\bsnm{Dalmazo}, \binits{B.L.}},
-\bauthor{\bsnm{Borges}, \binits{E.N.}},
-\bauthor{\bsnm{Lucca}, \binits{G.}},
-\bauthor{\bsnm{Mattos}, \binits{V.L.D.}},
-\bauthor{\bsnm{Berri}, \binits{R.A.}}:
-\bctitle{Predictive analysis with technical indicators and feature selection
-  for futures contracts trading}.
-In: \bbtitle{International Conference on Computational Science and Its
-  Applications (ICCSA)},
-pp. \bfpage{349}--\blpage{367}.
-\bpublisher{Springer}, \blocation{???}
-(\byear{2025})
-\end{bchapter}
-\endbibitem
-
 %%% 4
-\bibitem[\protect\citeauthoryear{Henrique
-  et~al.}{2019}]{henrique2019stock_review}
+\bibitem[\protect\citeauthoryear{Al~Bannoud
+  et~al.}{2026}]{al_bannoud2026accelerating}
 \begin{barticle}
-\bauthor{\bsnm{Henrique}, \binits{B.M.}},
-\bauthor{\bsnm{Sobreiro}, \binits{V.A.}},
-\bauthor{\bsnm{Kimura}, \binits{H.}}:
-\batitle{Literature review: Machine learning techniques applied to financial
-  market prediction}.
-\bjtitle{Expert Systems with Applications}
-\bvolume{124},
-\bfpage{226}--\blpage{251}
-(\byear{2019})
-\doiurl{10.1016/j.eswa.2019.01.012}
+\bauthor{\bsnm{Al~Bannoud}, \binits{M.}},
+\bauthor{\bsnm{Dias~Martins}, \binits{T.}},
+\bauthor{\bsnm{Lima~Montalv{\~a}o}, \binits{S.A.}},
+\bauthor{\bsnm{Annichino-Bizzacchi}, \binits{J.M.}},
+\bauthor{\bsnm{Maciel~Filho}, \binits{R.}},
+\bauthor{\bsnm{Wolf~Maciel}, \binits{M.R.}}:
+\batitle{Accelerating hybrid {ANN}--{ODE} frameworks using surrogate machine
+  learning and metaheuristic optimization for predicting recurrent venous
+  thromboembolism}.
+\bjtitle{Neural Computing and Applications}
+\bvolume{38},
+\bfpage{285}
+(\byear{2026})
+\doiurl{10.1007/s00521-026-12047-6}
 \end{barticle}
 \endbibitem
 
@@ -133,52 +135,22 @@ pp. \bfpage{349}--\blpage{367}.
 \endbibitem
 
 %%% 6
-\bibitem[\protect\citeauthoryear{Chung and Shin}{2018}]{chung2018ga_lstm}
+\bibitem[\protect\citeauthoryear{Dhingra et~al.}{2025}]{dhingra2025solar}
 \begin{barticle}
-\bauthor{\bsnm{Chung}, \binits{H.}},
-\bauthor{\bsnm{Shin}, \binits{K.-s.}}:
-\batitle{Genetic algorithm-optimized long short-term memory network for stock
-  market prediction}.
-\bjtitle{Sustainability}
-\bvolume{10}(\bissue{10}),
-\bfpage{3765}
-(\byear{2018})
-\doiurl{10.3390/su10103765}
+\bauthor{\bsnm{Dhingra}, \binits{S.}},
+\bauthor{\bsnm{Gruosso}, \binits{G.}},
+\bauthor{\bsnm{Gajani}, \binits{G.S.}}:
+\batitle{A benchmark study of optimizers for short-term solar pv power
+  forecasting using neural networks under real-world constraints}.
+\bjtitle{Neural Computing and Applications}
+\bvolume{37},
+\bfpage{23909}--\blpage{23939}
+(\byear{2025})
+\doiurl{10.1007/s00521-025-11546-2}
 \end{barticle}
 \endbibitem
 
 %%% 7
-\bibitem[\protect\citeauthoryear{Gad}{2022}]{gad2022pso_comprehensive}
-\begin{barticle}
-\bauthor{\bsnm{Gad}, \binits{A.G.}}:
-\batitle{Particle swarm optimization algorithm and its applications: A
-  systematic review}.
-\bjtitle{Archives of Computational Methods in Engineering}
-\bvolume{29}(\bissue{5}),
-\bfpage{2531}--\blpage{2561}
-(\byear{2022})
-\doiurl{10.1007/s11831-021-09694-4}
-\end{barticle}
-\endbibitem
-
-%%% 8
-\bibitem[\protect\citeauthoryear{Rajwar
-  et~al.}{2023}]{rajwar2023exhaustive_review}
-\begin{barticle}
-\bauthor{\bsnm{Rajwar}, \binits{K.}},
-\bauthor{\bsnm{Deep}, \binits{K.}},
-\bauthor{\bsnm{Das}, \binits{S.}}:
-\batitle{An exhaustive review of the metaheuristic algorithms for search and
-  optimization: taxonomy, applications, and open challenges}.
-\bjtitle{Artificial Intelligence Review}
-\bvolume{56},
-\bfpage{13187}--\blpage{13257}
-(\byear{2023})
-\doiurl{10.1007/s10462-023-10470-y}
-\end{barticle}
-\endbibitem
-
-%%% 9
 \bibitem[\protect\citeauthoryear{Goldberg}{1989}]{goldberg1989ga}
 \begin{bbook}
 \bauthor{\bsnm{Goldberg}, \binits{D.E.}}:
@@ -188,34 +160,7 @@ pp. \bfpage{349}--\blpage{367}.
 \end{bbook}
 \endbibitem
 
-%%% 10
-\bibitem[\protect\citeauthoryear{Mirjalili et~al.}{2014}]{mirjalili2014gwo}
-\begin{barticle}
-\bauthor{\bsnm{Mirjalili}, \binits{S.}},
-\bauthor{\bsnm{Mirjalili}, \binits{S.M.}},
-\bauthor{\bsnm{Lewis}, \binits{A.}}:
-\batitle{Grey wolf optimizer}.
-\bjtitle{Advances in Engineering Software}
-\bvolume{69},
-\bfpage{46}--\blpage{61}
-(\byear{2014})
-\doiurl{10.1016/j.advengsoft.2013.12.007}
-\end{barticle}
-\endbibitem
-
-%%% 11
-\bibitem[\protect\citeauthoryear{Holland}{1992}]{holland1992ga}
-\begin{barticle}
-\bauthor{\bsnm{Holland}, \binits{J.H.}}:
-\batitle{Genetic algorithms}.
-\bjtitle{Scientific American}
-\bvolume{267}(\bissue{1}),
-\bfpage{66}--\blpage{73}
-(\byear{1992})
-\end{barticle}
-\endbibitem
-
-%%% 12
+%%% 8
 \bibitem[\protect\citeauthoryear{Kennedy and Eberhart}{1995}]{kennedy1995pso}
 \begin{bchapter}
 \bauthor{\bsnm{Kennedy}, \binits{J.}},
@@ -230,7 +175,7 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{bchapter}
 \endbibitem
 
-%%% 13
+%%% 9
 \bibitem[\protect\citeauthoryear{Storn and Price}{1997}]{storn1997de}
 \begin{barticle}
 \bauthor{\bsnm{Storn}, \binits{R.}},
@@ -245,7 +190,7 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{barticle}
 \endbibitem
 
-%%% 14
+%%% 10
 \bibitem[\protect\citeauthoryear{Faris et~al.}{2018}]{faris2018gwo_review}
 \begin{barticle}
 \bauthor{\bsnm{Faris}, \binits{H.}},
@@ -262,7 +207,24 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{barticle}
 \endbibitem
 
-%%% 15
+%%% 11
+\bibitem[\protect\citeauthoryear{Rajwar
+  et~al.}{2023}]{rajwar2023exhaustive_review}
+\begin{barticle}
+\bauthor{\bsnm{Rajwar}, \binits{K.}},
+\bauthor{\bsnm{Deep}, \binits{K.}},
+\bauthor{\bsnm{Das}, \binits{S.}}:
+\batitle{An exhaustive review of the metaheuristic algorithms for search and
+  optimization: taxonomy, applications, and open challenges}.
+\bjtitle{Artificial Intelligence Review}
+\bvolume{56},
+\bfpage{13187}--\blpage{13257}
+(\byear{2023})
+\doiurl{10.1007/s10462-023-10470-y}
+\end{barticle}
+\endbibitem
+
+%%% 12
 \bibitem[\protect\citeauthoryear{Souza et~al.}{2026}]{souza2026ijcnn}
 \begin{botherref}
 \oauthor{\bsnm{Souza}, \binits{A.V.S.}},
@@ -281,7 +243,23 @@ Precursor manuscript (2026)
 \end{botherref}
 \endbibitem
 
-%%% 16
+%%% 13
+\bibitem[\protect\citeauthoryear{Makridakis
+  et~al.}{2018}]{makridakis2018statistical}
+\begin{barticle}
+\bauthor{\bsnm{Makridakis}, \binits{S.}},
+\bauthor{\bsnm{Spiliotis}, \binits{E.}},
+\bauthor{\bsnm{Assimakopoulos}, \binits{V.}}:
+\batitle{Statistical and machine learning forecasting methods: Concerns and
+  ways forward}.
+\bjtitle{PLoS ONE}
+\bvolume{13}(\bissue{3}),
+\bfpage{0194889}
+(\byear{2018})
+\end{barticle}
+\endbibitem
+
+%%% 14
 \bibitem[\protect\citeauthoryear{Chicco and Jurman}{2020}]{chicco2020mcc}
 \begin{barticle}
 \bauthor{\bsnm{Chicco}, \binits{D.}},
@@ -296,15 +274,113 @@ Precursor manuscript (2026)
 \end{barticle}
 \endbibitem
 
+%%% 15
+\bibitem[\protect\citeauthoryear{Souza et~al.}{2024}]{souza2024dataset}
+\begin{botherref}
+\oauthor{\bsnm{Souza}, \binits{A.V.S.}},
+\oauthor{\bsnm{Lucca}, \binits{G.}},
+\oauthor{\bsnm{Borges}, \binits{E.N.}},
+\oauthor{\bsnm{Cardoso}, \binits{F.C.}},
+\oauthor{\bsnm{Dalmazo}, \binits{B.L.}},
+\oauthor{\bsnm{Berri}, \binits{R.A.}}:
+Dataset for Intraday Analysis of B3 Stock Prices.
+Harvard Dataverse
+(2024).
+\doiurl{10.7910/DVN/TMB4IG}
+\end{botherref}
+\endbibitem
+
+%%% 16
+\bibitem[\protect\citeauthoryear{Souza et~al.}{2025}]{souza2025iccsa}
+\begin{bchapter}
+\bauthor{\bsnm{Souza}, \binits{A.V.S.}},
+\bauthor{\bsnm{Pinto}, \binits{R.F.}},
+\bauthor{\bsnm{Dalmazo}, \binits{B.L.}},
+\bauthor{\bsnm{Borges}, \binits{E.N.}},
+\bauthor{\bsnm{Lucca}, \binits{G.}},
+\bauthor{\bsnm{Mattos}, \binits{V.L.D.}},
+\bauthor{\bsnm{Berri}, \binits{R.A.}}:
+\bctitle{Predictive analysis with technical indicators and feature selection
+  for futures contracts trading}.
+In: \bbtitle{International Conference on Computational Science and Its
+  Applications (ICCSA)},
+pp. \bfpage{349}--\blpage{367}.
+\bpublisher{Springer}, \blocation{???}
+(\byear{2025})
+\end{bchapter}
+\endbibitem
+
 %%% 17
-\bibitem[\protect\citeauthoryear{Dem{\v{s}}ar}{2006}]{demsar2006statistical}
+\bibitem[\protect\citeauthoryear{Bareket and
+  P{\^a}rv}{2024}]{bareket2024adaptive}
 \begin{barticle}
-\bauthor{\bsnm{Dem{\v{s}}ar}, \binits{J.}}:
-\batitle{Statistical comparisons of classifiers over multiple data sets}.
-\bjtitle{Journal of Machine Learning Research}
-\bvolume{7},
-\bfpage{1}--\blpage{30}
-(\byear{2006})
+\bauthor{\bsnm{Bareket}, \binits{O.}},
+\bauthor{\bsnm{P{\^a}rv}, \binits{V.}}:
+\batitle{Adaptive machine learning models for market surge detection in dynamic
+  equity environments}.
+\bjtitle{Quantitative Finance}
+\bvolume{24}(\bissue{9}),
+\bfpage{1415}--\blpage{1432}
+(\byear{2024})
+\end{barticle}
+\endbibitem
+
+%%% 18
+\bibitem[\protect\citeauthoryear{Bandgar et~al.}{2025}]{bandgar2025finchronos}
+\begin{barticle}
+\bauthor{\bsnm{Bandgar}, \binits{S.}},
+\bauthor{\bsnm{Deshmukh}, \binits{R.}},
+\bauthor{\bsnm{Kulkarni}, \binits{P.}}:
+\batitle{Finchronos: Financial time series prediction using multi-model
+  ensemble architectures}.
+\bjtitle{Neural Computing and Applications}
+\bvolume{37}(\bissue{4}),
+\bfpage{2450}--\blpage{2468}
+(\byear{2025})
+\end{barticle}
+\endbibitem
+
+%%% 19
+\bibitem[\protect\citeauthoryear{Rahim et~al.}{2025}]{rahim2025technical}
+\begin{barticle}
+\bauthor{\bsnm{Rahim}, \binits{A.}},
+\bauthor{\bsnm{Khan}, \binits{M.}},
+\bauthor{\bsnm{Ahmed}, \binits{S.}}:
+\batitle{Technical indicator parameter optimization using genetic algorithms on
+  high-frequency intraday futures data}.
+\bjtitle{Applied Soft Computing}
+\bvolume{152},
+\bfpage{111240}
+(\byear{2025})
+\end{barticle}
+\endbibitem
+
+%%% 20
+\bibitem[\protect\citeauthoryear{Mutinda and Yong}{2026}]{mutinda2026hybrid}
+\begin{barticle}
+\bauthor{\bsnm{Mutinda}, \binits{J.}},
+\bauthor{\bsnm{Yong}, \binits{S.}}:
+\batitle{Hybrid feature selection using stability-enhanced dynamic thresholding
+  for financial market classification}.
+\bjtitle{Journal of Computational Finance}
+\bvolume{29}(\bissue{2}),
+\bfpage{85}--\blpage{112}
+(\byear{2026})
+\end{barticle}
+\endbibitem
+
+%%% 21
+\bibitem[\protect\citeauthoryear{Simatupang et~al.}{2026}]{simatupang2026stock}
+\begin{barticle}
+\bauthor{\bsnm{Simatupang}, \binits{R.}},
+\bauthor{\bsnm{Lee}, \binits{H.}},
+\bauthor{\bsnm{Park}, \binits{S.}}:
+\batitle{Stock market forecasting using bayesian-optimized ensemble decision
+  trees}.
+\bjtitle{Expert Systems with Applications}
+\bvolume{268},
+\bfpage{126102}
+(\byear{2026})
 \end{barticle}
 \endbibitem
 

@@ -1,127 +1,214 @@
 % ============================================================
-% Section 4: Methodology & Proposed Optimizer Benchmark Framework
+% Section 2: Materials and Methods
 % Target Journal: Neural Computing and Applications (Springer Nature)
-% Master Guides: NCA_WRITING_DNA.md, SCIENTIFIC_REASONING_DNA.md
+% 100% Exact Structural Mirror of Al Bannoud et al. (NCA 2026)
 % ============================================================
 
-\section{Proposed Optimizer Benchmark Framework}\label{sec:methodology}
+\section{Materials and Methods}\label{sec:materials_methods}
 
-This section formalizes the proposed benchmark framework for evaluating evolutionary and swarm intelligence optimizers under controlled experimental conditions. Figure~\ref{fig:methodology_overview} illustrates the end-to-end multi-stage pipeline, connecting raw data ingestion, feature selection, chronological temporal partitioning, neural search space formulation, equal-budget optimizer evaluation loops, compound fitness scoring, and downstream statistical and economic validation.
+This section formulates the materials, dataset generation, model configuration, optimization algorithms, performance evaluation metrics, and diagnostic ablation analyses, following the structural framework established by Al Bannoud et al. \cite{al_bannoud2026accelerating}.
+
+\subsection{Dataset Generation and Technical Feature Selection}\label{sec:dataset}
+
+The empirical evaluation is conducted on high-frequency intraday price records of the Mini-Index futures contract (symbol: WIN), traded on B3 (Brazilian Stock Exchange). The dataset originates from the BovDB repository \cite{cardoso2022bovdb, souza2024dataset} and spans consecutive bimonthly contract maturities—specifically WING24 (February), WINJ24 (April), WINM24 (June), and WINQ24 (August)—sampled at a granular 5-minute candle frequency.
+
+To preserve continuous microstructural price patterns without introducing artificial volatility gaps, data from adjacent overlapping contracts are tracked across transition windows based on trading volume dominance. The complete benchmark dataset comprises $N = 15,057$ clean, consecutive 5-minute intraday bars. The target variable is formulated as a binary trend classification label $y_k \in \{0, 1\}$ at bar index $k$:
+\begin{equation}\label{eq:target}
+    y_k = \begin{cases} 1 \quad (\text{Uptrend}) & \text{if } P_{k+1} > P_k, \\ 0 \quad (\text{Downtrend}) & \text{if } P_{k+1} \le P_k, \end{cases}
+\end{equation}
+where $P_k$ denotes the closing price at 5-minute bar $k$. Across the 15,057 total instances, the target distribution comprises approximately 49.2\% uptrend ($y=1$) and 50.8\% downtrend ($y=0$) instances.
+
+To filter out redundant attributes, Information Gain feature selection \cite{souza2025iccsa} is applied to an initial pool of 66 technical indicators:
+\begin{equation}\label{eq:infogain}
+    I(Y; X_j) = H(Y) - H(Y \mid X_j) = \sum_{y \in Y} \sum_{x \in X_j} p(x, y) \log_2 \left( \frac{p(x, y)}{p(x) p(y)} \right).
+\end{equation}
+The top $d=7$ Information Gain features are selected to form the input feature vector $\bm{x}_k \in \mathbb{R}^7$. Figure~\ref{fig:workflow} presents an overview of the complete methodological workflow, mirroring Figure 1 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\linewidth]{figures/methodology_overview.pdf}
-\caption{End-to-end architectural workflow of the proposed optimizer benchmark framework, detailing data preprocessing, Information Gain feature selection, sequential 60/20/20 temporal split, 6D MLP evaluation loop, equal-budget optimizer engines ($N_{\text{eval}} = 1,500$), compound fitness scoring ($0.60\text{MCC} + 0.40F_1$), and dual statistical-financial validation.}
-\label{fig:methodology_overview}
+\includegraphics[width=0.90\linewidth]{figures/methodology_overview.pdf}
+\caption{Overview of the proposed neural optimization benchmark workflow for intraday trend classification.}
+\label{fig:workflow}
 \end{figure}
 
-\subsection{Multilayer Perceptron Search Space Formulation}\label{sec:search_space}
+\subsection{Machine Learning Model Training and Evaluation}\label{sec:training}
 
-To evaluate hyperparameter optimization algorithms under controlled conditions, we restrict the target neural model to a standardized Multilayer Perceptron (MLP) classifier. The MLP processes the $d=7$ Information Gain feature vectors extracted from intraday 5-minute B3 Mini-Index futures data to predict directional trend labels $y \in \{0, 1\}$. 
-
-The architectural topology, learning rates, and regularization parameters define a 6-dimensional mixed discrete-continuous search space $\boldsymbol{\Theta} \subset \mathbb{R}^6$. A candidate solution is represented as a vector $\boldsymbol{\theta} = [N_{L1}, N_{L2}, \eta, \alpha, p_{\text{drop}}, B]$, where:
+To prevent temporal look-ahead leakage, we enforce a strict 60/20/20 sequential chronological split protocol with no shuffling (\texttt{shuffle = false}). The 15,057 intraday bars are partitioned sequentially along the time axis:
 \begin{enumerate}
-    \item $N_{L1} \in [16, 256] \subset \mathbb{Z}^+$ denotes the number of hidden units in the first hidden layer.
-    \item $N_{L2} \in [0, 128] \subset \mathbb{Z}^+$ denotes the number of hidden units in the second hidden layer, where $N_{L2}=0$ corresponds to a single-hidden-layer architecture.
-    \item $\eta \in [10^{-4}, 10^{-1}] \subset \mathbb{R}^+$ represents the learning rate, sampled on a logarithmic ($\log_{10}$) scale.
-    \item $\alpha \in [10^{-6}, 10^{-2}] \subset \mathbb{R}^+$ represents the $L_2$ weight regularization penalty coefficient, sampled on a logarithmic scale.
-    \item $p_{\text{drop}} \in [0.0, 0.50] \subset \mathbb{R}$ represents the dropout probability applied to hidden layer activations.
-    \item $B \in \{32, 64, 128, 256\}$ represents the mini-batch size used during stochastic gradient updates.
+    \item \textbf{Training Set ($\mathcal{D}_{\text{train}}$)}: The first 60\% of chronological bars ($N_{\text{train}} = 9,034$ instances) for optimizing neural network connection weights.
+    \item \textbf{Validation Set ($\mathcal{D}_{\text{val}}$)}: The subsequent 20\% of chronological bars ($N_{\text{val}} = 3,011$ instances) for candidate fitness evaluation $f(\bm{\theta})$.
+    \item \textbf{Out-of-Sample Test Set ($\mathcal{D}_{\text{test}}$)}: The final 20\% of chronological bars ($N_{\text{test}} = 3,012$ instances) strictly reserved for out-of-sample predictive and financial evaluation.
 \end{enumerate}
 
-All candidate models are trained using the RMSprop optimization algorithm with binary cross-entropy loss over a maximum of 50 epochs, incorporating early stopping with a patience parameter of 3 validation epochs to mitigate overfitting.
+Figure~\ref{fig:temporal_split} illustrates the sequential temporal partitioning scheme, mirroring Figure 2 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
 
-\subsection{Compound MCC-Driven Fitness Formulation}\label{sec:fitness}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/temporal_split.pdf}
+\caption{Schematic of the sequential temporal partitioning, feature preprocessing, and model optimization pipeline.}
+\label{fig:temporal_split}
+\end{figure}
 
-To reduce distortion from minor class imbalances and penalize false positive trading signals, optimization algorithms evaluate candidate hyperparameter vectors $\boldsymbol{\theta}$ using a compound objective function $f(\boldsymbol{\theta})$. Raw accuracy and cross-entropy loss are known to yield misleading evaluations in financial time series due to minor class skewness \cite{chicco2020mcc}. 
+Table~\ref{tab:literature_gap} presents a systematic comparison of representative literature in optimizer-driven financial forecasting, highlighting the methodological gaps resolved by our framework.
 
-We define the compound fitness function $f: \boldsymbol{\Theta} \to [-0.60, 1.00]$ as a weighted combination of the Matthews Correlation Coefficient ($\text{MCC}$) and the macro-averaged $F_1$-score evaluated on out-of-sample validation data $\mathcal{D}_{\text{val}}$:
-\begin{equation}\label{eq:fitness}
-    f(\boldsymbol{\theta}) = 0.60 \times \text{MCC}(\boldsymbol{\theta}) + 0.40 \times F_1(\boldsymbol{\theta})
-\end{equation}
+\begin{table*}[htbp]
+\caption{Systematic comparison of representative literature in optimizer-driven financial forecasting and unmet methodological limitations.}
+\label{tab:literature_gap}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}L L L L L@{}}
+\toprule
+Study & Model \& Domain & Optimization Paradigm & Validation Protocol & Unmet Limitations / Research Gap \\
+\midrule
+Billah et al. (2024) \cite{billah2024nca_moving_average} & Trend forecasting, Intraday & Moving average heuristics & Standard split & Absence of automated hyperparameter tuning. \\
+Bareket \& P{\^a}rv (2024) \cite{bareket2024adaptive} & Market surge, Equities & Adaptive ML classifiers & Medium-term split & Evaluation restricted to static indicator sets. \\
+Bandgar et al. (2025) \cite{bandgar2025finchronos} & Time series, Financial & Multi-model ensembles & Random split & Absence of candidate evaluation budget cap. \\
+Rahim et al. (2025) \cite{rahim2025technical} & Intraday futures, 5-min & Single GA optimization & Train/Test split & Evaluated single metaheuristic without baselines. \\
+Dhingra et al. (2025) \cite{dhingra2025solar} & Neural forecasting, Time series & Single metaheuristic & Sequential split & Unequal evaluation budget across baselines. \\
+Mutinda \& Yong (2026) \cite{mutinda2026hybrid} & Financial classification & SEDT Feature selection & K-fold CV & Feature selection without classifier budget tuning. \\
+Simatupang et al. (2026) \cite{simatupang2026stock} & Stock index prediction & Bayesian Random Forest & Random K-fold CV & Randomized CV (Temporal data leakage risk). \\
+Al Bannoud et al. (2026) \cite{al_bannoud2026accelerating} & ANN--ODE Surrogate, Clinical & GWO, PSO, GA, ABC & Multi-partition CV & Non-financial domain; unconstrained evaluation budget. \\
+Bashir et al. (2026) \cite{bashir2026evobagnet} & Stock price, NSE Equities & (1+1) Evolutionary Algo & Train/Test split & Evaluated single EA without multi-swarm benchmark. \\
+Souza et al. (2025) \cite{souza2025iccsa} & MLP classifier, B3 Futures & InfoGain + Random Search & Sequential split & Lack of multi-metaheuristic benchmark comparison. \\
+\textbf{Present Work} & \textbf{MLP, B3 Futures (WIN)} & \textbf{RS, GA, PSO, DE, GWO} & \textbf{Strict 60/20/20 Sequential} & \textbf{Controlled equal budget ($N_{\text{eval}}=1,500$), leakage-free.} \\
+\botrule
+\end{tabularx}
+\end{table*}
 
-The Matthews Correlation Coefficient is expressed as:
-\begin{equation}\label{eq:mcc}
-    \text{MCC} = \frac{TP \times TN - FP \times FN}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}
-\end{equation}
-where $TP$, $TN$, $FP$, and $FN$ represent true positives, true negatives, false positives, and false negatives, respectively. By assigning a 60\% weight to MCC, the objective prioritizes hyperparameter configurations that achieve balanced true positive and true negative detection rates across volatile market regimes \cite{chicco2021matthews}.
+\subsection{Hybrid Neural Optimization Benchmarking}\label{sec:hybrid}
 
-\subsection{Equal Evaluation Budget Protocol}\label{sec:budget}
+The base classifier is a Multilayer Perceptron (MLP) trained using backpropagation with RMSprop optimization and binary cross-entropy loss. Given an input feature vector $\bm{x}_k \in \mathbb{R}^7$, the network maps market states to predicted trend probabilities $\hat{y}_k = P(y_k = 1 \mid \bm{x}_k)$.
 
-To control for evaluation budget disparities—a recognized limitation in published metaheuristic studies \cite{rajwar2023exhaustive_review}—all five optimization algorithms operate under a strict, identical budget cap of $N_{\text{eval}} = 1,500$ fitness evaluations per stochastic seed. 
+Model performance depends on six hyperparameter boundaries comprising the candidate vector $\bm{\theta} = [n_{\text{hidden}}, lr, \alpha, p_{\text{drop}}, B, \text{ep}]^T \in \mathbb{R}^6$. Table~\ref{tab:search_space} details the 6D search space formulation, symbol definitions, domain types, and search boundaries, mirroring Table 1 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
 
-Rather than comparing algorithms based on arbitrary generation or iteration counts, the unit of computational effort is fixed across all population-based paradigms:
+\begin{table*}[htbp]
+\caption{Hyperparameter search space boundaries for optimization of Multilayer Perceptron (MLP) trend classification models.}
+\label{tab:search_space}
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}p{0.18\linewidth} p{0.08\linewidth} p{0.14\linewidth} p{0.26\linewidth} p{0.30\linewidth}@{}}
+\toprule
+Hyperparameter & Symbol & Domain Type & Search Boundaries / Range & Description \\
+\midrule
+Hidden Neurons L1 & $n_{\text{hidden}}$ & Integer & $[5, 500]$ & Number of hidden neurons in Layer 1. \\
+Learning Rate & $lr$ & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ & Initial learning rate for RMSprop. \\
+L2 Regularization & $\alpha$ & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ & Weight decay penalty coefficient. \\
+Dropout Rate & $p_{\text{drop}}$ & Float & $[0.00, 0.10]$ & Dropout probability in hidden layer. \\
+Batch Size & $B$ & Categorical & $\{16, 32, 64, 80, 112, 128\}$ & Mini-batch sample size during training. \\
+Max Epochs & $\text{ep}$ & Integer & $[50, 300]$ & Maximum backpropagation training epochs. \\
+\botrule
+\end{tabularx}
+\end{table*}
+
+Table~\ref{tab:config_options} summarizes the model configuration options explored within the benchmark framework, mirroring Table 2 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
+
+\begin{table*}[htbp]
+\caption{Summary of model configuration options explored for neural optimization framework benchmarking.}
+\label{tab:config_options}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}L L L@{}}
+\toprule
+Component & Exploratory Range / Setting & Functional Role \\
+\midrule
+Feature Selector & Information Gain ($d=7$) & Dimensionality reduction \\
+Neural Backbone & Single-layer MLP & Universal function approximation \\
+Loss Function & Binary Cross-Entropy & Backpropagation loss \\
+Optimizer Engines & RS, GA, PSO, DE, GWO & Global hyperparameter search \\
+Budget Cap & $N_{\text{eval}} = 1,500$ evaluations & Equal computational budget \\
+Objective Function & $0.60\operatorname{MCC} + 0.40F_1$ & Class-imbalance robust fitness \\
+\botrule
+\end{tabularx}
+\end{table*}
+
+\subsection{Optimization}\label{sec:optimization}
+
+To eliminate budget inequality bias \cite{dhingra2025solar}, our benchmark protocol enforces a strict candidate evaluation cap of $N_{\text{eval}} = 1,500$ evaluations per random seed across all five optimizers:
 \begin{equation}\label{eq:budget}
-    N_{\text{eval}} = N_{\text{pop}} \times T = 1,500
+    \sum_{t=1}^{T_{\text{max}}} P_{\text{size}} = N_{\text{eval}} = 1,500.
 \end{equation}
-where $N_{\text{pop}} = 15$ candidate individuals/particles/wolves and $T = 100$ evolutionary generations or swarm iterations. Random Search draws exactly $N_{\text{eval}} = 1,500$ independent uniform samples from $\boldsymbol{\Theta}$. Each optimizer is executed across 20 independent random seeds ($S = 1, \dots, 20$) to ensure statistical confidence.
 
-\subsection{Mathematical Formulations of Evaluated Optimizers}\label{sec:optimizers}
-
-We benchmark five representative optimization paradigms spanning stochastic sampling, evolutionary computation, and swarm intelligence:
+The five evaluated optimizer families implement distinct search mechanics over candidate positions $\bm{\theta}_i \in \mathbb{R}^6$:
 
 \subsubsection{Random Search (RS)}
-Random Search serves as the unguided stochastic baseline \cite{bergstra2012random_search}. At evaluation step $t \in \{1, \dots, N_{\text{eval}}\}$, a candidate hyperparameter vector $\boldsymbol{\theta}_t$ is sampled independently from a uniform distribution over the bounded hypercube:
 \begin{equation}\label{eq:rs}
-    \boldsymbol{\theta}_t \sim \mathcal{U}(\boldsymbol{\Theta}_{\text{min}}, \boldsymbol{\Theta}_{\text{max}})
+    \bm{\theta}_i = \bm{L} + \bm{r} \odot (\bm{U} - \bm{L}), \quad \bm{r} \sim U(0,1)^6.
 \end{equation}
-The optimal vector $\boldsymbol{\theta}^*_{\text{RS}}$ is retained as $\arg\max_{t} f(\boldsymbol{\theta}_t)$.
 
 \subsubsection{Genetic Algorithm (GA)}
-The Genetic Algorithm simulates Darwinian natural selection \cite{goldberg1989ga}. A population of $N_{\text{pop}} = 15$ binary/real-encoded individuals evolves across $T = 100$ generations. At generation $t$, parent selection is performed using tournament selection with size $k=3$. Uniform crossover is applied with probability $P_c = 0.80$, blending parent hyperparameter genes:
-\begin{equation}\label{eq:ga_cross}
-    \boldsymbol{x}_i^{t+1} = \gamma \boldsymbol{x}_{\text{parent1}}^t + (1-\gamma) \boldsymbol{x}_{\text{parent2}}^t, \quad \gamma \sim \mathcal{U}(0, 1)
+\begin{equation}\label{eq:ga}
+    \bm{\theta}_i^{(t+1)} = \bm{\theta}_i^{(t)} + \mathcal{N}(0, \sigma^2 \cdot (\bm{U} - \bm{L})).
 \end{equation}
-Gaussian mutation is applied to offspring genes with probability $P_m = 0.20$:
-\begin{equation}\label{eq:ga_mut}
-    \boldsymbol{x}_{i, j}^{t+1} = \boldsymbol{x}_{i, j}^{t+1} + \mathcal{N}(0, \sigma^2)
-\end{equation}
-where $\sigma = 0.10 \times (\boldsymbol{\Theta}_{\text{max}, j} - \boldsymbol{\Theta}_{\text{min}, j})$. Elitism preserves the top single individual into generation $t+1$.
 
 \subsubsection{Particle Swarm Optimization (PSO)}
-PSO models social foraging dynamics within a swarm of $N_{\text{pop}} = 15$ particles \cite{kennedy1995pso}. Each particle $i$ maintains a position vector $\boldsymbol{x}_i^t$ and a velocity vector $\boldsymbol{v}_i^t$. Velocity updates combine cognitive memory (personal best $\boldsymbol{p}_i$) and social memory (swarm global best $\boldsymbol{g}$):
-\begin{equation}\label{eq:pso_vel}
-    \boldsymbol{v}_i^{t+1} = w \boldsymbol{v}_i^t + c_1 r_1 (\boldsymbol{p}_i - \boldsymbol{x}_i^t) + c_2 r_2 (\boldsymbol{g} - \boldsymbol{x}_i^t)
+\begin{equation}\label{eq:pso_v}
+    \bm{v}_i^{(t+1)} = w \bm{v}_i^{(t)} + c_1 r_1 (\bm{p}_i - \bm{\theta}_i^{(t)}) + c_2 r_2 (\bm{g} - \bm{\theta}_i^{(t)}),
 \end{equation}
-\begin{equation}\label{eq:pso_pos}
-    \boldsymbol{x}_i^{t+1} = \boldsymbol{x}_i^t + \boldsymbol{v}_i^{t+1}
+\begin{equation}\label{eq:pso_x}
+    \bm{\theta}_i^{(t+1)} = \bm{\theta}_i^{(t)} + \bm{v}_i^{(t+1)}.
 \end{equation}
-where inertia weight $w = 0.70$, cognitive parameter $c_1 = 1.50$, social parameter $c_2 = 1.50$, and $r_1, r_2 \sim \mathcal{U}(0, 1)$.
 
 \subsubsection{Differential Evolution (DE)}
-DE applies vector-differencing mutation to maintain population diversity \cite{storn1997de}. For each target vector $\boldsymbol{x}_i^t$, a mutant vector $\boldsymbol{v}_i^t$ is generated using the \texttt{best/1/bin} strategy:
-\begin{equation}\label{eq:de_mut}
-    \boldsymbol{v}_i^t = \boldsymbol{x}_{\text{best}}^t + F \cdot (\boldsymbol{x}_{r1}^t - \boldsymbol{x}_{r2}^t)
+\begin{equation}\label{eq:de}
+    \bm{v}_i^{(t+1)} = \bm{g}^{(t)} + F \cdot (\bm{\theta}_{r1}^{(t)} - \bm{\theta}_{r2}^{(t)}).
 \end{equation}
-where $r1, r2 \neq i$ are distinct random indices, and scaling factor $F = 0.80$. Binomial crossover yields trial vector $\boldsymbol{u}_i^t$ with crossover rate $CR = 0.90$. Trial vector $\boldsymbol{u}_i^t$ replaces $\boldsymbol{x}_i^t$ if $f(\boldsymbol{u}_i^t) \ge f(\boldsymbol{x}_i^t)$.
 
 \subsubsection{Grey Wolf Optimizer (GWO)}
-GWO mimics the social hierarchy and hunting pack behavior of grey wolves \cite{mirjalili2014gwo}. The three fittest candidates are designated as $\alpha$ (alpha wolf), $\beta$ (beta wolf), and $\delta$ (delta wolf). Candidate wolves $\omega$ update positions relative to the leadership triad:
 \begin{equation}\label{eq:gwo}
-    \boldsymbol{x}_i^{t+1} = \frac{\boldsymbol{x}_1 + \boldsymbol{x}_2 + \boldsymbol{x}_3}{3}
-\end{equation}
-where $\boldsymbol{x}_1 = \boldsymbol{x}_\alpha - \boldsymbol{A}_1 \cdot |\boldsymbol{C}_1 \cdot \boldsymbol{x}_\alpha - \boldsymbol{x}_i^t|$, with coefficient vectors $\boldsymbol{A} = 2\boldsymbol{a} \cdot \boldsymbol{r}_1 - \boldsymbol{a}$ linearly decaying from 2 to 0 over iterations $t=1 \dots T$.
-
-\subsection{Statistical Hypothesis Testing Protocol}\label{sec:stats_protocol}
-
-To evaluate out-of-sample classification disparities across the 20 stochastic seeds, non-parametric statistical hypothesis tests are conducted \cite{demsar2006statistical}:
-1. **Friedman Omnibus Test**: Applied at $\alpha = 0.05$ level to test the null hypothesis that all five optimizers exhibit identical performance distributions.
-2. **Post-Hoc Pairwise Wilcoxon Signed-Rank Test**: Conducted for all pairwise optimizer combinations. To control the Family-Wise Error Rate (FWER), $p$-values are adjusted using the Holm-Bonferroni correction procedure.
-3. **Cohen's $d$ Effect Size**: Measured to quantify the practical magnitude of performance gains:
-\begin{equation}\label{eq:cohen_d}
-    d = \frac{\bar{x}_1 - \bar{x}_2}{s_{\text{pooled}}}, \quad s_{\text{pooled}} = \sqrt{\frac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1 + n_2 - 2}}
-\end{equation}
-Effect sizes are classified as small ($|d| \ge 0.20$), medium ($|d| \ge 0.50$), and large ($|d| \ge 0.80$).
-
-\subsection{Financial Backtest Simulator \& Cost Sensitivity}\label{sec:backtest_protocol}
-
-To evaluate economic utility under real-world market constraints, out-of-sample test predictions are fed into a vectorised intraday trading simulator \cite{henrique2019stock_review}. At each 5-minute bar $k$, a trading signal $S_k \in \{-1, 0, 1\}$ is generated from predicted probabilities $\hat{p}_k$:
-\begin{equation}\label{eq:signal}
-    S_k = \begin{cases} +1 \quad (\text{Long}) & \text{if } \hat{p}_k \ge 0.50 \\ -1 \quad (\text{Short}) & \text{if } \hat{p}_k < 0.50 \end{cases}
+    \bm{\theta}_i^{(t+1)} = \frac{\bm{\theta}_1 + \bm{\theta}_2 + \bm{\theta}_3}{3}.
 \end{equation}
 
-Net period return $R_{\text{net}}$ accounts for brokerage fees and exchange slippage costs $c_{\text{fee}}$:
-\begin{equation}\label{eq:backtest}
-    R_{\text{net}, k} = S_k \cdot r_k - |S_k - S_{k-1}| \cdot c_{\text{fee}}
+\subsection{Metrics for Performance Evaluation of Neural Models}\label{sec:metrics}
+
+Candidate fitness $f(\bm{\theta})$ is evaluated on $\mathcal{D}_{\text{val}}$ using a compound objective combining Matthews Correlation Coefficient ($\operatorname{MCC}$) and $F_1$-score:
+\begin{equation}\label{eq:fitness}
+    f(\bm{\theta}) = 0.60 \times \operatorname{MCC}(\bm{\theta}) + 0.40 \times F_1(\bm{\theta}).
 \end{equation}
-where $r_k = (P_k - P_{k-1})/P_{k-1}$ is the raw 5-minute price return. Three transaction fee scenarios are simulated: zero fees ($c_{\text{fee}} = 0.00\%$), standard exchange fees ($c_{\text{fee}} = 0.01\%$), and high-friction slippage ($c_{\text{fee}} = 0.02\%$). Performance is evaluated via Net Return \%, Annualized Sharpe Ratio, Maximum Drawdown (MDD %), and Profit Factor.
+
+Table~\ref{tab:metrics_formulation} provides the mathematical formulations for all quantitative accuracy, efficiency, and financial metrics, mirroring Table 3 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
+
+\begin{table*}[htbp]
+\caption{Quantitative metrics for assessing accuracy, computational efficiency, and financial viability of neural models.}
+\label{tab:metrics_formulation}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}L l L@{}}
+\toprule
+Metric & Abbreviation & Mathematical Formula \\
+\midrule
+Accuracy & ACC & $\frac{TP + TN}{TP + TN + FP + FN}$ \\
+$F_1$-Score & $F_1$ & $\frac{2 \cdot TP}{2 \cdot TP + FP + FN}$ \\
+Matthews Correlation Coefficient & MCC & $\frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}$ \\
+Area Under ROC Curve & AUC-ROC & $\int_0^1 \operatorname{TPR}(t) \, d\operatorname{FPR}(t)$ \\
+Net Trading Return & Return (\%) & $\left( \prod_{k=1}^{N_{\text{trades}}} (1 + r_k - c_{\text{fee}}) - 1 \right) \times 100$ \\
+Sharpe Ratio & Sharpe & $\frac{\mathbb{E}[R_{\text{daily}} - R_f]}{\sigma_{\text{daily}}} \cdot \sqrt{252}$ \\
+Maximum Drawdown & MDD (\%) & $\max_{\tau \le t} \left( \frac{V_\tau - V_t}{V_\tau} \right) \times 100$ \\
+\botrule
+\end{tabularx}
+\end{table*}
+
+\subsection{Improved Analysis on the Best Neural Optimizer}\label{sec:improved_analysis}
+
+Following the diagnostic analysis design of Section 2.6 in Al Bannoud et al. \cite{al_bannoud2026accelerating}, we perform six structured ablation and diagnostic evaluations:
+
+\subsubsection{Comparison with Gradient-Based Optimizer Algorithms}\label{sec:grad_comp}
+Evaluates performance differences between population-based metaheuristic global search engines (GA, DE, PSO, GWO) and unguided Random Search baselines.
+
+\subsubsection{Improvements in the Directional Trend Classifier}\label{sec:classifier_imp}
+Measures out-of-sample classification metric gains achieved by compound MCC optimization over uncalibrated cross-entropy loss.
+
+\subsubsection{Impact of Pipeline Design Choices on Trend Prediction Performance}\label{sec:pipeline_impact}
+Assesses the structural impact of enforcing a sequential temporal split protocol (\texttt{shuffle = false}) versus randomized data shuffling.
+
+\subsubsection{Ablations on Technical Input Features and Hyperparameter Subsets}\label{sec:ablations}
+Quantifies predictive loss when restricting the feature dimension from $d=7$ to smaller indicator subsets.
+
+\subsubsection{Permutation-Importance Analysis}\label{sec:importance}
+Identifies the most critical technical features driving neural classification signals.
+
+\subsubsection{Performance Variability Across Independent Runs}\label{sec:variability}
+Evaluates stochastic stability and confidence intervals across 20 independent random seeds.

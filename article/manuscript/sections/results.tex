@@ -1,23 +1,24 @@
 % ============================================================
-% Section 5: Experimental Results & Performance Benchmark
+% Section 3: Results
 % Target Journal: Neural Computing and Applications (Springer Nature)
-% Master Guides: NCA_WRITING_DNA.md, SCIENTIFIC_REASONING_DNA.md
+% 100% Exact Structural Mirror of Al Bannoud et al. (NCA 2026)
 % ============================================================
 
-\section{Experimental Results \& Performance Benchmark}\label{sec:results}
+\section{Results}\label{sec:results}
 
-This section presents the empirical evaluation of the controlled multi-optimizer benchmark. Performance is evaluated across out-of-sample predictive classification metrics, convergence dynamics, computational execution efficiency, non-parametric statistical hypothesis tests, and financial trading backtesting under transaction costs.
+This section presents empirical benchmark results structured into four main analytical stages mirroring Section 3 of Al Bannoud et al. \cite{al_bannoud2026accelerating}: comparative performance benchmarking, framework execution efficiency, metaheuristic algorithm analysis, and financial risk stratification evaluation.
 
-\subsection{Out-of-Sample Predictive Classification Performance}\label{sec:results_predictive}
+\subsection{Comparative Performance Benchmarking of Neural Optimizers}\label{sec:res_benchmarking}
 
-Table~\ref{tab:predictive_results} reports the out-of-sample predictive classification metrics across all five optimizers evaluated over $S = 20$ independent stochastic seeds on the 3,012 test instances of the B3 Mini-Index futures dataset. Metrics are reported as $\text{Mean} \pm \text{Std}$, with the highest observed mean performance highlighted in boldface. In addition, Figure~\ref{fig:metrics_boxplots} illustrates the distribution boxplots for Matthews Correlation Coefficient (MCC) and classification Accuracy across the 20 stochastic runs.
+Table~\ref{tab:predictive_results} presents out-of-sample predictive performance metrics across all five optimizers evaluated over $S = 20$ independent stochastic seeds on the 3,012 test instances of the B3 Mini-Index futures dataset ($N_{\text{eval}} = 1,500$ cap per seed). Metrics are reported as $\text{Mean} \pm \text{Std}$, with the top mean performance highlighted in boldface, mirroring Table 12 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
 
-\begin{table}[htbp]
-\caption{Out-of-sample predictive performance on 5-minute B3 Mini-Index futures test set ($N_{\text{seeds}} = 20$, $N_{\text{eval}} = 1,500$). Metrics reported as $\text{Mean} \pm \text{Std}$. Best mean values highlighted in bold.}
+\begin{table*}[htbp]
+\caption{Out-of-sample predictive performance matrix on 5-minute B3 Mini-Index futures test set ($N_{\text{seeds}} = 20, N_{\text{eval}} = 1,500$). Metrics reported as $\text{Mean} \pm \text{Std}$. Best mean values highlighted in bold.}
 \label{tab:predictive_results}
 \centering
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{lcccccc}
+\small
+\setlength{\tabcolsep}{2pt}
+\begin{tabularx}{\textwidth}{@{}L C C C C C C@{}}
 \toprule
 Optimizer Family & Accuracy (\%) & $F_1$-Score & MCC & AUC-ROC & AUC-PR & Runtime (s) \\
 \midrule
@@ -26,59 +27,36 @@ Genetic Algorithm (GA) & $\mathbf{61.45 \pm 0.92}$ & $\mathbf{0.608 \pm 0.011}$ 
 Particle Swarm Optimization (PSO) & $60.98 \pm 0.88$ & $0.602 \pm 0.010$ & $0.225 \pm 0.011$ & $\mathbf{0.661 \pm 0.009}$ & $\mathbf{0.655 \pm 0.010}$ & $3.35 \pm 0.14$ \\
 Differential Evolution (DE) & $61.20 \pm 0.95$ & $0.605 \pm 0.012$ & $0.228 \pm 0.014$ & $0.655 \pm 0.012$ & $0.648 \pm 0.013$ & $3.52 \pm 0.16$ \\
 Grey Wolf Optimizer (GWO) & $59.85 \pm 1.12$ & $0.591 \pm 0.015$ & $0.208 \pm 0.016$ & $0.638 \pm 0.014$ & $0.632 \pm 0.015$ & $3.58 \pm 0.18$ \\
-\bottomrule
-\end{tabular}%
-}
-\end{table}
+\botrule
+\end{tabularx}
+\end{table*}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.90\linewidth]{figures/metrics_boxplots.pdf}
-\caption{Out-of-sample performance distribution boxplots across 20 stochastic seeds for RS, GWO, PSO, DE, and GA. Left: Matthews Correlation Coefficient (MCC). Right: Predictive Accuracy (\%).}
-\label{fig:metrics_boxplots}
-\end{figure}
+Experimental results demonstrate that GA achieves the top out-of-sample MCC ($0.231 \pm 0.012$), $F_1$-score ($0.608 \pm 0.011$), and Accuracy ($61.45 \pm 0.92\%$), closely followed by DE ($\text{MCC} = 0.228 \pm 0.014$) and PSO ($\text{MCC} = 0.225 \pm 0.011$). All population-based metaheuristics significantly outperform Random Search ($\text{MCC} = 0.185 \pm 0.021$).
 
-The empirical classification results reveal three primary patterns:
-\begin{enumerate}
-    \item \textbf{Metaheuristic Superiority over Unguided Random Search}: All four guided metaheuristics outperform the unguided Random Search baseline across all classification metrics. The Genetic Algorithm achieved the highest out-of-sample MCC ($0.231 \pm 0.012$), representing a relative improvement of +24.8\% over Random Search ($0.185 \pm 0.021$).
-    \item \textbf{Competitive Parity between GA, DE, and PSO}: GA, DE, and PSO exhibit highly competitive generalization metrics. GA achieved the top mean Accuracy ($61.45\%$) and $F_1$-score ($0.608$), whereas PSO demonstrated slightly superior area under the ROC curve ($\text{AUC-ROC} = 0.661 \pm 0.009$) and lower inter-seed variance.
-    \item \textbf{Late-Stage Saturation in GWO}: While GWO improved upon Random Search ($\text{MCC} = 0.208 \pm 0.016$), it fell short of the performance levels attained by GA and DE, suggesting potential premature convergence in multimodal search spaces.
-\end{enumerate}
+\subsection{Optimization Framework Acceleration and Accuracy Comparison}\label{sec:res_acceleration}
 
-\subsection{Convergence Dynamics \& Fitness Trajectories}\label{sec:results_convergence}
-
-Figure~\ref{fig:convergence_curves} illustrates the out-of-sample validation fitness trajectories ($0.60\text{MCC} + 0.40F_1$) averaged across 20 stochastic seeds as a function of the evaluation step $t \in [1, 1500]$.
+Figure~\ref{fig:convergence_curves} illustrates out-of-sample validation fitness trajectories ($0.60\text{MCC} + 0.40F_1$) averaged across 20 stochastic seeds as a function of evaluation step $t \in [1, 1500]$.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{figures/convergence_curves.pdf}
-\caption{Validation fitness convergence trajectories ($0.60\text{MCC} + 0.40F_1$) across 20 stochastic seeds for RS, GA, PSO, DE, and GWO over $N_{\text{eval}} = 1,500$ evaluation steps. Shaded regions represent $\pm 1$ standard deviation confidence intervals.}
+\caption{Validation fitness convergence trajectories ($0.60\text{MCC} + 0.40F_1$) across 20 stochastic seeds for RS, GA, PSO, DE, and GWO over $N_{\text{eval}} = 1,500$ evaluation steps.}
 \label{fig:convergence_curves}
 \end{figure}
 
-Analysis of convergence trajectories reveals distinct search mechanics:
-\begin{itemize}
-    \item \textbf{Rapid Initial Exploitation in PSO and GWO}: PSO and GWO exhibit rapid fitness escalation within the first $t \le 300$ evaluations, leveraging global leader vectors to quickly locate high-fitness basins.
-    \item \textbf{Sustained Diversification in GA and DE}: GA and DE display steady, progressive fitness gains extending beyond $t \ge 800$ evaluations. Crossover diversification allows these evolutionary algorithms to escape local sub-optima that trapped GWO.
-    \item \textbf{Stochastic Plateaus in Random Search}: Random Search demonstrates slow, step-like fitness increases, plateauing early around $t \approx 500$ due to unguided uniform sampling.
-\end{itemize}
+Random Search recorded the fastest execution ($2.95 \pm 0.12\text{ s}$), as it incurs zero algorithmic population update overhead. Among population-based algorithms, PSO completed fastest ($3.35 \pm 0.14\text{ s}$), while GWO required $3.58 \pm 0.18\text{ s}$. The marginal computational overhead of metaheuristic population updates relative to Random Search is negligible ($\approx 0.40\text{ s}$ total), confirming that candidate model training dominates overall execution cost.
 
-\subsection{Computational Execution Overhead}\label{sec:results_runtime}
+\subsection{Metaheuristic Optimization Algorithm Performance Analysis}\label{sec:res_metaheuristics}
 
-All five optimizers were evaluated on a dedicated computing node (Intel Xeon E5-2680 v4, 64GB RAM). Total execution times per run (including 1,500 MLP train-validation cycles) are reported in Table~\ref{tab:predictive_results}. 
+Non-parametric hypothesis tests were conducted across the 20 stochastic seeds. The Friedman omnibus test confirmed statistically significant performance differences across optimizers ($\chi^2 = 38.42, p = 9.2 \times 10^{-8}$). Post-hoc pairwise comparisons using the Wilcoxon signed-rank test with Holm-Bonferroni correction and Cohen's $d$ effect sizes are reported in Table~\ref{tab:pairwise_results}.
 
-Random Search recorded the fastest execution ($2.95 \pm 0.12\text{ s}$), as it incurs zero algorithmic overhead for population updates. Among population-based algorithms, PSO completed fastest ($3.35 \pm 0.14\text{ s}$), while GWO required the longest runtime ($3.58 \pm 0.18\text{ s}$). The marginal computational overhead of metaheuristic population updates relative to Random Search is small ($\approx 0.40\text{ s}$ total), confirming that candidate MLP model training dominates overall execution cost.
-
-\subsection{Non-Parametric Statistical Hypothesis Testing \& Null Findings}\label{sec:results_stats}
-
-To confirm whether performance disparities are statistically significant, non-parametric hypothesis tests were conducted across the 20 stochastic seeds. The Friedman omnibus test confirmed statistically significant performance differences across optimizers ($\chi^2 = 38.42, p = 9.2 \times 10^{-8}$). Post-hoc pairwise comparisons using the Wilcoxon signed-rank test with Holm-Bonferroni correction and Cohen's $d$ effect sizes are reported in Table~\ref{tab:pairwise_results}.
-
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \caption{Post-hoc pairwise statistical test results (Wilcoxon signed-rank test with Holm-Bonferroni correction, $N_{\text{seeds}} = 20$). Effect sizes reported via Cohen's $d$.}
 \label{tab:pairwise_results}
 \centering
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{llcccl}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}L C C C C L@{}}
 \toprule
 Pairwise Comparison & Target Metric & Mean Diff. & Adjusted $p$-value & Cohen's $d$ & Statistical Interpretation \\
 \midrule
@@ -89,26 +67,30 @@ GWO vs Random Search & MCC & +0.023 & \textbf{0.0215} & 0.742 & Statistically si
 GA vs PSO & MCC & +0.006 & 0.1360 & 0.261 & Statistically equivalent (Null finding) \\
 GA vs DE & MCC & +0.003 & 0.4520 & 0.115 & Statistically equivalent (Null finding) \\
 GA vs GWO & MCC & +0.023 & \textbf{0.0142} & 0.815 & Statistically significant (Large effect) \\
-\bottomrule
-\end{tabular}%
-}
-\end{table}
+\botrule
+\end{tabularx}
+\end{table*}
 
-The statistical results validate three key assertions:
-1. **Significant Metaheuristic Gain over Baseline**: GA, PSO, DE, and GWO achieve statistically significant improvements over Random Search ($p < 0.05$), with GA, PSO, and DE demonstrating large effect sizes ($d > 1.00$).
-2. **Competitive Parity (Null Finding)**: Pairwise differences between GA, DE, and PSO are statistically non-significant ($p > 0.10$). Under budget equality ($N_{\text{eval}}=1,500$), top evolutionary and particle swarm paradigms achieve comparable solution quality.
-3. **GA Superiority over GWO**: GA achieves a statistically significant improvement over GWO ($p = 0.0142, d = 0.815$), proving that crossover recombination resists premature local trapping better than wolf leadership triad attraction.
+Figure~\ref{fig:metrics_boxplots} illustrates out-of-sample performance distribution boxplots across 20 stochastic seeds, mirroring Figure 6 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
 
-\subsection{Out-of-Sample Financial Backtesting \& Cost Sensitivity}\label{sec:results_backtest}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.90\linewidth]{figures/metrics_boxplots.pdf}
+\caption{Out-of-sample performance distribution boxplots across 20 stochastic seeds for RS, GWO, PSO, DE, and GA. Left: Matthews Correlation Coefficient (MCC). Right: Predictive Accuracy (\%).}
+\label{fig:metrics_boxplots}
+\end{figure}
 
-Table~\ref{tab:backtest_results} reports the economic backtesting performance of trading strategies guided by each optimized MLP model over the 3,012 test instances under three transaction fee scenarios ($0.00\%$, $0.01\%$, and $0.02\%$ per trade). In addition, Figure~\ref{fig:financial_equity} plots the cumulative out-of-sample equity curves across the 3,012 test bars.
+\subsection{Financial Risk Stratification and Trend Classification Evaluation}\label{sec:res_financial}
 
-\begin{table}[htbp]
+Table~\ref{tab:backtest_results} reports economic backtesting performance over the 3,012 test instances under three transaction fee scenarios ($0.00\%$, $0.01\%$, and $0.02\%$ per trade).
+
+\begin{table*}[htbp]
 \caption{Out-of-sample intraday trading simulation metrics on B3 Mini-Index futures test set (3,012 test bars). Transaction fee scenarios: Zero ($0.00\%$), Standard ($0.01\%$), High ($0.02\%$). Best metrics highlighted in bold.}
 \label{tab:backtest_results}
 \centering
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{lcccccc}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}L C C C C C C@{}}
 \toprule
 Optimizer Strategy & Fee Scenario & Net Return (\%) & Sharpe Ratio & Max Drawdown (\%) & Profit Factor & Total Trades \\
 \midrule
@@ -120,10 +102,11 @@ PSO Strategy & $0.01\%$ Fee & $+16.8\%$ & 1.35 & $-8.8\%$ & 1.42 & 352 \\
 DE Strategy & $0.01\%$ Fee & $+17.5\%$ & 1.38 & $-8.5\%$ & 1.44 & 344 \\
 GWO Strategy & $0.01\%$ Fee & $+11.2\%$ & 0.92 & $-11.8\%$ & 1.25 & 368 \\
 Buy \& Hold Baseline & N/A & $-2.5\%$ & -0.15 & $-18.2\%$ & 0.91 & 1 \\
-\bottomrule
-\end{tabular}%
-}
-\end{table}
+\botrule
+\end{tabularx}
+\end{table*}
+
+Figure~\ref{fig:financial_equity} plots cumulative out-of-sample equity curves across the 3,012 test bars.
 
 \begin{figure}[htbp]
 \centering
@@ -132,4 +115,4 @@ Buy \& Hold Baseline & N/A & $-2.5\%$ & -0.15 & $-18.2\%$ & 0.91 & 1 \\
 \label{fig:financial_equity}
 \end{figure}
 
-The financial backtest confirms that predictive MCC improvements directly translate into economic trading gains. Under standard exchange fees ($0.01\%$), the GA-optimized model generated a Net Return of $+18.4\%$, an annualized Sharpe Ratio of $1.42$, and a Maximum Drawdown of $-8.2\%$, significantly outperforming both Random Search ($+4.2\%$) and the passive Buy \& Hold benchmark ($-2.5\%$).
+Under standard exchange fees ($0.01\%$), the GA-optimized neural classifier generated a Net Return of $+18.4\%$, an annualized Sharpe Ratio of $1.42$, and a Maximum Drawdown of $-8.2\%$, outperforming both Random Search ($+4.2\%$) and Buy \& Hold ($-2.5\%$).

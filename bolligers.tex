@@ -1,0 +1,892 @@
+\documentclass{ieeeaccess}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm} %add
+%\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{textcomp}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+\history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
+\doi{10.1109/ACCESS.2017.DOI}
+
+\title{Evolutionary Optimization of Technical Indicators and Feature Selection for Intraday Futures Market Prediction}
+\author{\uppercase{Othavio C. Correa}\authorrefmark{1}, 
+\uppercase{Bruno L. Dalmazo}\authorrefmark{1},
+\uppercase{Eduardo N. Borges}\authorrefmark{1},
+\uppercase{Giancarlo Lucca}\authorrefmark{1},
+\uppercase{Fabian C. Cardoso}\authorrefmark{2},
+\uppercase{Diego Renan Bruno\authorrefmark{3}, and Rafael A. Berri}.\authorrefmark{1}}
+
+\address[1]{Federal University of Rio Grande (FURG), Rio Grande, Brazil}
+\address[2]{University of Rio Verde (UniRV), Rio Verde, Brazil}
+\address[3]{São Paulo State University (UNESP), São José do Rio Preto, Brazil}
+
+
+\tfootnote{The authors would like to thank FAPERGS (24/2551-0001396-2, 23/2551-0000773-8), CNPq (307416/2025-9), FAPERGS/CNPq (23/2551-0000126-8)}
+
+\markboth
+{Correa C. O. \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
+{Correa C. O. \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
+
+\corresp{Corresponding author: Othavio C. Correa (e-mail: othavioccorrea@furg.br).}
+
+\begin{abstract}
+This study addresses short-term financial market prediction using 5-minute intraday data from the Mini Brazilian Futures Index, a highly liquid and low-cost derivative in the Brazilian market. The main contribution is the use of genetic algorithms to optimize Bollinger Band parameters by positioning market tops and bottoms outside the bands while keeping most price candles within them. This optimized indicator is combined with technical features such as simple and exponential moving averages, standard deviation, and the Average Directional Movement Index Rating to capture market volatility and price dynamics. Feature ranking techniques are applied to identify the most relevant features and remove redundant information. Random Forest, Extreme Gradient Boosting and Multi-Layer Perceptron models are then optimized via genetic algorithms for hyperparameter tuning, and their robustness is evaluated using stratified cross-validation. The metrics used were Accuracy, Precision, Recall, $F1-Score$, Balanced Accuracy, Directional Accuracy, Matthews Correlation Coefficient and the Receiver Operating Characteristic - Area Under the Curve. The best model achieved 68.04\% accuracy in cross-validation and 64.08\% on the test set, outperforming non-optimized models, which reached 65.17\% and 61.55\%, respectively. These results demonstrate that the proposed optimization and feature selection framework improves both predictive performance and model robustness in intraday market forecasting.
+\end{abstract}
+
+%ADD ALGUMA COISA
+\begin{keywords}
+Forecasting, Future Market, Machine Learning, Neural Network.
+
+%Enter key words or phrases in alphabetical order, separated by commas. For a list of suggested keywords, send a blank e-mail to keywords@ieee.org or visit \underline{http://www.ieee.org/organizations/pubs/ani\_prod/keywrd98.txt}
+\end{keywords}
+
+\titlepgskip=-15pt
+
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+Financial markets constitute an inherently complex, non-stationary, and highly dynamic environment for asset trading, posing significant challenges for predictive modeling. Consequently, this structural complexity makes financial markets an exceptionally rigorous and relevant benchmark for evaluating the robustness of advanced predictive modeling approaches.
+
+%series temporais
+Fundamentally, these market dynamics are captured through financial time series, which consist of sequential observations of financial variables such as stock indices, exchange rates, and commodity prices recorded at regular intervals. However, these time series are inherently chaotic, non-linear, and non-stationary, meaning that their underlying statistical properties constantly evolve over time \cite{durairaj2022convolutional} \cite{de2025enhancing}. They are highly volatile and contain a significant amount of noise, being driven by a myriad of unpredictable and interdependent components, including macroeconomic policies, political events, and other geographical phenomena. Due to these structural complexities, frequent structural breaks, and the immense volume and velocity of data, decoding the true underlying patterns of financial time series becomes an exceptionally challenging task. This requires the use of robust feature extraction and advanced predictive modeling to handle uncertainty, isolate relevant patterns, and extract meaningful signals from the noise before any accurate forecast can be achieved \cite{praveen2026financial} \cite{de2025enhancing}.
+
+%intraday
+Within this scenario, intraday data represents one of the most challenging frontiers for predictive modeling. This data tracks the behavior of assets and their trading volumes at high frequency throughout a single day, aggregating essential information, such as opening, high, low, and closing price (OHLC) on granular time scales, such as minute intervals \cite{macherla2025intraday}. The structural complexity of these time series stems from their inherent instability, extreme volatility, and a remarkably low signal-to-noise ratio \cite{zhang2025informer}. Unlike long-term time series, intraday price fluctuations have a highly stochastic and non-linear nature, being driven and distorted at every instant by noise from the market microstructure, sudden liquidity constraints, aggressive imbalances in order flow, and seasonal anomalies, such as severe volume spikes at market opening and closing \cite{nepal2025incorporating}. Thus, modeling these high-frequency series means dealing with data prone to abrupt mutations \cite{borkar2026empirical}, making the task of predicting micromovements and capturing reliable trends a rigorous technical challenge, which justifies the need for advanced and robust applications of technical analysis and machine learning for their decoding \cite{macherla2025intraday}.
+
+Technical analysis relies on historical price patterns and indicators to support decision-making in financial markets~\cite{nazario2017literature}.
+One of these tools is the technical analysis indicator. Each indicator has advantages and disadvantages, but, in general, they can be used to determine market trends. The Bollinger Band is a technical indicator formed by two standard deviations above and below a Simple Moving Average (SMA) \cite{bollinger1992using}. Since this technical analysis indicator is composed of standard deviations, it captures overbought and oversold conditions and signals of trend formation \cite{chen2018bollinger}. 
+
+The moving average indicators, both the SMA and the Exponential Moving Average (EMA), formed by the closing price of 3, 5, 7, 9, and 11 periods, in addition to the Standard Deviation (STDDEV) statistical function indicator and the Average Directional Movement Index Rating (ADXR) momentum indicator, make up the composition of the indicators used in this research.
+
+One of the indispensable techniques in machine learning, Feature Selection is a resource that detects relevant features and removes irrelevant data from the dataset \cite{kumar2014feature}. By decreasing the size of the data, the temporal complexity is reduced, thereby improving the model's accuracy \cite{venkatesh2019review}.%add:
+This optimization not only mitigates the risk of overfitting but also enhances the overall interpretability of the predictive model by focusing strictly on the most informative signals. Furthermore, by discarding redundant variables and structural noise, the algorithm becomes more robust, ensuring it generalizes effectively when exposed to unseen intraday market data.
+
+Random Forest is a machine learning technique whose underlying principles, such as divide-and-conquer strategies, resampling, aggregation, and randomized exploration of the feature space, enable it to effectively handle large-scale datasets while preserving computational efficiency \cite{biau2016random}. Extreme Gradient Boosting (XGBoost) is a learning framework based on Boost Tree models \cite{chen2016xgboost}. Unlike traditional Boosting Tree models, this model implements a second-order Taylor expansion on the loss function, instead of just first-derivative information \cite{li2019gene}. Multi-Layer Perceptron (MLP) is a multilayer neural network \cite{taud2017multilayer}. Because its approach is flexible, in addition to being nonparametric and stochastic, its efficiency tends to be higher than that of traditional Machine Learning techniques \cite{costa1997evaluating}.
+
+A Genetic Algorithm (GA) is used with MLP, XGBoost and Random Forest to adjust their settings based on the pertinent features discovered. GA are based on biological evolution \cite{forrest1996genetic}. They have operations discovered in natural genetics, such as individuals, mutations, and generations, thus providing robust search resources, which help with problems that turn off efficient and effective searches \cite{sivanandam2008genetic}.
+
+To address these challenges, this study proposes a methodological framework that combines technical indicator optimization, feature selection, and machine learning techniques.
+The main contributions of this study can be summarized as follows:
+
+\begin{itemize}
+
+\item An evolutionary optimization strategy for Bollinger Bands, where a Genetic Algorithm is used to adjust indicator parameters based on the positioning of market tops and bottoms.
+
+\item The integration of optimized technical indicators with multiple feature selection methods to identify the most relevant attributes for intraday prediction.
+
+\item The application of Genetic Algorithms for hyperparameter optimization of machine learning models, specifically MLP, XGBoost and Random Forest.
+
+\item An empirical evaluation of the proposed framework using intraday data from the Mini Brazilian Futures Index, demonstrating improvements in predictive performance and robustness.
+
+\end{itemize}
+
+The structure of this article is defined as follows: Section \ref{sec:works} addresses the studies related to this article, Section \ref{sec:methodology} presents the methodology used to conduct this study, and Section \ref{sec:results} discusses the results obtained. Finally, Section \ref{sec:conclusions} concludes this study and points out some future directions.
+
+\section{Related Works}
+\label{sec:works}
+
+
+\begin{table*}[htbp]
+\centering
+\caption{Comparison of features, data, and approaches in related works.}
+\label{tab:related_works}
+\resizebox{\textwidth}{!}{
+
+\renewcommand{\arraystretch}{1.9} 
+
+\begin{tabular}{|c|l|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+& \textbf{Criteria} & 
+\rotatebox{90}{Bandgar et al. \cite{bandgar2025finchronos}} & 
+\rotatebox{90}{Simatupang et al. \cite{simatupang2026stock}} & 
+\rotatebox{90}{Sekhar \& Naras. \cite{sekhar2025stock}} & 
+\rotatebox{90}{Yu et al. \cite{yu2025multi}} & 
+\rotatebox{90}{Bhatnagar \cite{mittal2025machine}} & 
+\rotatebox{90}{Sukma \& Namah. \cite{sukma2025enhancing}} & 
+\rotatebox{90}{Guo \cite{guo2025empirical}} & 
+\rotatebox{90}{Bareket \& Pârv \cite{bareket2024adaptive}} & 
+\rotatebox{90}{Mutinda \& Yong \cite{mutinda2026hybrid}} & 
+\rotatebox{90}{Vivek et al. \cite{vivek2025optimal}} & 
+\rotatebox{90}{Rahim et al. \cite{rahim2025technical}} & 
+\rotatebox{90}{Hung et al. \cite{hung2024ai}} \\ \hline
+
+\multirow{4}{*}{\rotatebox[origin=c]{90}{\textbf{Data}}} 
+& Stocks / Equities & X & X & X & X & X & X & X & X & X & X & X & X \\ \cline{2-14}
+& Intraday Data ($1$ to $45$ min) & & & & & & & & & & & & X \\ \cline{2-14}
+& Intraday Data ($5$ minutes) & & & & & & & & & & & X & \\ \cline{2-14}
+& Cross-Validation & & X & & & X & & & & X & & & \\ \hline
+
+\multirow{5}{*}{\rotatebox[origin=c]{90}{\textbf{Pre-Processing}}} 
+& Volatility Indicators (BB, STD) & X & X & X & & X & X & X & X & X & X & X & \\ \cline{2-14}
+& Momentum / Trend (SMA, EMA) & X & X & X & & X & X & X & X & X & X & & \\ \cline{2-14}
+& Oscillators (RSI, MACD) & X & X & X & & X & X & X & X & X & X & X & \\ \cline{2-14}
+& Volume Indicators & & & & & & X & X & X & X & & & \\ \cline{2-14}
+& Feature Selection & & & X & & & X & X & X & X & & X & \\ \hline
+
+\multirow{5}{*}{\rotatebox[origin=c]{90}{\textbf{Approach}}} 
+& Random Forest (RF) & X & X & X & & & & X & & X & & & \\ \cline{2-14}
+& Extreme Gradient Boosting (XGBoost) & & & X & & X & & X & & X & & & \\ \cline{2-14}
+& Multi-Layer Perceptron (MLP/ANN) & & & & X & & & & X & X & & X & X \\ \cline{2-14}
+& Long Short-Term Memory (LSTM) & X & & X & X & & & X & & X & & & \\ \cline{2-14}
+& Convolutional Neural Network (CNN) & & & X & & & & & & X & & & \\ \hline
+
+\multirow{4}{*}{\rotatebox[origin=c]{90}{\textbf{Metrics}}} 
+& Error Metrics (RMSE, MAE, MSE, MAPE) & X & X & X & X & & & X & & & & & \\ \cline{2-14}
+& Standard Classification (Acc, Prec, Rec) & & & X & & X & & & X & X & & X & X \\ \cline{2-14}
+& Finance Metrics & & & X & X & X & X & X & & X & X & & X \\ \cline{2-14}
+& Robustness Metrics (MCC, AUC, F1) & & & & & X & & & X & X & & X & \\ \hline
+
+\multirow{4}{*}{\rotatebox[origin=c]{90}{\textbf{Optimization}}} 
+& Indicator Optimization (GA) & & & & & & & & & & X & & \\ \cline{2-14}
+& Model Optimization (GA) & & & & & & & & & & & & \\ \cline{2-14}
+& Model Opt. (Grid / Random Search) & X & & X & X & X & X & & X & X & & X & \\ \cline{2-14}
+& Model Optimization (Bayesian) & & X & X & & & & X & & & & & \\ \hline
+\end{tabular}
+}
+\end{table*}
+
+Short-term financial market forecasting and algorithmic modeling have become central areas of innovation in the financial sector, driven by recent advances in artificial intelligence and computing power. The existing literature addresses the challenge of price forecasting from various perspectives, which can be broadly categorized into the use of Machine Learning (ML) and Deep Learning (DL) algorithms, technical indicators, Feature Selection techniques, and hyperparameter optimization through metaheuristics and evolutionary algorithms. To provide a clear view of the state-of-the-art and properly position our contributions, Table \ref{tab:related_works} summarizes recent and highly relevant studies, categorizing them based on their data characteristics, preprocessing methodologies, predictive approaches, evaluation metrics, and optimization strategies.
+
+As observed in Table \ref{tab:related_works}, the literature covers a wide array of isolated pillars, but comprehensive frameworks that integrate evolutionary optimization at both the technical indicator and model levels remain remarkably scarce. The table's visual representation makes it evident that while most researchers apply machine learning to standard indicator sets, the geometrical and mathematical optimization of the indicators themselves is a significant gap in the current research.
+
+\subsection{Data Characteristics and Market Horizons}
+
+The first major criterion in our comparative analysis is the nature of the data and the market horizon analyzed. Most studies in the current literature rely heavily on daily stock or equity data to train their predictive models. For instance, Yu et al. \cite{yu2025multi} proposed a multi-market data-driven system focusing on daily cross-national indices, while Bareket \& Pârv \cite{bareket2024adaptive} utilized daily closing prices across medium-term horizons to identify significant price surges. While daily data provides a smoothed representation of market trends, it inherently fails to capture the high-frequency dynamics and sudden volatility spikes characteristic of modern algorithmic trading environments.
+
+Focusing on intraday trading, where the speed of trends requires timely action, Hung et al. \cite{hung2024ai} addressed unpredictable oscillations in the futures market using data transformed into minute-based intervals. They observed that very short-term horizons, such as 5 to 45 minutes, offer lower-risk entries to day traders if correctly modeled according to the physical behavior of the time series.
+
+Similarly, Rahim et al. \cite{rahim2025technical} utilized data groupings on 5-minute candles, highlighting that, in intraday data, the complexities of oscillations often escape conventional fixed-rule formats. This validates that maximum accuracy requires autonomous systems driven by heuristics and optimizations. However, as Table \ref{tab:related_works} clearly illustrates, the combination of 5-minute intraday data with robust Cross-Validation procedures is rarely applied simultaneously. Our study addresses this gap by employing a rigorous stratified cross-validation on 5-minute intraday data from the highly liquid Brazilian Mini Futures Index, an emerging derivative asset scarcely explored with this level of granularity.
+
+\subsection{Pre-Processing and Technical Indicators}
+
+Building a robust input space often dictates the success of predictive algorithms. As shown in the Pre-Processing section of Table \ref{tab:related_works}, the simultaneous use of Volatility, Momentum, and Oscillators is practically a consensus among top-tier financial studies. Bhatnagar \cite{mittal2025machine} highlights that technical indicators reflect market sentiment, trend strength, price dynamics, and volatility. In his research, Moving Averages (SMA and EMA), the Relative Strength Index (RSI), and Bollinger Bands were actively used to contextualize market conditions.
+
+The effectiveness of using these metrics in combination was strongly corroborated by Sukma and Namahoot \cite{sukma2025enhancing}, who formulated a multi-indicator strategy. They concluded that the simultaneous use of Bollinger Bands, MACD, and EMAs provides valuable signals for predicting market movements, helping to identify oversold/overbought moments and volatility reversals. Table \ref{tab:related_works} reflects that almost all evaluated works incorporate these specific indicator groups to feed their predictive models.
+
+However, in models that use a vast number of technical indicators combined with historical price data, the excess of information introduces noise, redundancy, and causes the curse of dimensionality. To mitigate this, Mutinda and Yong \cite{mutinda2026hybrid} proposed a hybrid system using an advanced feature selection technique called Stability-Enhanced Dynamic Thresholding (SEDT). They found that filtering out technical metrics that do not add direct predictive power dramatically increases not only accuracy but also the algorithm's F1-Score, allowing for generalization and stability. While Feature Selection is gaining traction, Table \ref{tab:related_works} indicates that it is frequently applied as a standalone filter, disconnected from the structural optimization of the indicators themselves.
+
+
+\subsection{Machine Learning and Deep Learning Approaches}
+
+Regarding the predictive approaches, researchers have actively tested various machine learning and deep learning algorithms to decode complex market patterns. Ensemble tree-based methods, particularly Random Forest (RF) and Extreme Gradient Boosting (XGBoost), are heavily favored for tabular financial data, as seen in Table \ref{tab:related_works}. Bandgar et al. \cite{bandgar2025finchronos} developed a framework integrating RF, SVR, and LSTM, demonstrating that ensemble models can successfully leverage the complementary advantages of different methodologies.
+
+Deep learning architectures, particularly Long Short-Term Memory (LSTM) networks and Convolutional Neural Networks (CNN), have also been widely adopted to capture sequential and temporal dependencies. Sekhar and Narasimhulu \cite{sekhar2025stock} demonstrated that an ensemble of RF, XGBoost, and LSTM yields robust predictions, pushing the boundaries of forecasting accuracy. The capacity of these networks to learn hidden long-term relationships has made them a staple in advanced financial forecasting.
+
+Nevertheless, while LSTMs and CNNs are highly powerful for raw sequential data, Table \ref{tab:related_works} highlights that Multi-Layer Perceptrons (MLP) and advanced tree-based ensembles (RF, XGBoost) remain exceptionally effective and computationally efficient when the input space consists of engineered technical features. Mutinda and Yong \cite{mutinda2026hybrid} verified that algorithms like LR, RF, XGBoost, and MLP/ANN perform exceptionally well when applied to appropriately filtered indicator datasets. Consequently, our methodology rigorously evaluates RF, XGBoost, and MLP to ensure high performance with optimized computational overhead.
+
+\subsection{Evaluation and Performance Metrics}
+
+The evaluation criteria used in these studies vary significantly, defining the ultimate applicability of the models. Early or regression-focused studies primarily rely on standard Error Metrics, such as RMSE, MAE, MSE, and MAPE. For example, Simatupang et al. \cite{simatupang2026stock} and Yu et al. \cite{yu2025multi} utilized MSE and RMSE to quantify the precise deviation of predicted price values from actual observations. While undeniably useful for price regression, these metrics do not perfectly align with the binary nature of directional intraday trading.
+
+As a result, Standard Classification metrics, including Accuracy, Precision, and Recall, are frequently adopted in directional forecasting \cite{sekhar2025stock, bareket2024adaptive}. However, accuracy alone can be misleading in financial datasets due to inherent class imbalances and rapidly shifting market regimes. Algorithms may achieve high accuracy by merely predicting the majority class during strong trend periods, failing to capture critical market reversals.
+
+To combat this, the incorporation of Robustness Metrics, such as the Matthews Correlation Coefficient (MCC), ROC-AUC, and F1-Score, is paramount, although less common in the literature. Bareket \& Pârv \cite{bareket2024adaptive} and Mutinda \& Yong \cite{mutinda2026hybrid} successfully applied  F1-Scores to validate their models against imbalances. Furthermore, Finance Metrics like the Sharpe ratio and maximum drawdown are essential to prove economic viability, as demonstrated by Vivek et al. \cite{vivek2025optimal}. Our study elevates the validation standard by moving beyond basic accuracy, leveraging stratified cross-validation alongside advanced robustness metrics like MCC and ROC-AUC.
+
+\subsection{Hyperparameter and Indicator Optimization}
+
+Optimization is the final, yet arguably the most critical, pillar of Table \ref{tab:related_works}. Hyperparameter fine-tuning is widely recognized as a catalyst for predictive performance. The table shows that Grid and Random Search remain the most prevalent techniques across the literature. More advanced studies, such as Simatupang et al. \cite{simatupang2026stock}, implemented Bayesian optimization to calibrate Random Forest hyperparameters, proving that optimal adjustments significantly improve precision coefficients.
+
+Evolutionary algorithms are also gaining substantial traction for complex search spaces. Rahim et al. \cite{rahim2025technical} and Guo \cite{guo2025empirical} noted that integrating Machine Learning with Genetic Algorithms (GA) for hyperparameter optimization achieves statistically higher levels of predictive accuracy improvement compared to conventional random searches. The parallel search capabilities of GAs make them exceptionally suited for traversing the vast parameter spaces of neural networks and decision trees.
+
+A critical observation from Table \ref{tab:related_works}, however, is the scarcity of Indicator Optimization. Vivek et al. \cite{vivek2025optimal} introduced an evolutionary approach using MOEA to combine technical indicators to maximize the Sharpe ratio. Guo \cite{guo2025empirical} also reported predictive improvements of up to 25\% by dynamically optimizing indicator parameters rather than relying on static defaults. 
+
+\subsection{Synthesis and Gaps in the Research}
+
+In summary, although the literature largely supports the benefits of ML tools \cite{bandgar2025finchronos}, technical volatility and trend indicators \cite{mittal2025machine}, and feature selection \cite{mutinda2026hybrid}, a critical limitation persists. Most studies examine the use of genetic metaheuristics exclusively to search for hyperparameters in computational models \cite{simatupang2026stock} or only test fixed parameters on well-known indicators, such as Bollinger Bands \cite{guo2025empirical}. Few studies comprehensively integrate the use of GA in a dual scope: firstly, adjusting the mathematical properties of the indicator window (requiring market tops and bottoms to be positioned outside the Bollinger Bands, containing internal closes) and, secondly, conducting a careful feature selection followed by fine-tuning of the final classifiers (RF, XGBoost, and MLP).
+
+Furthermore, studies applying this systematic rigor to emerging derivative assets in 5-minute intraday intervals, such as the Brazilian Mini Futures Index, are practically nonexistent in current databases. It is this sophisticated integration, ranging from the evolutionary engineering of the Bollinger Bands volatility channel formation to the evaluation validated by stratified Cross-Validation and robust metrics (such as Matthews Correlation Coefficient and AUC) of predictive architectures, that this work proposes to solve, proving a real and tangible gain in modeling performance in the short term.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Methodology}
+\label{sec:methodology}
+This Section presents the new methodology proposed by this article. As shown in Fig. \ref{fig1}, the approach is composed of 6 different steps. First, we present the dataset creation and the data used. Second, the generation of technical indicators shows how the indicators were normalized and how GA was used to determine the parameters of the Bollinger Bands. Third, we discuss how feature selection methods were classified. Then, we present the use of GA to optimize the classifier parameters (MLP, XGBoost and Random Forest). Finally, we discuss the classifier's performance.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\textwidth]{overview.pdf}
+\caption{Methodology Process Overview.}
+\label{fig1}
+\end{figure*}
+
+The GA was used in multiple stages due to its efficiency in finding optimal solutions. Unlike traditional methods, which are often limited, GA operates on a population of candidates in parallel, searching across various areas of space instead of a single point.
+
+\subsection{Input Data}
+
+%The data used were taken from the BovDB.v2 database \cite{DVN/TMB4IG_2024}, an updated version of BovDB \cite{cardoso2022bovdb}, with all companies on the Brazilian financial market (B3) between 1995 and 2024, and with the implementation of 5-minute intraday data from January to June 2024.
+%The study focused on the Mini Brazilian Futures Index (WIN), a low-cost, high-volume trading ticker. To examine short-term market dynamics and capture price fluctuations over a short time interval, we used 5-minute intraday data from January 1 to June 30, 2024. It allows a short-term analysis of the asset's behavior. The Brazilian Mini Futures Index, with the two highest monthly trading volumes, was selected from the first half of 2024.
+%All the Technical Indicators across different periods were generated from this data and are essential for building the dataset. The trend label was defined based on the price variation between the current closing price and the next closing price. If the future price is higher, the label is 1 (uptrend), otherwise 0 (downtrend). In this way, the dataset comprises over 100 trading days and over 15,000 instances. This ensures a significant sample of data for machine learning while reducing the inclusion of outdated volatility data that could degrade model performance.
+
+The data used were taken from the BovDB.v2 database \cite{DVN/TMB4IG_2024}, an updated version of BovDB \cite{cardoso2022bovdb}, with all companies on the Brazilian financial market (B3) between 1995 and 2024, and with the implementation of 5-minute intraday data from January to June 2024.
+
+The study focused on the Mini Brazilian Futures Index (WIN), a low-cost, high-volume trading ticker. To examine short-term market dynamics and capture price fluctuations over a short time interval, we used 5-minute intraday data from January 1 to June 30, 2024. It allows a short-term analysis of the asset's behavior. The Brazilian Mini Futures Index, with the two highest monthly trading volumes, was selected from the first half of 2024.
+
+Table \ref{tab:traded_tickers} details the trading volume and active days of the two most liquid mini-index futures contracts in each month evaluated.
+
+\begin{table}
+\caption{Most Traded Tickers by Month, Volume, and Negotiated Days}
+\label{tab:traded_tickers}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{45pt}|p{45pt}|p{75pt}|p{50pt}|}
+\hline
+Month& 
+Ticker& 
+Volume& 
+Negotiated \par Days \\
+\hline
+January & WING24 & 31,382,573,964.5 & 22 \\
+January & WINJ24 & 7,003,384,999.0 & 22 \\
+February & WINJ24 & 19,397,421,024.5 & 18 \\
+February & WING24 & 9,559,101,047.5 & 8 \\
+March & WINJ24 & 22,630,690,701.5 & 17 \\
+March & WINM24 & 3,115,063,415.5 & 17 \\
+April & WINM24 & 19,136,612,830.0 & 21 \\
+April & WINJ24 & 15,438,451,913.0 & 12 \\
+May & WINM24 & 25,926,808,760.0 & 20 \\
+May & WINQ24 & 9,851,009,541.0 & 20 \\
+June & WINQ24 & 18,669,996,694.0 & 18 \\
+June & WINM24 & 8,469,322,595.0 & 7 \\
+\hline
+\end{tabular}
+\end{table}
+
+The dynamics of index futures contracts work as follows: every two months the contracts expire (even months), the letter after WIN signals the expiration month of the asset. The simultaneous use of both tickers is due to the fact that as the expiration date approaches, liquidity shifts abruptly to the next expiration cycle. Therefore, monitoring both contracts during the transition windows ensures the continuous capture of market microstructure patterns.
+
+All the Technical Indicators across different periods were generated from this data and are essential for building the dataset. The trend label was defined based on the price variation between the current closing price and the next closing price. If the future price is higher, the label is 1 (uptrend), otherwise 0 (downtrend). In this way, the dataset comprises over 100 trading days and over 15,000 instances. This ensures a significant sample of data for machine learning while reducing the inclusion of outdated volatility data that could degrade model performance.
+
+
+\subsection{The creation of Technical Indicators}
+
+To accurately capture the high-frequency nuances of the financial market, a diverse set of technical indicators was engineered to serve as input features for the predictive model. Recognizing the rapid shifts inherent in intraday trading, these indicators were specifically selected to quantify volatility, measure trend strength, and identify potential overbought and oversold market conditions.
+
+The primary feature set comprises SMAs, EMAs, STDDEV, ADXR, and Bollinger Bands. Rather than relying on standard daily metrics, the feature generation was adapted for intraday 5-minute interval data to better reflect immediate price actions and momentum shifts.
+
+%The technical indicators generated to create a predictive model are Bollinger Bands, SMAs, EMAs, STDDEV, and ADXR. In the search for the best parameters for Bollinger Bands, a GA approach was employed, while SMAs, EMAs, and STDDEV were used with periods (5-minute) of 3, 5, 7, 9, and 11, and the ADXR with the ADX value from the previous 14 periods. After that, to improve efficiency and performance and enhance data integrity, the values of these indicators were normalized.
+
+\subsubsection{Trend and Volatility Indicators}
+
+Moving averages are foundational tools in technical analysis, utilized to smooth out price noise and highlight underlying market trends. The SMA calculates the unweighted mean of the closing prices over a specific number of periods, $n$, defined as:
+
+\begin{equation}
+SMA_{t}(n) = \frac{1}{n}\sum_{i=0}^{n-1}close_{t-i}
+\label{eq:sma}
+\end{equation}
+
+To complement the SMA, the EMA was integrated to provide a higher sensitivity to recent price changes, a crucial factor in 5-minute timeframe forecasting. The EMA applies a weighting multiplier, $k$, to the most recent data:
+
+\begin{equation}
+EMA_{t}(n) = (close_{t}-EMA_{t-1}(n))\cdot k+EMA_{t-1}(n)
+\label{eq:ema}
+\end{equation}
+
+To explicitly capture market volatility within these micro-trends, the rolling STDDEV was calculated. This metric quantifies the dispersion of prices from the mean over a given window, formulated as:
+
+\begin{equation}
+STDDEV_t(n) = \sqrt{\frac{1}{n-1} \sum_{i=0}^{n-1} \left( P_{t-i} - SMA_t(n) \right)^2}
+\label{eq:stddev}
+\end{equation}
+
+Where P is the price of the asset during the period (which can be the open or close price).
+
+For the SMA, EMA, and STDDEV, a localized approach was adopted using highly responsive 5-minute periods of 3, 5, 7, 9, and 11. This granular spectrum allows the model to analyze micro-trends and immediate volatility spikes. Additionally, to assess the absolute strength of the prevailing trend, the ADXR was calculated utilizing the Average Directional Index (ADX) values from the preceding 14 periods.
+
+\subsubsection{Detect Peaks and Valleys}
+
+The top and bottom detection stage consists of a multi-timeframe analytical approach, combining 60-minute and 5-minute resolutions to locate price extremes with high precision. Initially, the algorithm scans the 60-minute time series looking for directional trends, grouping consecutive sequences of bullish candles (close higher than open) to identify the formation of potential tops, and bearish sequences (close lower than or equal to open) to map possible bottoms. By isolating these trends, the system selects the hourly candle that recorded the most extreme close, i.e., the maximum value for the bullish sequence or the minimum for the bearish sequence. This process acts as a structural filter, delimiting the exact zone where the probable exhaustion and reversal of market force occurred.
+
+Once this exhaustion zone is demarcated on the hourly chart, the model performs a scale refinement, accessing exclusively the 5-minute candles contained within that same interval. The objective of this step is to analyze the microstructure of the movement, finding the absolute maximum or minimum closing price to determine the exact coordinates (date, time, and price) of the top or bottom. Additionally, the algorithm implements a forward validation mechanism: it evaluates the 5-minute candles corresponding to the immediately subsequent time interval to confirm that the price direction has not continued to advance. If an even more extreme closing price is detected in this following window, the coordinate is updated. This validation ensures the capture of the true top or bottom of the movement, mitigating false positives caused by time transitions between hourly candles and providing the exact reference points that will guide the fitness function of the Genetic Algorithm.
+
+\subsubsection{Genetic Algorithms on Bollinger Bands}
+\label{sec:GA_BB}
+Bollinger Bands require two predefined parameters: one is the period, and the other is the deviation factor. To find the optimal parameters in the data, we have used GA to search for them. To create a GA, some model hyperparameters need to be defined to search for the best Bollinger Bands parameters. These values are shown in Table \ref{tab:ga_settings_model}. 
+
+\begin{table}
+\caption{Evolutionary Algorithm Configuration}
+\label{tab:ga_settings_model}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{110pt}|p{70pt}|p{40pt}|}
+\hline
+Parameter& 
+Value / Setting& 
+Details \\ 
+\hline
+Crossover Probability (cxpb) & 80\% & -- \\
+Mutation Probability (mutpb) & 5\% & -- \\
+Generations (ngen) & 5000 & -- \\
+Population Size (pop) & 20 Individuals & -- \\
+Selection Method & Tournament & $k = 3$ \\
+Crossover Method & TwoPoint & Active \\ 
+\hline
+\end{tabular}
+\end{table}
+
+Where hyperparameters cxpb and mutpb are the probabilities of mating and mutation per individual per generation, respectively. Ngen is the number of generations, and pop is the number of individuals in the initial population. Selection for tournament means selecting the best individual by tournament, while Crossover TwoPoint performs the crossover between two individuals \cite{dedeap}.
+
+The search for the best Bollinger Band parameters is conducted based on the peaks and valleys. The goal is to ensure that only the peaks and valleys are outside the Bands and that the remaining candles are inside the Bands. The candles outside the Bands are penalized, while the peaks and valleys outside the Bands represent the gains. Thus, their fitness formula used in GA can be seen in the \eqref{eq:fitness1}.
+
+\begin{equation}
+\mathit{Fitness_{GA_{BB}}} = ({Gain}) - \lambda \cdot (\mathit{Penalty}),
+\label{eq:fitness1}
+\end{equation}
+
+Where the number of correct peaks and valleys outside the bands would be the gain, $\lambda$ controls the penalty for misclassified candles, and the number of candles outside the bands would be the penalty. 
+
+The GA has a range for each parameter to find the ideal solution. The period parameter is analyzed over the range [2, 30], and the deviation factor over [0.2, 4]. This way, our approach finds the optimal Bollinger Band parameters for the data, thereby improving model accuracy.
+
+%add o resto:
+
+To formalize the optimization process, Algorithm \ref{alg:ga_bollinger} details the computational sequence of the proposed Genetic Algorithm. This procedure delineates the population initialization, the iterative evolutionary steps, and the precise fitness evaluation mechanism applied to the intraday data.
+
+
+\begin{algorithm}[t]
+\caption{Genetic Algorithm for Bollinger Bands Parameter Optimization}
+\label{alg:ga_bollinger}
+\begin{algorithmic}[1]
+\REQUIRE Intraday datasets $D_{5m}$ and $D_{60m}$
+\REQUIRE GA Hyperparameters ($N_{gen}$, $P_{size}$, $P_{cx}$, $P_{mut}$)
+\ENSURE Optimal Bollinger Bands parameters ($Period^*$, $StdFac^*$)
+\STATE $Extrema \leftarrow \text{DetectPeaksValleys}(D_{5m}, D_{60m})$
+\STATE $Pop \leftarrow \text{InitPop}(P_{size})$ \COMMENT{5-bit period, 9-bit std}
+\FOR{$generation = 1$ \TO $N_{gen}$}
+    \FOR{\textbf{each} $ind \in Pop$}
+        \STATE $Period \leftarrow \text{Decode}(ind[0:4], 2, 30)$
+        \STATE $StdFac \leftarrow \text{Decode}(ind[5:13], 0.2, 4.0)$
+        \STATE $U_{Band}, L_{Band} \leftarrow \text{CalcBands}(D_{5m}, Period, StdFac)$
+        \STATE $Gain \leftarrow 0$, $Penalty \leftarrow 0$
+        \FOR{\textbf{each} $candle \in D_{5m}$}
+            \IF{$candle \in Extrema$}
+                \STATE $isPeakOut \leftarrow (candle \text{ is Peak}) \land (candle.close > U_{Band})$
+                \STATE $isValOut \leftarrow (candle \text{ is Valley}) \land (candle.close < L_{Band})$
+                \IF{$isPeakOut \lor isValOut$}
+                    \STATE $Gain \leftarrow Gain + 1$
+                \ENDIF
+            \ELSE
+                \IF{$candle.close > U_{Band} \lor candle.close < L_{Band}$}
+                    \STATE $Penalty \leftarrow Penalty + 1$
+                \ENDIF
+            \ENDIF
+        \ENDFOR
+        \STATE $ind.fitness \leftarrow Gain - (\lambda \times Penalty)$
+    \ENDFOR
+    \STATE $Pop \leftarrow \text{Selection}(Pop, \text{TournSize}=3)$
+    \STATE $Pop \leftarrow \text{Crossover}(Pop, P_{cx})$
+    \STATE $Pop \leftarrow \text{Mutation}(Pop, P_{mut})$
+\ENDFOR
+\STATE \textbf{return} $\text{BestIndividual}(Pop)$
+\end{algorithmic}
+\end{algorithm}
+
+
+Algorithm \ref{alg:ga_bollinger} outlines the stochastic optimization framework employed to tailor the Bollinger Bands to the specific microstructural dynamics of the asset. The procedure initializes by extracting the market extrema structural peaks and valleys via a multi timeframe analysis that synergizes 60-minute trend definitions with 5-minute precision mapping. The chromosomal representation adopts a binary encoding strategy, allocating 5 bits for the moving average period and 9 bits for the standard deviation multiplier. These binary arrays map to the continuous search spaces of 2 to 30 and 0.2 to 4.0, respectively. 
+
+Within the evolutionary loop, the fitness function critically evaluates each candidate solution. It mathematically reinforces parameter sets that successfully isolate structural extrema outside the volatility envelope (maximizing the objective gain) while strictly penalizing the inclusion of non-extrema noise (minimizing the penalty, moderated by $\lambda$). Convergence is driven by tournament selection and two-point crossover operators, iterating until an optimal parameter pair ($Period$, $StdFac$) is approximated, thereby yielding a dynamically adjusted volatility baseline for subsequent predictive modeling.
+
+
+\subsubsection{Normalized Technical Indicators}
+\label{normalized_TI}
+This step is related with the normalization (scaling) of the data, in the technical indicators: Bollinger Bands, SMAs, EMAs, ADXR, and STDDEV. This normalization positively impacts the classification model's performance because the considered indicators differ in scale, and normalization puts them on the same scale \cite{borkin2019impact}.
+
+The normalization of technical indicators will place their values within the range [0, 1]. First, we normalize the Bollinger Bands with the parameters defined by GA. Equation \eqref{eq:bb} shows how the calculation of the normalized Bollinger Bands is done.
+
+\begin{equation}
+\mathit{BB_{\text{norm}}} = \frac{\mathit{close} \text{-} \mathit{LowerBand}}
+{\mathit{UpperBand} \text{-} \mathit{LowerBand}},
+\label{eq:bb}
+\end{equation}
+
+For the SMAs, EMAs, and STDDEV, we calculate for each selected period (3, 5, 7, 9, 11). Equation \eqref{eq:indi_norm} shows the calculation to find the normalized.
+
+\begin{equation}
+\tilde{X}_{t} = \frac{X_{t} - X_{\min}}{X_{\max} - X_{\min}}
+\label{eq:indi_norm}
+\end{equation}
+
+To prevent information leaks, the normalization parameters for $max$ and $min$ were estimated in the training partition and then applied to the test set.
+
+To normalize the ADXR, since its scale ranges from 0 to 100, simply perform the calculation by dividing its value by 100.
+
+%\begin{equation}
+%\mathit{ADXR}_{\text{norm}} = \mathit{ADXR}/100,
+%\label{eq:adxr}
+%\end{equation}
+
+\subsection{Feature Selection Methods Classifier}
+\label{sec:FS_subsec}
+
+Feature selection is a technique used in machine learning algorithms to eliminate redundant and irrelevant features from the model \cite{theng2024feature}. Several methods have been developed to identify these features, and we will use the following ones: Correlation-based Feature Selection (CFS) SubsetEval, ClassifierAttributeEval, CorrelationAttributeEval, Principal Component Analysis (PCA), Information Gain, and ReliefF \cite{bragancca2025enhancing}. Each of these methods uses different metrics to evaluate attribute relevance, so they are evaluated under different criteria, which helps provide a more reliable view of the features \cite{lamothe2025determining}.
+
+\subsubsection{Feature Selection Frameworks}
+
+In CFS SubsetEval, instead of inspecting variables in isolation, this technique analyzes the merit of entire feature groupings. The algorithm's selection criterion is based on a dual metric: it prioritizes subsets of data that demonstrate a strong ability to predict the target class (high relevance) and that simultaneously exhibit the lowest possible degree of mutual similarity (low redundancy). In this way, the method optimizes the model's input space by retaining only the descriptors that are highly informative for the result but independent of each other \cite{jimenez2022multivariate}.
+
+In ClassifierAttributeEval, the feature selection process is encapsulated around the machine learning algorithm itself. The model measures the importance of each attribute based on the accuracy or error rate generated by the underlying classifier, selecting the variables that minimize estimation error and directly improve the classifier's prediction performance \cite{ali2023analysis}.
+
+In the CorrelationAttributeEval model, a univariate ranking of features is performed, measuring the statistical dependence and relevance of each attribute individually in relation to the target class. Because it focuses purely on the isolated predictive capacity of the variable, this method is highly efficient for identifying relevant attributes, but it has the algorithmic limitation of not detecting or removing redundancy among the selected attributes \cite{ali2023analysis}.
+
+In the PCA model, the technique acts not as a simple filter, but by promoting feature extraction and drastically reducing the dimensionality of the data \cite{ali2023analysis} \cite{kalabarige2023boosting}. The process mathematically transforms and projects the original attribute space into new (principal) uncorrelated components, and is often integrated with other classifiers to mitigate excess noise and improve the overall performance of the modeling \cite{ali2023analysis} \cite{kalabarige2023boosting}.
+
+In the Information Gain model, the method operates as a statistical filter that ranks the importance of features based on the information gain, that is, the reduction of uncertainty (entropy) that each variable intrinsically provides about the target class \cite{ali2023analysis}. The algorithm analyzes these properties in a univariate manner before executing the learning task, classifying the variables based on how descriptive they are for the system \cite{jimenez2022multivariate}.
+
+In the ReliefF model, the relevance of an attribute is determined by analyzing how its values differ within and between classes, comparing the similarity of nearest neighbors. If the characteristic presents mathematically similar values for instances of the same class and discrepant values for instances of different classes, it receives a high importance score \cite{ali2023analysis}. Although considered a multivariate method, it shares the limitation of not removing redundancy, potentially selecting variables that are highly correlated with each other \cite{jimenez2022multivariate}.
+
+
+\subsubsection{Forward Selection}
+
+Using these chosen methods, an importance ranking was assigned to the twenty-two features in the dataset. To determine the optimal subset of attributes, we employed a Forward Selection approach based on these ranked features \cite{dejean2020forward}. Specifically, a Random Forest algorithm configured with 100 estimators was trained iteratively. The process began by training the model using only the top-ranked feature. In each subsequent iteration, the next most important feature according to the ranking was added to the subset, and the model was retrained. This cumulative training process continued until all twenty-two features were included. This iterative methodology allows us to systematically monitor how each progressively added feature impacts the predictive performance, thereby identifying the most relevant feature combinations based on the resulting accuracy.
+
+To visualize this process and make informed decisions regarding the optimal feature sets, a performance curve was generated (see Section \ref{sec:results}). This graph maps the evolution of the model's accuracy as a function of the increasing number of features included in the training process. By analyzing this curve, it becomes possible to pinpoint the exact threshold where adding more features no longer yields significant performance gains or even introduces noise that degrades the model. This way, this visualization serves as the primary tool to select the most compact yet effective group of features, balancing high accuracy with reduced computational complexity.
+
+\subsection{Genetic Algorithm in Machine Learning techniques for parameter searching}
+
+To optimize the parameters for both the MLP, XGBoost and Random Forest models, GA was used again. The specifications imposed are the same as those used previously to find the Bollinger Bands hyperparameter (see Section \ref{sec:GA_BB}). Then, for each set of interesting features, from Section \ref{sec:FS_subsec}, we used it for GA training, so that for each set we would have its best parameters. To achieve better generalization and reduce the risk of overfitting, the function was divided into 40\% accuracy obtained from training with Stratified Cross Validation and 60\% accuracy from the test. Therefore, in the \eqref{eq:fitness} shows the fitness function used to find them.
+
+\begin{equation}
+\mathit{Fitness} = 0.4 \cdot \mathit{Acc_{train}} + 0.6 \cdot \mathit{Acc_{test}},
+\label{eq:fitness}
+\end{equation}
+
+Tables \ref{tab:mlp_params}, \ref{tab:rf_params} and \ref{tab:xgb_params} show the range in which each parameter was searched for the two models considered.
+
+\begin{table}
+\caption{MLP Hyperparameter Search Space.}
+\label{tab:mlp_params}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{95pt}|p{75pt}|p{55pt}|}
+\hline
+Parameter & Range / Options & Type \\
+\hline
+Hidden Layer Size & 10 -- 200 & Integer \\
+Activation Function & relu, tanh, logistic & Categorical \\
+Alpha (Regularization) & 0.0001 -- 0.1 & Float \\
+Learning Rate Init & 0.0001 -- 0.1 & Float \\
+Max Iterations & 100 -- 1000 & Integer \\
+\hline
+\end{tabular}
+\end{table}
+
+The hidden layer size is the number of neurons in the $i-th$ hidden layer. At the same time, activation would be the activation function that can be logistic (logistic sigmoid function), tanh (hyperbolic tangent function), or ReLU (linear function). Alpha is the regularization penalty, learning rate init is the initial learning rate, and max iter is the maximum number of iterations.
+
+\begin{table}
+\caption{Random Forest Hyperparameter Search Space.}
+\label{tab:rf_params}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{95pt}|p{65pt}|p{60pt}|}
+\hline
+Parameter & Range & Type \\
+\hline
+Number of Estimators & 10 -- 200 & Integer \\
+Max Depth & 1 -- 30 & Integer \\
+Max Features & 1 -- 5 & Integer \\
+Min Samples Leaf & 1 -- 20 & Integer \\
+Min Samples Split & 2 -- 20 & Integer \\
+\hline
+\end{tabular}
+\end{table}
+
+The $n$ estimators is the number of trees in the forest, max depth is the maximum depth of each tree, max features is the number of features to be considered for the best split, min samples leaf is the minimum number of instances in a leaf node, and min samples split is the number of samples needed to split a node.
+
+\begin{table}
+\caption{XGBoost Hyperparameter Search Space.}
+\label{tab:xgb_params}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{95pt}|p{65pt}|p{60pt}|}
+\hline
+Parameter & Range & Type \\
+\hline
+Number of Estimators & 100 -- 1200 & Integer \\
+Max Depth & 3 -- 10 & Integer \\
+Learning Rate & 0.005 -- 0.1 & Float \\
+Subsample & 0.4 -- 0.9 & Float \\
+Gamma & 0 -- 10.0 & Float \\
+Min Child Weight & 1 -- 40 & Integer \\
+\hline
+\end{tabular}
+\end{table}
+
+The number of estimators is the number of boosting stages to perform; maximum depth would be the complexity of the tree; learning rate. Subsample is data sampling; gamma is regularization of splits; and minimum child weight is used for overfitting control.
+
+With the optimal parameters for each algorithm, a model can be generated by applying cross-validation to each set of interesting features, where the data is subdivided into k subsets, thereby ensuring robust performance evaluation.
+To preserve the class distribution, the 9-fold stratified cross-validation was applied. Moreover, to visualize the results, a confusion matrix was generated for each set of features, both for training and testing. 
+
+\subsection{metricas para avaliação do modelo}
+
+Several evaluation metrics were employed, such as Precision, Recall, $F1-Score$, Balanced Accuracy, Directional Accuracy, and the Receiver Operating Characteristic - Area Under the Curve (ROC-AUC) metric. In addition to the Matthews Correlation Coefficient (MCC), which is a metric that can generate a score between [-1, 1], and only produces a high score if the prediction has good results in all four categories of the confusion matrix, this statistical metric becomes more reliable in binary classifications \cite{chicco2020advantages}. With these applications, we generated a classification model.
+
+\subsubsection{metrica estatistica}
+add falar metrica estatistica
+
+\subsubsection{metrica financeira modo que foi implementada}
+add falar metrica financeira
+
+add falar comparação entre todos os modelos, o que foi feito para comparar e pq de uma maneira geral.
+
+
+
+Techniques were adapted from the studies \cite{bandgar2025finchronos, simatupang2026stock, sekhar2025stock, yu2025multi, mittal2025machine, sukma2025enhancing, guo2025empirical, bareket2024adaptive, mutinda2026hybrid, vivek2025optimal, rahim2025technical, hung2024ai} (see Section \ref{sec:works}). These related approaches were essential for indicator selection, feature selection, and the machine learning and neural network techniques optimized by GA.
+
+\section{Results}
+\label{sec:results}
+In this Section, we present the results and insights of this research, which we dissect into two subsections. The first subsection presents what was obtained using GA on Bollinger Bands. The second subsection discusses the most relevant features from the resource selection methods, the cross-validation process, and the evaluation of machine learning techniques with parameters found using GA.
+
+\subsection{Performance of Bollinger Bands parameters}
+
+In this subsection, we present the results and insights from the GA, which was performed to identify the optimal parameters for Bollinger Bands in the data used. Its fitness calculation was done based on gains and losses; peaks and valleys outside the bands were considered gains, while candles outside the bands were considered penalties. With only peaks and valleys outside the bands, and the rest of the candles within them, it is possible to capture the asset's volatility.
+
+The following table shows the GA performance evaluation with the Bollinger Bands parameters adjusted, split between the training data (first three months) and the testing data (last three months). Performance is measured by the number of candles above or below the band, specifically the tops and bottoms.
+
+\begin{table} 
+\caption{Genetic Algorithm Optimization Results.}
+\label{tab:ga_results}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{35pt}|p{35pt}|p{40pt}|p{45pt}|p{25pt}|p{25pt}|}
+\hline
+Phase & Penalty & True Tops & True Bottoms & Total & Error \\
+\hline
+Training & 3314 & 121 & 127 & 249 & 0.004 \\
+Test & 3112 & 112 & 111 & 227 & 0.017 \\
+\hline
+\end{tabular}
+\end{table}
+
+The model’s behavior during training and testing is presented in Table~\ref{tab:ga_results}. Penalties correspond to candles that failed to remain within the bands and were therefore penalized. True tops and troughs refer to those correctly identified outside the bands, representing gains. Additionally, the table reports the total number of tops and troughs observed in each analyzed period. Finally, the errors column indicates the corresponding error rate.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\textwidth]{finalgraph.pdf}
+\caption{Mini Index WINJ24, April 16, 2024.}
+\label{fig5}
+\end{figure*}
+
+The traditional configuration for Bollinger Bands, as originally proposed by John Bollinger \cite{bollinger2001bollinger}, relies on a 20-period simple moving average and a standard deviation multiplier of 2.0. While Bollinger justified these default values as statistically robust for containing the vast majority of price action across general markets, they were primarily designed for daily or broader timeframes. They are not inherently optimized for the high-frequency microstructural noise and rapid volatility shifts characteristic of 5-minute intraday data. In our context, applying standard parameters to the WIN often results in bands that either lag significantly or encapsulate too much noise, masking critical short-term reversals. By employing the GA, the parameters dynamically adapt to the specific idiosyncrasies of this asset, yielding values that significantly outperform the default settings in isolating true market extrema.
+
+As illustrated in Fig. \ref{fig5}, the practical advantage of these GA-optimized parameters lies in the enhanced clarity of trend observation. The adjusted bands wrap the price action closely enough to filter out standard intraday noise, yet remain responsive enough to strictly expose the structural peaks (overbought conditions) and valleys (oversold conditions). This precise delineation is crucial for our overarching predictive objectives. Since the model aims to forecast clear buy (uptrend) and sell (downtrend), feeding it finely-tuned data improves the overall feature quality. Therefore, the predictive model can more accurately distinguish between momentary volatility spikes and genuine trend reversals, increasing the reliability of the trading signals.
+
+\subsection{Feature Selection Evaluation}
+
+In this study, several Feature Selection methods were used to select the most relevant attribute sets for evaluation with two Machine Learning techniques: Random Forest, XGBoost and MLP.
+
+%\subsubsection{feature selection --mudar nome}
+
+First, for the chosen feature selection methods, we determine the feature ordering by importance in each method. We can already understand the most relevant features from the lists. However, to better analyze them and determine which set of attributes may be interesting, a process will be carried out. This process consists of evaluating the accuracy of each possible feature set for each list. %Figure \ref{fig2} shows the evolution of accuracy for each feature set.
+
+\begin{figure*}[htbp]
+    \centering
+    
+    % --- PRIMEIRA LINHA ---
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{feature_selection/grafico_CFS_SubsetEval.pdf}
+        \vspace{0.1cm} % Pequeno espaço entre imagem e texto
+        \centerline{(a) CFS SubsetEval}
+        \label{fig:feat_cfs}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{feature_selection/grafico_melhor.pdf}
+        \vspace{0.1cm}
+        \centerline{(b) ClassifierAttributeEval}
+        \label{fig:feat_classifier}
+    \end{minipage}
+    
+    \vspace{0.4cm} % Espaço vertical entre as linhas
+    
+    % --- SEGUNDA LINHA ---
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{feature_selection/grafico_CorrelationAttributeEval.pdf}
+        \vspace{0.1cm}
+        \centerline{(c) CorrelationAttributeEval}
+        \label{fig:feat_correlation}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{feature_selection/grafico_PCA.pdf}
+        \vspace{0.1cm}
+        \centerline{(d) Principal Component Analysis (PCA)}
+        \label{fig:feat_pca}
+    \end{minipage}
+    
+    \vspace{0.4cm} % Espaço vertical entre as linhas
+    
+    % --- TERCEIRA LINHA ---
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{feature_selection/grafico_Information_Gain.pdf}
+        \vspace{0.1cm}
+        \centerline{(e) Information Gain}
+        \label{fig:feat_infogain}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{feature_selection/grafico_ReliefF.pdf}
+        \vspace{0.1cm}
+        \centerline{(f) ReliefF}
+        \label{fig:feat_relief}
+    \end{minipage}
+    
+    \caption{Validation accuracy evolution as a function of the number of features incorporated via Forward Selection for each evaluated method.}
+    \label{fig:all_feature_methods}
+\end{figure*}
+
+Fig. \ref{fig:all_feature_methods} illustrates the validation accuracy trajectory for each feature selection method as the subset dimensionality increases incrementally. A comparative analysis of these performance graphics reveals that the ClassifierAttributeEval method consistently demonstrates predictive capability across the spectrum of subset sizes. The absolute peak of the experiment is achieved when utilizing exactly eighteen features ranked by this method, marking the highest overall validation accuracy recorded among all evaluated combinations. Thus, this 18-feature configuration is established as the primary analytical benchmark, representing the maximum predictive capacity of the model when leveraging the broadest viable set of technical indicators before the inclusion of additional variables begins to degrade the system's performance.
+
+In parallel, the subset comprising the top eight features from the same ClassifierAttributeEval ranking warrants rigorous examination due to its exceptional performance-to-dimensionality ratio. As the learning trajectory demonstrates, this 8-feature configuration achieves a prominent local maximum, significantly outperforming all other selection methods at that specific threshold and maintaining its comparative dominance until the subset size expands past fourteen elements. Evaluating this more compact set is fundamentally relevant for high-frequency financial forecasting, as it represents an optimal equilibrium. It effectively isolates the most critical market trend signals while aggressively filtering out microstructural noise, thereby mitigating the risk of overfitting and reducing computational complexity without incurring a substantial loss in accuracy compared to the 18-feature global maximum.
+
+To better understand which features belong to each set analyzed and to observe the order of importance of these attributes, Table \ref{tab:feature_ranking} shows the ranking of the features of the methods observed as most interesting in the graph, paying close attention to the column for the ClassifierAttributeEval method, as this is the method that exhibited the most interesting feature sets.
+
+\begin{table}
+\caption{Top Ranked Features by Selection Methods.}
+\label{tab:feature_ranking}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{25pt}|p{65pt}|p{65pt}|p{65pt}|}
+\hline
+Rank & ClassifierAttributeEval & InformationGain & ReliefF    \\
+\hline
+1 & EMA\_3 & SMA\_3 & EMA\_3 \\
+2 & SMA\_3 & EMA\_3 & EMA\_5 \\
+3 & ADXR & EMA\_5 & SMA\_3 \\
+4 & Bollinger\_Norm & Bollinger\_Norm & EMA\_7 \\
+5 & EMA\_5 & SMA\_9 & EMA\_9 \\
+6 & SMA\_5 & std\_open3 & EMA\_11 \\
+7 & std\_close3 & ADXR & SMA\_5 \\
+8 & std\_open3 & SMA\_11 & SMA\_11 \\
+9 & std\_close5 & EMA\_11 & SMA\_9 \\
+10 & std\_open5 & SMA\_5 & SMA\_7 \\
+11 & std\_open7 & SMA\_7 & std\_close3 \\
+12 & SMA\_7 & std\_close9 & std\_open3 \\
+13 & std\_close7 & EMA\_7 & ADXR \\
+14 & SMA\_9 & std\_close5 & Bollinger\_Norm \\
+15 & std\_open9 & EMA\_9 & std\_close9 \\
+16 & std\_close11 & std\_open9 & std\_close11 \\
+17 & EMA\_11 & std\_close7 & std\_open5 \\
+18 & std\_close9 & std\_close3 & std\_close5 \\
+19 & std\_open11 & std\_open5 & std\_close7 \\
+20 & SMA\_11 & std\_open7 & std\_open9 \\
+21 & EMA\_7 & std\_open11 & std\_open7 \\
+22 & EMA\_9 & std\_close11 & std\_open11 \\
+\hline
+\end{tabular}
+\end{table}
+
+As detailed in Table \ref{tab:feature_ranking}, a cross-examination of the feature selection methods reveals a strong consensus regarding the predictive weight of short-term technical indicators. Across ClassifierAttributeEval, Information Gain, and ReliefF, the top-tier rankings are overwhelmingly dominated by moving averages with minimal lag, specifically the 3-period and 5-period Exponential and Simple Moving Averages ($EMA_3$, $SMA_3$, $EMA_5$). In the context of high-frequency 5-minute intraday trading, this pattern is highly logical, micro-trends and sudden volatility shifts require highly responsive metrics. Conversely, longer-term features such as the 9-period and 11-period standard deviations and moving averages consistently populate the lower echelons of the rankings. This suggests that for this specific asset and timeframe, extended historical windows introduce excessive latency, effectively smoothing out and diluting the immediate price action signals necessary for accurate short-term directional forecasting.
+
+Focusing specifically on the ClassifierAttributeEval method which ultimately yielded the optimal feature subsets for our predictive model, the hierarchy further underscores a balance between trend velocity and structural volatility. Beyond prioritizing the critical short-term moving averages, this method distinctly elevates the ADXR and the Bollinger Bands to its top four positions. The prominence of the Bollinger Bands feature is particularly noteworthy, as it directly validates the effectiveness of the preceding GA optimization. By supplying the model with dynamically calibrated, asset-specific volatility bands, the feature becomes a mathematically robust predictor of overbought and oversold conditions. While Information Gain and ReliefF also emphasize short-term responsiveness, ClassifierAttributeEval demonstrates a superior capacity to synergize these fast price-action signals with the contextual volatility provided by the optimized bands and ADXR, thereby explaining its superior performance in the forward selection process.
+
+%SEGUNDA PARTE
+
+%\subsubsection{machine learning parte --mudar noem}
+\subsection{ML - mudar nome}
+
+Using the selected sets, we can train a model with Random Forest, XGBoost and MLP. The techniques were tuned to find the optimal parameters for each feature set. GA was reconfigured to achieve the highest possible accuracy on the test data. In the end, the best parameters for each set are generated. From there, techniques such as Stratified Cross-Validation and confusion matrices were applied to visualize the model's predictions and get an idea of how the model distributed its predictions. The results for the sets of interesting features of eight and eighteen features can be seen in Fig. \ref{fig:todas_acc}. %completar a frase.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\columnwidth]{accuracies_chart.pdf}
+\caption{Cross-validation and accuracy testing in the Random Forest, XGBoost and MLP models.}
+\label{fig:todas_acc}
+\end{figure}
+
+The model with 18 features using Random Forest achieved a Cross-Validation accuracy of 66.64\% and a test accuracy of 62.97\%. The model with 8 features, also using Random Forest, achieved a Cross-Validation accuracy of 66.52\% and a test accuracy of 63.16\%. The XGBoost model with 18 features had a cross-validation accuracy of 68.93\% and a test accuracy of 62.99\%. The XGBoost model with 8 features had a cross-validation accuracy of 68.75\% and a test accuracy of 63.31\%. Using MLP, the set with 18 features had a Cross-Validation accuracy of 68.70\% and a test accuracy of 64.05\%, while the set with 8 features had a Cross-Validation accuracy of 68.04\% and a test accuracy of 64.08\%.
+
+Thus, the set with the highest accuracy after Feature Selection showed superior test accuracies in both Random Forest, XGBoost and MLP compared to the same technique with 18 features. Furthermore, the MLP models showed superiority over the Random Forest and XGBoost models.
+
+The results for the most interesting set of features, with eight features in the MLP model, in which the best performance was achieved among the models, will be presented in Tables \ref{tab:confusion_training} and \ref{tab:confusion_test}, as well as for the Random Forest and XGBoost models, where their matrices can be seen in the Tables \ref{tab:xgb_confusion_training}, \ref{tab:xgb_confusion_test}, \ref{tab:rf_confusion_training} and \ref{tab:rf_confusion_test}, along with their respective confusion matrices. In addition, other fundamental evaluation metrics are presented in Table \ref{tab:performance_test_all}, such as Precision, Recall, $F1-Score$, Balanced Accuracy, Directional Accuracy and MCC. The AUC-ROC curve will also be shown in Fig. \ref{fig10}, all for the 3 models with 8 features.
+
+\begin{table}[!ht]
+\caption{MLP Confusion Matrix (Training Set).}
+\label{tab:confusion_training}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{75pt}|p{70pt}|p{70pt}|}
+\hline
+\textbf{Actual Class} & \textbf{Predicted Downtrend} & \textbf{Predicted Uptrend} \\ 
+\hline
+\textbf{Real Downtrend} & 3269 & 1427 \\
+\textbf{Real Uptrend} & 1504 & 2971 \\ 
+\hline
+\end{tabular}
+\end{table}
+
+With an accuracy of 68.04\%, 3269 downtrends were predicted correctly, and 1427 downtrends were predicted incorrectly. 2971 uptrends were predicted correctly, and 1504 uptrends were predicted incorrectly.
+
+\begin{table}[!ht]
+\caption{MLP Confusion Matrix (Test Set).}
+\label{tab:confusion_test}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{75pt}|p{70pt}|p{70pt}|}
+\hline
+\textbf{Actual Class} & \textbf{Predicted Downtrend} & \textbf{Predicted Uptrend} \\ 
+\hline
+\textbf{Real Downtrend} & 2781 & 1477 \\
+\textbf{Real Uptrend} & 1507 & 2541 \\ 
+\hline
+\end{tabular}
+\end{table}
+
+With an accuracy of 64.08\%, 2781 correct and 1477 incorrect downtrends were predicted, while 2541 correct and 1507 incorrect uptrends were predicted.
+
+\begin{table}[!ht]
+\caption{XGBoost Confusion Matrix (Training Set).}
+\label{tab:xgb_confusion_training}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{75pt}|p{70pt}|p{70pt}|}
+\hline
+\textbf{Actual Class} & \textbf{Predicted Downtrend} & \textbf{Predicted Uptrend} \\ 
+\hline
+\textbf{Real Downtrend} & 3263 & 1433 \\
+\textbf{Real Uptrend} & 1433 & 3042 \\ 
+\hline
+\end{tabular}
+\end{table}
+
+The XGBoost model achieved a 68.75\% accuracy on the training set. It correctly identified 3263 downtrend and 3042 uptrend instances, while misclassifying exactly 1433 samples in both the downtrend and uptrend categories.
+
+\begin{table}[!ht]
+\caption{XGBoost Confusion Matrix (Test Set).}
+\label{tab:xgb_confusion_test}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{75pt}|p{70pt}|p{70pt}|}
+\hline
+\textbf{Actual Class} & \textbf{Predicted Downtrend} & \textbf{Predicted Uptrend} \\ 
+\hline
+\textbf{Real Downtrend} & 2723 & 1535 \\
+\textbf{Real Uptrend} & 1512 & 2536 \\ 
+\hline
+\end{tabular}
+\end{table}
+
+When evaluated on the unseen test data, the model's accuracy reached 63.31\%. The predictions yielded 2723 true downtrends alongside 1535 errors for this specific class. Regarding the uptrend category, the model made 2536 accurate predictions and 1512 mistakes.
+
+
+\begin{table}[!ht]
+\caption{Random Forest Confusion Matrix (Training Set).}
+\label{tab:rf_confusion_training}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{75pt}|p{70pt}|p{70pt}|}
+\hline
+\textbf{Actual Class} & \textbf{Predicted Downtrend} & \textbf{Predicted Uptrend} \\ 
+\hline
+\textbf{Real Downtrend} & 3199 & 1497 \\
+\textbf{Real Uptrend} & 1573 & 2902 \\ 
+\hline
+\end{tabular}
+\end{table}
+
+During the training phase, the Random Forest algorithm recorded an accuracy rate of 66.52\%. Breaking down the matrix, it successfully captured 3199 actual downtrends (with 1497 missed) and correctly labeled 2902 uptrends (against 1573 false predictions).
+
+\begin{table}[!ht]
+\caption{Random Forest Confusion Matrix (Test Set).}
+\label{tab:rf_confusion_test}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{75pt}|p{70pt}|p{70pt}|}
+\hline
+\textbf{Actual Class} & \textbf{Predicted Downtrend} & \textbf{Predicted Uptrend} \\ 
+\hline
+\textbf{Real Downtrend} & 2752 & 1506 \\
+\textbf{Real Uptrend} & 1554 & 2494 \\ 
+\hline
+\end{tabular}
+\end{table}
+
+The test set for Random Forest yielded an overall accuracy of 63.16\%. The classifier accurately spotted 2752 downtrends and 2494 uptrends, whereas it failed to correctly predict 1506 and 1554 cases for those respective classes.
+
+\begin{table}
+\centering
+\caption{Performance Metrics Comparison (Test Set)}
+\label{tab:performance_test_all}
+\renewcommand{\arraystretch}{1.2} % Melhora o espaçamento vertical entre as linhas
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Metric} & \textbf{XGBoost} & \textbf{Random Forest} & \textbf{MLP} \\
+\hline
+\multicolumn{4}{|c|}{\textbf{Overall Metrics}} \\
+\hline
+Directional Accuracy & 63.32\% & 63.16\% & 64.07\% \\
+Balanced Accuracy    & 63.30\% & 63.12\% & 64.04\% \\
+MCC & 0.2660 & 0.2625 & 0.2809 \\
+\hline
+\multicolumn{4}{|c|}{\textbf{Uptrend}} \\
+\hline
+Precision & 62.29\% & 62.35\% & 63.24\% \\
+Recall    & 62.65\% & 61.61\% & 62.77\% \\
+F1-Score  & 62.47\% & 61.98\% & 63.01\% \\
+FNR       & 37.35\% & 38.39\% & 37.23\% \\
+\hline
+\multicolumn{4}{|c|}{\textbf{Downtrend}} \\
+\hline
+Precision & 64.30\% & 63.91\% & 64.86\% \\
+Recall    & 63.95\% & 64.63\% & 65.31\% \\
+F1-Score  & 64.12\% & 64.27\% & 65.08\% \\
+FPR       & 36.05\% & 35.37\% & 34.69\% \\
+\hline
+\end{tabular}
+\end{table}
+
+The comparative performance of the XGBoost, Random Forest, and MLP models on the test set shows that, in terms of overall predictive capability, the MLP architecture demonstrated superior performance, achieving the highest directional accuracy (64.07\%) and balanced accuracy (64.04\%). In comparison, the ensemble methods showed slightly inferior results, with XGBoost and Random Forest registering directional accuracies of 63.32\% and 63.16\%, respectively. The MCC further confirms the robustness of the neural network; MLP obtained an MCC of 0.2809, indicating a stronger positive correlation in all four categories of the confusion matrix when compared to the reference models, which achieved scores of 0.2660 (XGBoost) and 0.2625 (Random Forest).
+
+When evaluating class-specific metrics, MLP maintained its consistency in both market directions. For uptrends, the model achieved an accuracy of 63.24\% and correctly identified 62.77\% of instances (recall), resulting in an F1 score of 63.01\%. In downtrends, it recorded an accuracy of 64.86\% and a recall of 65.31\%, generating an F1 score of 65.08\%. Although tree based models presented competitive metrics such as XGBoost's 62.65\% recall for uptrends and Random Forest's 64.63\% recall for downtrends they exhibited higher error rates. Specifically, MLP minimized both the false positive rate (34.69\%) and the false negative rate (37.23\%), proving to be more effective at filtering false signals than XGBoost and Random Forest.
+
+\begin{figure*}[!bt]
+\centering
+\includegraphics[width=\textwidth]{roc_curve.pdf}
+\caption{ROC-AUC curves.}
+\label{fig10}
+\end{figure*}
+
+ROC curves assess the relationship between sensitivity (True Positive Rate) and specificity (False Positive Rate) at different decision thresholds. The MLP model demonstrated the best overall discriminative performance, presenting the highest Area Under the Curve (AUC) of 0.6550, as represented by the solid blue curve, which consistently maintains higher True Positive Rate values relative to the False Positive Rate. In comparison, the Random Forest and XGBoost models achieved slightly lower AUC values of 0.6463 and 0.6446, respectively. For all three classifiers, the curves consistently remain above the dashed diagonal baseline, which represents chance, indicating that the models have effectively learned to differentiate between classes over the evaluated period.
+
+add metrica estatistica
+
+\subsection{Aplicar tecnica financeira}
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+This study presented a comprehensive and optimized framework for short-term financial market prediction, specifically addressing the high-frequency, noisy dynamics of 5-minute intraday data from the Mini Brazilian Futures Index. The core methodological contribution lies in the novel geometric calibration of Bollinger Bands via Genetic Algorithms (GA). Rather than relying on standard deviations, the GA optimization successfully bounded typical market noise while explicitly isolating critical price extremes (local maxima and minima) outside the bands. 
+
+By integrating this tailored indicator with a robust feature selection process over momentum and volatility metrics (SMAs, EMAs, ADXR, and standard deviation), the framework established a highly discriminative feature space. This ranking process proved crucial in mitigating dimensionality and redundant information, allowing models like Random Forest, XGBoost, and Multi-Layer Perceptron to capture complex price dynamics more effectively.
+
+The rigorous evaluation protocol, utilizing 9-fold stratified cross-validation across a comprehensive suite of metrics (including $F_1\text{-Score}$, MCC, and ROC-AUC), confirmed the model's robustness against the non-stationary nature of financial derivatives. While the application of evolutionary algorithms introduces a high computational cost and longer training times, the performance trade-off is distinctly favorable. The GA-driven hyperparameter tuning elevated the best model to a cross-validation accuracy of 68.04\% and a test accuracy of 64.08\%, outperforming the non-optimized baselines by absolute margins of 2.87\% and 2.53\%, respectively. These gains are statistically significant in the context of high-frequency quantitative trading, where minor edge improvements translate to substantial strategic advantages.
+
+Revisiting the comparative analysis established in the Section \ref{sec:works} (Table \ref{tab:related_works}), the proposed framework successfully bridges several critical gaps in the current literature. While most existing research relies on daily data, standard accuracy metrics, and restricts evolutionary optimization solely to model hyperparameters, our study advances the state-of-the-art by introducing a dual-optimization approach. By simultaneously engineering the mathematical boundaries of technical indicators (Bollinger Bands) and fine-tuning robust classifiers, combined with rigorous feature selection on 5-minute intraday data, this work establishes a holistic and highly adaptive predictive pipeline that overcomes the isolated approaches previously mapped in the literature.
+
+For future studies, expanding the optimized feature space by incorporating additional technical oscillators and volume-based metrics, such as the Moving Average Convergence Divergence (MACD), the Relative Strength Index (RSI), and On-Balance Volume (OBV), would be highly valuable. Integrating these momentum and liquidity dimensions into the evolutionary framework could further enhance the model's discriminative power, making the predictive architecture even more efficient for complex high-frequency trading environments.
+
+\section{acknowledgements}
+
+The authors would like to thank FAPERGS (24/2551-0001396-2, 23/2551-0000773-8), CNPq (307416/2025-9), FAPERGS/CNPq (23/2551-0000126-8)
+
+\bibliographystyle{IEEEtran}
+\bibliography{cite.bib}
+
+\EOD
+
+\end{document}
