@@ -87,8 +87,14 @@ Figure~\ref{fig:temporal_split} illustrates the sequential temporal partitioning
 
 \subsection{Multi-Model Search Spaces and Configuration Summary}\label{sec:search_spaces}
 
-We evaluate four machine learning backbone families: Multilayer Perceptron (MLP), Support Vector Machine (SVM), Random Forest (RF), and 1D Convolutional Neural Network (1D-CNN). Table~\ref{tab:search_space} details the hyperparameter search space boundaries for all four model families, mirroring Table 1 in Al Bannoud et al.\ \cite{al_bannoud2026accelerating}.
+We evaluate four machine learning backbone families: Multilayer Perceptron (MLP), Support Vector Machine (SVM), Random Forest (RF), and 1D Convolutional Neural Network (1D-CNN).
+\ifdefined\methodresultscompact
+The searched hyperparameters cover architecture size, learning rate, regularization, dropout, and batch size for neural models; regularization and kernel settings for SVM; and tree, depth, split, leaf, feature, and class-weight settings for RF.
+\else
+Table~\ref{tab:search_space} details the hyperparameter search space boundaries for all four model families, mirroring Table 1 in Al Bannoud et al.\ \cite{al_bannoud2026accelerating}.
+\fi
 
+\ifdefined\methodresultscompact\else
 \begin{table*}[htbp]
 \caption{Hyperparameter search space boundaries for optimization of machine learning and neural network trend classification models.}
 \label{tab:search_space}
@@ -130,6 +136,7 @@ Model Family & Hyperparameter & Domain Type & Search Boundaries / Range \\
 \botrule
 \end{tabularx}
 \end{table*}
+\fi
 
 Table~\ref{tab:config_options} summarizes the model configuration options explored within the benchmark framework, mirroring Table 2 in Al Bannoud et al.\ \cite{al_bannoud2026accelerating}.
 
@@ -177,8 +184,13 @@ Candidate fitness $f(\bm{\theta})$ is evaluated on $\mathcal{D}_{\text{val}}$ us
     f(\bm{\theta}) = 0.60 \times \operatorname{MCC}(\bm{\theta}) + 0.40 \times F_1(\bm{\theta}).
 \end{equation}
 
+\ifdefined\methodresultscompact
+The evaluation reports accuracy, $F_1$, MCC, AUC-ROC, AUC-PR, net return, Sharpe ratio, and maximum drawdown; MCC and $F_1$ jointly define the optimization objective.
+\else
 Table~\ref{tab:metrics_formulation} details the mathematical formulations for all quantitative accuracy, efficiency, and financial backtest metrics, mirroring Table 3 in Al Bannoud et al.\ \cite{al_bannoud2026accelerating}.
+\fi
 
+\ifdefined\methodresultscompact\else
 \begin{table*}[htbp]
 \caption{Quantitative metrics for assessing classification accuracy, ranking quality, and financial viability of neural models within the benchmark framework.}
 \label{tab:metrics_formulation}
@@ -200,3 +212,4 @@ Maximum Drawdown & MDD (\%) & $\max_{\tau \le t} \left( \frac{V_\tau - V_t}{V_\t
 \botrule
 \end{tabularx}
 \end{table*}
+\fi

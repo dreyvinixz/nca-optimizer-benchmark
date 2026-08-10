@@ -1,0 +1,39 @@
+% Standalone clean extract: Methods and Results only.
+% Anonymous manuscript for the NCA optimizer benchmark.
+\documentclass[sn-mathphys-num,Numbered]{sn-jnl}
+
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.75}
+
+% The source sections contain wide comparison tables.  In this standalone
+% extract, constrain each table to the printable width without altering the
+% full manuscript sources.
+\BeforeBeginEnvironment{tabularx}{\begin{adjustbox}{max width=\linewidth}}
+\AfterEndEnvironment{tabularx}{\end{adjustbox}}
+
+\begin{document}
+
+\title{Optimizer Benchmark for Neural Intraday Trend Classification: Methodology and Results}
+\maketitle
+
+% This extract intentionally includes only the requested study sections.
+\newcommand{\methodresultscompact}{}
+\input{sections/methodology}
+\input{sections/results}
+
+\bibliography{references}
+
+\end{document}

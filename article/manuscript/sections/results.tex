@@ -9,8 +9,13 @@ This section presents empirical benchmark results structured into two main analy
 
 \subsection{Comparative Performance Benchmarking of Neural Optimizers}\label{sec:res_benchmarking}
 
+\ifdefined\methodresultscompact
+Out-of-sample predictive performance is assessed across all five optimizers over $S = 20$ independent stochastic seeds on 3,012 test instances, with an equal cap of $N_{\text{eval}} = 1{,}500$ evaluations per seed. Metrics are reported as $\text{Mean} \pm \text{Std}$.
+\else
 Table~\ref{tab:predictive_results} presents out-of-sample predictive performance metrics across all five optimizers evaluated over $S = 20$ independent stochastic seeds on the 3,012 test instances of the B3 Mini-Index futures dataset ($N_{\text{eval}} = 1{,}500$ cap per seed). Metrics are reported as $\text{Mean} \pm \text{Std}$, with the top mean performance highlighted in boldface.
+\fi
 
+\ifdefined\methodresultscompact\else
 \begin{table*}[htbp]
 \caption{Out-of-sample predictive performance matrix on 5-minute B3 Mini-Index futures test set ($N_{\text{seeds}} = 20$, $N_{\text{eval}} = 1{,}500$). Metrics reported as $\text{Mean} \pm \text{Std}$. Best mean values highlighted in bold.}
 \label{tab:predictive_results}
@@ -29,16 +34,24 @@ Grey Wolf Optimizer (GWO) & $59.85 \pm 1.12$ & $0.591 \pm 0.015$ & $0.208 \pm 0.
 \botrule
 \end{tabularx}
 \end{table*}
+\fi
 
 Experimental results demonstrate that GA achieves the top out-of-sample MCC ($0.231 \pm 0.012$), $F_1$-score ($0.608 \pm 0.011$), and Accuracy ($61.45 \pm 0.92\%$), closely followed by DE ($\text{MCC} = 0.228 \pm 0.014$) and PSO ($\text{MCC} = 0.225 \pm 0.011$). All population-based metaheuristics significantly outperform the Random Search baseline ($\text{MCC} = 0.185 \pm 0.021$). Notably, PSO achieves the highest AUC-ROC ($0.661 \pm 0.009$) and AUC-PR ($0.655 \pm 0.010$), suggesting superior rank-order discrimination despite marginally lower MCC.
 
-Figure~\ref{fig:metrics_boxplots} illustrates out-of-sample performance distribution boxplots across the 20 stochastic seeds, providing visual confirmation of the distributional separation between optimizer families.
+Figure~\ref{fig:mcc_performance} reports the MCC comparison separately, the primary imbalance-robust performance measure. Figure~\ref{fig:accuracy_performance} presents the corresponding accuracy comparison, preserving the distinction between correlation-based and conventional classification performance.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.90\linewidth]{figures/metrics_boxplots.pdf}
-\caption{Out-of-sample performance distribution boxplots across 20 stochastic seeds for RS, GWO, PSO, DE, and GA. Left: Matthews Correlation Coefficient (MCC). Right: Predictive Accuracy (\%).}
-\label{fig:metrics_boxplots}
+\includegraphics[width=0.88\linewidth]{figures/mcc_performance.pdf}
+\caption{Out-of-sample MCC by optimizer. Points and horizontal intervals report the mean and standard deviation across the seeds reported in the benchmark summary. MCC is shown independently because it is the imbalance-robust primary performance measure.}
+\label{fig:mcc_performance}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\linewidth]{figures/accuracy_performance.pdf}
+\caption{Out-of-sample accuracy by optimizer. Points and horizontal intervals report the mean and standard deviation across the seeds reported in the benchmark summary. This conventional metric is presented separately from MCC to prevent conflation of the two criteria.}
+\label{fig:accuracy_performance}
 \end{figure}
 
 \subsection{Detailed Evaluation of the Best-Performing Optimizer}\label{sec:res_detailed}
@@ -62,8 +75,9 @@ Random Search recorded the fastest execution ($2.95 \pm 0.12\text{ s}$), as it i
 
 \subsubsection{Statistical Hypothesis Testing}
 
-Non-parametric hypothesis tests were conducted across the 20 stochastic seeds to assess statistical significance of performance differences. The Friedman omnibus test confirmed statistically significant performance differences across optimizers ($\chi^2 = 38.42$, $p = 9.2 \times 10^{-8}$). Post-hoc pairwise comparisons using the Wilcoxon signed-rank test with Holm-Bonferroni correction and Cohen's $d$ effect sizes are reported in Table~\ref{tab:pairwise_results}.
+Non-parametric hypothesis tests were conducted across the 20 stochastic seeds to assess statistical significance of performance differences. The Friedman omnibus test confirmed statistically significant performance differences across optimizers ($\chi^2 = 38.42$, $p = 9.2 \times 10^{-8}$). Post-hoc pairwise comparisons use the Wilcoxon signed-rank test with Holm-Bonferroni correction and Cohen's $d$ effect sizes.
 
+\ifdefined\methodresultscompact\else
 \begin{table*}[htbp]
 \caption{Post-hoc pairwise statistical test results (Wilcoxon signed-rank test with Holm-Bonferroni correction, $N_{\text{seeds}} = 20$). Effect sizes reported via Cohen's $d$.}
 \label{tab:pairwise_results}
@@ -87,8 +101,18 @@ DE vs GWO & MCC & +0.020 & \textbf{0.0285} & 0.667 & Significant (Medium effect)
 \botrule
 \end{tabularx}
 \end{table*}
+\fi
 
 All four population-based metaheuristics achieved statistically significant improvements over Random Search ($p < 0.05$), with GA, DE, and PSO exhibiting large effect sizes (Cohen's $d > 1.10$). Crucially, pairwise tests between the top three optimizers (GA, DE, PSO) yielded non-significant results ($p > 0.10$), confirming competitive parity under equal budget constraints.
+
+Figure~\ref{fig:statistical_evidence} visualizes the complete pairwise inferential evidence. Standardized effects are shown separately from Holm-adjusted significance levels; the upper block contrasts each metaheuristic with Random Search, while the lower block compares metaheuristics directly. This separation makes both effect magnitude and statistical support directly interpretable without conflating MCC with accuracy.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\linewidth]{figures/statistical_evidence_mcc.pdf}
+\caption{Complete statistical evidence for MCC pairwise comparisons. Left: Cohen's $d$ effect size; the dashed line denotes the conventional large-effect threshold. Right: $-\log_{10}$ Holm-adjusted $p$-values; the dashed line denotes $\alpha = 0.05$. The horizontal divider separates contrasts against Random Search from direct metaheuristic contrasts. The Friedman omnibus result is $\chi^2 = 38.42$, $p = 9.2 \times 10^{-8}$.}
+\label{fig:statistical_evidence}
+\end{figure}
 
 \subsubsection{Financial Risk Stratification and Trading Evaluation}
 
