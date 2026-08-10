@@ -1,0 +1,23 @@
+% Table 3: Quantitative metrics for assessing accuracy, efficiency, and financial viability
+% Extracted structure from Al Bannoud et al. (NCA 2026) Table 3
+
+\begin{table*}[htbp]
+\caption{Quantitative metrics for assessing accuracy, computational efficiency, and financial viability of neural models.}
+\label{tab:metrics_formulation}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}L l L@{}}
+\toprule
+Metric & Abbreviation & Mathematical Formula \\
+\midrule
+Accuracy & ACC & $\frac{TP + TN}{TP + TN + FP + FN}$ \\
+$F_1$-Score & $F_1$ & $\frac{2 \cdot TP}{2 \cdot TP + FP + FN}$ \\
+Matthews Correlation Coefficient & MCC & $\frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}$ \\
+Area Under ROC Curve & AUC-ROC & $\int_0^1 \operatorname{TPR}(t) \, d\operatorname{FPR}(t)$ \\
+Net Trading Return & Return (\%) & $\left( \prod_{k=1}^{N_{\text{trades}}} (1 + r_k - c_{\text{fee}}) - 1 \right) \times 100$ \\
+Sharpe Ratio & Sharpe & $\frac{\mathbb{E}[R_{\text{daily}} - R_f]}{\sigma_{\text{daily}}} \cdot \sqrt{252}$ \\
+Maximum Drawdown & MDD (\%) & $\max_{\tau \le t} \left( \frac{V_\tau - V_t}{V_\tau} \right) \times 100$ \\
+\botrule
+\end{tabularx}
+\end{table*}

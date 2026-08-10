@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  3 AUG 2026 16:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  3 AUG 2026 17:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -560,24 +560,24 @@ File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -648,7 +648,7 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 Package color Info: Driver file: pdftex.def on input line 149.
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx))
-Package hyperref Info: Link coloring ON on input line 35.
+Package hyperref Info: Link coloring ON on input line 36.
 (main.out) (main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
@@ -656,27 +656,27 @@ Package hyperref Info: Link coloring ON on input line 35.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 54.
+LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 51.
 
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 54.
+(Font)              size <5> substituted on input line 51.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.51686> not available
-(Font)              size <5> substituted on input line 54.
+(Font)              size <5> substituted on input line 51.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 54.
+(Font)              size <5> substituted on input line 51.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 54.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 51.
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 54.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 51.
 
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -684,18 +684,40 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 54.
+(Font)              size <5> substituted on input line 51.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.51686> not available
-(Font)              size <5> substituted on input line 54.
+(Font)              size <5> substituted on input line 51.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 54.
+(Font)              size <5> substituted on input line 51.
 
-(sections/introduction.tex
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 7.
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 51.
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.015> not available
+(Font)              size <5> substituted on input line 51.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.015> not available
+(Font)              size <5> substituted on input line 51.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.015> not available
+(Font)              size <5> substituted on input line 51.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.015> not available
+(Font)              size <5> substituted on input line 51.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.015> not available
+(Font)              size <5> substituted on input line 51.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.015> not available
+(Font)              size <5> substituted on input line 51.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -706,151 +728,282 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [1
 
 {C:/Users/User/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
+(sections/introduction.tex
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 6.
+
+
+
+Package natbib Warning: Citation `jarrow1981forward' on page 2 undefined on inp
+ut line 8.
+
+
+Package natbib Warning: Citation `heaton2017deep' on page 2 undefined on input 
+line 8.
+
+
+Package natbib Warning: Citation `box2015time' on page 2 undefined on input lin
+e 12.
+
+
+Package natbib Warning: Citation `jiang2021applications' on page 2 undefined on
+ input line 12.
+
+
+Package natbib Warning: Citation `ballings2015evaluating' on page 2 undefined o
+n input line 12.
+
+
+Package natbib Warning: Citation `nabipour2020predicting' on page 2 undefined o
+n input line 14.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2]
+
+Package natbib Warning: Citation `ecer2020training' on page 3 undefined on inpu
+t line 16.
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [2])
-(sections/methodology.tex
+ [3])
+(sections/literature_review.tex
+
+Package natbib Warning: Citation `heaton2017deep' on page 4 undefined on input 
+line 8.
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [3{C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-sup
+ [4{C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-sup
 er-ts1.enc}]
-<figures/methodology_overview.pdf, id=213, 638.59366pt x 269.5671pt>
+
+Package natbib Warning: Citation `ballings2015evaluating' on page 5 undefined o
+n input line 12.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5]
+
+Package natbib Warning: Citation `ballings2015evaluating' on page 6 undefined o
+n input line 55.
+
+
+Overfull \hbox (36.14735pt too wide) in paragraph at lines 55--55
+[]|\OT1/cmr/bx/n/9 MLP/SVM/RF/CNN, 
+ []
+
+
+LaTeX Warning: Float too large for page by 232.01457pt on input line 56.
+
+) (sections/methodology.tex
+<figures/methodology_overview.pdf, id=277, 638.59366pt x 269.5671pt>
 File: figures/methodology_overview.pdf Graphic file (type pdf)
 <use figures/methodology_overview.pdf>
-Package pdftex.def Info: figures/methodology_overview.pdf  used on input line 2
-9.
+Package pdftex.def Info: figures/methodology_overview.pdf  used on input line 1
+2.
 (pdftex.def)             Requested size: 334.79773pt x 141.33151pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4 <./figures/methodology_overview.pdf>]
-<figures/temporal_split.pdf, id=292, 581.61008pt x 182.25928pt>
-File: figures/temporal_split.pdf Graphic file (type pdf)
-<use figures/temporal_split.pdf>
-Package pdftex.def Info: figures/temporal_split.pdf  used on input line 47.
-(pdftex.def)             Requested size: 316.20227pt x 99.08876pt.
 
-
-LaTeX Warning: Float too large for page by 12.01457pt on input line 77.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 102--102
-[]|\OT1/cmr/m/n/9 Domain
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 102--102
-[]|\OT1/cmr/m/n/9 Search Bound-aries /
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 102--102
-[]|\OT1/cmr/m/n/9 Float
- []
-
-
-Underfull \hbox (badness 6412) in paragraph at lines 102--102
-[]|\OT1/cmr/m/n/9 Initial learn-ing rate for
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 102--102
-[]|\OT1/cmr/m/n/9 L2 Reg-u-lar-iza-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 102--102
-[]|\OT1/cmr/m/n/9 Float
- []
-
-
-Overfull \hbox (9.11682pt too wide) in alignment at lines 102--102
-[][][][][] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [5 <./figures/temporal_split.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [6]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7]
-Overfull \hbox (8.94078pt too wide) in paragraph at lines 191--191
-[]|$[]$| 
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [8 <./figures/methodology_overview.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [9]
+<figures/temporal_split.pdf, id=390, 581.61008pt x 182.25928pt>
+File: figures/temporal_split.pdf Graphic file (type pdf)
+<use figures/temporal_split.pdf>
+Package pdftex.def Info: figures/temporal_split.pdf  used on input line 83.
+(pdftex.def)             Requested size: 316.20227pt x 99.08876pt.
+
+(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/base\omscmr.fd)
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Domain
+ []
+
+
+Overfull \hbox (45.27592pt too wide) in paragraph at lines 131--131
+[]|[]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Hidden Neu-rons
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Float
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Float
+ []
+
+
+Overfull \hbox (55.40019pt too wide) in paragraph at lines 131--131
+[]|[]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Float
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Float
+ []
+
+
+Overfull \hbox (10.72203pt too wide) in paragraph at lines 131--131
+[]|[]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Number of Trees
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Maximum Depth
+ []
+
+
+Overfull \hbox (45.20653pt too wide) in paragraph at lines 131--131
+[]|[]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Float
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
+[]|\OT1/cmr/m/n/9 Float
+ []
+
+
+Overfull \hbox (3.1225pt too wide) in alignment at lines 131--131
+[][][][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8])
-(sections/results.tex
-Overfull \hbox (4.0046pt too wide) in paragraph at lines 31--31
+ [10 <./figures/temporal_split.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [11]
+Overfull \hbox (60.11526pt too wide) in paragraph at lines 201--201
+[]|$[]$| 
+ []
+
+
+Overfull \hbox (4.45836pt too wide) in paragraph at lines 201--201
+[]|$[][] []\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 r\OT1/cmr/m/n/9 ) \OML/cmm/m/it/9 d 
+[]\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 r\OT1/cmr/m/n/9 )$| 
+ []
+
+
+Overfull \hbox (25.88167pt too wide) in paragraph at lines 201--201
+[]|$[] \OMS/cmsy/m/n/9 ^^B 
+ []
+
+) (sections/results.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [12]
+Overfull \hbox (4.0046pt too wide) in paragraph at lines 30--30
  []|$[]$| 
  []
 
 
-Overfull \hbox (9.32953pt too wide) in paragraph at lines 31--31
+Overfull \hbox (9.32953pt too wide) in paragraph at lines 30--30
  []|$[]$| 
  []
 
 
-Overfull \hbox (9.32953pt too wide) in paragraph at lines 31--31
+Overfull \hbox (9.32953pt too wide) in paragraph at lines 30--30
  []|$[]$| 
  []
 
 
-Overfull \hbox (9.32953pt too wide) in paragraph at lines 31--31
+Overfull \hbox (9.32953pt too wide) in paragraph at lines 30--30
  []|$[]$| 
  []
 
 
-Overfull \hbox (9.32953pt too wide) in paragraph at lines 31--31
+Overfull \hbox (9.32953pt too wide) in paragraph at lines 30--30
  []|$[]$| 
  []
 
-<figures/convergence_curves.pdf, id=447, 536.57906pt x 298.18588pt>
+<figures/metrics_boxplots.pdf, id=492, 644.98405pt x 269.37259pt>
+File: figures/metrics_boxplots.pdf Graphic file (type pdf)
+<use figures/metrics_boxplots.pdf>
+Package pdftex.def Info: figures/metrics_boxplots.pdf  used on input line 39.
+(pdftex.def)             Requested size: 334.79773pt x 139.82793pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [13]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [14 <./figures/metrics_boxplots.pdf>]
+<figures/convergence_curves.pdf, id=560, 536.57906pt x 298.18588pt>
 File: figures/convergence_curves.pdf Graphic file (type pdf)
 <use figures/convergence_curves.pdf>
-Package pdftex.def Info: figures/convergence_curves.pdf  used on input line 42.
+Package pdftex.def Info: figures/convergence_curves.pdf  used on input line 54.
 
 (pdftex.def)             Requested size: 316.20227pt x 175.72339pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [9]
+ [15 <./figures/convergence_curves.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10 <./figures/convergence_curves.pdf>]
-<figures/metrics_boxplots.pdf, id=542, 644.98405pt x 269.37259pt>
-File: figures/metrics_boxplots.pdf Graphic file (type pdf)
-<use figures/metrics_boxplots.pdf>
-Package pdftex.def Info: figures/metrics_boxplots.pdf  used on input line 78.
-(pdftex.def)             Requested size: 334.79773pt x 139.82793pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11]
-<figures/financial_equity_curves.pdf, id=550, 608.8352pt x 283.69048pt>
+ [16]
+<figures/financial_equity_curves.pdf, id=654, 608.8352pt x 283.69048pt>
 File: figures/financial_equity_curves.pdf Graphic file (type pdf)
 <use figures/financial_equity_curves.pdf>
 Package pdftex.def Info: figures/financial_equity_curves.pdf  used on input lin
-e 113.
+e 123.
 (pdftex.def)             Requested size: 334.79773pt x 156.00426pt.
-)
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [17])
 (sections/discussion.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [12 <./figures/metrics_boxplots.pdf> <./figures/financial_equity_curves.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [13]
-Underfull \hbox (badness 1484) in paragraph at lines 17--18
+ [18 <./figures/financial_equity_curves.pdf>]
+Underfull \hbox (badness 1484) in paragraph at lines 16--17
 \OT1/cmr/m/n/10 tic recom-bi-na-tion oper-a-tors (two-point crossover in GA and
  vec-tor muta-tion
  []
@@ -858,33 +1011,40 @@ Underfull \hbox (badness 1484) in paragraph at lines 17--18
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [14])
-(sections/conclusion.tex)
+ [19]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [15]
-(sections/declarations.tex
-
-Package hyperref Warning: Difference (3) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 6.
-
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 9.
-
-) (main.bbl
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [16]
+ [20])
+(sections/conclusion.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [17])
+ [21])
+(sections/declarations.tex) (main.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [18]
+ [22]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [23]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [24])
+
+Package natbib Warning: There were undefined citations.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [25]
 (main.aux)
  ***********
 LaTeX2e <2025-11-01>
@@ -893,86 +1053,54 @@ L3 programming layer <2026-03-20>
 
 
 LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 0.48314pt have occurred.
+(Font)              up to 0.985pt have occurred.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: 3566F49AE4187777326D92561FAF83F1;8446
-(rerunfilecheck)             After:  1CCE09D629D09D74739B6E72EA2B707F;8446.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 723A4C99BF7112B67FD4E9CD0520D061;6735.
  ) 
 Here is how much of TeX's memory you used:
- 14239 strings out of 467691
- 227326 string characters out of 5415471
- 663185 words of memory out of 5000000
- 42926 multiletter control sequences out of 15000+600000
- 642955 words of font info for 98 fonts, out of 8000000 for 9000
+ 14318 strings out of 467691
+ 228810 string characters out of 5415471
+ 663043 words of memory out of 5000000
+ 42980 multiletter control sequences out of 15000+600000
+ 645912 words of font info for 111 fonts, out of 8000000 for 9000
  1151 hyphenation exceptions out of 8191
- 90i,17n,131p,1744b,639s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{figure.caption.15} has been referenced but does not
- exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.14} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.9} has been referenced but does not e
-xist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.5} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.4} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section*.20} has been referenced but does not exist
-, replaced by a fixed one
-
-<C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmb
-x10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
-s/cm/cmbx12.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/amsfonts/cm/cmbx7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><C:/Users/User/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/User/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmex9.pfb><C:/Users/Us
-er/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/
-Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.p
-fb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmmi7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmmi9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/amsfonts/cm/cmmib10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmr10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/f
-onts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/User/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/User/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/User/AppData/Loca
-l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/User/AppDat
-a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/User/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users
-/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
-C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy
-7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
-cm/cmsy9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/am
-sfonts/cm/cmti10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmtt10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/User/AppData/Local/Programs
-/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Users/User/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on main.pdf (18 pages, 723124 bytes).
+ 90i,17n,131p,2091b,657s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
+mbx10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmbx12.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmbx7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/User/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmex9.pfb><C:/Users/User/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Us
+er/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/U
+sers/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pf
+b><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
+mmi9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmmib10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmr10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmr17.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/User/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/User/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/User/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/User/AppData/
+Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/User/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users
+/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C
+:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8
+.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmsy9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmti10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/pu
+blic/amsfonts/cm/cmtt10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/amsfonts/cm/cmtt9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/User/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Users/User/AppD
+ata/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on main.pdf (25 pages, 764946 bytes).
 PDF statistics:
- 905 PDF objects out of 1000 (max. 8388607)
- 118 named destinations out of 1000 (max. 500000)
- 298 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 975 PDF objects out of 1000 (max. 8388607)
+ 132 named destinations out of 1000 (max. 500000)
+ 234 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,0 +1,44 @@
+% Table 1: Hyperparameter search spaces for optimization of ML and Neural models (MLP, SVM, RF, CNN)
+% Mirror: Al Bannoud et al. (NCA 2026) Table 1
+
+\begin{table*}[htbp]
+\caption{Hyperparameter search space boundaries for optimization of machine learning and neural network trend classification models.}
+\label{tab:search_space}
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}p{0.18\linewidth} p{0.22\linewidth} p{0.14\linewidth} p{0.42\linewidth}@{}}
+\toprule
+Model Family & Hyperparameters & Domain Type & Search Boundaries / Range \\
+\midrule
+\multirow{5}{*}{Multilayer Perceptron (MLP)} 
+  & Hidden Neurons ($n_{\text{hidden}}$) & Integer & $[5, 500]$ \\
+  & Learning Rate ($lr$) & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ \\
+  & L2 Regularization ($\alpha$) & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ \\
+  & Dropout Rate ($p_{\text{drop}}$) & Float & $[0.00, 0.10]$ \\
+  & Batch Size ($B$) & Categorical & $\{16, 32, 64, 80, 112, 128\}$ \\
+\midrule
+\multirow{3}{*}{Support Vector Machine (SVM)} 
+  & Regularization ($C$) & Float (Log10) & $[1.0 \times 10^{-3}, 1.0 \times 10^{3}]$ \\
+  & Kernel Coefficient ($\gamma$) & Float (Log10) & $[1.0 \times 10^{-5}, 1.0 \times 10^{1}]$ \\
+  & Kernel Function & Categorical & \{\texttt{linear}, \texttt{rbf}\} \\
+\midrule
+\multirow{6}{*}{Random Forest (RF)} 
+  & Number of Trees ($n_{\text{tree}}$) & Integer & $[50, 500]$ \\
+  & Maximum Depth ($d_{\text{max}}$) & Integer & $[5, 50]$ \\
+  & Min Samples Split & Integer & $[2, 20]$ \\
+  & Min Samples Leaf & Integer & $[1, 20]$ \\
+  & Max Feature Selection & Categorical & \{\texttt{sqrt}, \texttt{log2}, \texttt{None}\} \\
+  & Class Weight Balance & Categorical & \{\texttt{None}, \texttt{balanced}\} \\
+\midrule
+\multirow{7}{*}{Convolutional Neural Net (1D-CNN)} 
+  & Conv Filters ($n_{\text{filters}}$) & Integer & $[8, 128]$ \\
+  & Kernel Size & Integer & $[2, 5]$ \\
+  & Dense Neurons & Integer & $[16, 256]$ \\
+  & Learning Rate ($lr$) & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ \\
+  & L2 Regularization ($\alpha$) & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ \\
+  & Dropout Rate ($p_{\text{drop}}$) & Float & $[0.00, 0.10]$ \\
+  & Batch Size ($B$) & Categorical & $\{16, 32, 64, 80, 112, 128\}$ \\
+\botrule
+\end{tabularx}
+\end{table*}

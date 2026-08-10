@@ -1,0 +1,27 @@
+% Table 4: Systematic comparison of representative literature in optimizer-driven financial forecasting
+% Extracted structure from Al Bannoud et al. (NCA 2026) Table 4
+
+\begin{table*}[htbp]
+\caption{Systematic comparison of representative literature in optimizer-driven financial forecasting and unmet methodological limitations.}
+\label{tab:literature_gap}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}L L L L L@{}}
+\toprule
+Study & Model \& Domain & Optimization Paradigm & Validation Protocol & Unmet Limitations / Research Gap \\
+\midrule
+Billah et al. (2024) \cite{billah2024nca_moving_average} & Trend forecasting, Intraday & Moving average heuristics & Standard split & Absence of automated hyperparameter tuning. \\
+Bareket \& P{\^a}rv (2024) \cite{bareket2024adaptive} & Market surge, Equities & Adaptive ML classifiers & Medium-term split & Evaluation restricted to static indicator sets. \\
+Bandgar et al. (2025) \cite{bandgar2025finchronos} & Time series, Financial & Multi-model ensembles & Random split & Absence of candidate evaluation budget cap. \\
+Rahim et al. (2025) \cite{rahim2025technical} & Intraday futures, 5-min & Single GA optimization & Train/Test split & Evaluated single metaheuristic without baselines. \\
+Dhingra et al. (2025) \cite{dhingra2025solar} & Neural forecasting, Time series & Single metaheuristic & Sequential split & Unequal evaluation budget across baselines. \\
+Mutinda \& Yong (2026) \cite{mutinda2026hybrid} & Financial classification & SEDT Feature selection & K-fold CV & Feature selection without classifier budget tuning. \\
+Simatupang et al. (2026) \cite{simatupang2026stock} & Stock index prediction & Bayesian Random Forest & Random K-fold CV & Randomized CV (Temporal data leakage risk). \\
+Al Bannoud et al. (2026) \cite{al_bannoud2026accelerating} & ANN--ODE Surrogate, Clinical & GWO, PSO, GA, ABC & Multi-partition CV & Non-financial domain; unconstrained evaluation budget. \\
+Bashir et al. (2026) \cite{bashir2026evobagnet} & Stock price, NSE Equities & (1+1) Evolutionary Algo & Train/Test split & Evaluated single EA without multi-swarm benchmark. \\
+Souza et al. (2025) \cite{souza2025iccsa} & MLP classifier, B3 Futures & InfoGain + Random Search & Sequential split & Lack of multi-metaheuristic benchmark comparison. \\
+\textbf{Present Work} & \textbf{MLP, B3 Futures (WIN)} & \textbf{RS, GA, PSO, DE, GWO} & \textbf{Strict 60/20/20 Sequential} & \textbf{Controlled equal budget ($N_{\text{eval}}=1,500$), leakage-free.} \\
+\botrule
+\end{tabularx}
+\end{table*}

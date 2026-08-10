@@ -1,0 +1,22 @@
+% Table 2: Summary of model configuration options explored for hybrid framework optimization
+% Extracted structure from Al Bannoud et al. (NCA 2026) Table 2
+
+\begin{table*}[htbp]
+\caption{Summary of model configuration options explored for neural optimization framework benchmarking.}
+\label{tab:config_options}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}L L L@{}}
+\toprule
+Component & Exploratory Range / Setting & Functional Role \\
+\midrule
+Feature Selector & Information Gain ($d=7$) & Dimensionality reduction \\
+Neural Backbone & Single-layer MLP & Universal function approximation \\
+Loss Function & Binary Cross-Entropy & Backpropagation loss \\
+Optimizer Engines & RS, GA, PSO, DE, GWO & Global hyperparameter search \\
+Budget Cap & $N_{\text{eval}} = 1,500$ evaluations & Equal computational budget \\
+Objective Function & $0.60\operatorname{MCC} + 0.40F_1$ & Class-imbalance robust fitness \\
+\botrule
+\end{tabularx}
+\end{table*}

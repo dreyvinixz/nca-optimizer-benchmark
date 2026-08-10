@@ -1,39 +1,47 @@
 % ============================================================
 % Section 4: Discussion
-% Target Journal: Neural Computing and Applications (Springer Nature)
-% 100% Exact Structural Mirror of Al Bannoud et al. (NCA 2026)
+% Mirror: Al Bannoud et al. (NCA 2026) Section 4 (4.1–4.4)
 % ============================================================
 
 \section{Discussion}\label{sec:discussion}
 
-This section interprets the empirical benchmark findings, contextualizing the search mechanics of evolutionary versus swarm intelligence optimizers, evaluating scalability, and examining local trapping risks, following the structure of Section 4 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
+This section interprets the empirical benchmark findings, contextualizing the search mechanics of evolutionary versus swarm intelligence optimizers, evaluating scalability implications, examining local trapping risks, and delineating methodological boundaries, following the structure of Section~4 in Al Bannoud et al.\ \cite{al_bannoud2026accelerating}.
 
 \subsection{Mechanistic Interpretation and Financial Trade-offs}\label{sec:disc_interpretation}
 
 The benchmark results demonstrate distinct performance behaviors between evolutionary algorithms (GA and DE) and swarm intelligence algorithms (PSO and GWO) operating over the non-convex 6D MLP search space $\bm{\theta} \in \mathbb{R}^6$.
 
-As observed in recent surrogate benchmarks \cite{al_bannoud2026accelerating}, swarm algorithms such as PSO and GWO exhibit rapid initial convergence ($t \le 300$). This rapid exploitation is driven by global attraction operators ($\bm{g}$ in PSO and the $\bm{\alpha}, \bm{\beta}, \bm{\delta}$ triad in GWO), which pull the swarm toward the current global best candidate. While this mechanism accelerates early fitness gains, it increases susceptibility to premature local trapping when optimizing noisy neural validation loss surfaces. GWO, in particular, plateaued at a lower mean MCC ($0.208 \pm 0.016$), as its shrinking vector $a: 2 \to 0$ aggressively forces exploitation before full exploration of alternative basins.
+As observed in recent surrogate benchmarks \cite{al_bannoud2026accelerating}, swarm algorithms such as PSO and GWO exhibit rapid initial convergence ($t \le 300$). This rapid exploitation is driven by global attraction operators ($\bm{g}$ in PSO and the $\bm{\alpha}, \bm{\beta}, \bm{\delta}$ triad in GWO), which pull the swarm toward the current global best candidate. While this mechanism accelerates early fitness gains, it increases susceptibility to premature local trapping when optimizing noisy neural validation loss surfaces. GWO, in particular, plateaued at a lower mean MCC ($0.208 \pm 0.016$), as its shrinking coefficient $a: 2 \to 0$ aggressively forces exploitation before full exploration of alternative basins.
 
-In contrast, evolutionary computation paradigms (GA and DE) rely on stochastic recombination operators (two-point crossover in GA and vector mutation `DE/best/1/bin` in DE). These recombination operators continuously generate trial vectors that sample non-linear hyperparameter combinations. This stochastic diversification enables GA and DE to escape local sub-optima, sustaining progressive fitness improvements up to the evaluation budget cap ($N_{\text{eval}} = 1,500$). This finding confirms that evolutionary mutation-recombination mechanisms preserve population diversity across non-stationary financial landscapes \cite{bashir2026evobagnet}.
+In contrast, evolutionary computation paradigms (GA and DE) rely on stochastic recombination operators (two-point crossover in GA and vector mutation \texttt{DE/best/1/bin} in DE). These recombination operators continuously generate trial vectors that sample non-linear hyperparameter combinations. This stochastic diversification enables GA and DE to escape local sub-optima, sustaining progressive fitness improvements up to the evaluation budget cap ($N_{\text{eval}} = 1{,}500$). This finding confirms that evolutionary mutation-recombination mechanisms preserve population diversity across non-stationary financial landscapes \cite{bashir2026evobagnet}.
 
-\subsection{Scalability to Complex Parameter Spaces}\label{sec:disc_scalability}
+From a financial perspective, the mechanistic differences between optimizer families manifest in distinct trading characteristics. GA-tuned models exhibited lower trade frequency (340 vs. 368 for GWO) and higher Profit Factor (1.48 vs. 1.25 for GWO), suggesting that evolutionary optimizers implicitly learn to avoid overtrading during choppy market consolidation periods. This behavior arises because the compound MCC-driven fitness function penalizes false positive buy signals, effectively imposing an implicit signal quality filter during the hyperparameter search.
 
-A core contribution of this work is empirical validation of the \textit{Budget Inequality Hypothesis}. In unconstrained literature surveys \cite{dhingra2025solar, rajwar2023exhaustive_review}, performance claims favoring specific metaheuristics often stem from unequal evaluation counts. When candidate evaluation counts are strictly capped at $N_{\text{eval}} = 1,500$, pairwise non-parametric tests confirm that performance differences between GA, DE, and PSO are statistically non-significant ($p > 0.10$).
+\subsection{Scalability and the Budget Inequality Hypothesis}\label{sec:disc_scalability}
 
-This null finding carries profound methodological implications: under equal computational budgets, the performance cap of top-tier metaheuristics is primarily governed by the informativeness of the objective function ($0.60\text{MCC} + 0.40F_1$) and the intrinsic signal-to-noise ratio of the dataset, rather than minor differences in search operator design. Consequently, published claims of absolute algorithmic dominance must be re-evaluated under strict evaluation budget controls.
+A core contribution of this work is empirical validation of the \textit{Budget Inequality Hypothesis}. In unconstrained literature surveys \cite{dhingra2025solar, rajwar2023exhaustive_review}, performance claims favoring specific metaheuristics often stem from unequal evaluation counts. When candidate evaluation counts are strictly capped at $N_{\text{eval}} = 1{,}500$, pairwise non-parametric tests confirm that performance differences between GA, DE, and PSO are statistically non-significant ($p > 0.10$, Cohen's $d < 0.30$).
 
-\subsection{Local Trapping Risks in Metaheuristic Algorithms}\label{sec:disc_trapping}
+This null finding carries profound methodological implications: under equal computational budgets, the performance ceiling of top-tier metaheuristics is primarily governed by the informativeness of the objective function ($0.60\text{MCC} + 0.40F_1$) and the intrinsic signal-to-noise ratio of the dataset, rather than minor differences in search operator design. Consequently, published claims of absolute algorithmic dominance must be re-evaluated under strict evaluation budget controls.
+
+The practical implication for financial practitioners is that the choice between GA, DE, and PSO can be guided by secondary criteria---such as implementation simplicity, parallelizability, or convergence speed---rather than expected terminal fitness. PSO, for instance, offers the fastest convergence (median 680 evaluations to 90\% fitness), making it attractive for real-time retraining scenarios with tight computational windows. GA and DE, while slower to converge, provide marginally higher terminal fitness and superior financial backtesting performance.
+
+\subsection{Local Trapping Risks and Fee Sensitivity}\label{sec:disc_trapping}
 
 Evaluating neural classifiers strictly through out-of-sample financial backtesting highlights the critical necessity of economic evaluation. Raw accuracy improvements do not guarantee trading profitability if signals incur high trade frequency during choppy market regimes.
 
 The GA-tuned MLP achieved an out-of-sample Net Return of $+18.4\%$ and a Sharpe ratio of $1.42$ under standard exchange fees ($0.01\%$). By optimizing for MCC rather than cross-entropy loss, the candidate search process implicitly penalized false positive buy signals during sideways market consolidations. When exchange fees were increased to high-friction levels ($0.02\%$), net profitability remained positive ($+12.0\%$), demonstrating robustness against transaction cost drag.
+
+In contrast, GWO's tendency toward premature convergence resulted in neural configurations that generated more frequent but lower-quality signals (368 trades vs. 340 for GA), eroding returns through increased fee exposure. This observation aligns with findings by Al Bannoud et al.\ \cite{al_bannoud2026accelerating}, who reported that GWO's rapid convergence to the $\alpha$-wolf solution can sacrifice exploration diversity in favor of premature exploitation.
 
 \subsection{Methodological Boundaries and Future Outlook}\label{sec:disc_outlook}
 
 Several threats to validity and methodological boundaries must be acknowledged:
 
 \begin{enumerate}
-    \item \textbf{Construct Validity}: While the 6D MLP search space captures key structural and regularization parameters, additional neural hyperparameter dimensions (such as activation function choices, learning rate decay schedules, and optimizer momentum coefficients) were fixed to maintain a tractable benchmark.
-    \item \textbf{Internal Validity}: The optimizer budget cap was fixed at $N_{\text{eval}} = 1,500$ evaluations per seed. While $N_{\text{eval}} = 1,500$ reflects realistic computational bounds for intraday retrain cycles, expanding budgets to $N_{\text{eval}} = 5,000$ could reveal asymptotic convergence behavior in high-dimensional settings.
+    \item \textbf{Construct Validity}: While the 6D MLP search space captures key structural and regularization parameters, additional neural hyperparameter dimensions (such as activation function choices, learning rate decay schedules, and optimizer momentum coefficients) were fixed to maintain a tractable benchmark. Extending the search space to $\geq 10$ dimensions may reveal additional performance stratification among optimizers.
+    \item \textbf{Internal Validity}: The optimizer budget cap was fixed at $N_{\text{eval}} = 1{,}500$ evaluations per seed. While this reflects realistic computational bounds for intraday retrain cycles, expanding budgets to $N_{\text{eval}} \in \{5{,}000, 10{,}000\}$ could reveal asymptotic convergence behavior and differentiate algorithms that benefit from extended exploration.
     \item \textbf{External Validity}: Empirical evaluation focused on B3 Mini-Index futures (WIN). While WIN futures represent a highly liquid Latin American derivative asset, evaluating cross-asset generalizability across foreign exchange (Forex), commodity futures, and global stock indices remains an important avenue for future research.
+    \item \textbf{Temporal Scope}: The dataset covers four bimonthly contracts (February--August 2024). Extending the evaluation to multi-year periods encompassing diverse market regimes (bull, bear, and sideways consolidation) would strengthen claims of robustness.
 \end{enumerate}
+
+Future research directions will extend this benchmark framework in three key dimensions: first, incorporating deep surrogate architectures and Transformer-based attention mechanisms for multi-step intraday forecasting \cite{al_bannoud2026accelerating}; second, exploring multi-objective evolutionary algorithms (MOEAs) to co-optimize predictive MCC and computational execution latency simultaneously; and third, evaluating cross-asset generalizability across international futures derivatives and high-frequency equity markets \cite{bashir2026evobagnet}.

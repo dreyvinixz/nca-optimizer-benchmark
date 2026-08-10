@@ -22,49 +22,57 @@ Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Database file #1: references.bib
+Warning--I didn't find a database entry for "jarrow1981forward"
+Warning--I didn't find a database entry for "heaton2017deep"
+Warning--I didn't find a database entry for "box2015time"
+Warning--I didn't find a database entry for "jiang2021applications"
+Warning--I didn't find a database entry for "ballings2015evaluating"
+Warning--I didn't find a database entry for "nabipour2020predicting"
+Warning--I didn't find a database entry for "ecer2020training"
 Reallocating 'wiz_functions' (item size: 4) to 9000 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
-You've used 21 entries,
+You've used 27 entries,
             7480 wiz_defined-function locations,
-            1308 strings with 14511 characters,
-and the built_in function-call counts, 229430 in all, are:
-= -- 39624
-> -- 809
-< -- 344
-+ -- 21916
-- -- 249
-* -- 7679
-:= -- 41021
-add.period$ -- 24
-call.type$ -- 21
-change.case$ -- 138
-chr.to.int$ -- 921
-cite$ -- 21
-duplicate$ -- 1047
-empty$ -- 5529
-format.name$ -- 613
-if$ -- 57730
+            1350 strings with 15493 characters,
+and the built_in function-call counts, 247548 in all, are:
+= -- 41929
+> -- 1023
+< -- 473
++ -- 22495
+- -- 285
+* -- 8664
+:= -- 44546
+add.period$ -- 30
+call.type$ -- 27
+change.case$ -- 174
+chr.to.int$ -- 1263
+cite$ -- 27
+duplicate$ -- 1335
+empty$ -- 6485
+format.name$ -- 731
+if$ -- 62180
 int.to.chr$ -- 1
-int.to.str$ -- 39
+int.to.str$ -- 51
 missing$ -- 0
-newline$ -- 363
-num.names$ -- 105
-pop$ -- 541
+newline$ -- 441
+num.names$ -- 135
+pop$ -- 645
 preamble$ -- 1
-purify$ -- 101
+purify$ -- 131
 quote$ -- 0
-skip$ -- 23780
+skip$ -- 25243
 stack$ -- 0
-substring$ -- 23882
-swap$ -- 597
-text.length$ -- 280
+substring$ -- 25504
+swap$ -- 777
+text.length$ -- 351
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 888
+type$ -- 1158
 warning$ -- 0
-while$ -- 679
+while$ -- 842
 width$ -- 0
-write$ -- 487
+write$ -- 601
+(There were 7 warnings)

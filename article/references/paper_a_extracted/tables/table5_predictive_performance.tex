@@ -1,0 +1,21 @@
+% Table 5: Out-of-sample predictive performance matrix across all optimizers
+% Extracted structure from Al Bannoud et al. (NCA 2026) Table 12
+
+\begin{table*}[htbp]
+\caption{Out-of-sample predictive performance matrix on 5-minute B3 Mini-Index futures test set ($N_{\text{seeds}} = 20, N_{\text{eval}} = 1,500$). Metrics reported as $\text{Mean} \pm \text{Std}$. Best mean values highlighted in bold.}
+\label{tab:predictive_results}
+\centering
+\small
+\setlength{\tabcolsep}{2pt}
+\begin{tabularx}{\textwidth}{@{}L C C C C C C@{}}
+\toprule
+Optimizer Family & Accuracy (\%) & $F_1$-Score & MCC & AUC-ROC & AUC-PR & Runtime (s) \\
+\midrule
+Random Search (Baseline) & $58.12 \pm 1.45$ & $0.574 \pm 0.018$ & $0.185 \pm 0.021$ & $0.612 \pm 0.015$ & $0.608 \pm 0.016$ & $\mathbf{2.95 \pm 0.12}$ \\
+Genetic Algorithm (GA) & $\mathbf{61.45 \pm 0.92}$ & $\mathbf{0.608 \pm 0.011}$ & $\mathbf{0.231 \pm 0.012}$ & $0.658 \pm 0.011$ & $0.651 \pm 0.012$ & $3.48 \pm 0.15$ \\
+Particle Swarm Optimization (PSO) & $60.98 \pm 0.88$ & $0.602 \pm 0.010$ & $0.225 \pm 0.011$ & $\mathbf{0.661 \pm 0.009}$ & $\mathbf{0.655 \pm 0.010}$ & $3.35 \pm 0.14$ \\
+Differential Evolution (DE) & $61.20 \pm 0.95$ & $0.605 \pm 0.012$ & $0.228 \pm 0.014$ & $0.655 \pm 0.012$ & $0.648 \pm 0.013$ & $3.52 \pm 0.16$ \\
+Grey Wolf Optimizer (GWO) & $59.85 \pm 1.12$ & $0.591 \pm 0.015$ & $0.208 \pm 0.016$ & $0.638 \pm 0.014$ & $0.632 \pm 0.015$ & $3.58 \pm 0.18$ \\
+\botrule
+\end{tabularx}
+\end{table*}

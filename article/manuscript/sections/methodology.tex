@@ -1,108 +1,137 @@
 % ============================================================
-% Section 2: Materials and Methods
-% Target Journal: Neural Computing and Applications (Springer Nature)
-% 100% Exact Structural Mirror of Al Bannoud et al. (NCA 2026)
+% Section 3: Materials and Methods
+% Expanded from IJCNN.TEX with technical indicator equations & multi-model setup
 % ============================================================
 
 \section{Materials and Methods}\label{sec:materials_methods}
 
-This section formulates the materials, dataset generation, model configuration, optimization algorithms, performance evaluation metrics, and diagnostic ablation analyses, following the structural framework established by Al Bannoud et al. \cite{al_bannoud2026accelerating}.
+Figure~\ref{fig:workflow} presents an overview of the computational workflow pipeline adopted in this study. The methodology spans six sequential stages: (i)~acquisition of high-frequency 5-minute B3 Mini-Index futures data from BovDB, (ii)~construction and min-max normalization of technical analysis indicators, (iii)~Information Gain feature selection to extract a compact 7-indicator subset, (iv)~formulation of multi-model hyperparameter search spaces across four classifier families (MLP, SVM, RF, 1D-CNN), (v)~equal-budget metaheuristic optimization ($N_{\text{eval}} = 1{,}500$) under a leakage-free 60/20/20 sequential temporal split, and (vi)~out-of-sample statistical, predictive, and financial evaluation.
 
-\subsection{Dataset Generation and Technical Feature Selection}\label{sec:dataset}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.90\linewidth]{figures/methodology_overview.pdf}
+\caption{Overview of the proposed computational workflow for neural optimization benchmarking and intraday trend classification.}
+\label{fig:workflow}
+\end{figure}
 
-The empirical evaluation is conducted on high-frequency intraday price records of the Mini-Index futures contract (symbol: WIN), traded on B3 (Brazilian Stock Exchange). The dataset originates from the BovDB repository \cite{cardoso2022bovdb, souza2024dataset} and spans consecutive bimonthly contract maturities—specifically WING24 (February), WINJ24 (April), WINM24 (June), and WINQ24 (August)—sampled at a granular 5-minute candle frequency.
+\subsection{Input Dataset and Data Acquisition}\label{sec:data}
 
-To preserve continuous microstructural price patterns without introducing artificial volatility gaps, data from adjacent overlapping contracts are tracked across transition windows based on trading volume dominance. The complete benchmark dataset comprises $N = 15,057$ clean, consecutive 5-minute intraday bars. The target variable is formulated as a binary trend classification label $y_k \in \{0, 1\}$ at bar index $k$:
+The empirical evaluation is conducted on high-frequency intraday price records of the Mini-Index futures contract (symbol: WIN), referenced to the Ibovespa index and traded on B3 (Brasil Bolsa Balc\~{a}o). The data were obtained from the BovDB repository \cite{cardoso2022bovdb, souza2024dataset}, a public academic database providing clean financial market records. This database includes 5-minute intraday candle records covering consecutive bimonthly contract maturities---specifically WING24 and WINJ24 (January--February 2024), WINJ24 and WINM24 (March--April 2024), and WINM24 and WINQ24 (May--June 2024).
+
+These contract maturities were selected based on liquidity dominance and intense trading volume. To preserve continuous microstructural price dynamics across contract rollovers without introducing artificial volatility gaps, transitions were executed based on trading volume volume dominance. The complete dataset comprises $N = 15{,}057$ clean, consecutive 5-minute intraday bars across approximately 40 business days per contract cycle.
+
+The target variable is formulated as a binary trend classification label $y_k \in \{0, 1\}$ at bar index $k$:
 \begin{equation}\label{eq:target}
     y_k = \begin{cases} 1 \quad (\text{Uptrend}) & \text{if } P_{k+1} > P_k, \\ 0 \quad (\text{Downtrend}) & \text{if } P_{k+1} \le P_k, \end{cases}
 \end{equation}
 where $P_k$ denotes the closing price at 5-minute bar $k$. Across the 15,057 total instances, the target distribution comprises approximately 49.2\% uptrend ($y=1$) and 50.8\% downtrend ($y=0$) instances.
 
-To filter out redundant attributes, Information Gain feature selection \cite{souza2025iccsa} is applied to an initial pool of 66 technical indicators:
+\subsection{Generation and Normalization of Technical Indicators}\label{sec:indicators}
+
+To capture short-term momentum, volatility regimes, and trend direction, technical analysis indicators were computed from the raw 5-minute intraday series. Key moving average metrics---Simple Moving Average (SMA), Exponential Moving Average (EMA), and Standard Deviation envelopes---were calculated over short lookback windows (3, 5, 7, and 9 periods) to maximize sensitivity to rapid price shifts occurring within minutes \cite{hunter1986exponentially}:
+\begin{equation}\label{eq:sma}
+    \text{SMA}_n(k) = \frac{1}{n} \sum_{i=0}^{n-1} P_{k-i},
+\end{equation}
+\begin{equation}\label{eq:ema}
+    \text{EMA}_n(k) = \alpha \cdot P_k + (1 - \alpha) \cdot \text{EMA}_n(k-1), \quad \alpha = \frac{2}{n+1}.
+\end{equation}
+
+To capture changes in trend slope and momentum acceleration, differential features derived from the differences between moving averages were constructed. For instance, the difference between the 7-period SMA and 3-period SMA is defined as:
+\begin{equation}\label{eq:diff}
+    \text{SMA}_{7-3}(k) = \text{SMA}_7(k) - \text{SMA}_3(k).
+\end{equation}
+
+A central preprocessing step consisted of normalizing technical indicators alongside open, high, low, and closing prices to place all features on a uniform numerical scale \cite{singh2022feature}. For each 5-minute intraday window, min-max intraday scaling was applied:
+\begin{equation}\label{eq:minmax}
+    \text{Feature}_{\text{norm}} = \frac{\text{Feature} - \text{Low}}{\text{High} - \text{Low}},
+\end{equation}
+where $\text{High}$ and $\text{Low}$ correspond to the maximum and minimum price bounds observed within the same 5-minute interval. This transformation maps features into $[0, 1]$ while preserving relative position within the intraday bar. Combined with historical volume and trade frequency metrics, a total of 66 raw technical features were constructed.
+
+\subsection{Feature Selection via Information Gain}\label{sec:feature_selection}
+
+To address redundancy and noise inherent in 66 high-dimensional technical features \cite{souza2025iccsa, lei2012feature}, an Information Gain feature selection filter was applied:
 \begin{equation}\label{eq:infogain}
     I(Y; X_j) = H(Y) - H(Y \mid X_j) = \sum_{y \in Y} \sum_{x \in X_j} p(x, y) \log_2 \left( \frac{p(x, y)}{p(x) p(y)} \right).
 \end{equation}
-The top $d=7$ Information Gain features are selected to form the input feature vector $\bm{x}_k \in \mathbb{R}^7$. Figure~\ref{fig:workflow} presents an overview of the complete methodological workflow, mirroring Figure 1 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.90\linewidth]{figures/methodology_overview.pdf}
-\caption{Overview of the proposed neural optimization benchmark workflow for intraday trend classification.}
-\label{fig:workflow}
-\end{figure}
+Information Gain measures the reduction in entropy $H(Y)$ of the target trend class given technical feature $X_j$. Ranking features by Information Gain identified a compact, highly informative subset of $d=7$ indicators:
+\begin{enumerate}
+    \item Exponential Moving Average Difference 5--3 ($\text{EMA}_{5-3}$)
+    \item Exponential Moving Average Difference 7--3 ($\text{EMA}_{7-3}$)
+    \item Normalized EMA Difference 5--3 ($\text{EMA}_{5-3,\text{norm}}$)
+    \item Normalized EMA Difference 7--3 ($\text{EMA}_{7-3,\text{norm}}$)
+    \item Normalized 9-period Simple Moving Average ($\text{SMA}_{9,\text{norm}}$)
+    \item Exponential Moving Average Difference 9--3 ($\text{EMA}_{9-3}$)
+    \item Normalized 7-period Exponential Moving Average ($\text{EMA}_{7,\text{norm}}$)
+\end{enumerate}
+
+Restricting input space to these 7 key indicators significantly reduces search variance and accelerates hyperparameter optimization \cite{kumar2014feature}.
 
 \subsection{Machine Learning Model Training and Evaluation}\label{sec:training}
 
 To prevent temporal look-ahead leakage, we enforce a strict 60/20/20 sequential chronological split protocol with no shuffling (\texttt{shuffle = false}). The 15,057 intraday bars are partitioned sequentially along the time axis:
 \begin{enumerate}
-    \item \textbf{Training Set ($\mathcal{D}_{\text{train}}$)}: The first 60\% of chronological bars ($N_{\text{train}} = 9,034$ instances) for optimizing neural network connection weights.
-    \item \textbf{Validation Set ($\mathcal{D}_{\text{val}}$)}: The subsequent 20\% of chronological bars ($N_{\text{val}} = 3,011$ instances) for candidate fitness evaluation $f(\bm{\theta})$.
-    \item \textbf{Out-of-Sample Test Set ($\mathcal{D}_{\text{test}}$)}: The final 20\% of chronological bars ($N_{\text{test}} = 3,012$ instances) strictly reserved for out-of-sample predictive and financial evaluation.
+    \item \textbf{Training Set ($\mathcal{D}_{\text{train}}$)}: The first 60\% of chronological bars ($N_{\text{train}} = 9{,}034$ instances) for optimizing classifier connection weights and parameters.
+    \item \textbf{Validation Set ($\mathcal{D}_{\text{val}}$)}: The subsequent 20\% of chronological bars ($N_{\text{val}} = 3{,}011$ instances) for candidate fitness evaluation $f(\bm{\theta})$ during hyperparameter search.
+    \item \textbf{Out-of-Sample Test Set ($\mathcal{D}_{\text{test}}$)}: The final 20\% of chronological bars ($N_{\text{test}} = 3{,}012$ instances) strictly reserved for out-of-sample predictive and financial evaluation.
 \end{enumerate}
 
-Figure~\ref{fig:temporal_split} illustrates the sequential temporal partitioning scheme, mirroring Figure 2 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
+Figure~\ref{fig:temporal_split} illustrates the sequential temporal partitioning scheme, highlighting the strict separation between training and testing partitions to prevent data leakage.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{figures/temporal_split.pdf}
-\caption{Schematic of the sequential temporal partitioning, feature preprocessing, and model optimization pipeline.}
+\caption{Schematic of data partitioning, preprocessing, and model optimization pipeline. The test set remains isolated until final evaluation.}
 \label{fig:temporal_split}
 \end{figure}
 
-Table~\ref{tab:literature_gap} presents a systematic comparison of representative literature in optimizer-driven financial forecasting, highlighting the methodological gaps resolved by our framework.
+\subsection{Multi-Model Search Spaces and Configuration Summary}\label{sec:search_spaces}
+
+We evaluate four machine learning backbone families: Multilayer Perceptron (MLP), Support Vector Machine (SVM), Random Forest (RF), and 1D Convolutional Neural Network (1D-CNN). Table~\ref{tab:search_space} details the hyperparameter search space boundaries for all four model families, mirroring Table 1 in Al Bannoud et al.\ \cite{al_bannoud2026accelerating}.
 
 \begin{table*}[htbp]
-\caption{Systematic comparison of representative literature in optimizer-driven financial forecasting and unmet methodological limitations.}
-\label{tab:literature_gap}
-\centering
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\textwidth}{@{}L L L L L@{}}
-\toprule
-Study & Model \& Domain & Optimization Paradigm & Validation Protocol & Unmet Limitations / Research Gap \\
-\midrule
-Billah et al. (2024) \cite{billah2024nca_moving_average} & Trend forecasting, Intraday & Moving average heuristics & Standard split & Absence of automated hyperparameter tuning. \\
-Bareket \& P{\^a}rv (2024) \cite{bareket2024adaptive} & Market surge, Equities & Adaptive ML classifiers & Medium-term split & Evaluation restricted to static indicator sets. \\
-Bandgar et al. (2025) \cite{bandgar2025finchronos} & Time series, Financial & Multi-model ensembles & Random split & Absence of candidate evaluation budget cap. \\
-Rahim et al. (2025) \cite{rahim2025technical} & Intraday futures, 5-min & Single GA optimization & Train/Test split & Evaluated single metaheuristic without baselines. \\
-Dhingra et al. (2025) \cite{dhingra2025solar} & Neural forecasting, Time series & Single metaheuristic & Sequential split & Unequal evaluation budget across baselines. \\
-Mutinda \& Yong (2026) \cite{mutinda2026hybrid} & Financial classification & SEDT Feature selection & K-fold CV & Feature selection without classifier budget tuning. \\
-Simatupang et al. (2026) \cite{simatupang2026stock} & Stock index prediction & Bayesian Random Forest & Random K-fold CV & Randomized CV (Temporal data leakage risk). \\
-Al Bannoud et al. (2026) \cite{al_bannoud2026accelerating} & ANN--ODE Surrogate, Clinical & GWO, PSO, GA, ABC & Multi-partition CV & Non-financial domain; unconstrained evaluation budget. \\
-Bashir et al. (2026) \cite{bashir2026evobagnet} & Stock price, NSE Equities & (1+1) Evolutionary Algo & Train/Test split & Evaluated single EA without multi-swarm benchmark. \\
-Souza et al. (2025) \cite{souza2025iccsa} & MLP classifier, B3 Futures & InfoGain + Random Search & Sequential split & Lack of multi-metaheuristic benchmark comparison. \\
-\textbf{Present Work} & \textbf{MLP, B3 Futures (WIN)} & \textbf{RS, GA, PSO, DE, GWO} & \textbf{Strict 60/20/20 Sequential} & \textbf{Controlled equal budget ($N_{\text{eval}}=1,500$), leakage-free.} \\
-\botrule
-\end{tabularx}
-\end{table*}
-
-\subsection{Hybrid Neural Optimization Benchmarking}\label{sec:hybrid}
-
-The base classifier is a Multilayer Perceptron (MLP) trained using backpropagation with RMSprop optimization and binary cross-entropy loss. Given an input feature vector $\bm{x}_k \in \mathbb{R}^7$, the network maps market states to predicted trend probabilities $\hat{y}_k = P(y_k = 1 \mid \bm{x}_k)$.
-
-Model performance depends on six hyperparameter boundaries comprising the candidate vector $\bm{\theta} = [n_{\text{hidden}}, lr, \alpha, p_{\text{drop}}, B, \text{ep}]^T \in \mathbb{R}^6$. Table~\ref{tab:search_space} details the 6D search space formulation, symbol definitions, domain types, and search boundaries, mirroring Table 1 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
-
-\begin{table*}[htbp]
-\caption{Hyperparameter search space boundaries for optimization of Multilayer Perceptron (MLP) trend classification models.}
+\caption{Hyperparameter search space boundaries for optimization of machine learning and neural network trend classification models.}
 \label{tab:search_space}
 \centering
 \small
 \setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\textwidth}{@{}p{0.18\linewidth} p{0.08\linewidth} p{0.14\linewidth} p{0.26\linewidth} p{0.30\linewidth}@{}}
+\begin{tabularx}{\textwidth}{@{}p{0.20\linewidth} p{0.24\linewidth} p{0.14\linewidth} p{0.38\linewidth}@{}}
 \toprule
-Hyperparameter & Symbol & Domain Type & Search Boundaries / Range & Description \\
+Model Family & Hyperparameter & Domain Type & Search Boundaries / Range \\
 \midrule
-Hidden Neurons L1 & $n_{\text{hidden}}$ & Integer & $[5, 500]$ & Number of hidden neurons in Layer 1. \\
-Learning Rate & $lr$ & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ & Initial learning rate for RMSprop. \\
-L2 Regularization & $\alpha$ & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ & Weight decay penalty coefficient. \\
-Dropout Rate & $p_{\text{drop}}$ & Float & $[0.00, 0.10]$ & Dropout probability in hidden layer. \\
-Batch Size & $B$ & Categorical & $\{16, 32, 64, 80, 112, 128\}$ & Mini-batch sample size during training. \\
-Max Epochs & $\text{ep}$ & Integer & $[50, 300]$ & Maximum backpropagation training epochs. \\
+\multirow{5}{*}{Multilayer Perceptron (MLP)} 
+  & Hidden Neurons ($n_{\text{hidden}}$) & Integer & $[5, 500]$ \\
+  & Learning Rate ($lr$) & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ \\
+  & L2 Regularization ($\alpha$) & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ \\
+  & Dropout Rate ($p_{\text{drop}}$) & Float & $[0.00, 0.10]$ \\
+  & Batch Size ($B$) & Categorical & $\{16, 32, 64, 80, 112, 128\}$ \\
+\midrule
+\multirow{3}{*}{Support Vector Machine (SVM)} 
+  & Regularization ($C$) & Float (Log10) & $[1.0 \times 10^{-3}, 1.0 \times 10^{3}]$ \\
+  & Kernel Coefficient ($\gamma$) & Float (Log10) & $[1.0 \times 10^{-5}, 1.0 \times 10^{1}]$ \\
+  & Kernel Function & Categorical & \{\texttt{linear}, \texttt{rbf}\} \\
+\midrule
+\multirow{6}{*}{Random Forest (RF)} 
+  & Number of Trees ($n_{\text{tree}}$) & Integer & $[50, 500]$ \\
+  & Maximum Depth ($d_{\text{max}}$) & Integer & $[5, 50]$ \\
+  & Min Samples Split & Integer & $[2, 20]$ \\
+  & Min Samples Leaf & Integer & $[1, 20]$ \\
+  & Max Feature Selection & Categorical & \{\texttt{sqrt}, \texttt{log2}, \texttt{None}\} \\
+  & Class Weight Balance & Categorical & \{\texttt{None}, \texttt{balanced}\} \\
+\midrule
+\multirow{7}{*}{1D Convolutional Net (CNN)} 
+  & Conv Filters ($n_{\text{filters}}$) & Integer & $[8, 128]$ \\
+  & Kernel Size & Integer & $[2, 5]$ \\
+  & Dense Neurons & Integer & $[16, 256]$ \\
+  & Learning Rate ($lr$) & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ \\
+  & L2 Regularization ($\alpha$) & Float (Log10) & $[1.0 \times 10^{-8}, 1.0 \times 10^{-2}]$ \\
+  & Dropout Rate ($p_{\text{drop}}$) & Float & $[0.00, 0.10]$ \\
+  & Batch Size ($B$) & Categorical & $\{16, 32, 64, 80, 112, 128\}$ \\
 \botrule
 \end{tabularx}
 \end{table*}
 
-Table~\ref{tab:config_options} summarizes the model configuration options explored within the benchmark framework, mirroring Table 2 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
+Table~\ref{tab:config_options} summarizes the model configuration options explored within the benchmark framework, mirroring Table 2 in Al Bannoud et al.\ \cite{al_bannoud2026accelerating}.
 
 \begin{table*}[htbp]
 \caption{Summary of model configuration options explored for neural optimization framework benchmarking.}
@@ -112,103 +141,62 @@ Table~\ref{tab:config_options} summarizes the model configuration options explor
 \setlength{\tabcolsep}{4pt}
 \begin{tabularx}{\textwidth}{@{}L L L@{}}
 \toprule
-Component & Exploratory Range / Setting & Functional Role \\
+Configuration Option & Description & Evaluated Settings \\
 \midrule
-Feature Selector & Information Gain ($d=7$) & Dimensionality reduction \\
-Neural Backbone & Single-layer MLP & Universal function approximation \\
-Loss Function & Binary Cross-Entropy & Backpropagation loss \\
-Optimizer Engines & RS, GA, PSO, DE, GWO & Global hyperparameter search \\
-Budget Cap & $N_{\text{eval}} = 1,500$ evaluations & Equal computational budget \\
-Objective Function & $0.60\operatorname{MCC} + 0.40F_1$ & Class-imbalance robust fitness \\
+Feature Selector & Dimensionality reduction technique & Information Gain ($d=7$ from 66 candidates) \\
+Model Backbones & Supervised learning architectures & MLP, SVM (RBF/Linear), RF, 1D-CNN \\
+Loss Functions & Training objectives for backpropagation/margin & Binary Cross-Entropy, Hinge Loss \\
+Optimizer Engines & Global hyperparameter search algorithms & RS, GA, PSO, DE, GWO \\
+Budget Cap & Maximum function evaluations per seed & $N_{\text{eval}} = 1{,}500$ evaluations \\
+Objective Function & Fitness function for candidate ranking & $0.60\operatorname{MCC} + 0.40F_1$ \\
+Early Stopping & Overfitting prevention mechanism & Patience = 3 epochs on validation loss \\
 \botrule
 \end{tabularx}
 \end{table*}
 
-\subsection{Optimization}\label{sec:optimization}
+\subsection{Metaheuristic Optimization Operators}\label{sec:optimization}
 
-To eliminate budget inequality bias \cite{dhingra2025solar}, our benchmark protocol enforces a strict candidate evaluation cap of $N_{\text{eval}} = 1,500$ evaluations per random seed across all five optimizers:
+To eliminate budget inequality bias \cite{dhingra2025solar}, our benchmark protocol enforces a strict candidate evaluation cap of $N_{\text{eval}} = 1{,}500$ evaluations per random seed across all five optimizers:
 \begin{equation}\label{eq:budget}
-    \sum_{t=1}^{T_{\text{max}}} P_{\text{size}} = N_{\text{eval}} = 1,500.
+    \sum_{t=1}^{T_{\text{max}}} P_{\text{size}} = N_{\text{eval}} = 1{,}500.
 \end{equation}
 
-The five evaluated optimizer families implement distinct search mechanics over candidate positions $\bm{\theta}_i \in \mathbb{R}^6$:
+The five evaluated optimizer families implement distinct search mechanics:
+\begin{itemize}
+    \item \textbf{Random Search (RS)}: Uniform stochastic sampling over bounds $\bm{\theta}_i = \bm{L} + \bm{r} \odot (\bm{U} - \bm{L}), \bm{r} \sim U(0,1)^D$.
+    \item \textbf{Genetic Algorithm (GA)}: Tournament selection ($k=3$), uniform crossover ($P_c = 0.80$), Gaussian mutation ($P_m = 0.20$).
+    \item \textbf{Particle Swarm Optimization (PSO)}: Cognitive parameter $c_1 = 1.50$, social parameter $c_2 = 1.50$, inertia weight $w = 0.70$.
+    \item \textbf{Differential Evolution (DE)}: \texttt{best/1/bin} strategy with mutation factor $F = 0.80$ and crossover rate $CR = 0.90$.
+    \item \textbf{Grey Wolf Optimizer (GWO)}: Leadership hierarchy ($\bm{\alpha}, \bm{\beta}, \bm{\delta}$) with linearly decreasing coefficient $a: 2 \to 0$.
+\end{itemize}
 
-\subsubsection{Random Search (RS)}
-\begin{equation}\label{eq:rs}
-    \bm{\theta}_i = \bm{L} + \bm{r} \odot (\bm{U} - \bm{L}), \quad \bm{r} \sim U(0,1)^6.
-\end{equation}
-
-\subsubsection{Genetic Algorithm (GA)}
-\begin{equation}\label{eq:ga}
-    \bm{\theta}_i^{(t+1)} = \bm{\theta}_i^{(t)} + \mathcal{N}(0, \sigma^2 \cdot (\bm{U} - \bm{L})).
-\end{equation}
-
-\subsubsection{Particle Swarm Optimization (PSO)}
-\begin{equation}\label{eq:pso_v}
-    \bm{v}_i^{(t+1)} = w \bm{v}_i^{(t)} + c_1 r_1 (\bm{p}_i - \bm{\theta}_i^{(t)}) + c_2 r_2 (\bm{g} - \bm{\theta}_i^{(t)}),
-\end{equation}
-\begin{equation}\label{eq:pso_x}
-    \bm{\theta}_i^{(t+1)} = \bm{\theta}_i^{(t)} + \bm{v}_i^{(t+1)}.
-\end{equation}
-
-\subsubsection{Differential Evolution (DE)}
-\begin{equation}\label{eq:de}
-    \bm{v}_i^{(t+1)} = \bm{g}^{(t)} + F \cdot (\bm{\theta}_{r1}^{(t)} - \bm{\theta}_{r2}^{(t)}).
-\end{equation}
-
-\subsubsection{Grey Wolf Optimizer (GWO)}
-\begin{equation}\label{eq:gwo}
-    \bm{\theta}_i^{(t+1)} = \frac{\bm{\theta}_1 + \bm{\theta}_2 + \bm{\theta}_3}{3}.
-\end{equation}
-
-\subsection{Metrics for Performance Evaluation of Neural Models}\label{sec:metrics}
+\subsection{Metrics for Performance Evaluation}\label{sec:metrics}
 
 Candidate fitness $f(\bm{\theta})$ is evaluated on $\mathcal{D}_{\text{val}}$ using a compound objective combining Matthews Correlation Coefficient ($\operatorname{MCC}$) and $F_1$-score:
 \begin{equation}\label{eq:fitness}
     f(\bm{\theta}) = 0.60 \times \operatorname{MCC}(\bm{\theta}) + 0.40 \times F_1(\bm{\theta}).
 \end{equation}
 
-Table~\ref{tab:metrics_formulation} provides the mathematical formulations for all quantitative accuracy, efficiency, and financial metrics, mirroring Table 3 in Al Bannoud et al. \cite{al_bannoud2026accelerating}.
+Table~\ref{tab:metrics_formulation} details the mathematical formulations for all quantitative accuracy, efficiency, and financial backtest metrics, mirroring Table 3 in Al Bannoud et al.\ \cite{al_bannoud2026accelerating}.
 
 \begin{table*}[htbp]
-\caption{Quantitative metrics for assessing accuracy, computational efficiency, and financial viability of neural models.}
+\caption{Quantitative metrics for assessing classification accuracy, ranking quality, and financial viability of neural models within the benchmark framework.}
 \label{tab:metrics_formulation}
 \centering
 \small
-\setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\textwidth}{@{}L l L@{}}
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}L l L L@{}}
 \toprule
-Metric & Abbreviation & Mathematical Formula \\
+Metric & Abbreviation & Mathematical Formula & Purpose \\
 \midrule
-Accuracy & ACC & $\frac{TP + TN}{TP + TN + FP + FN}$ \\
-$F_1$-Score & $F_1$ & $\frac{2 \cdot TP}{2 \cdot TP + FP + FN}$ \\
-Matthews Correlation Coefficient & MCC & $\frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}$ \\
-Area Under ROC Curve & AUC-ROC & $\int_0^1 \operatorname{TPR}(t) \, d\operatorname{FPR}(t)$ \\
-Net Trading Return & Return (\%) & $\left( \prod_{k=1}^{N_{\text{trades}}} (1 + r_k - c_{\text{fee}}) - 1 \right) \times 100$ \\
-Sharpe Ratio & Sharpe & $\frac{\mathbb{E}[R_{\text{daily}} - R_f]}{\sigma_{\text{daily}}} \cdot \sqrt{252}$ \\
-Maximum Drawdown & MDD (\%) & $\max_{\tau \le t} \left( \frac{V_\tau - V_t}{V_\tau} \right) \times 100$ \\
+Accuracy & ACC & $\frac{TP + TN}{TP + TN + FP + FN}$ & Overall correct classification rate \\
+$F_1$-Score & $F_1$ & $\frac{2 \cdot TP}{2 \cdot TP + FP + FN}$ & Harmonic mean of precision/recall \\
+Matthews Correlation Coefficient & MCC & $\frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP{+}FP)(TP{+}FN)(TN{+}FP)(TN{+}FN)}}$ & Class-imbalance robust correlation \\
+Area Under ROC Curve & AUC-ROC & $\int_0^1 \operatorname{TPR}(t) \, d\operatorname{FPR}(t)$ & Rank-order discriminative quality \\
+Area Under PR Curve & AUC-PR & $\int_0^1 \operatorname{Precision}(r) \, d\operatorname{Recall}(r)$ & Precision-recall trade-off quality \\
+Net Trading Return & Return (\%) & $\left( \prod_{k=1}^{N_{\text{trades}}} (1 + r_k - c_{\text{fee}}) - 1 \right) \times 100$ & Cumulative out-of-sample profit \\
+Sharpe Ratio & Sharpe & $\frac{\mathbb{E}[R_{\text{daily}} - R_f]}{\sigma_{\text{daily}}} \cdot \sqrt{252}$ & Risk-adjusted annualized return \\
+Maximum Drawdown & MDD (\%) & $\max_{\tau \le t} \left( \frac{V_\tau - V_t}{V_\tau} \right) \times 100$ & Worst peak-to-trough capital loss \\
 \botrule
 \end{tabularx}
 \end{table*}
-
-\subsection{Improved Analysis on the Best Neural Optimizer}\label{sec:improved_analysis}
-
-Following the diagnostic analysis design of Section 2.6 in Al Bannoud et al. \cite{al_bannoud2026accelerating}, we perform six structured ablation and diagnostic evaluations:
-
-\subsubsection{Comparison with Gradient-Based Optimizer Algorithms}\label{sec:grad_comp}
-Evaluates performance differences between population-based metaheuristic global search engines (GA, DE, PSO, GWO) and unguided Random Search baselines.
-
-\subsubsection{Improvements in the Directional Trend Classifier}\label{sec:classifier_imp}
-Measures out-of-sample classification metric gains achieved by compound MCC optimization over uncalibrated cross-entropy loss.
-
-\subsubsection{Impact of Pipeline Design Choices on Trend Prediction Performance}\label{sec:pipeline_impact}
-Assesses the structural impact of enforcing a sequential temporal split protocol (\texttt{shuffle = false}) versus randomized data shuffling.
-
-\subsubsection{Ablations on Technical Input Features and Hyperparameter Subsets}\label{sec:ablations}
-Quantifies predictive loss when restricting the feature dimension from $d=7$ to smaller indicator subsets.
-
-\subsubsection{Permutation-Importance Analysis}\label{sec:importance}
-Identifies the most critical technical features driving neural classification signals.
-
-\subsubsection{Performance Variability Across Independent Runs}\label{sec:variability}
-Evaluates stochastic stability and confidence intervals across 20 independent random seeds.
