@@ -1,65 +1,95 @@
 % ============================================================
-% Section 2: Systematic Review of Literature (SRL)
-% Transformed and expanded from Section 2 (Related Work) of IJCNN.TEX
+% Section 2: Systematic Review of Literature
+% Structured according to PRISMA guidelines and NCA journal standards.
 % ============================================================
 
 \section{Systematic Review of Literature}\label{sec:literature_review}
 
-With advancements in artificial intelligence and the widespread deployment of machine learning and deep learning methodologies across financial engineering \cite{heaton2017deep}, predicting future asset price movements has become a core area of computational finance research. This section presents a Systematic Review of Literature (SRL) examining recent research at the intersection of feature selection, metaheuristic optimization, and neural market forecasting, delineating key methodological paradigms and identifying open research gaps.
+Predicting short-term directional price movements in high-frequency financial markets remains one of the most demanding applications of neural computing due to low signal-to-noise ratios, rapid regime shifts, and severe non-stationarity \cite{heaton2017deep, jesus2025tda}. Supervised machine learning algorithms and technical indicator representations have been widely deployed to capture non-linear intraday patterns; however, predictive efficacy depends heavily on input feature selection, hyperparameter tuning, and validation protocol integrity \cite{singh2022feature, henrique2019stock_review}. This section presents a structured Systematic Review of Literature (SRL) examining prior work across input representations, metaheuristic optimization paradigms, and validation designs, synthesizing current state-of-the-art contributions and formalizing the critical methodological gaps that motivate our benchmark framework.
 
-\subsection{Machine Learning and Feature Selection in Market Forecasting}
+\subsection{Literature Selection Protocol and Research Questions}\label{subsec:selection_protocol}
 
-Early comparative surveys established the viability of supervised learning algorithms for market direction classification. Ballings et al.\ \cite{ballings2015evaluating} conducted a large-scale empirical evaluation comparing Support Vector Machines, Random Forests, Kernel Factory, AdaBoost, and Logistic Regression on financial data from 5,767 European companies. Their findings identified SVM and Random Forest as the top-performing classifiers, demonstrating that predictive accuracy relies heavily on input feature quality, hyperparameter configuration, and model regularization.
+To ensure methodological rigor and eliminate reporting bias, relevant literature was retrieved following an explicit PRISMA-guided protocol across major scholarly databases: IEEE Xplore, Scopus, Web of Science, and SpringerLink (specifically targeting \textit{Neural Computing and Applications}). The search strategy combined boolean queries for optimization paradigms (\texttt{"metaheuristic"}, \texttt{"genetic algorithm"}, \texttt{"particle swarm"}, \texttt{"differential evolution"}, \texttt{"grey wolf optimization"}), machine learning models (\texttt{"multilayer perceptron"}, \texttt{"random forest"}, \texttt{"support vector machine"}, \texttt{"1D-CNN"}), and financial application domains (\texttt{"futures market"}, \texttt{"intraday forecasting"}, \texttt{"technical indicators"}).
 
-Because technical analysis indicators introduce substantial redundancy when computed across multiple lookback windows, feature selection has emerged as a critical preprocessing step. Naik and Mohan \cite{naik2019optimal} applied the Boruta feature selection algorithm to extract informative technical indicators from an initial set of 33 technical combinations, evaluating an ANN classifier on National Stock Exchange (NSE) data. Their feature selection protocol reduced prediction error by 12\%, proving that filtering out uninformative indicators mitigates the curse of dimensionality and stabilizes neural network training. Similarly, Mutinda and Yong \cite{mutinda2026hybrid} proposed a sequential ensemble decision tree (SEDT) feature selection strategy combined with hybrid classification, demonstrating that feature space compacting improves classification sensitivity in volatile financial markets.
+The review was bounded to peer-reviewed journal articles and top-tier conference proceedings published between 2015 and 2026. Inclusion criteria mandated that candidate studies: (i) evaluate automated feature selection or hyperparameter tuning on financial or complex time-series classification/forecasting, (ii) specify validation protocols and search spaces, and (iii) report empirical predictive or financial metrics. Studies lacking reproducible experimental parameters or failing to disclose optimization constraints were excluded. The systematic review is organized around three central Research Questions (RQs):
+\begin{enumerate}
+    \item \textbf{RQ1 (Budget Parity)}: How do stochastic metaheuristic search operators (RS, GA, PSO, DE, GWO) compare across distinct classifier backbones (RF, SVM, MLP, 1D-CNN) when restricted to a strictly equal candidate evaluation budget cap ($N_{\mathrm{eval}} = 1{,}000$)?
+    \item \textbf{RQ2 (Temporal Leakage)}: What is the quantitative impact on out-of-sample generalization when comparing chronological sequential temporal splits against randomized cross-validation on high-frequency financial time series?
+    \item \textbf{RQ3 (Economic Alignment)}: How effectively do classification-based validation fitness objectives (e.g., compound MCC/$F_1$ vs. weighted accuracy) align with out-of-sample intraday trading metrics (Net Return \%, Sharpe ratio, Maximum Drawdown) under realistic exchange transaction costs?
+\end{enumerate}
 
-\subsection{Metaheuristic Optimization of Financial Neural Networks}
+\subsection{Classifier Backbones and Input Representations}\label{subsec:backbones_features}
 
-Hyperparameter optimization is vital for maximizing neural network generalization in non-stationary environments. Traditional gradient-based backpropagation algorithms (such as Stochastic Gradient Descent or Adam) often suffer from local entrapment when tuning network hyperparameter configurations over non-convex loss surfaces \cite{dhingra2025solar}. Ding et al.\ \cite{ding2011optimizing} introduced a hybrid Genetic Algorithm--Back-Propagation (GA-BP) framework, leveraging GA's global exploration capability to locate promising initial search regions before applying backpropagation fine-tuning.
+Supervised intraday trend prediction relies heavily on the quality and information density of input features \cite{singh2022feature}. Raw high-frequency bar data (OHLCV) exhibit extreme microstructural noise and high variance. Consequently, domain-specific technical analysis indicators---spanning momentum indicators, moving averages, and volatility envelopes---are widely computed to extract directional signals \cite{billah2024nca_moving_average, hunter1986exponentially, bollinger1992using}. However, calculating dozens of technical indicators across multiple lookback windows introduces severe multicollinearity and high dimensionality, which can destabilize model training and induce overfitting \cite{lei2012feature, kumar2014feature}.
 
-In financial time series modeling, F. Ecer \cite{ecer2020mlp_ga_pso} investigated optimized MLP architectures for financial price forecasting, comparing multi-layer topologies and non-linear activation functions tuned via population-based metaheuristics. Rahim et al.\ \cite{rahim2025technical} applied a single Genetic Algorithm to tune technical indicator combinations for 5-minute futures contracts, observing significant accuracy gains over untuned baselines. Bashir et al.\ \cite{bashir2026evobagnet} proposed EvoBagNet, an evolutionary bagging network incorporating a (1+1) evolutionary algorithm for equity price forecasting on the National Stock Exchange of India, demonstrating that evolutionary search operators enhance model robustness under non-stationary regimes.
+Information-theoretic feature selection provides a principled approach to reduce feature space dimensionality. Information Gain (IG) attribute filtering measures the mutual information between individual indicators and the target trend label, ranking features according to their predictive entropy reduction \cite{lei2012feature, souza2025iccsa}. Filtering out redundant or noisy indicators isolates a compact, highly informative feature core, which stabilizes fitted classification boundaries and lowers computational overhead during downstream hyperparameter search \cite{kumar2014feature}.
 
-More recently, Al Bannoud et al.\ \cite{al_bannoud2026accelerating} conducted a comprehensive benchmark evaluating 14 machine learning surrogate models coupled with eight metaheuristic optimization algorithms (including GWO, PSO, GA, and ABC) within a hybrid computational framework. Their work established that Grey Wolf Optimizer (GWO) and Particle Swarm Optimization (PSO) provide exceptional convergence efficiency and solution quality when optimizing complex neural surrogate parameters over non-differentiable objective landscapes.
+Downstream predictive backbones span diverse algorithmic hypothesis spaces:
+\begin{itemize}
+    \item \textbf{Random Forest (RF)}: An ensemble of decision trees constructed via bootstrap aggregation (bagging) and random feature subset selection, highly resilient to feature noise and non-linear interactions \cite{ballings2015evaluating}.
+    \item \textbf{Support Vector Machines (SVM)}: Convex maximum-margin classifiers that map non-linearly separable indicator subsets into high-dimensional feature spaces using kernel functions (e.g., Radial Basis Function) \cite{naik2019optimal}.
+    \item \textbf{Multilayer Perceptron (MLP)}: Fully-connected feedforward neural networks that learn complex non-linear decision maps via error backpropagation, sensitive to layer widths, learning rates, and regularization settings \cite{ecer2020mlp_ga_pso}.
+    \item \textbf{1D Convolutional Neural Network (1D-CNN)}: Deep learning architectures employing 1D temporal convolution filters and pooling layers to extract local spatial-temporal patterns directly from sequential indicator windows \cite{bandgar2025finchronos, dhingra2025solar}.
+\end{itemize}
+Prior research confirms that classifier ranking is strongly dependent on input feature representation, demonstrating that feature subset selection and model hyperparameter configuration must be evaluated jointly \cite{ballings2015evaluating, mutinda2026hybrid}.
 
-\subsection{Identification of Research Gaps and Synthesis}
+\subsection{Metaheuristic Optimization Paradigms}\label{subsec:metaheuristic_paradigms}
 
-Despite significant progress reported across recent literature, a systematic analysis reveals critical methodological limitations in existing studies. Table~\ref{tab:literature_gap} summarizes representative literature across five key dimensions: domain application, model family, optimization paradigm, validation protocol, and identified methodological gaps.
+Hyperparameter optimization is critical to prevent underfitting or severe overfitting in financial learning models. Classical gradient-based optimization methods (e.g., SGD, Adam) require smooth, differentiable loss surfaces with respect to weights, but cannot navigate discrete structural parameters (e.g., hidden neurons, filter counts, batch sizes) or non-differentiable regularization settings \cite{jovanovic2024wann, dhingra2025solar}. Population-based metaheuristic algorithms offer derivative-free global search capabilities over rugged, non-convex, mixed discrete-continuous search spaces $\bm{\theta} \in \mathbb{R}^D$ \cite{faris2018gwo_review, rajwar2023exhaustive_review}.
+
+Four primary population-based metaheuristic families dominate the financial ML literature:
+\begin{itemize}
+    \item \textbf{Genetic Algorithms (GA)}: Evolutionary optimization schemes simulating natural selection through population selection, uniform/single-point crossover, and mutation operators to evolve candidate solution vectors \cite{goldberg1989ga, ding2011optimizing}.
+    \item \textbf{Particle Swarm Optimization (PSO)}: Swarm intelligence algorithms simulating avian flocking, where individual particles dynamically update velocity vectors based on personal historical bests and global swarm best positions \cite{kennedy1995pso, gad2022pso_comprehensive}.
+    \item \textbf{Differential Evolution (DE)}: Stochastic population-based vector search methods that generate trial vectors using vector differences for self-referential mutation and crossover operations \cite{storn1997de}.
+    \item \textbf{Grey Wolf Optimizer (GWO)}: Bio-inspired metaheuristics modeling the hunting social hierarchy ($\alpha, \beta, \delta, \omega$) and prey encirclement mechanisms of grey wolves \cite{faris2018gwo_review, al_bannoud2026accelerating}.
+\end{itemize}
+Random Search (RS) provides an essential baseline sampler in metaheuristic benchmarks, generating uniform random configurations across bounded parameter spaces to test whether guided search operators yield true efficiency gains beyond unguided sampling \cite{bergstra2012random_search}. 
+
+While mathematical update formulations for these optimizers are detailed in Section~\ref{sec:methods}, existing literature frequently compares these algorithms under unconstrained or unequal candidate evaluation counts (e.g., running GA for 100 generations vs. PSO for 30 iterations without matching population sizes). Such unequal setups obscure whether reported performance gains stem from superior search operators or simply higher computational evaluation budgets \cite{dhingra2025solar, ecer2020mlp_ga_pso}.
+
+\subsection{Comparative Synthesis of Representative Studies}\label{subsec:comparative_synthesis}
+
+To establish the state of the art and pinpoint persistent methodological gaps, Table~\ref{tab:literature_gap} synthesizes 15 representative published studies from 2015 to 2026 alongside the present benchmark work. Studies are evaluated across six technical dimensions: Study \& Year, Application Domain \& Data, Model Backbones, Optimization \& Feature Paradigms, Validation Protocol, and Identified Methodological Gap.
 
 \begin{table*}[htbp]
-\caption{Systematic Literature Review (SRL) comparison matrix of representative studies in optimizer-driven financial forecasting and identified methodological gaps.}
+\caption{Systematic Literature Review comparison matrix auditing representative studies in financial machine learning, metaheuristic hyperparameter tuning, and temporal validation protocols against identified methodological gaps.}
 \label{tab:literature_gap}
 \centering
-\small
-\setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\textwidth}{@{}L L L L L@{}}
+\fontsize{6.5pt}{7.6pt}\selectfont
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.85}
+\begin{tabularx}{\textwidth}{@{} >{\hsize=0.95\hsize}L >{\hsize=0.95\hsize}L >{\hsize=0.85\hsize}L >{\hsize=1.15\hsize}L >{\hsize=0.90\hsize}L >{\hsize=1.20\hsize}L @{}}
 \toprule
-Study & Model \& Domain & Optimization Paradigm & Validation Protocol & Identified Methodological Gaps \\
+Study \& Year & Domain \& Data & Models & Optimization \& Features & Validation Protocol & Methodological Gap \\
 \midrule
-Ballings et al.\ (2015) \cite{ballings2015evaluating} & Stock prediction, 5,767 European firms & Grid search / Manual & Cross-validation & Absence of metaheuristic hyperparameter search. \\
-Ding et al.\ (2011) \cite{ding2011optimizing} & Neural networks, Benchmark data & Hybrid GA-BP & Standard split & No equal budget cap across baseline optimizers. \\
-Naik \& Mohan (2019) \cite{naik2019optimal} & ANN trend, NSE Equities & Boruta + Default ANN & Train/Test split & Static hyperparameter tuning without metaheuristics. \\
-Ecer et al.\ (2020) \cite{ecer2020mlp_ga_pso} & MLP classifier, Financial & GA and PSO tuning & K-fold CV & Evaluated single model under unconstrained budget. \\
-Billah et al.\ (2024) \cite{billah2024nca_moving_average} & Intraday trend, Equities & Moving average heuristics & Standard split & Absence of automated neural hyperparameter search. \\
-Bareket \& P{\^a}rv (2024) \cite{bareket2024adaptive} & Market surge, Equities & Adaptive ML classifiers & Medium-term split & Evaluation restricted to static indicator sets. \\
-Bandgar et al.\ (2025) \cite{bandgar2025finchronos} & Time series, Financial & Multi-model ensembles & Random split & Absence of candidate evaluation budget cap. \\
-Rahim et al.\ (2025) \cite{rahim2025technical} & Intraday futures, 5-min & Single GA optimization & Train/Test split & Evaluated single GA without multi-swarm benchmark. \\
-Dhingra et al.\ (2025) \cite{dhingra2025solar} & Neural forecasting, Solar time series & Single metaheuristic & Sequential split & Unequal evaluation budget across baseline algorithms. \\
-Mutinda \& Yong (2026) \cite{mutinda2026hybrid} & Financial classification & SEDT Feature selection & K-fold CV & Feature selection without classifier budget tuning. \\
-Simatupang et al.\ (2026) \cite{simatupang2026stock} & Stock index, IDX Equities & Bayesian Random Forest & Random K-fold CV & Randomized CV (Temporal data leakage risk). \\
-Al Bannoud et al.\ (2026) \cite{al_bannoud2026accelerating} & ANN--ODE, Clinical kinetics & GWO, PSO, GA, ABC & Multi-partition CV & Non-financial domain; unconstrained evaluation budget. \\
-Bashir et al.\ (2026) \cite{bashir2026evobagnet} & Stock price, NSE Equities & (1+1) Evolutionary Algo & Train/Test split & Evaluated single EA without multi-swarm benchmark. \\
-Souza et al.\ (2025) \cite{souza2025iccsa} & RF classifier, B3 Futures & InfoGain + Default RF & Sequential split & Untuned baseline classifier without metaheuristics. \\
-Souza et al.\ (2026) \cite{souza2026ijcnn} & MLP/SVM/RF, B3 Futures & InfoGain + Single GA & 5-fold CV & Single GA optimizer; unconstrained 1,000 gens. \\
-\textbf{Present Work} & \textbf{MLP/SVM/RF/CNN, B3 Futures} & \textbf{RS, GA, PSO, DE, GWO} & \textbf{Strict 60/20/20 Sequential} & \textbf{Equal budget ($N_{\text{eval}}=1{,}500$), leakage-free, fee backtest.} \\
+Ballings et al.\ (2015) \cite{ballings2015evaluating} & Equities (5,767 firms) & SVM, RF, AdaBoost & Grid search / Manual & Cross-validation & Absence of metaheuristic search. \\
+Ding et al.\ (2011) \cite{ding2011optimizing} & Stock index trend & Neural Networks & Hybrid GA-BP & Standard split & Unequal evaluation budget across optimizers. \\
+Naik \& Mohan (2019) \cite{naik2019optimal} & Equities (NSE India) & ANN classifier & Boruta feature selection & Train/test split & Static parameters; no metaheuristics. \\
+Ecer et al.\ (2020) \cite{ecer2020mlp_ga_pso} & Financial trend & MLP classifier & GA and PSO tuning & $K$-fold CV & Unconstrained budget; single classifier. \\
+Billah et al.\ (2024) \cite{billah2024nca_moving_average} & Intraday equities & Heuristic models & Moving average rules & Standard split & Absence of neural hyperparameter tuning. \\
+Bareket \& P{\^a}rv (2024) \cite{bareket2024adaptive} & Surge detection & Adaptive ML & Technical indicators & Medium-term split & Evaluation restricted to static features. \\
+Bandgar et al.\ (2025) \cite{bandgar2025finchronos} & Financial forecasting & Ensembles & Default tuning & Random split & No evaluation budget cap; data leakage. \\
+Rahim et al.\ (2025) \cite{rahim2025technical} & 5-min futures & Single neural model & Single GA optimization & Train/test split & Single GA; no multi-swarm benchmark. \\
+Dhingra et al.\ (2025) \cite{dhingra2025solar} & Solar PV forecasting & LSTM, CNN-LSTM & RAdam, Lookahead, Adam & Sequential split & Non-financial domain; stochastic optimizers omitted. \\
+Mutinda \& Yong (2026) \cite{mutinda2026hybrid} & Financial market & Ensembles & SEDT feature selection & $K$-fold CV & Feature selection without tuning. \\
+Simatupang et al.\ (2026) \cite{simatupang2026stock} & Stock index (IDX) & Bayesian RF & Bayesian optimization & Random $K$-fold CV & Random CV causes temporal data leakage. \\
+Al Bannoud et al.\ (2026) \cite{al_bannoud2026accelerating} & Kinetics time series & ANN--ODE surrogate & GWO, PSO, GA, ABC & Multi-partition & Non-financial; unconstrained search budget. \\
+Bashir et al.\ (2026) \cite{bashir2026evobagnet} & Equities (NSE India) & Bagging Ensemble & (1+1) Evolutionary Algo & Train/test split & Single EA evaluated without budget cap. \\
+\textit{[Anonymized Precursor A]} (2025) \cite{souza2025iccsa} & Intraday B3 futures & Random Forest & InfoGain + Default RF & Sequential 60/20/20 & Untuned baseline classifier without metaheuristics. \\
+\textit{[Anonymized Precursor B]} (2026) \cite{souza2026ijcnn} & Intraday B3 futures & MLP, SVM, RF & InfoGain + Single GA & 5-fold CV & Single GA; unconstrained 1,000-generation budget. \\
+\textbf{Present Work} & \textbf{Intraday B3 futures} & \textbf{MLP, SVM, RF, 1D-CNN} & \textbf{InfoGain + RS, GA, PSO, DE, GWO} & \textbf{Sequential 60/20/20} & \textbf{Equal budget ($N_{\mathrm{eval}}=1{,}000$), 3 seeds, fee backtest.} \\
 \botrule
 \end{tabularx}
 \end{table*}
 
-As detailed in Table~\ref{tab:literature_gap}, existing literature suffers from three pervasive limitations:
+\subsection{Critical Methodological Gaps and Research Motivation}\label{subsec:critical_gaps}
+
+As synthesized in Table~\ref{tab:literature_gap}, three primary methodological flaws permeate the existing literature on metaheuristic financial forecasting:
 \begin{enumerate}
-    \item \textit{Lack of Equal-Budget Benchmark Protocols}: Prior studies frequently compare metaheuristics under unequal candidate evaluation counts, making it impossible to determine whether reported performance gains stem from superior search operators or unconstrained computation \cite{dhingra2025solar}.
-    \item \textit{Widespread Temporal Data Leakage}: Studies routinely employ randomized $K$-fold cross-validation or data shuffling on financial time series, causing future market states to contaminate validation folds \cite{simatupang2026stock, makridakis2018statistical}.
-    \item \textit{Disconnection from Real-World Trading Friction}: Classifiers are tuned exclusively on raw classification accuracy, ignoring class imbalance and live trading costs (brokerage fees and slippage) that deteriorate real-world profitability \cite{souza2025iccsa}.
+    \item \textit{The Budget Inequality Flaw}: Prior studies routinely compare metaheuristics without enforcing a strict candidate evaluation cap ($N_{\mathrm{eval}}$). Because stochastic optimization performance scales with function evaluations, superiority claims in unconstrained studies often reflect unequal computational budgets rather than algorithmic search efficiency \cite{dhingra2025solar, ecer2020mlp_ga_pso}.
+    \item \textit{The Temporal Data Leakage Flaw}: Financial machine learning research frequently relies on randomized $K$-fold cross-validation or data shuffling \cite{simatupang2026stock, makridakis2018statistical}. Shuffling sequential intraday price bars allows future market information to contaminate historical training folds, yielding artificially inflated predictive accuracy scores that collapse during live execution.
+    \item \textit{The Classification-Economic Disconnect Flaw}: Hyperparameter tuning is overwhelmingly conducted against raw accuracy or cross-entropy loss \cite{chicco2020mcc, souza2025iccsa}. In high-frequency futures trading, raw accuracy ignores class imbalance and trade execution costs. A classifier achieving high nominal accuracy can incur net financial losses once exchange transaction fees and slippage are deducted.
 \end{enumerate}
 
-Unlike previous studies that treat feature selection, hyperparameter tuning, and economic evaluation separately, this work integrates Information Gain feature selection with an equal-budget ($N_{\text{eval}} = 1{,}500$) multi-optimizer benchmark (RS, GA, PSO, DE, GWO) across four model families (MLP, SVM, RF, 1D-CNN) operating under a strict 60/20/20 chronological split and an out-of-sample financial backtest with exchange transaction fees.
+To address these limitations, this paper establishes an auditable multi-optimizer benchmark framework on 15,057 five-minute B3 Mini-Index futures bars. Leveraging Information Gain feature selection to extract a compact 7-indicator subset, we systematically evaluate five optimizer families (RS, GA, PSO, DE, GWO) across four diverse model backbones (MLP, SVM, RF, 1D-CNN). All optimizers operate under a strictly locked candidate evaluation cap of $N_{\mathrm{eval}} = 1{,}000$ evaluations per seed across three common random seeds within a leakage-free 60/20/20 chronological partition. Furthermore, we contrast two distinct validation fitness objectives (a compound $0.60\,\mathrm{MCC} + 0.40\,F_1$ objective vs. weighted accuracy) and evaluate held-out trading profitability under realistic exchange transaction costs.

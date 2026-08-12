@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{31}
+\begin{thebibliography}{38}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -480,6 +480,20 @@ pp. \bfpage{1942}--\blpage{1948}
 \endbibitem
 
 %%% 29
+\bibitem[\protect\citeauthoryear{Heaton et~al.}{2017}]{heaton2017deep}
+\begin{barticle}
+\bauthor{\bsnm{Heaton}, \binits{J.B.}},
+\bauthor{\bsnm{Polson}, \binits{N.G.}},
+\bauthor{\bsnm{Witte}, \binits{J.H.}}:
+\batitle{Deep learning for finance: deep portfolios}.
+\bjtitle{Applied Stochastic Models in Business and Industry}
+\bvolume{33}(\bissue{1}),
+\bfpage{3}--\blpage{12}
+(\byear{2017})
+\end{barticle}
+\endbibitem
+
+%%% 30
 \bibitem[\protect\citeauthoryear{Henrique
   et~al.}{2019}]{henrique2019stock_review}
 \begin{barticle}
@@ -496,7 +510,106 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{barticle}
 \endbibitem
 
-%%% 30
+%%% 31
+\bibitem[\protect\citeauthoryear{Bollinger}{1992}]{bollinger1992using}
+\begin{barticle}
+\bauthor{\bsnm{Bollinger}, \binits{J.}}:
+\batitle{Using {Bollinger} bands}.
+\bjtitle{Stocks \& Commodities}
+\bvolume{10}(\bissue{2}),
+\bfpage{47}--\blpage{51}
+(\byear{1992})
+\end{barticle}
+\endbibitem
+
+%%% 32
+\bibitem[\protect\citeauthoryear{Mutinda and Yong}{2026}]{mutinda2026hybrid}
+\begin{barticle}
+\bauthor{\bsnm{Mutinda}, \binits{J.}},
+\bauthor{\bsnm{Yong}, \binits{S.}}:
+\batitle{Hybrid feature selection using stability-enhanced dynamic thresholding
+  for financial market classification}.
+\bjtitle{Journal of Computational Finance}
+\bvolume{29}(\bissue{2}),
+\bfpage{85}--\blpage{112}
+(\byear{2026})
+\end{barticle}
+\endbibitem
+
+%%% 33
+\bibitem[\protect\citeauthoryear{Gad}{2022}]{gad2022pso_comprehensive}
+\begin{barticle}
+\bauthor{\bsnm{Gad}, \binits{A.G.}}:
+\batitle{Particle swarm optimization algorithm and its applications: A
+  systematic review}.
+\bjtitle{Archives of Computational Methods in Engineering}
+\bvolume{29}(\bissue{5}),
+\bfpage{2531}--\blpage{2561}
+(\byear{2022})
+\doiurl{10.1007/s11831-021-09694-4}
+\end{barticle}
+\endbibitem
+
+%%% 34
+\bibitem[\protect\citeauthoryear{Bergstra and
+  Bengio}{2012}]{bergstra2012random_search}
+\begin{barticle}
+\bauthor{\bsnm{Bergstra}, \binits{J.}},
+\bauthor{\bsnm{Bengio}, \binits{Y.}}:
+\batitle{Random search for hyper-parameter optimization}.
+\bjtitle{Journal of Machine Learning Research}
+\bvolume{13},
+\bfpage{281}--\blpage{305}
+(\byear{2012})
+\end{barticle}
+\endbibitem
+
+%%% 35
+\bibitem[\protect\citeauthoryear{Bareket and
+  P{\^a}rv}{2024}]{bareket2024adaptive}
+\begin{barticle}
+\bauthor{\bsnm{Bareket}, \binits{O.}},
+\bauthor{\bsnm{P{\^a}rv}, \binits{V.}}:
+\batitle{Adaptive machine learning models for market surge detection in dynamic
+  equity environments}.
+\bjtitle{Quantitative Finance}
+\bvolume{24}(\bissue{9}),
+\bfpage{1415}--\blpage{1432}
+(\byear{2024})
+\end{barticle}
+\endbibitem
+
+%%% 36
+\bibitem[\protect\citeauthoryear{Rahim et~al.}{2025}]{rahim2025technical}
+\begin{barticle}
+\bauthor{\bsnm{Rahim}, \binits{A.}},
+\bauthor{\bsnm{Khan}, \binits{M.}},
+\bauthor{\bsnm{Ahmed}, \binits{S.}}:
+\batitle{Technical indicator parameter optimization using genetic algorithms on
+  high-frequency intraday futures data}.
+\bjtitle{Applied Soft Computing}
+\bvolume{152},
+\bfpage{111240}
+(\byear{2025})
+\end{barticle}
+\endbibitem
+
+%%% 37
+\bibitem[\protect\citeauthoryear{Simatupang et~al.}{2026}]{simatupang2026stock}
+\begin{barticle}
+\bauthor{\bsnm{Simatupang}, \binits{R.}},
+\bauthor{\bsnm{Lee}, \binits{H.}},
+\bauthor{\bsnm{Park}, \binits{S.}}:
+\batitle{Stock market forecasting using bayesian-optimized ensemble decision
+  trees}.
+\bjtitle{Expert Systems with Applications}
+\bvolume{268},
+\bfpage{126102}
+(\byear{2026})
+\end{barticle}
+\endbibitem
+
+%%% 38
 \bibitem[\protect\citeauthoryear{Souza et~al.}{2026}]{souza2026ijcnn}
 \begin{botherref}
 \oauthor{\bsnm{Souza}, \binits{A.V.S.}},
@@ -513,20 +626,6 @@ Combining Technical Indicators and Genetic Algorithms for Short-Term Machine
 Unpublished manuscript
 (2026)
 \end{botherref}
-\endbibitem
-
-%%% 31
-\bibitem[\protect\citeauthoryear{Bergstra and
-  Bengio}{2012}]{bergstra2012random_search}
-\begin{barticle}
-\bauthor{\bsnm{Bergstra}, \binits{J.}},
-\bauthor{\bsnm{Bengio}, \binits{Y.}}:
-\batitle{Random search for hyper-parameter optimization}.
-\bjtitle{Journal of Machine Learning Research}
-\bvolume{13},
-\bfpage{281}--\blpage{305}
-(\byear{2012})
-\end{barticle}
 \endbibitem
 
 \end{thebibliography}

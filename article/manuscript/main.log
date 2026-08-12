@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  12 AUG 2026 11:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  12 AUG 2026 15:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1001,110 +1001,144 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [2])
-(sections/ijcnn_related_work.tex
+(sections/literature_review.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [3])
-(sections/ijcnn_methodology.tex
+ [3]
+Underfull \hbox (badness 2689) in paragraph at lines 12--13
+\OT1/cmr/m/n/10 queries for opti-miza-tion paradigms (\OT1/cmtt/m/n/10 "metaheu
+ristic"\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 "genetic algorithm"\OT1/cmr/m/n/10 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 12--13
+\OT1/cmtt/m/n/10 "particle swarm"\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 "differenti
+al evolution"\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 "grey wolf optimization"\OT1/cm
+r/m/n/10 ),
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [4]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [5]
-<figures/ijcnn_style_partition.pdf, id=192, 412.19958pt x 169.85269pt>
-File: figures/ijcnn_style_partition.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_partition.pdf>
-Package pdftex.def Info: figures/ijcnn_style_partition.pdf  used on input line 
-42.
-(pdftex.def)             Requested size: 345.95728pt x 142.55864pt.
+ [5{C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-sup
+er-ts1.enc}]
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <6.5> not available
+(Font)              size <6> substituted on input line 59.
+
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [6 <./figures/ijcnn_style_partition.pdf>]) (sections/ijcnn_results.tex
+ [6])
+(sections/nca_methods.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7]
-<figures/ijcnn_style_rf_convergence.pdf, id=230, 405.77473pt x 211.52588pt>
-File: figures/ijcnn_style_rf_convergence.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_rf_convergence.pdf>
-Package pdftex.def Info: figures/ijcnn_style_rf_convergence.pdf  used on input 
-line 80.
-(pdftex.def)             Requested size: 345.95728pt x 180.353pt.
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [8]
-<figures/ijcnn_style_svm_convergence.pdf, id=242, 401.06966pt x 211.52588pt>
-File: figures/ijcnn_style_svm_convergence.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_svm_convergence.pdf>
-Package pdftex.def Info: figures/ijcnn_style_svm_convergence.pdf  used on input
- line 85.
-(pdftex.def)             Requested size: 345.95728pt x 182.46063pt.
-<figures/ijcnn_style_mlp_convergence.pdf, id=243, 401.06966pt x 211.52588pt>
-File: figures/ijcnn_style_mlp_convergence.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_mlp_convergence.pdf>
-Package pdftex.def Info: figures/ijcnn_style_mlp_convergence.pdf  used on input
- line 90.
-(pdftex.def)             Requested size: 345.95728pt x 182.46063pt.
-<figures/ijcnn_style_cnn_convergence.pdf, id=244, 405.77473pt x 211.52588pt>
-File: figures/ijcnn_style_cnn_convergence.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_cnn_convergence.pdf>
-Package pdftex.def Info: figures/ijcnn_style_cnn_convergence.pdf  used on input
- line 95.
-(pdftex.def)             Requested size: 345.95728pt x 180.353pt.
-<figures/ijcnn_style_model_performance.pdf, id=247, 390.46754pt x 188.48605pt>
-File: figures/ijcnn_style_model_performance.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_model_performance.pdf>
-Package pdftex.def Info: figures/ijcnn_style_model_performance.pdf  used on inp
-ut line 117.
-(pdftex.def)             Requested size: 349.68091pt x 168.80756pt.
+<figures/dual_fitness_temporal_split.pdf, id=333, 385.36063pt x 187.78482pt>
+File: figures/dual_fitness_temporal_split.pdf Graphic file (type pdf)
+<use figures/dual_fitness_temporal_split.pdf>
+Package pdftex.def Info: figures/dual_fitness_temporal_split.pdf  used on input
+ line 77.
+(pdftex.def)             Requested size: 319.92023pt x 155.90146pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [9 <./figures/ijcnn_style_rf_convergence.pdf>]
+ [9])
+(sections/nca_results.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10 <./figures/ijcnn_style_svm_convergence.pdf> <./figures/ijcnn_style_mlp_con
-vergence.pdf>]
-<figures/ijcnn_style_economic_summary.pdf, id=327, 397.46242pt x 202.24698pt>
-File: figures/ijcnn_style_economic_summary.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_economic_summary.pdf>
-Package pdftex.def Info: figures/ijcnn_style_economic_summary.pdf  used on inpu
-t line 128.
-(pdftex.def)             Requested size: 349.68091pt x 177.94394pt.
-) (sections/ijcnn_conclusion.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11 <./figures/ijcnn_style_cnn_convergence.pdf> <./figures/ijcnn_style_model_p
-erformance.pdf>]) (sections/declarations.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [12 <./figures/ijcnn_style_economic_summary.pdf>]) (main.bbl
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [13]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
+ [10 <./figures/dual_fitness_temporal_split.pdf>]
+<figures/dual_fitness_paired_outcomes.pdf, id=362, 409.69624pt x 338.94406pt>
+File: figures/dual_fitness_paired_outcomes.pdf Graphic file (type pdf)
+<use figures/dual_fitness_paired_outcomes.pdf>
+Package pdftex.def Info: figures/dual_fitness_paired_outcomes.pdf  used on inpu
+t line 11.
+(pdftex.def)             Requested size: 357.1225pt x 295.45302pt.
+<figures/dual_fitness_delta_heatmaps.pdf, id=364, 417.56061pt x 235.84035pt>
+File: figures/dual_fitness_delta_heatmaps.pdf Graphic file (type pdf)
+<use figures/dual_fitness_delta_heatmaps.pdf>
+Package pdftex.def Info: figures/dual_fitness_delta_heatmaps.pdf  used on input
+ line 20.
+(pdftex.def)             Requested size: 357.1225pt x 201.71756pt.
+<figures/dual_fitness_convergence.pdf, id=366, 400.50378pt x 224.88065pt>
+File: figures/dual_fitness_convergence.pdf Graphic file (type pdf)
+<use figures/dual_fitness_convergence.pdf>
+Package pdftex.def Info: figures/dual_fitness_convergence.pdf  used on input li
+ne 31.
+(pdftex.def)             Requested size: 357.1225pt x 200.5206pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [14]
+ [11 <./figures/dual_fitness_paired_outcomes.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+ [12 <./figures/dual_fitness_delta_heatmaps.pdf> <./figures/dual_fitness_conver
+gence.pdf>]
+<figures/dual_fitness_statistical_summary.pdf, id=432, 411.3086pt x 249.48784pt
+>
+File: figures/dual_fitness_statistical_summary.pdf Graphic file (type pdf)
+<use figures/dual_fitness_statistical_summary.pdf>
+Package pdftex.def Info: figures/dual_fitness_statistical_summary.pdf  used on 
+input line 44.
+(pdftex.def)             Requested size: 357.1225pt x 216.6339pt.
+<figures/dual_fitness_economic_summary.pdf, id=434, 400.83789pt x 237.78888pt>
+File: figures/dual_fitness_economic_summary.pdf Graphic file (type pdf)
+<use figures/dual_fitness_economic_summary.pdf>
+Package pdftex.def Info: figures/dual_fitness_economic_summary.pdf  used on inp
+ut line 57.
+(pdftex.def)             Requested size: 357.1225pt x 211.86726pt.
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [13 <./figures/dual_fitness_statistical_summary.pdf>]) (sections/nca_discussio
+n.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [14 <./figures/dual_fitness_economic_summary.pdf>]) (sections/nca_conclusion.t
+ex
+Underfull \hbox (badness 1117) in paragraph at lines 3--4
+\OT1/cmr/m/n/10 tech-ni-cal rep-re-sen-ta-tion can sup-port meta-heuris-tic hyp
+er-pa-ram-e-ter search---but
+ []
+
+) (sections/declarations.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [15])
+(main.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [16]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [17]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [18])
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [19]
 (main.aux)
  ***********
 LaTeX2e <2025-11-01>
@@ -1113,47 +1147,53 @@ L3 programming layer <2026-03-20>
 
 
 LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 0.985pt have occurred.
+(Font)              up to 1.75pt have occurred.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: BE5206A95335BD9E35DE6BD76752FFE2;2124.
+(rerunfilecheck)             Checksum: 3888DE73AC7C9CFB00B6F088960796CC;4175.
  ) 
 Here is how much of TeX's memory you used:
- 23506 strings out of 467691
- 437178 string characters out of 5415471
- 831518 words of memory out of 5000000
- 52029 multiletter control sequences out of 15000+600000
- 644588 words of font info for 106 fonts, out of 8000000 for 9000
+ 23588 strings out of 467691
+ 438517 string characters out of 5415471
+ 848388 words of memory out of 5000000
+ 52085 multiletter control sequences out of 15000+600000
+ 648366 words of font info for 122 fonts, out of 8000000 for 9000
  1151 hyphenation exceptions out of 8191
- 90i,16n,104p,1784b,816s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,13n,104p,1784b,816s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
 mbx10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
 nts/cm/cmbx12.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmbx7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/User/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/User/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/User/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/U
-ser/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C
-:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10
-.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmr17.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmr5.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmr6.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/amsfonts/cm/cmr7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/User/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/User/AppData/Local/Programs
-/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/User/AppData/Local/
-Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/User/AppData
-/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/User/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/User
-s/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10
-.pfb>
-Output written on main.pdf (16 pages, 910271 bytes).
+ic/amsfonts/cm/cmbx6.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmbx7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/User/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/User/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/U
+ser/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/
+Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.p
+fb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmmi9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmmib10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmr10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmr17.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/f
+onts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/User/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/User/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/User/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/User/AppData
+/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/User/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/User
+s/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><
+C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy
+8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmti10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmti7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmtt10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/User/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on main.pdf (19 pages, 717497 bytes).
 PDF statistics:
- 541 PDF objects out of 1000 (max. 8388607)
- 87 named destinations out of 1000 (max. 500000)
- 144 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 675 PDF objects out of 1000 (max. 8388607)
+ 105 named destinations out of 1000 (max. 500000)
+ 195 words of extra memory for PDF output out of 10000 (max. 10000000)
 

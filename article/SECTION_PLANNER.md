@@ -46,31 +46,36 @@ This document defines the pre-writing blueprint for every section of the paper. 
 
 ---
 
-### SECTION 2: RELATED WORK & THEORETICAL BACKGROUND
+### SECTION 2: SYSTEMATIC REVIEW OF LITERATURE
 
-- **Scientific Objective**: Provide a rigorous synthesis of technical analysis, neural financial forecasting, and metaheuristics, culminating in Table 1 which exposes unmet limitations in published literature.
+- **Scientific Objective**: Provide a systematic review of literature (SRL) following PRISMA guidelines and NCA journal standards across technical features, classifier backbones (RF, SVM, MLP, 1D-CNN), and metaheuristic optimizers (RS, GA, PSO, DE, GWO), culminating in Table 1 which exposes unmet limitations in published literature and motivates our benchmark framework.
 - **Questions the Reader Has**:
-  1. What features are standard in high-frequency intraday prediction?
-  2. How have neural networks and metaheuristics been combined previously?
-  3. What are the exact limitations of prior studies?
+  1. How were studies selected (PRISMA protocol, databases, boolean queries)?
+  2. What are the 3 central Research Questions (RQ1 Budget Parity, RQ2 Temporal Leakage, RQ3 Economic Alignment)?
+  3. How do technical indicators and Information Gain feature selection support downstream classification backbones?
+  4. How do evolutionary and swarm metaheuristics navigate non-convex hyperparameter search spaces under budget caps?
+  5. What exact methodological gaps permeate prior works?
 - **Questions That Must Be Answered**:
-  - Why is Information Gain effective for feature selection in 5-min WIN futures?
-  - Which metaheuristic families (evolutionary vs. swarm) have been applied?
-  - What gaps exist in the 40+ reference papers from NCA and financial ML?
+  - What are the search criteria, inclusion/exclusion rules, and target databases (IEEE, Scopus, WoS, SpringerLink/NCA)?
+  - How do RF, SVM, MLP, and 1D-CNN handle high-frequency 5-min WIN futures indicators?
+  - Why is an equal candidate evaluation budget ($N_{\mathrm{eval}} = 1{,}000$) essential for fair metaheuristic comparison?
+  - What are the 3 critical methodological flaws (*Budget Inequality*, *Temporal Data Leakage*, *Classification-Economic Disconnect*)?
 - **Repository Evidence Required**:
   - `article/references/md_references/` (90 Markdown reference papers).
-  - ICCSA 2025 paper (`InfoGain_[7] = [30, 52, 31, 53, 42, 33, 41]`).
+  - Precursor papers (`souza2025iccsa`, `souza2026ijcnn`).
 - **Literature Evidence Required**:
-  - 40 recent NCA papers (2024–2026), Faris et al. (2018), Mirjalili et al. (2020).
-- **Figures Needed**: None.
-- **Tables Needed**: **Table 1: Representative literature on optimizer-driven financial forecasting and their unmet limitations**.
-- **Logical Dependencies**: Depends on literature survey in `md_references/`.
-- **Expected Conclusion**: Prior work is fragmented and lacks equal-budget temporal validation.
-- **Common Reviewer Criticisms**: Superficial literature review, missing recent 2024-2026 NCA citations, non-systematic table.
+  - 15 representative studies (2015–2026) in Table 1 + 2024–2026 NCA papers (Dhingra 2025, Al Bannoud 2026, Bashir 2026, Bandgar 2025, Billah 2024, Jesus 2025, Jovanovic 2024).
+- **Figures Needed**: None (Section 2 is textual + Tabular).
+- **Tables Needed**: **Table 1: Systematic Literature Review comparison matrix (6 columns: Study & Year, Domain & Data, Models, Optimization & Features, Validation Protocol, Methodological Gap)**.
+- **Logical Dependencies**: Connects PRISMA literature synthesis to Section 3 (Methods) design.
+- **Expected Conclusion**: Prior work is fragmented, unconstrained in budget, and subject to temporal leakage, demonstrating the urgent need for our controlled benchmark.
+- **Common Reviewer Criticisms**: Superficial literature review, missing recent 2024–2026 NCA citations, un-anonymized precursor references, non-systematic matrix.
 - **Acceptance Checklist**:
-  - [ ] 3 thematic sub-sections (2.1 Technical Analysis, 2.2 Financial ML, 2.3 Metaheuristics).
-  - [ ] Table 1 present with 4 columns (*Study, Model/Domain, Optimization, Unmet Limitations*).
-  - [ ] At least 15 citations from 2024–2026 NCA papers included.
+  - [ ] 5-part sub-section blueprint (2.1 Selection Protocol & RQs, 2.2 Backbones & Features, 2.3 Metaheuristic Paradigms, 2.4 Comparative Synthesis, 2.5 Critical Gaps).
+  - [ ] Table 1 present with 6 columns and 16 rows (15 prior studies + Present Work).
+  - [ ] Precursors strictly anonymized as `[Anonymized Precursor A]` and `[Anonymized Precursor B]`.
+  - [ ] 3 Research Questions (RQ1, RQ2, RQ3) explicitly formulated.
+  - [ ] 3 Methodological Gaps explicitly articulated.
 
 ---
 
