@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{38}
+\begin{thebibliography}{37}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -241,18 +241,19 @@ Harvard Dataverse
 \endbibitem
 
 %%% 13
-\bibitem[\protect\citeauthoryear{Ballings
-  et~al.}{2015}]{ballings2015evaluating}
+\bibitem[\protect\citeauthoryear{Nabipour
+  et~al.}{2020}]{nabipour2020predicting}
 \begin{barticle}
-\bauthor{\bsnm{Ballings}, \binits{M.}},
-\bauthor{\bsnm{Poel}, \binits{D.}},
-\bauthor{\bsnm{Hespeels}, \binits{N.}},
-\bauthor{\bsnm{Gryp}, \binits{R.}}:
-\batitle{Evaluating multiple classifiers for stock price direction prediction}.
-\bjtitle{Expert Systems with Applications}
-\bvolume{42}(\bissue{20}),
-\bfpage{7046}--\blpage{7056}
-(\byear{2015})
+\bauthor{\bsnm{Nabipour}, \binits{M.}},
+\bauthor{\bsnm{Nayyeri}, \binits{P.}},
+\bauthor{\bsnm{Jabani}, \binits{H.}},
+\bauthor{\bsnm{Mosavi}, \binits{A.}}, \betal:
+\batitle{Predicting stock market trends using machine learning and deep
+  learning algorithms via continuous and binary data: a comparative analysis}.
+\bjtitle{IEEE Access}
+\bvolume{8},
+\bfpage{150199}--\blpage{150212}
+(\byear{2020})
 \end{barticle}
 \endbibitem
 
@@ -355,21 +356,6 @@ Harvard Dataverse
 \endbibitem
 
 %%% 21
-\bibitem[\protect\citeauthoryear{Ding et~al.}{2011}]{ding2011optimizing}
-\begin{barticle}
-\bauthor{\bsnm{Ding}, \binits{S.}},
-\bauthor{\bsnm{Su}, \binits{C.}},
-\bauthor{\bsnm{Yu}, \binits{J.}}:
-\batitle{Optimizing neural network weights and hyperparameters using genetic
-  algorithms}.
-\bjtitle{Artificial Intelligence Review}
-\bvolume{36}(\bissue{2}),
-\bfpage{153}--\blpage{162}
-(\byear{2011})
-\end{barticle}
-\endbibitem
-
-%%% 22
 \bibitem[\protect\citeauthoryear{Jovanovic et~al.}{2024}]{jovanovic2024wann}
 \begin{barticle}
 \bauthor{\bsnm{Jovanovic}, \binits{L.}},
@@ -389,7 +375,7 @@ Harvard Dataverse
 \end{barticle}
 \endbibitem
 
-%%% 23
+%%% 22
 \bibitem[\protect\citeauthoryear{Faris et~al.}{2018}]{faris2018gwo_review}
 \begin{barticle}
 \bauthor{\bsnm{Faris}, \binits{H.}},
@@ -406,7 +392,7 @@ Harvard Dataverse
 \end{barticle}
 \endbibitem
 
-%%% 24
+%%% 23
 \bibitem[\protect\citeauthoryear{Rajwar
   et~al.}{2023}]{rajwar2023exhaustive_review}
 \begin{barticle}
@@ -423,7 +409,7 @@ Harvard Dataverse
 \end{barticle}
 \endbibitem
 
-%%% 25
+%%% 24
 \bibitem[\protect\citeauthoryear{Goldberg}{1989}]{goldberg1989ga}
 \begin{bbook}
 \bauthor{\bsnm{Goldberg}, \binits{D.E.}}:
@@ -434,7 +420,7 @@ Harvard Dataverse
 \end{bbook}
 \endbibitem
 
-%%% 26
+%%% 25
 \bibitem[\protect\citeauthoryear{Storn and Price}{1997}]{storn1997de}
 \begin{barticle}
 \bauthor{\bsnm{Storn}, \binits{R.}},
@@ -449,7 +435,7 @@ Harvard Dataverse
 \end{barticle}
 \endbibitem
 
-%%% 27
+%%% 26
 \bibitem[\protect\citeauthoryear{Kennedy and Eberhart}{1995}]{kennedy1995pso}
 \begin{bchapter}
 \bauthor{\bsnm{Kennedy}, \binits{J.}},
@@ -464,7 +450,7 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{bchapter}
 \endbibitem
 
-%%% 28
+%%% 27
 \bibitem[\protect\citeauthoryear{Chicco and Jurman}{2020}]{chicco2020mcc}
 \begin{barticle}
 \bauthor{\bsnm{Chicco}, \binits{D.}},
@@ -479,21 +465,7 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{barticle}
 \endbibitem
 
-%%% 29
-\bibitem[\protect\citeauthoryear{Heaton et~al.}{2017}]{heaton2017deep}
-\begin{barticle}
-\bauthor{\bsnm{Heaton}, \binits{J.B.}},
-\bauthor{\bsnm{Polson}, \binits{N.G.}},
-\bauthor{\bsnm{Witte}, \binits{J.H.}}:
-\batitle{Deep learning for finance: deep portfolios}.
-\bjtitle{Applied Stochastic Models in Business and Industry}
-\bvolume{33}(\bissue{1}),
-\bfpage{3}--\blpage{12}
-(\byear{2017})
-\end{barticle}
-\endbibitem
-
-%%% 30
+%%% 28
 \bibitem[\protect\citeauthoryear{Henrique
   et~al.}{2019}]{henrique2019stock_review}
 \begin{barticle}
@@ -507,6 +479,35 @@ pp. \bfpage{1942}--\blpage{1948}
 \bfpage{226}--\blpage{251}
 (\byear{2019})
 \doiurl{10.1016/j.eswa.2019.01.012}
+\end{barticle}
+\endbibitem
+
+%%% 29
+\bibitem[\protect\citeauthoryear{Gad}{2022}]{gad2022pso_comprehensive}
+\begin{barticle}
+\bauthor{\bsnm{Gad}, \binits{A.G.}}:
+\batitle{Particle swarm optimization algorithm and its applications: A
+  systematic review}.
+\bjtitle{Archives of Computational Methods in Engineering}
+\bvolume{29}(\bissue{5}),
+\bfpage{2531}--\blpage{2561}
+(\byear{2022})
+\doiurl{10.1007/s11831-021-09694-4}
+\end{barticle}
+\endbibitem
+
+%%% 30
+\bibitem[\protect\citeauthoryear{Wang et~al.}{2018}]{wang2018pso_comprehensive}
+\begin{barticle}
+\bauthor{\bsnm{Wang}, \binits{D.}},
+\bauthor{\bsnm{Tan}, \binits{D.}},
+\bauthor{\bsnm{Liu}, \binits{L.}}:
+\batitle{Particle swarm optimization algorithm: an overview}.
+\bjtitle{Soft Computing}
+\bvolume{22}(\bissue{2}),
+\bfpage{387}--\blpage{408}
+(\byear{2018})
+\doiurl{10.1007/s00500-016-2474-6}
 \end{barticle}
 \endbibitem
 
@@ -537,20 +538,6 @@ pp. \bfpage{1942}--\blpage{1948}
 \endbibitem
 
 %%% 33
-\bibitem[\protect\citeauthoryear{Gad}{2022}]{gad2022pso_comprehensive}
-\begin{barticle}
-\bauthor{\bsnm{Gad}, \binits{A.G.}}:
-\batitle{Particle swarm optimization algorithm and its applications: A
-  systematic review}.
-\bjtitle{Archives of Computational Methods in Engineering}
-\bvolume{29}(\bissue{5}),
-\bfpage{2531}--\blpage{2561}
-(\byear{2022})
-\doiurl{10.1007/s11831-021-09694-4}
-\end{barticle}
-\endbibitem
-
-%%% 34
 \bibitem[\protect\citeauthoryear{Bergstra and
   Bengio}{2012}]{bergstra2012random_search}
 \begin{barticle}
@@ -564,7 +551,7 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{barticle}
 \endbibitem
 
-%%% 35
+%%% 34
 \bibitem[\protect\citeauthoryear{Bareket and
   P{\^a}rv}{2024}]{bareket2024adaptive}
 \begin{barticle}
@@ -579,7 +566,7 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{barticle}
 \endbibitem
 
-%%% 36
+%%% 35
 \bibitem[\protect\citeauthoryear{Rahim et~al.}{2025}]{rahim2025technical}
 \begin{barticle}
 \bauthor{\bsnm{Rahim}, \binits{A.}},
@@ -594,7 +581,7 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{barticle}
 \endbibitem
 
-%%% 37
+%%% 36
 \bibitem[\protect\citeauthoryear{Simatupang et~al.}{2026}]{simatupang2026stock}
 \begin{barticle}
 \bauthor{\bsnm{Simatupang}, \binits{R.}},
@@ -609,7 +596,7 @@ pp. \bfpage{1942}--\blpage{1948}
 \end{barticle}
 \endbibitem
 
-%%% 38
+%%% 37
 \bibitem[\protect\citeauthoryear{Souza et~al.}{2026}]{souza2026ijcnn}
 \begin{botherref}
 \oauthor{\bsnm{Souza}, \binits{A.V.S.}},

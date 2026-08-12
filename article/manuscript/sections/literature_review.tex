@@ -5,52 +5,202 @@
 
 \section{Systematic Review of Literature}\label{sec:literature_review}
 
-Predicting short-term directional price movements in high-frequency financial markets remains one of the most demanding applications of neural computing due to low signal-to-noise ratios, rapid regime shifts, and severe non-stationarity \cite{heaton2017deep, jesus2025tda}. Supervised machine learning algorithms and technical indicator representations have been widely deployed to capture non-linear intraday patterns; however, predictive efficacy depends heavily on input feature selection, hyperparameter tuning, and validation protocol integrity \cite{singh2022feature, henrique2019stock_review}. This section presents a structured Systematic Review of Literature (SRL) examining prior work across input representations, metaheuristic optimization paradigms, and validation designs, synthesizing current state-of-the-art contributions and formalizing the critical methodological gaps that motivate our benchmark framework.
+The intersection of computational intelligence, metaheuristic optimization, and financial time-series forecasting has generated an extensive body of literature over the past decade \cite{henrique2019stock_review, rajwar2023exhaustive_review, jiang2021applications}. Comprehensive surveys have categorized machine learning applications in financial prediction \cite{henrique2019stock_review, jiang2021applications}, systematically reviewed metaheuristic search paradigms such as Particle Swarm Optimization \cite{gad2022pso_comprehensive, wang2018pso_comprehensive} and Grey Wolf Optimizer \cite{faris2018gwo_review}, and benchmarked neural forecasting architectures under computational constraints \cite{dhingra2025solar, jovanovic2024wann}. However, despite substantial published progress in premier neural computing journals \cite{billah2024nca_moving_average, bandgar2025finchronos, al_bannoud2026accelerating, bashir2026evobagnet}, existing reviews and empirical benchmarks have not systematically evaluated the interaction between equal-budget metaheuristic tuning, temporal validation integrity, and out-of-sample trading performance. This section presents a Systematic Review of Literature (SRL) guided by the Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) protocol, examining prior work across feature selection, model backbones, metaheuristic search, and validation protocols, synthesizing current state-of-the-art contributions and formalizing the three critical methodological gaps that motivate our benchmark framework.
 
 \subsection{Literature Selection Protocol and Research Questions}\label{subsec:selection_protocol}
 
-To ensure methodological rigor and eliminate reporting bias, relevant literature was retrieved following an explicit PRISMA-guided protocol across major scholarly databases: IEEE Xplore, Scopus, Web of Science, and SpringerLink (specifically targeting \textit{Neural Computing and Applications}). The search strategy combined boolean queries for optimization paradigms (\texttt{"metaheuristic"}, \texttt{"genetic algorithm"}, \texttt{"particle swarm"}, \texttt{"differential evolution"}, \texttt{"grey wolf optimization"}), machine learning models (\texttt{"multilayer perceptron"}, \texttt{"random forest"}, \texttt{"support vector machine"}, \texttt{"1D-CNN"}), and financial application domains (\texttt{"futures market"}, \texttt{"intraday forecasting"}, \texttt{"technical indicators"}).
+To ensure methodological rigor and eliminate reporting bias, relevant literature was retrieved following an explicit PRISMA search protocol across major scholarly databases: IEEE Xplore, Scopus, Web of Science, and SpringerLink (specifically targeting \textit{Neural Computing and Applications}). The search was executed using the following structured Boolean query:
+\begin{itemize}
+    \item (\texttt{"metaheuristic"} OR \texttt{"genetic algorithm"} OR \texttt{"particle swarm"} OR \texttt{"grey wolf"})
+    \item AND (\texttt{"feature selection"} OR \texttt{"technical indicators"} OR \texttt{"Information Gain"})
+    \item AND (\texttt{"futures market"} OR \texttt{"intraday forecasting"} OR \texttt{"trend classification"})
+\end{itemize}
 
-The review was bounded to peer-reviewed journal articles and top-tier conference proceedings published between 2015 and 2026. Inclusion criteria mandated that candidate studies: (i) evaluate automated feature selection or hyperparameter tuning on financial or complex time-series classification/forecasting, (ii) specify validation protocols and search spaces, and (iii) report empirical predictive or financial metrics. Studies lacking reproducible experimental parameters or failing to disclose optimization constraints were excluded. The systematic review is organized around three central Research Questions (RQs):
+The review was bounded to peer-reviewed journal articles and top-tier conference proceedings published between 2019 and 2026. Candidate studies were screened against explicit eligibility criteria:
+\begin{itemize}
+    \item \textbf{Inclusion Criteria}: (i) evaluation of automated feature selection or metaheuristic hyperparameter tuning on financial or complex time-series classification/forecasting; (ii) explicit disclosure of validation protocols and search space boundaries; and (iii) reporting of empirical predictive or out-of-sample financial metrics.
+    \item \textbf{Exclusion Criteria}: Studies lacking reproducible experimental parameters, omitting candidate evaluation budget details, or failing to disclose optimization constraints were excluded.
+\end{itemize}
+
+Figure~\ref{fig:prisma_flowchart} depicts the complete PRISMA literature selection workflow. The systematic review is organized around three central Research Questions (RQs):
 \begin{enumerate}
     \item \textbf{RQ1 (Budget Parity)}: How do stochastic metaheuristic search operators (RS, GA, PSO, DE, GWO) compare across distinct classifier backbones (RF, SVM, MLP, 1D-CNN) when restricted to a strictly equal candidate evaluation budget cap ($N_{\mathrm{eval}} = 1{,}000$)?
     \item \textbf{RQ2 (Temporal Leakage)}: What is the quantitative impact on out-of-sample generalization when comparing chronological sequential temporal splits against randomized cross-validation on high-frequency financial time series?
     \item \textbf{RQ3 (Economic Alignment)}: How effectively do classification-based validation fitness objectives (e.g., compound MCC/$F_1$ vs. weighted accuracy) align with out-of-sample intraday trading metrics (Net Return \%, Sharpe ratio, Maximum Drawdown) under realistic exchange transaction costs?
 \end{enumerate}
 
+\begin{figure}[htbp]
+\centering
+\resizebox{0.92\linewidth}{!}{%
+\begin{tikzpicture}[
+  node distance=0.8cm and 1.0cm,
+  every node/.style={
+    draw=black!80,
+    rounded corners=2.5pt,
+    align=center,
+    font=\footnotesize,
+    inner sep=6pt
+  },
+  stage/.style={fill=black!6, text width=4.0cm, minimum height=1.1cm},
+  criteria/.style={fill=black!2, text width=5.6cm, align=left},
+  arrow/.style={-{Stealth[length=2.2mm]}, thick}
+]
+
+  % Nodes
+  \node[stage] (db) {\textbf{Electronic Database Search}\\IEEE Xplore, Scopus,\\Web of Science, SpringerLink (NCA)};
+  \node[stage, right=1.2cm of db] (retrieved) {\textbf{Identification Phase}\\$N = 1{,}248$ candidate records\\retrieved via Boolean query};
+  
+  \node[criteria, below=0.8cm of retrieved] (prisma) {
+    \textbf{PRISMA Screening \& Eligibility Audit}\\[2pt]
+    \textbf{Inclusion Criteria}:
+    \begin{itemize}
+      \item Peer-reviewed publications (2019--2026).
+      \item Feature selection / metaheuristic tuning on financial time series.
+      \item Disclosed search bounds \& validation split.
+    \end{itemize}
+    \textbf{Exclusion Criteria}:
+    \begin{itemize}
+      \item Unconstrained/undefined evaluation budget.
+      \item Non-reproducible experimental parameters.
+    \end{itemize}
+  };
+  
+  \node[stage, left=1.2cm of prisma] (final) {\textbf{Included Studies}\\$N = 15$ representative studies\\+ Present Work audited in Table~\ref{tab:literature_gap}};
+
+  % Arrows
+  \draw[arrow] (db) -- (retrieved);
+  \draw[arrow] (retrieved) -- (prisma);
+  \draw[arrow] (prisma) -- (final);
+
+\end{tikzpicture}%
+}
+\caption{PRISMA literature selection protocol flowchart mapping database retrieval, eligibility criteria filtering, and final synthesis of 15 representative studies audited in Table~\ref{tab:literature_gap}.}
+\label{fig:prisma_flowchart}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.82\linewidth]{figures/literature_scope_by_year.pdf}
+\caption{Distribution of the 15 representative prior studies included in the literature synthesis, grouped by publication year and the scope of optimizer comparison. A study is assigned to one category according to its primary experimental design; the present work is excluded. The limited number of multi-optimizer studies motivates the controlled benchmark developed in this paper.}
+\label{fig:literature_scope_by_year}
+\end{figure}
+\FloatBarrier
+
 \subsection{Classifier Backbones and Input Representations}\label{subsec:backbones_features}
 
-Supervised intraday trend prediction relies heavily on the quality and information density of input features \cite{singh2022feature}. Raw high-frequency bar data (OHLCV) exhibit extreme microstructural noise and high variance. Consequently, domain-specific technical analysis indicators---spanning momentum indicators, moving averages, and volatility envelopes---are widely computed to extract directional signals \cite{billah2024nca_moving_average, hunter1986exponentially, bollinger1992using}. However, calculating dozens of technical indicators across multiple lookback windows introduces severe multicollinearity and high dimensionality, which can destabilize model training and induce overfitting \cite{lei2012feature, kumar2014feature}.
+\subsubsection{Technical indicators as input representations}
 
-Information-theoretic feature selection provides a principled approach to reduce feature space dimensionality. Information Gain (IG) attribute filtering measures the mutual information between individual indicators and the target trend label, ranking features according to their predictive entropy reduction \cite{lei2012feature, souza2025iccsa}. Filtering out redundant or noisy indicators isolates a compact, highly informative feature core, which stabilizes fitted classification boundaries and lowers computational overhead during downstream hyperparameter search \cite{kumar2014feature}.
+The quality and information density of the input representation are central determinants of supervised intraday trend prediction \cite{singh2022feature}. Open, high, low, close, and volume observations encode the market state, but short-horizon bars are also affected by microstructural noise, regime shifts, and high variance. For this reason, financial machine-learning studies commonly transform raw bar data into technical descriptors representing complementary aspects of price behaviour: momentum, trend, dispersion, and volatility \cite{billah2024nca_moving_average, hunter1986exponentially, bollinger1992using}. Such representations do not create information; rather, they provide a structured hypothesis space through which a learner can test whether recent price and volume dynamics carry directional content.
 
-Downstream predictive backbones span diverse algorithmic hypothesis spaces:
+The expansion of the indicator set must nevertheless be controlled. Indicators derived from common prices and overlapping lookback windows are often strongly correlated, so a large technical library can amplify redundancy, increase estimation variance, and make model ranking sensitive to incidental patterns in the development sample \cite{lei2012feature, kumar2014feature}. Feature selection is therefore a component of model design rather than a preliminary convenience: it reduces the dimensionality exposed to subsequent learning and hyperparameter search, while retaining descriptors with a demonstrable association with the target. Information Gain (IG) is a transparent filter criterion for this purpose, ranking candidate indicators by their reduction of class uncertainty \cite{lei2012feature, souza2025iccsa}. Although a univariate ranking does not guarantee an optimal multivariate subset, its low computational cost and auditability make it appropriate for constructing a compact technical representation. The mathematical formulation and empirical application of IG in the present benchmark are detailed in Section~\ref{sec:featureselection}.
+
+\subsubsection{Classifier families}
+
+The literature spans several classifier families whose distinct inductive biases make a single preferred backbone unlikely across all market representations:
 \begin{itemize}
-    \item \textbf{Random Forest (RF)}: An ensemble of decision trees constructed via bootstrap aggregation (bagging) and random feature subset selection, highly resilient to feature noise and non-linear interactions \cite{ballings2015evaluating}.
-    \item \textbf{Support Vector Machines (SVM)}: Convex maximum-margin classifiers that map non-linearly separable indicator subsets into high-dimensional feature spaces using kernel functions (e.g., Radial Basis Function) \cite{naik2019optimal}.
-    \item \textbf{Multilayer Perceptron (MLP)}: Fully-connected feedforward neural networks that learn complex non-linear decision maps via error backpropagation, sensitive to layer widths, learning rates, and regularization settings \cite{ecer2020mlp_ga_pso}.
-    \item \textbf{1D Convolutional Neural Network (1D-CNN)}: Deep learning architectures employing 1D temporal convolution filters and pooling layers to extract local spatial-temporal patterns directly from sequential indicator windows \cite{bandgar2025finchronos, dhingra2025solar}.
+    \item \textbf{Ensemble decision trees}, represented by Random Forest (RF), aggregate decorrelated trees built from bootstrap samples and randomly selected feature subsets. Their partition-based structure accommodates non-linear interactions and can be relatively robust to noisy descriptors \cite{nabipour2020predicting}.
+    \item \textbf{Kernel margin classifiers}, represented by Support Vector Machines (SVM), seek separating hyperplanes with a maximum-margin principle. Kernel mappings, including the radial-basis-function kernel, permit non-linear decision surfaces while retaining a well-defined optimization objective \cite{naik2019optimal}.
+    \item \textbf{Feedforward neural networks}, represented by Multilayer Perceptrons (MLP), learn non-linear mappings through stacked fully connected layers and backpropagation. Their expressive capacity is accompanied by sensitivity to architectural and regularization choices \cite{ecer2020mlp_ga_pso}.
+    \item \textbf{One-dimensional convolutional neural networks} (1D-CNN) apply shared local filters to ordered input windows. This construction can capture short-range patterns while using parameter sharing to constrain the number of learned weights \cite{bandgar2025finchronos, dhingra2025solar}.
 \end{itemize}
-Prior research confirms that classifier ranking is strongly dependent on input feature representation, demonstrating that feature subset selection and model hyperparameter configuration must be evaluated jointly \cite{ballings2015evaluating, mutinda2026hybrid}.
+
+These families therefore represent different hypotheses about how directional information is encoded. Their comparative use is more informative than selecting a single algorithm a priori, particularly because changes in feature representation and hyperparameterization can alter the observed ranking of classifiers \cite{nabipour2020predicting, mutinda2026hybrid}. The specific representations, search domains, and fitted architectures adopted in this study are defined in Section~\ref{sec:methods}.
 
 \subsection{Metaheuristic Optimization Paradigms}\label{subsec:metaheuristic_paradigms}
 
-Hyperparameter optimization is critical to prevent underfitting or severe overfitting in financial learning models. Classical gradient-based optimization methods (e.g., SGD, Adam) require smooth, differentiable loss surfaces with respect to weights, but cannot navigate discrete structural parameters (e.g., hidden neurons, filter counts, batch sizes) or non-differentiable regularization settings \cite{jovanovic2024wann, dhingra2025solar}. Population-based metaheuristic algorithms offer derivative-free global search capabilities over rugged, non-convex, mixed discrete-continuous search spaces $\bm{\theta} \in \mathbb{R}^D$ \cite{faris2018gwo_review, rajwar2023exhaustive_review}.
+\subsubsection{Population-based search for hyperparameter selection}
 
-Four primary population-based metaheuristic families dominate the financial ML literature:
-\begin{itemize}
-    \item \textbf{Genetic Algorithms (GA)}: Evolutionary optimization schemes simulating natural selection through population selection, uniform/single-point crossover, and mutation operators to evolve candidate solution vectors \cite{goldberg1989ga, ding2011optimizing}.
-    \item \textbf{Particle Swarm Optimization (PSO)}: Swarm intelligence algorithms simulating avian flocking, where individual particles dynamically update velocity vectors based on personal historical bests and global swarm best positions \cite{kennedy1995pso, gad2022pso_comprehensive}.
-    \item \textbf{Differential Evolution (DE)}: Stochastic population-based vector search methods that generate trial vectors using vector differences for self-referential mutation and crossover operations \cite{storn1997de}.
-    \item \textbf{Grey Wolf Optimizer (GWO)}: Bio-inspired metaheuristics modeling the hunting social hierarchy ($\alpha, \beta, \delta, \omega$) and prey encirclement mechanisms of grey wolves \cite{faris2018gwo_review, al_bannoud2026accelerating}.
-\end{itemize}
-Random Search (RS) provides an essential baseline sampler in metaheuristic benchmarks, generating uniform random configurations across bounded parameter spaces to test whether guided search operators yield true efficiency gains beyond unguided sampling \cite{bergstra2012random_search}. 
+Hyperparameter selection is naturally formulated as a black-box optimization problem. Let $\boldsymbol{\theta} \in \Omega$ denote a feasible model configuration, where $\Omega$ can contain continuous, integer, categorical, and conditional variables. A validation criterion $f(\boldsymbol{\theta})$ is obtained only after fitting and evaluating the corresponding learning pipeline, and the search objective is
+\begin{equation}\label{eq:metaheuristic_objective}
+\boldsymbol{\theta}^{\star} = \underset{\boldsymbol{\theta} \in \Omega}{\operatorname{arg\,max}}\; f(\boldsymbol{\theta}).
+\end{equation}
+Unlike weight training, this objective need not be differentiable with respect to $\boldsymbol{\theta}$. Tree depth, number of hidden units, kernel choices, and regularization settings may also be discrete or conditionally active. Population-based metaheuristics are consequently attractive because they navigate such mixed spaces without gradient information and can balance broad exploration against local refinement \cite{jovanovic2024wann, faris2018gwo_review, rajwar2023exhaustive_review}.
 
-While mathematical update formulations for these optimizers are detailed in Section~\ref{sec:methods}, existing literature frequently compares these algorithms under unconstrained or unequal candidate evaluation counts (e.g., running GA for 100 generations vs. PSO for 30 iterations without matching population sizes). Such unequal setups obscure whether reported performance gains stem from superior search operators or simply higher computational evaluation budgets \cite{dhingra2025solar, ecer2020mlp_ga_pso}.
+In this context, a “candidate evaluation” should mean one complete configuration assessment under an unchanged validation protocol. This distinction is important: iterations and generations are internal counters, whereas the number of evaluated candidates is the common computational unit through which heterogeneous search procedures can be compared.
+
+Figure~\ref{fig:backbone_optimizer_taxonomy} provides a compact taxonomy of the learning and search families considered in this literature. It distinguishes the classifier hypothesis spaces from the mechanisms used to select their configurations, while retaining the shared objective of validation-based model selection.
+
+\subsubsection{Evolutionary paradigms}
+
+Evolutionary algorithms maintain a population of candidate configurations and improve it through selection and variation. Genetic Algorithms (GA) emulate selection, crossover, and mutation: configurations with stronger fitness are preferentially retained or recombined, while mutation introduces new material into the population \cite{goldberg1989ga, jovanovic2024wann}. This representation-agnostic cycle is well suited to mixed hyperparameter spaces after appropriate encoding and constraint handling.
+
+Differential Evolution (DE) is also population based, but creates candidate displacements from scaled differences between population members. A canonical donor-vector form is
+\begin{equation}\label{eq:de_mutation}
+\mathbf{v}_{i}^{t} = \mathbf{x}_{r_1}^{t} + F\left(\mathbf{x}_{r_2}^{t} - \mathbf{x}_{r_3}^{t}\right),
+\end{equation}
+where $r_1$, $r_2$, and $r_3$ index distinct population members and $F$ scales the differential displacement. Crossover then combines the donor with a target vector, and selection retains the better candidate \cite{storn1997de}. The use of population differences gives DE a self-adaptive search scale, although its practical behaviour still depends on encoding, bounds, and the chosen mutation and crossover strategy.
+
+\subsubsection{Swarm-intelligence paradigms}
+
+Swarm methods update candidates by combining individual experience with population-level information. In Particle Swarm Optimization (PSO), each particle has a position $\mathbf{x}_{i}^{t}$, a velocity $\mathbf{v}_{i}^{t}$, a personal best position $\mathbf{p}_{i}^{t}$, and an incumbent swarm-best position $\mathbf{g}^{t}$. Its standard update is
+\begin{align}
+\mathbf{v}_{i}^{t+1} &= \omega\mathbf{v}_{i}^{t} + c_{1}r_{1}\left(\mathbf{p}_{i}^{t}-\mathbf{x}_{i}^{t}\right) + c_{2}r_{2}\left(\mathbf{g}^{t}-\mathbf{x}_{i}^{t}\right), \label{eq:pso_velocity}\\
+\mathbf{x}_{i}^{t+1} &= \mathbf{x}_{i}^{t} + \mathbf{v}_{i}^{t+1}, \label{eq:pso_position}
+\end{align}
+where $\omega$ controls inertia, $c_{1}$ and $c_{2}$ weight cognitive and social attraction, and $r_{1},r_{2}$ are random variates. This formulation makes the exploration--exploitation trade-off explicit and is the foundation for the broad family of PSO variants reviewed by Gad \cite{kennedy1995pso, gad2022pso_comprehensive}.
+
+Grey Wolf Optimizer (GWO) uses a different collective metaphor. Candidate solutions are ranked into leading $\alpha$, $\beta$, and $\delta$ wolves, while the remaining wolves update their positions by encircling and approaching these leaders. Its control schedule progressively shifts the search from exploration to exploitation \cite{faris2018gwo_review, al_bannoud2026accelerating}. Despite distinct metaphors, PSO and GWO share the same benchmarking requirement: each update must be translated into feasible configurations and assessed under the same validation rule.
+
+\subsubsection{Baselines and implications for comparative studies}
+
+Random Search (RS) is an indispensable baseline because it samples feasible configurations without an adaptive search trajectory. It establishes whether the additional mechanisms of evolutionary or swarm search improve solution quality beyond unguided sampling from the same search space \cite{bergstra2012random_search}. A credible comparison must therefore control the parameter domain, candidate-evaluation count, validation data, random replication, and reporting metrics. Equalizing only the nominal number of generations or iterations is insufficient when algorithms evaluate different numbers of candidates per update.
+
+The comparative evidence also highlights recurring weaknesses: unequal computational budgets can confound search quality with search effort; randomized validation can compromise temporal integrity; and classification-only reporting may not establish economic value after transaction costs \cite{ecer2020mlp_ga_pso, bandgar2025finchronos, billah2024nca_moving_average}. These issues are synthesized in Section~\ref{subsec:critical_gaps}; the concrete controls used by the present benchmark are specified only in Section~\ref{sec:methods}.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  every node/.style={font=\footnotesize, align=center},
+  root/.style={draw=black!80, fill=black!7, rounded corners=2pt, minimum width=4.45cm, minimum height=0.72cm, font=\bfseries\footnotesize},
+  family/.style={draw=black!80, fill=blue!18, rounded corners=2pt, minimum width=3.8cm, minimum height=0.70cm, font=\bfseries\footnotesize},
+  classifier/.style={draw=black!80, fill=black!3, rounded corners=2pt, text width=1.85cm, minimum height=1.15cm, inner sep=3.5pt},
+  search/.style={draw=black!80, fill=orange!18, rounded corners=2pt, text width=2.75cm, minimum height=1.15cm, inner sep=3.5pt},
+  branch/.style={-{Stealth[length=1.8mm]}, line width=0.5pt, black!75}
+]
+  % Explicit bounding box prevents clipping when this float is moved to a page top.
+  \useasboundingbox (-4.55,0.50) rectangle (4.40,-6.75);
+  \node[root] (root) at (0,0) {Validation-based model selection};
+  \node[family] (backbones) at (-2.3,-1.25) {Predictive backbones};
+  \node[family] (optimizers) at (2.75,-1.25) {Search paradigms};
+
+  \node[classifier] (rf) at (-3.45,-2.85) {\textbf{Random Forest}\\Tree ensemble\\and random subspaces};
+  \node[classifier] (svm) at (-1.15,-2.85) {\textbf{SVM}\\Kernel-margin\\classification};
+  \node[classifier] (mlp) at (-3.45,-4.60) {\textbf{MLP}\\Feedforward\\neural mapping};
+  \node[classifier] (cnn) at (-1.15,-4.60) {\textbf{1D-CNN}\\Local filters over\\ordered windows};
+
+  \node[search] (rs) at (2.75,-2.65) {\textbf{Random Search}\\Uniform sampling of feasible configurations};
+  \node[search] (evolution) at (2.75,-4.25) {\textbf{Evolutionary search}\\GA: selection, crossover, mutation\\DE: differential variation};
+  \node[search] (swarm) at (2.75,-5.95) {\textbf{Swarm intelligence}\\PSO: personal/global best\\GWO: leader hierarchy};
+
+  % Root split
+  \draw[black!75, line width=0.5pt] (root.south) -- (0,-0.62) -- (-2.3,-0.62);
+  \draw[black!75, line width=0.5pt] (root.south) -- (0,-0.62) -- (2.75,-0.62);
+  \draw[branch] (-2.3,-0.62) -- (backbones.north);
+  \draw[branch] (2.75,-0.62) -- (optimizers.north);
+
+  % Classifier-family buses: each backbone is an alternative, not a sequence.
+  \draw[black!75, line width=0.5pt] (backbones.south) -- (-2.3,-2.05);
+  \draw[black!75, line width=0.5pt] (-3.45,-2.05) -- (-1.15,-2.05);
+  \draw[branch] (-3.45,-2.05) -- (rf.north);
+  \draw[branch] (-1.15,-2.05) -- (svm.north);
+  \draw[black!75, line width=0.5pt] (-2.3,-2.05) -- (-2.3,-3.80);
+  \draw[black!75, line width=0.5pt] (-3.45,-3.80) -- (-1.15,-3.80);
+  \draw[branch] (-3.45,-3.80) -- (mlp.north);
+  \draw[branch] (-1.15,-3.80) -- (cnn.north);
+
+  % Search paradigms share the same model-selection objective.
+  \draw[black!75, line width=0.5pt] (optimizers.south) -- (1.10,-1.60) -- (1.10,-5.95);
+  \draw[branch] (1.10,-2.65) -- (rs.west);
+  \draw[branch] (1.10,-4.25) -- (evolution.west);
+  \draw[branch] (1.10,-5.95) -- (swarm.west);
+\end{tikzpicture}%
+\caption{Conceptual taxonomy linking predictive backbones with hyperparameter-search strategies in the reviewed literature. The left branch denotes alternative classifier hypothesis spaces; the right branch distinguishes unguided sampling, evolutionary variation, and swarm-based collective search. The figure is conceptual; the precise search domains and experimental controls are specified in Section~\ref{sec:methods}.}
+\label{fig:backbone_optimizer_taxonomy}
+\end{figure}
 
 \subsection{Comparative Synthesis of Representative Studies}\label{subsec:comparative_synthesis}
 
-To establish the state of the art and pinpoint persistent methodological gaps, Table~\ref{tab:literature_gap} synthesizes 15 representative published studies from 2015 to 2026 alongside the present benchmark work. Studies are evaluated across six technical dimensions: Study \& Year, Application Domain \& Data, Model Backbones, Optimization \& Feature Paradigms, Validation Protocol, and Identified Methodological Gap.
+To establish the state of the art and pinpoint persistent methodological gaps, Table~\ref{tab:literature_gap} synthesizes 15 representative published studies from 2019 to 2026 alongside the present benchmark work. Studies are evaluated across six technical dimensions: Study \& Year, Application Domain \& Data, Model Backbones, Optimization \& Feature Paradigms, Validation Protocol, and Identified Methodological Gap.
 
 \begin{table*}[htbp]
 \caption{Systematic Literature Review comparison matrix auditing representative studies in financial machine learning, metaheuristic hyperparameter tuning, and temporal validation protocols against identified methodological gaps.}
@@ -63,8 +213,8 @@ To establish the state of the art and pinpoint persistent methodological gaps, T
 \toprule
 Study \& Year & Domain \& Data & Models & Optimization \& Features & Validation Protocol & Methodological Gap \\
 \midrule
-Ballings et al.\ (2015) \cite{ballings2015evaluating} & Equities (5,767 firms) & SVM, RF, AdaBoost & Grid search / Manual & Cross-validation & Absence of metaheuristic search. \\
-Ding et al.\ (2011) \cite{ding2011optimizing} & Stock index trend & Neural Networks & Hybrid GA-BP & Standard split & Unequal evaluation budget across optimizers. \\
+Nabipour et al.\ (2020) \cite{nabipour2020predicting} & Stock index trend & RF, SVM, ANN, XGBoost & Technical indicators & Train/test split & Absence of metaheuristic hyperparameter tuning. \\
+Jovanovic et al.\ (2024) \cite{jovanovic2024wann} & Crop-yield prediction & Weight-agnostic neural networks & Metaheuristic tuning & Train/test evaluation & Non-financial domain; no equal-budget financial benchmark. \\
 Naik \& Mohan (2019) \cite{naik2019optimal} & Equities (NSE India) & ANN classifier & Boruta feature selection & Train/test split & Static parameters; no metaheuristics. \\
 Ecer et al.\ (2020) \cite{ecer2020mlp_ga_pso} & Financial trend & MLP classifier & GA and PSO tuning & $K$-fold CV & Unconstrained budget; single classifier. \\
 Billah et al.\ (2024) \cite{billah2024nca_moving_average} & Intraday equities & Heuristic models & Moving average rules & Standard split & Absence of neural hyperparameter tuning. \\

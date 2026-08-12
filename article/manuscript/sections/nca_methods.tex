@@ -1,88 +1,151 @@
-\section{Materials and Methods}\label{sec:methods}
+\section{Materials and Methods}\label{sec:methods}\label{sec:methodology}
 
-\subsection{Dataset, Target, and Feature Representation}
-
-The empirical dataset contains 15,057 clean, chronologically ordered five-minute bars for B3 Mini-Index futures (WIN), drawn from BovDB resources \cite{cardoso2022bovdb,souza2024dataset}. The binary target is the next-bar directional movement, with $y_k=1$ for an uptrend and $y_k=0$ otherwise. The source pipeline derives 66 price-, moving-average-, volatility-, volume-, and trade-frequency descriptors. In keeping with the precursor, Information Gain selects seven descriptors: two EMA differences, their normalized counterparts, normalized SMA$_9$, EMA$_{9-3}$, and normalized EMA$_7$. This preserves the predecessor's compact feature representation while changing the validation and optimizer design.
-
-\subsection{Temporal Protocol and Shared Search Controls}
-
-All runs follow the same chronological 60/20/20 partition: the first 9,034 bars form the training block, the following 3,011 bars form the validation block, and the final 3,012 bars form the locked test block. No shuffling is applied. The test block is never used to rank candidates or select a fitness function.
-
-Four classifier backbones are assessed: MLP, Random Forest, SVM, and 1D-CNN. Their hyperparameters cover architecture size, regularization, learning rate, dropout, batch size, tree settings, and kernel settings. Each backbone is searched by RS, GA, PSO, DE, and GWO. To make their comparisons interpretable, every optimizer receives the same candidate-evaluation allowance:
-\begin{equation}\label{eq:budget}
-N_{\mathrm{eval}}=1{,}000 \quad \text{evaluations per optimizer and seed}.
-\end{equation}
-
-The optimizers retain their standard search roles: RS samples feasible configurations; GA uses tournament selection, crossover, and mutation; PSO uses cognitive and social attraction; DE uses differential perturbation and crossover; and GWO updates a population through its $\alpha$, $\beta$, and $\delta$ leaders. The purpose is not to tune their internal operators asymmetrically, but to compare their model-selection behaviour under the same evaluation opportunity.
-
-\subsection{Dual-Fitness Design}
-
-Figure~\ref{fig:workflow} depicts the controlled comparison. Protocol A ranks candidates on the validation block by a compound imbalance-aware fitness,
-\begin{equation}\label{eq:mcc_fitness}
-f_{\mathrm{MCC/F1}}(\boldsymbol{\theta})=0.60\,\mathrm{MCC}_{\mathrm{val}}(\boldsymbol{\theta})+0.40\,F_{1,\mathrm{val}}(\boldsymbol{\theta}),
-\end{equation}
-whereas Protocol B ranks candidates by a weighted training/validation accuracy,
-\begin{equation}\label{eq:accuracy_fitness}
-f_{\mathrm{Acc}}(\boldsymbol{\theta})=0.40\,\mathrm{Accuracy}_{\mathrm{train}}(\boldsymbol{\theta})+0.60\,\mathrm{Accuracy}_{\mathrm{val}}(\boldsymbol{\theta}).
-\end{equation}
-
-The protocols differ only in this validation objective. Data, features, model families, optimizer families, budget, and test block are shared. After selection, both protocols report test MCC, test accuracy, and test $F_1$.
+This section presents the methodology adopted in this study. Figure~\ref{fig:workflow} provides an overview of the flow from data acquisition to final model evaluation. It preserves the practical sequence of the IJCNN precursor---input data, technical indicators, feature selection, optimization, model fitting, and evaluation---while inserting the temporal controls and the two validation objectives required by the expanded benchmark.
 
 \begin{figure}[htbp]
 \centering
 \resizebox{0.96\linewidth}{!}{%
 \begin{tikzpicture}[
   node distance=0.72cm and 0.62cm,
-  every node/.style={
-    draw=black!80,
-    rounded corners=2.5pt,
-    align=center,
-    minimum height=0.88cm,
-    text width=2.75cm,
-    font=\footnotesize
-  },
-  process/.style={fill=black!5},
-  protocol/.style={fill=black!12, text width=3.15cm},
-  outcome/.style={fill=black!18, text width=4.10cm},
-  arrow/.style={-{Stealth[length=2.0mm]}, thick}
+  every node/.style={draw=black!80,rounded corners=2.5pt,align=center,minimum height=0.88cm,text width=2.75cm,font=\footnotesize},
+  process/.style={fill=black!5}, protocol/.style={fill=black!12,text width=3.15cm},
+  outcome/.style={fill=black!18,text width=4.10cm}, arrow/.style={-{Stealth[length=2.0mm]},thick}
 ]
   \node[process] (data) {\textbf{Input data}\\WIN five-minute futures\\$N=15{,}057$ bars};
   \node[process, right=of data] (indicators) {\textbf{Technical indicators}\\66 price, moving-average, volatility, volume, and trading descriptors};
   \node[process, right=of indicators] (selection) {\textbf{Feature selection}\\Information Gain\\seven retained features};
-
   \node[process, below=1.05cm of indicators] (split) {\textbf{Temporal data partition}\\chronological 60/20/20\\train, validation, locked test};
   \node[process, below=of split] (search) {\textbf{Equal-budget optimizer search}\\RS, GA, PSO, DE, and GWO\\$N_{\mathrm{eval}}=1{,}000$ per seed};
-
   \node[protocol, below left=0.92cm and 0.25cm of search] (mcc) {\textbf{Protocol A: MCC/$F_1$ fitness}\\$0.60\,\mathrm{MCC}_{\mathrm{val}}+0.40\,F_{1,\mathrm{val}}$};
   \node[protocol, below right=0.92cm and 0.25cm of search] (accuracy) {\textbf{Protocol B: accuracy fitness}\\$0.40\,\mathrm{Acc}_{\mathrm{train}}+0.60\,\mathrm{Acc}_{\mathrm{val}}$};
   \coordinate (protocolmid) at ($(mcc.south)!0.5!(accuracy.south)$);
   \node[outcome, below=1.00cm of protocolmid] (test) {\textbf{Model fitting and locked evaluation}\\RF, SVM, MLP, and 1D-CNN; common seeds 1--3\\held-out accuracy, MCC, $F_1$, and intraday economic evaluation};
-
-  \draw[arrow] (data) -- (indicators);
-  \draw[arrow] (indicators) -- (selection);
-  \draw[arrow] (selection.south) |- (split.east);
-  \draw[arrow] (split) -- (search);
-  \draw[arrow] (search) -- (mcc);
-  \draw[arrow] (search) -- (accuracy);
-  \draw[arrow] (mcc.south) |- (test.west);
-  \draw[arrow] (accuracy.south) |- (test.east);
+  \draw[arrow] (data) -- (indicators); \draw[arrow] (indicators) -- (selection);
+  \draw[arrow] (selection.south) |- (split.east); \draw[arrow] (split) -- (search);
+  \draw[arrow] (search) -- (mcc); \draw[arrow] (search) -- (accuracy);
+  \draw[arrow] (mcc.south) |- (test.west); \draw[arrow] (accuracy.south) |- (test.east);
 \end{tikzpicture}%
 }
-\caption{Overview of the proposed methodology. The pipeline retains the precursor's sequence of intraday data preparation, indicator construction, feature selection, model fitting, and final evaluation; the new benchmark inserts a chronological partition, equal-budget optimizer comparison, and two explicitly separated validation objectives.}
+\caption{Overview of the proposed methodology. The new benchmark preserves the precursor workflow while enforcing a chronological split, equal optimizer budget, and two separated validation objectives.}
 \label{fig:workflow}
 \end{figure}
 
+\subsection{Input Data}
+\label{sec:data}
+
+The data were obtained from the BovDB resources \cite{cardoso2022bovdb,souza2024dataset}. The analyzed subset contains 15,057 clean five-minute records of the WIN contract from January to June 2024. WIN is referenced to the Ibovespa index and was selected because its liquidity and frequent intraday movement make it suitable for short-horizon computational prediction. The binary target indicates the next-bar direction: 0 for downtrend and 1 for uptrend.
+
+The records remain in chronological order. The first 9,034 observations are used for training, the subsequent 3,011 observations for validation, and the final 3,012 observations for locked testing. No random shuffling is applied. Figure~\ref{fig:partition} makes this separation explicit; the test observations are unavailable during both feature and hyperparameter selection.
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.86\linewidth]{figures/dual_fitness_temporal_split.pdf}
-\caption{Chronological 60/20/20 partition. The final test block is unavailable during feature fitting, candidate ranking, and hyperparameter selection.}
-\label{fig:temporal_split}
+\includegraphics[width=0.93\linewidth]{figures/ijcnn_style_partition.pdf}
+\caption{Chronological data partition used in every experiment. Training, validation, and locked test segments occupy consecutive periods of the WIN five-minute series.}
+\label{fig:partition}
 \end{figure}
 
-\subsection{Evidence Scope, Statistical Analysis, and Economic Evaluation}
+\subsection{Generation of Technical Analysis Indicators}
+\label{sec:indicators}
 
-Three seeds (1--3) are available for every model--optimizer combination in both protocols. Therefore, the direct protocol contrast uses 20 cell means per protocol, each averaged over the same three seeds, and is presented descriptively. It is not a 20-seed confirmatory test of one fitness against another.
+Technical indicators were derived from open, high, low, close, trade volume, and transaction-frequency information. Simple Moving Average (SMA), Exponential Moving Average (EMA), and dispersion measures were computed over short windows (3, 5, 7, and 9 periods) to retain sensitivity to intraday changes. For example, the difference between the seven- and three-period SMA is
+\begin{equation}
+\mathrm{SMA}_{7-3}=\mathrm{SMA}_{7}-\mathrm{SMA}_{3}.
+\end{equation}
+The raw and derived variables were normalized before model fitting. Together, the construction procedure produces 66 descriptors, including moving-average differences and normalized counterparts.
 
-A complementary model-level analysis is performed within each holdout protocol. The five optimizer--seed combinations form 15 matched blocks for the four model backbones. Friedman tests assess global rank differences, followed by paired Wilcoxon tests with Holm adjustment for post-hoc MLP contrasts. This analysis answers whether models separate within a fixed protocol; it does not infer a global fitness advantage.
+\subsection{Feature Selection Method}
+\label{sec:featureselection}
 
-Finally, the locked predictions are evaluated through an intraday long/short trading simulation. The analysis reports total profit, profit factor, annualized Sharpe ratio, and maximum drawdown. Economic results are interpreted jointly with predictive metrics because a trading strategy can have different return and drawdown characteristics despite similar classification accuracy.
+The 66-indicator pool was filtered using Information Gain attribute selection evaluated strictly on the training partition ($N = 9{,}034$ bars). This information-theoretic ranking isolates attributes that maximize entropy reduction regarding next-bar trend directions while eliminating redundant lookback descriptors \cite{lei2012feature,kumar2014feature}. Seven features were retained: EMA$_{5-3}$, normalized EMA$_{5-3}$, EMA$_{7-3}$, normalized EMA$_{7-3}$, normalized SMA$_9$, EMA$_{9-3}$, and normalized EMA$_7$. This identical 7-variable input vector $\mathbf{X}_{\text{selected}} \in \mathbb{R}^7$ is fed into all classifier backbones across all optimizer runs.
+
+\subsection{Implemented Classifier Architectures and Search Spaces}
+\label{sec:classifier_architectures}
+
+To benchmark metaheuristic search performance across fundamentally distinct hypothesis spaces, four classifier backbones were implemented: Random Forest (RF), Support Vector Machines (SVM), Multilayer Perceptron (MLP), and 1D Convolutional Neural Networks (1D-CNN). Figure~\ref{fig:classifier_backbones} illustrates the structural decision mechanisms and layer topologies of these four implemented architectures.
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/random_forest_ai_generated.png}
+\\[4pt] \small (a) Random Forest
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/svm_rbf_ai_generated.png}
+\\[4pt] \small (b) Support Vector Machine
+\end{minipage}
+\vspace{1.5em}
+
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/mlp_ai_generated.png}
+\\[4pt] \small (c) Multilayer Perceptron
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/cnn_1d_ai_generated.png}
+\\[4pt] \small (d) 1D Convolutional Neural Network
+\end{minipage}
+\caption{Architectural topologies and structural decision mechanisms of the four candidate classifier backbones evaluated under the equal-budget metaheuristic optimization framework.}
+\label{fig:classifier_backbones}
+\end{figure}
+
+The hyperparameter search space bounds $\bm{\theta} \in \mathcal{S}$ for each implemented model are defined as follows:
+\begin{itemize}
+    \item \textbf{RF}: Number of trees $n_{\text{tree}} \in [10, 200]$, maximum tree depth $d_{\text{max}} \in [2, 20]$, and minimum split samples $s_{\text{min}} \in [2, 10]$.
+    \item \textbf{SVM}: Soft-margin penalty $C \in [10^{-2}, 10^2]$ and Radial Basis Function kernel bandwidth $\gamma \in [10^{-3}, 10^1]$ sampled on logarithmic scales.
+    \item \textbf{MLP}: Hidden layer width $n_{\text{hidden}} \in [16, 128]$, L2 penalty coefficient $\alpha \in [10^{-4}, 10^{-1}]$, and initial learning rate $\eta_0 \in [10^{-4}, 10^{-1}]$.
+    \item \textbf{1D-CNN}: Convolutional filter count $n_{\text{filter}} \in [16, 64]$, kernel size $k_{\text{size}} \in [2, 5]$, dense layer width $n_{\text{dense}} \in [16, 64]$, dropout rate $p_{\text{drop}} \in [0.1, 0.5]$, and Adam learning rate $\eta \in [10^{-4}, 10^{-2}]$.
+\end{itemize}
+
+\subsection{Optimizer Configuration, Search Operators, and Validation Objectives}
+\label{sec:optimizerconfiguration}
+
+To ensure complete experimental reproducibility, five search paradigms were evaluated: Random Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimizer (GWO). All optimizers operate under a strict candidate evaluation cap of $N_{\mathrm{eval}} = 1{,}000$ per model and random seed. For all population-based algorithms (GA, PSO, DE, GWO), the population size is fixed to $N_{\mathrm{pop}} = 10$ candidates evaluated across $G = 100$ generations or iterations ($10 \times 100 = 1{,}000$ function evaluations). RS generates $N_{\mathrm{eval}} = 1{,}000$ independent uniform random samples across the search space.
+
+Candidate hyperparameter vectors are encoded as continuous real vectors $\mathbf{u} \in [0, 1]^D$. Discrete parameters (such as tree counts, hidden widths, and filter sizes) are mapped via step quantization:
+\begin{equation}\label{eq:decoding_discrete}
+\theta_d = \lfloor \theta_{d,\mathrm{min}} + u_d (\theta_{d,\mathrm{max}} - \theta_{d,\mathrm{min}} + 1) \rfloor.
+\end{equation}
+Continuous parameters defined over logarithmic scales (such as regularization parameters $C, \alpha$ and learning rates $\eta$) are decoded via exponential scaling:
+\begin{equation}\label{eq:decoding_log}
+\theta_d = 10^{\log_{10}(\theta_{d,\mathrm{min}}) + u_d (\log_{10}(\theta_{d,\mathrm{max}}) - \log_{10}(\theta_{d,\mathrm{min}}))}.
+\end{equation}
+
+The specific search operators and update formulations governing each optimizer are defined as follows:
+\begin{itemize}
+    \item \textbf{Genetic Algorithm (GA)}: Utilizes binary tournament selection ($k=2$), uniform crossover with probability $P_c = 0.8$, and Gaussian mutation with probability $P_m = 0.1$ and standard deviation $\sigma = 0.1$.
+    \item \textbf{Particle Swarm Optimization (PSO)}: Velocity vectors $\mathbf{v}_i$ and positions $\mathbf{u}_i$ for particle $i$ at iteration $g$ are updated using inertia weight $w = 0.729$ and cognitive/social coefficients $c_1 = c_2 = 1.494$:
+    \begin{equation}\label{eq:pso_update}
+    \mathbf{v}_i^{g+1} = w \mathbf{v}_i^g + c_1 r_1 (\mathbf{pbest}_i - \mathbf{u}_i^g) + c_2 r_2 (\mathbf{gbest} - \mathbf{u}_i^g),
+    \end{equation}
+    \begin{equation}
+    \mathbf{u}_i^{g+1} = \mathrm{clip}\left(\mathbf{u}_i^g + \mathbf{v}_i^{g+1}, 0, 1\right),
+    \end{equation}
+    where $r_1, r_2 \sim U(0, 1)$.
+    \item \textbf{Differential Evolution (DE)}: Implements the DE/best/1/bin strategy with mutation factor $F = 0.5$ and binomial crossover probability $CR = 0.7$:
+    \begin{equation}\label{eq:de_update}
+    \mathbf{v}_i^{g+1} = \mathbf{gbest}^g + F (\mathbf{u}_{r1}^g - \mathbf{u}_{r2}^g),
+    \end{equation}
+    where $r1, r2$ are distinct randomly chosen population indices.
+    \item \textbf{Grey Wolf Optimizer (GWO)}: Candidate position vectors are updated by simulating encirclement of the three leading wolves ($\bm{\alpha}, \bm{\beta}, \bm{\delta}$):
+    \begin{equation}\label{eq:gwo_update}
+    \mathbf{u}_i^{g+1} = \frac{\mathbf{x}_1 + \mathbf{x}_2 + \mathbf{x}_3}{3},
+    \end{equation}
+    where $\mathbf{x}_1 = \bm{\alpha} - \mathbf{A}_1 \cdot |\mathbf{C}_1 \cdot \bm{\alpha} - \mathbf{u}_i^g|$, with analogous terms for $\mathbf{x}_2$ ($\bm{\beta}$) and $\mathbf{x}_3$ ($\bm{\delta}$).
+\end{itemize}
+
+Candidate configurations are evaluated against two separated validation objectives:
+\begin{itemize}
+    \item \textbf{Protocol A (MCC/$F_1$ Compound Objective)}:
+    \begin{equation}\label{eq:fitness_protocol_a}
+    f_{\mathrm{MCC/F1}}(\boldsymbol{\theta}) = 0.60\,\mathrm{MCC}_{\mathrm{val}}(\boldsymbol{\theta}) + 0.40\,F_{1,\mathrm{val}}(\boldsymbol{\theta}).
+    \end{equation}
+    \item \textbf{Protocol B (Weighted Accuracy Objective)}:
+    \begin{equation}\label{eq:fitness_protocol_b}
+    f_{\mathrm{Acc}}(\boldsymbol{\theta}) = 0.40\,\mathrm{Accuracy}_{\mathrm{train}}(\boldsymbol{\theta}) + 0.60\,\mathrm{Accuracy}_{\mathrm{val}}(\boldsymbol{\theta}).
+    \end{equation}
+\end{itemize}
+
+Upon completion of the $N_{\mathrm{eval}} = 1{,}000$ search budget, the optimal candidate vector $\boldsymbol{\theta}^* = \arg\max f(\boldsymbol{\theta})$ is refit on the concatenated training and validation dataset ($N = 12{,}045$ bars) and evaluated exactly once on the locked test block ($N = 3{,}012$ bars). Out-of-sample directional predictions drive an automated backtest execution engine under an exchange transaction fee of 0.03\% per round-trip trade to compute Net Return \%, Sharpe ratio, and Maximum Drawdown.
