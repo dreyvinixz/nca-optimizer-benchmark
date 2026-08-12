@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  12 AUG 2026 10:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  12 AUG 2026 10:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -491,368 +491,31 @@ Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/placeins\placeins.sty
 Package: placeins 2005/04/18  v 2.2
 )
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.s
-ty
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf.sty
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfrcs.sty
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil-
-common.tex
-\pgfutil@everybye=\toks33
-\pgfutil@tempdima=\dimen274
-\pgfutil@tempdimb=\dimen275
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil-
-latex.def
-\pgfutil@abb=\box76
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfrcs.c
-ode.tex
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf\pgf.revision.tex)
-Package: pgfrcs 2025-08-29 v3.1.11a (3.1.11a)
-))
-Package: pgf 2025-08-29 v3.1.11a (3.1.11a)
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgfcore.s
-ty
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/systemlayer\pgfsys.s
-ty
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
-.code.tex
-Package: pgfsys 2025-08-29 v3.1.11a (3.1.11a)
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys.
-code.tex
-\pgfkeys@pathtoks=\toks34
-\pgfkeys@temptoks=\toks35
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeysl
-ibraryfiltered.code.tex
-\pgfkeys@tmptoks=\toks36
-))
-\pgf@x=\dimen276
-\pgf@y=\dimen277
-\pgf@xa=\dimen278
-\pgf@ya=\dimen279
-\pgf@xb=\dimen280
-\pgf@yb=\dimen281
-\pgf@xc=\dimen282
-\pgf@yc=\dimen283
-\pgf@xd=\dimen284
-\pgf@yd=\dimen285
-\w@pgf@writea=\write3
-\r@pgf@reada=\read2
-\c@pgf@counta=\count333
-\c@pgf@countb=\count334
-\c@pgf@countc=\count335
-\c@pgf@countd=\count336
-\t@pgf@toka=\toks37
-\t@pgf@tokb=\toks38
-\t@pgf@tokc=\toks39
-\pgf@sys@id@count=\count337
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgf.cf
-g
-File: pgf.cfg 2025-08-29 v3.1.11a (3.1.11a)
-)
-Driver file for pgf: pgfsys-pdftex.def
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
--pdftex.def
-File: pgfsys-pdftex.def 2025-08-29 v3.1.11a (3.1.11a)
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
--common-pdf.def
-File: pgfsys-common-pdf.def 2025-08-29 v3.1.11a (3.1.11a)
-)))
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
-softpath.code.tex
-File: pgfsyssoftpath.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfsyssoftpath@smallbuffer@items=\count338
-\pgfsyssoftpath@bigbuffer@items=\count339
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
-protocol.code.tex
-File: pgfsysprotocol.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-))
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
-Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
-File: color.cfg 2016/01/02 v1.6 sample color configuration
-)
-Package xcolor Info: Driver file: pdftex.def on input line 274.
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)
-Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
-Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
-Package xcolor Info: Model `RGB' extended on input line 1365.
-Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1367.
-Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1368.
-Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
-Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
-Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
-Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-.code.tex
-Package: pgfcore 2025-08-29 v3.1.11a (3.1.11a)
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code.
-tex
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathutil.c
-ode.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathparser
-.code.tex
-\pgfmath@dimen=\dimen286
-\pgfmath@count=\count340
-\pgfmath@box=\box77
-\pgfmath@toks=\toks40
-\pgfmath@stack@operand=\toks41
-\pgfmath@stack@operation=\toks42
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.code.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.basic.code.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.trigonometric.code.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.random.code.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.comparison.code.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.base.code.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.round.code.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.misc.code.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.integerarithmetics.code.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathcalc.c
-ode.tex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat.
-code.tex
-\c@pgfmathroundto@lastzeros=\count341
-))
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfint.code.t
-ex)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-points.code.tex
-File: pgfcorepoints.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@picminx=\dimen287
-\pgf@picmaxx=\dimen288
-\pgf@picminy=\dimen289
-\pgf@picmaxy=\dimen290
-\pgf@pathminx=\dimen291
-\pgf@pathmaxx=\dimen292
-\pgf@pathminy=\dimen293
-\pgf@pathmaxy=\dimen294
-\pgf@xx=\dimen295
-\pgf@xy=\dimen296
-\pgf@yx=\dimen297
-\pgf@yy=\dimen298
-\pgf@zx=\dimen299
-\pgf@zy=\dimen300
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-pathconstruct.code.tex
-File: pgfcorepathconstruct.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@path@lastx=\dimen301
-\pgf@path@lasty=\dimen302
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-pathusage.code.tex
-File: pgfcorepathusage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@shorten@end@additional=\dimen303
-\pgf@shorten@start@additional=\dimen304
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-scopes.code.tex
-File: pgfcorescopes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfpic=\box78
-\pgf@hbox=\box79
-\pgf@layerbox@main=\box80
-\pgf@picture@serial@count=\count342
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-graphicstate.code.tex
-File: pgfcoregraphicstate.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgflinewidth=\dimen305
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-transformations.code.tex
-File: pgfcoretransformations.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@pt@x=\dimen306
-\pgf@pt@y=\dimen307
-\pgf@pt@temp=\dimen308
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-quick.code.tex
-File: pgfcorequick.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-objects.code.tex
-File: pgfcoreobjects.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-pathprocessing.code.tex
-File: pgfcorepathprocessing.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-arrows.code.tex
-File: pgfcorearrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfarrowsep=\dimen309
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-shade.code.tex
-File: pgfcoreshade.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@max=\dimen310
-\pgf@sys@shading@range@num=\count343
-\pgf@shadingcount=\count344
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-image.code.tex
-File: pgfcoreimage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-external.code.tex
-File: pgfcoreexternal.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfexternal@startupbox=\box81
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-layers.code.tex
-File: pgfcorelayers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-transparency.code.tex
-File: pgfcoretransparency.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-patterns.code.tex
-File: pgfcorepatterns.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-rdf.code.tex
-File: pgfcorerdf.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)))
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodules
-hapes.code.tex
-File: pgfmoduleshapes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfnodeparttextbox=\box82
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulep
-lot.code.tex
-File: pgfmoduleplot.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcom
-p-version-0-65.sty
-Package: pgfcomp-version-0-65 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@nodesepstart=\dimen311
-\pgf@nodesepend=\dimen312
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcom
-p-version-1-18.sty
-Package: pgfcomp-version-1-18 2025-08-29 v3.1.11a (3.1.11a)
-))
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgffor.sty
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfkeys.st
-y
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys.
-code.tex))
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/pgf/math\pgfmath.sty
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code.
-tex))
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor.c
-ode.tex
-Package: pgffor 2025-08-29 v3.1.11a (3.1.11a)
-\pgffor@iter=\dimen313
-\pgffor@skip=\dimen314
-\pgffor@stack=\toks43
-\pgffor@toks=\toks44
-))
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
-\tikz.code.tex
-Package: tikz 2025-08-29 v3.1.11a (3.1.11a)
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibra
-ryplothandlers.code.tex
-File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@plot@mark@count=\count345
-\pgfplotmarksize=\dimen315
-)
-\tikz@lastx=\dimen316
-\tikz@lasty=\dimen317
-\tikz@lastxsaved=\dimen318
-\tikz@lastysaved=\dimen319
-\tikz@lastmovetox=\dimen320
-\tikz@lastmovetoy=\dimen321
-\tikzleveldistance=\dimen322
-\tikzsiblingdistance=\dimen323
-\tikz@figbox=\box83
-\tikz@figbox@bg=\box84
-\tikz@tempbox=\box85
-\tikz@tempbox@bg=\box86
-\tikztreelevel=\count346
-\tikznumberofchildren=\count347
-\tikznumberofcurrentchild=\count348
-\tikz@fig@count=\count349
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulem
-atrix.code.tex
-File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfmatrixcurrentrow=\count350
-\pgfmatrixcurrentcolumn=\count351
-\pgf@matrix@numberofcolumns=\count352
-)
-\tikz@expandcount=\count353
-
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
-/libraries\tikzlibrarytopaths.code.tex
-File: tikzlibrarytopaths.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)))
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibra
-ryarrows.meta.code.tex
-File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfarrowinset=\dimen324
-\pgfarrowlength=\dimen325
-\pgfarrowwidth=\dimen326
-\pgfarrowlinewidth=\dimen327
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
-/libraries\tikzlibrarypositioning.code.tex
-File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
-/libraries\tikzlibrarycalc.code.tex
-File: tikzlibrarycalc.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdft
 ex.def
 File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count354
+\l__color_backend_stack_int=\count333
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -893,17 +556,17 @@ LaTeX Font Info:    ... okay on input line 23.
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mki
 i
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count355
-\scratchdimen=\dimen328
-\scratchbox=\box87
-\nofMPsegments=\count356
-\nofMParguments=\count357
-\everyMPshowfont=\toks45
-\MPscratchCnt=\count358
-\MPscratchDim=\dimen329
-\MPnumerator=\count359
-\makeMPintoPDFobject=\count360
-\everyMPtoPDFconversion=\toks46
+\scratchcounter=\count334
+\scratchdimen=\dimen274
+\scratchbox=\box76
+\nofMPsegments=\count335
+\nofMParguments=\count336
+\everyMPshowfont=\toks33
+\MPscratchCnt=\count337
+\MPscratchDim=\dimen275
+\MPnumerator=\count338
+\makeMPintoPDFobject=\count339
+\everyMPtoPDFconversion=\toks34
 )
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-ba
 se.sty
@@ -914,33 +577,41 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cf
 g
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
-))
-Package hyperref Info: Link coloring ON on input line 23.
- (main.out) (main.out)
-\@outlinefile=\write4
-\openout4 = `main.out'.
+)) (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/graphics\color.sty
+Package: color 2025/01/14 v1.3e Standard LaTeX Color (DPC)
 
-LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 32.
+(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 149.
+
+(C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx))
+Package hyperref Info: Link coloring ON on input line 21.
+(main.out) (main.out)
+\@outlinefile=\write3
+\openout3 = `main.out'.
+
+LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 30.
 
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.51686> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 32.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 30.
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 32.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 30.
 
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -948,42 +619,42 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.51686> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 32.
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 30.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.015> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.015> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 32.
+(Font)              size <5> substituted on input line 30.
 
-(sections/ijcnn_introduction.tex
+(sections/nca_introduction.tex
 LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 1.
 
 
@@ -995,102 +666,142 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [1
 
 {C:/Users/User/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-Underfull \hbox (badness 1442) in paragraph at lines 7--8
-\OT1/cmr/m/n/10 con-vo-lu-tional neu-ral net-works (1D-CNNs) can rep-re-sent no
-n-lin-ear inter-ac-tions
- []
+
+LaTeX Warning: Reference `sec:related_work' on page 2 undefined on input line 2
+2.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-[]\OT1/cmr/bx/n/10 Replaces \OT1/cmr/m/n/10 ran-dom-ized val-i-da-tion with a c
-hrono-log-i-cal 60/20/20
- []
+LaTeX Warning: Reference `sec:methods' on page 2 undefined on input line 22.
 
-) (sections/ijcnn_related_work.tex
+) (sections/nca_related_work.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [2{C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-sup
-er-ts1.enc}]) (sections/ijcnn_methodology.tex
+er-ts1.enc}]
+
+Package natbib Warning: Citation `mirjalili2014gwo' on page 3 undefined on inpu
+t line 5.
+
+
+Package natbib Warning: Citation `bergstra2012random_search' on page 3 undefine
+d on input line 5.
+
+
+LaTeX Warning: Reference `tab:precursor_extension' on page 3 undefined on input
+ line 9.
+
+) (sections/nca_methods.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [3]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
  [4]
-<figures/ijcnn_style_partition.pdf, id=127, 412.19958pt x 169.85269pt>
-File: figures/ijcnn_style_partition.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_partition.pdf>
-Package pdftex.def Info: figures/ijcnn_style_partition.pdf  used on input line 
-42.
-(pdftex.def)             Requested size: 345.95728pt x 142.55864pt.
+<figures/dual_fitness_protocol_overview.pdf, id=170, 350.39139pt x 293.70528pt>
+
+File: figures/dual_fitness_protocol_overview.pdf Graphic file (type pdf)
+<use figures/dual_fitness_protocol_overview.pdf>
+Package pdftex.def Info: figures/dual_fitness_protocol_overview.pdf  used on in
+put line 33.
+(pdftex.def)             Requested size: 342.23932pt x 286.88359pt.
+<figures/dual_fitness_temporal_split.pdf, id=171, 385.36063pt x 187.78482pt>
+File: figures/dual_fitness_temporal_split.pdf Graphic file (type pdf)
+<use figures/dual_fitness_temporal_split.pdf>
+Package pdftex.def Info: figures/dual_fitness_temporal_split.pdf  used on input
+ line 40.
+(pdftex.def)             Requested size: 319.92023pt x 155.90146pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [5 <./figures/ijcnn_style_partition.pdf>]) (sections/ijcnn_results.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
+ [5 <./figures/dual_fitness_protocol_overview.pdf>]) (sections/nca_results.tex
 
- [6]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Warning: Reference `fig:paired_outcomes' on page 6 undefined on input lin
+e 5.
 
- [7]
-<figures/ijcnn_style_rf_convergence.pdf, id=181, 405.77473pt x 211.52588pt>
-File: figures/ijcnn_style_rf_convergence.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_rf_convergence.pdf>
-Package pdftex.def Info: figures/ijcnn_style_rf_convergence.pdf  used on input 
-line 80.
-(pdftex.def)             Requested size: 345.95728pt x 180.353pt.
-<figures/ijcnn_style_svm_convergence.pdf, id=182, 401.06966pt x 211.52588pt>
-File: figures/ijcnn_style_svm_convergence.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_svm_convergence.pdf>
-Package pdftex.def Info: figures/ijcnn_style_svm_convergence.pdf  used on input
- line 85.
-(pdftex.def)             Requested size: 345.95728pt x 182.46063pt.
-<figures/ijcnn_style_mlp_convergence.pdf, id=183, 401.06966pt x 211.52588pt>
-File: figures/ijcnn_style_mlp_convergence.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_mlp_convergence.pdf>
-Package pdftex.def Info: figures/ijcnn_style_mlp_convergence.pdf  used on input
- line 90.
-(pdftex.def)             Requested size: 345.95728pt x 182.46063pt.
-<figures/ijcnn_style_cnn_convergence.pdf, id=184, 405.77473pt x 211.52588pt>
-File: figures/ijcnn_style_cnn_convergence.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_cnn_convergence.pdf>
-Package pdftex.def Info: figures/ijcnn_style_cnn_convergence.pdf  used on input
- line 95.
-(pdftex.def)             Requested size: 345.95728pt x 180.353pt.
-<figures/ijcnn_style_model_performance.pdf, id=187, 390.46754pt x 188.48605pt>
-File: figures/ijcnn_style_model_performance.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_model_performance.pdf>
-Package pdftex.def Info: figures/ijcnn_style_model_performance.pdf  used on inp
-ut line 117.
-(pdftex.def)             Requested size: 349.68091pt x 168.80756pt.
+<figures/dual_fitness_paired_outcomes.pdf, id=193, 409.69624pt x 338.94406pt>
+File: figures/dual_fitness_paired_outcomes.pdf Graphic file (type pdf)
+<use figures/dual_fitness_paired_outcomes.pdf>
+Package pdftex.def Info: figures/dual_fitness_paired_outcomes.pdf  used on inpu
+t line 11.
+(pdftex.def)             Requested size: 357.1225pt x 295.45302pt.
+
+LaTeX Warning: Reference `fig:delta_heatmaps' on page 6 undefined on input line
+ 16.
+
+<figures/dual_fitness_delta_heatmaps.pdf, id=194, 417.56061pt x 235.84035pt>
+File: figures/dual_fitness_delta_heatmaps.pdf Graphic file (type pdf)
+<use figures/dual_fitness_delta_heatmaps.pdf>
+Package pdftex.def Info: figures/dual_fitness_delta_heatmaps.pdf  used on input
+ line 20.
+(pdftex.def)             Requested size: 357.1225pt x 201.71756pt.
+
+LaTeX Warning: Reference `fig:convergence' on page 6 undefined on input line 27
+.
+
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8 <./figures/ijcnn_style_rf_convergence.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [9 <./figures/ijcnn_style_svm_convergence.pdf> <./figures/ijcnn_style_mlp_conv
-ergence.pdf>]
-<figures/ijcnn_style_economic_summary.pdf, id=267, 397.46242pt x 202.24698pt>
-File: figures/ijcnn_style_economic_summary.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_economic_summary.pdf>
-Package pdftex.def Info: figures/ijcnn_style_economic_summary.pdf  used on inpu
-t line 128.
-(pdftex.def)             Requested size: 349.68091pt x 177.94394pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10 <./figures/ijcnn_style_cnn_convergence.pdf> <./figures/ijcnn_style_model_p
-erformance.pdf>]) (sections/ijcnn_conclusion.tex) (sections/declarations.tex
+ [6 <./figures/dual_fitness_temporal_split.pdf>]
+<figures/dual_fitness_convergence.pdf, id=215, 400.50378pt x 224.88065pt>
+File: figures/dual_fitness_convergence.pdf Graphic file (type pdf)
+<use figures/dual_fitness_convergence.pdf>
+Package pdftex.def Info: figures/dual_fitness_convergence.pdf  used on input li
+ne 31.
+(pdftex.def)             Requested size: 357.1225pt x 200.5206pt.
+
+
+LaTeX Warning: Reference `fig:statistical_summary' on page 7 undefined on input
+ line 40.
+
+<figures/dual_fitness_statistical_summary.pdf, id=216, 411.3086pt x 249.48784pt
+>
+File: figures/dual_fitness_statistical_summary.pdf Graphic file (type pdf)
+<use figures/dual_fitness_statistical_summary.pdf>
+Package pdftex.def Info: figures/dual_fitness_statistical_summary.pdf  used on 
+input line 44.
+(pdftex.def)             Requested size: 357.1225pt x 216.6339pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [11 <./figures/ijcnn_style_economic_summary.pdf>]) (main.bbl
+ [7 <./figures/dual_fitness_paired_outcomes.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [8 <./figures/dual_fitness_delta_heatmaps.pdf> <./figures/dual_fitness_converg
+ence.pdf>]
+
+LaTeX Warning: Reference `fig:economic_summary' on page 9 undefined on input li
+ne 53.
+
+<figures/dual_fitness_economic_summary.pdf, id=285, 400.83789pt x 237.78888pt>
+File: figures/dual_fitness_economic_summary.pdf Graphic file (type pdf)
+<use figures/dual_fitness_economic_summary.pdf>
+Package pdftex.def Info: figures/dual_fitness_economic_summary.pdf  used on inp
+ut line 57.
+(pdftex.def)             Requested size: 357.1225pt x 211.86726pt.
+) (sections/nca_discussion.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [9 <./figures/dual_fitness_statistical_summary.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [10 <./figures/dual_fitness_economic_summary.pdf>]) (sections/nca_conclusion.t
+ex
+Underfull \hbox (badness 1117) in paragraph at lines 3--4
+\OT1/cmr/m/n/10 tech-ni-cal rep-re-sen-ta-tion can sup-port meta-heuris-tic hyp
+er-pa-ram-e-ter search---but
+ []
+
+) (sections/declarations.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [11])
+(main.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [12]
@@ -1100,6 +811,10 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [13])
+
+Package natbib Warning: There were undefined citations.
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [14]
@@ -1113,44 +828,105 @@ L3 programming layer <2026-03-20>
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.985pt have occurred.
 
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: BE5206A95335BD9E35DE6BD76752FFE2;2124.
+(rerunfilecheck)             Checksum: 27B3ECF475DDDCAE09751F552AF48C1B;2698.
  ) 
 Here is how much of TeX's memory you used:
- 23449 strings out of 467691
- 435840 string characters out of 5415471
- 831039 words of memory out of 5000000
- 51989 multiletter control sequences out of 15000+600000
- 644923 words of font info for 107 fonts, out of 8000000 for 9000
+ 12640 strings out of 467691
+ 198395 string characters out of 5415471
+ 619403 words of memory out of 5000000
+ 41369 multiletter control sequences out of 15000+600000
+ 646200 words of font info for 113 fonts, out of 8000000 for 9000
  1151 hyphenation exceptions out of 8191
- 90i,16n,104p,1613b,816s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
-mbx10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmbx12.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmbx7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/User/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/User/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/User/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/U
-ser/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C
-:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10
-.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmr17.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmr5.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmr6.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/amsfonts/cm/cmr7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/User/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/User/AppData/Local/Programs
-/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/User/AppData/Local/
-Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/User/AppData
-/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/User/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/User
-s/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on main.pdf (14 pages, 889465 bytes).
+ 90i,13n,93p,1585b,647s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+pdfTeX warning (dest): name{figure.caption.3} has been referenced but does not 
+exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.5.4} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.5.3} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.5.2} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.5.1} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsubsection.4.2.4} has been referenced but does n
+ot exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsubsection.4.2.3} has been referenced but does n
+ot exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsubsection.4.2.2} has been referenced but does n
+ot exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsubsection.4.2.1} has been referenced but does n
+ot exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.3.7} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.3.6} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.3.5} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.2.3} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.2.2} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.2.1} has been referenced but does not ex
+ist, replaced by a fixed one
+
+<C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmb
+x10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmbx12.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/User/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/User/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/User/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/User/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/U
+ser/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/
+Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.p
+fb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmr6.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmr7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmr8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmr9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/User/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/User/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on C:\mysystems\projects\nca-optimizer-benchmark\output\pdf\main
+.pdf (14 pages, 566440 bytes).
 PDF statistics:
- 467 PDF objects out of 1000 (max. 8388607)
- 68 named destinations out of 1000 (max. 500000)
- 144 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 498 PDF objects out of 1000 (max. 8388607)
+ 90 named destinations out of 1000 (max. 500000)
+ 244 words of extra memory for PDF output out of 10000 (max. 10000000)
 

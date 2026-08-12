@@ -1,6 +1,6 @@
 This is BibTeX, Version 0.99e
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
-The top-level auxiliary file: main.aux
+The top-level auxiliary file: ..\..\output\pdf\main.aux
 Reallocating 'name_of_file' (item size: 1) to 16 items.
 The style file: sn-mathphys-num.bst
 Reallocating 'name_of_file' (item size: 1) to 11 items.
@@ -27,44 +27,44 @@ Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
-You've used 17 entries,
+You've used 11 entries,
             7480 wiz_defined-function locations,
-            1289 strings with 13026 characters,
-and the built_in function-call counts, 152358 in all, are:
-= -- 25983
-> -- 605
-< -- 282
-+ -- 14060
-- -- 171
-* -- 5127
-:= -- 27420
-add.period$ -- 19
-call.type$ -- 17
-change.case$ -- 108
-chr.to.int$ -- 743
-cite$ -- 17
-duplicate$ -- 797
-empty$ -- 3846
-format.name$ -- 430
-if$ -- 38349
+            1248 strings with 11832 characters,
+and the built_in function-call counts, 130903 in all, are:
+= -- 23319
+> -- 372
+< -- 153
++ -- 13459
+- -- 122
+* -- 3820
+:= -- 23201
+add.period$ -- 13
+call.type$ -- 11
+change.case$ -- 72
+chr.to.int$ -- 392
+cite$ -- 11
+duplicate$ -- 489
+empty$ -- 2605
+format.name$ -- 304
+if$ -- 33239
 int.to.chr$ -- 1
-int.to.str$ -- 32
+int.to.str$ -- 20
 missing$ -- 0
-newline$ -- 288
-num.names$ -- 85
-pop$ -- 381
+newline$ -- 203
+num.names$ -- 55
+pop$ -- 256
 preamble$ -- 1
-purify$ -- 82
+purify$ -- 52
 quote$ -- 0
-skip$ -- 15727
+skip$ -- 14156
 stack$ -- 0
-substring$ -- 15505
-swap$ -- 455
-text.length$ -- 220
+substring$ -- 13125
+swap$ -- 264
+text.length$ -- 146
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 707
+type$ -- 437
 warning$ -- 0
-while$ -- 512
+while$ -- 338
 width$ -- 0
-write$ -- 388
+write$ -- 267

@@ -1,33 +1,20 @@
-% ============================================================
-% NCA Optimizer Benchmark — Main LaTeX File
-% Journal: Neural Computing and Applications (Springer Nature, Journal ID 521)
-% Template: Official sn-jnl.cls with sn-mathphys-num (Numbered references)
-% Structure: Expanded from IJCNN.TEX with Systematic Review of Literature
-% ============================================================
-%
-% Double-blind peer review: This file is the ANONYMOUS main manuscript.
-% Author names, ORCIDs, and grant numbers are submitted separately in titlepage.tex.
-% ============================================================
-
+% Anonymous manuscript for Neural Computing and Applications.
+% The class file is the unmodified Springer Nature sn-jnl template distributed
+% with this repository under article/templates.
 \documentclass[sn-mathphys-num,Numbered]{sn-jnl}
 
-% --- Standard Packages ---
 \usepackage{amsmath,amssymb,bm}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{tabularx}
-\newcolumntype{L}{>{\raggedright\arraybackslash}X}
-\newcolumntype{C}{>{\centering\arraybackslash}X}
-\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
-\usepackage{subcaption}
-\usepackage{float}
-\usepackage{placeins}
 \usepackage{graphicx}
 \usepackage{hyperref}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+\usepackage{placeins}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
 
-% --- Float placement tuning ---
 \renewcommand{\topfraction}{0.95}
 \renewcommand{\bottomfraction}{0.85}
 \renewcommand{\textfraction}{0.05}
@@ -35,63 +22,20 @@
 
 \begin{document}
 
-% ============================================================
-% TITLE & ABSTRACT (Anonymous version for double-blind submission)
-% ============================================================
-\title[Optimizer Benchmark for Neural Intraday Trend Classification]{%
-  Combining Technical Indicators and Metaheuristic Optimizers for Short-Term Neural Intraday Trend Prediction in Mini-Index Futures}
+\title[Metaheuristic optimization for intraday futures]{Combining Technical Indicators and Equal-Budget Metaheuristic Optimization for Short-Term Mini-Index Futures Prediction}
 
-\abstract{%
-Short-term trend forecasting in high-frequency derivatives markets represents one of the most challenging applications of computational intelligence, characterized by severe non-stationarity, regime shifts, and low signal-to-noise ratios. Although supervised machine learning models and neural networks---such as Multilayer Perceptrons (MLPs), Support Vector Machines (SVMs), Random Forests (RFs), and 1D Convolutional Neural Networks (1D-CNNs)---are widely employed for trend classification, their generalization depends critically on input feature quality and hyperparameter optimization across non-convex search spaces. This article extends prior research by presenting a unified, controlled multi-optimizer benchmark framework for short-term financial time series prediction on 5-minute B3 Mini-Index futures (WIN) data from the BovDB repository. Using Information Gain feature selection to select a compact subset of 7 informative technical indicators from an initial pool of 66, five distinct optimizer families---Random Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimizer (GWO)---are evaluated under an identical computational budget cap of $N_{\text{eval}} = 1{,}500$ evaluations per seed. To prevent temporal look-ahead leakage, all models operate within a strict 60/20/20 sequential chronological split and a compound MCC-driven objective ($0.60 \times \text{MCC} + 0.40 \times F_1$). Experimental results demonstrate that evolutionary optimizers (GA and DE) coupled with MLP and 1D-CNN backbones achieve superior out-of-sample classification balance ($\text{MCC} = 0.231 \pm 0.012$ and $0.228 \pm 0.014$), significantly outperforming Random Search ($p < 0.01$, Cohen's $d > 1.2$). In out-of-sample financial backtesting with real-world transaction costs ($0.01\%$), the GA-tuned neural classifier yields a Net Return of $+18.4\%$ and a Sharpe ratio of 1.42. These findings reinforce the value of combining feature selection with equal-budget metaheuristic optimization for quantitative trading.
-}
+\abstract{Short-horizon trend classification in futures markets is vulnerable to non-stationarity, weak signal-to-noise ratios, and temporal information leakage. An earlier conference precursor combined technical indicators, Information Gain feature selection, and genetic-algorithm tuning, but used randomized cross-validation, a single metaheuristic, and no economic assessment. This study advances that research line through an auditable benchmark on 15,057 five-minute B3 Mini-Index futures bars. Four model backbones (multilayer perceptron, random forest, support vector machine, and 1D convolutional neural network) are optimized by random search, genetic algorithm, particle swarm optimization, differential evolution, and grey wolf optimization under an identical 1,000-evaluation budget. A chronological 60/20/20 train/validation/test partition prevents look-ahead leakage. The study contrasts two validation objectives: a compound $0.60\,\mathrm{MCC}+0.40\,F_1$ fitness and a weighted training/validation accuracy fitness. The common, locked test block is used only after selection for predictive and trading evaluation. Results are reported transparently on the three seeds available in every model--optimizer cell. The direct fitness comparison is descriptive; complementary Friedman and Holm-adjusted Wilcoxon analyses compare models within each protocol across matched optimizer--seed blocks. The study provides a reproducible design for separating the selection criterion from the reported metric and for jointly examining predictive and economic consequences of metaheuristic tuning.}
 
-\keywords{Metaheuristic benchmark $\cdot$ Neural network optimization $\cdot$ Particle swarm optimization $\cdot$ Genetic algorithm $\cdot$ Intraday trend classification $\cdot$ Systematic literature review $\cdot$ Brazilian futures market}
+\keywords{Financial time series $\cdot$ Metaheuristic optimization $\cdot$ Hyperparameter tuning $\cdot$ Matthews correlation coefficient $\cdot$ Temporal validation $\cdot$ Intraday futures}
 
 \maketitle
 
-% ============================================================
-% ABBREVIATIONS
-% ============================================================
-\noindent
-ACC: Accuracy;
-AUC: Area Under the Curve;
-B3: Brasil Bolsa Balc\~{a}o (Brazilian Stock Exchange);
-CNN: Convolutional Neural Network;
-DE: Differential Evolution;
-EMA: Exponential Moving Average;
-GA: Genetic Algorithm;
-GWO: Grey Wolf Optimizer;
-MCC: Matthews Correlation Coefficient;
-MDD: Maximum Drawdown;
-ML: Machine Learning;
-MLP: Multilayer Perceptron;
-MOA: Metaheuristic Optimization Algorithm;
-PSO: Particle Swarm Optimization;
-RF: Random Forest;
-RS: Random Search;
-SMA: Simple Moving Average;
-SRL: Systematic Review of Literature;
-SVM: Support Vector Machine;
-WIN: Mini-Index Futures Contract.
-
-% ============================================================
-% SECTIONS
-% ============================================================
-\input{sections/introduction}
-\input{sections/literature_review}
-\input{sections/methodology}
-\input{sections/results}
-\input{sections/discussion}
-\input{sections/conclusion}
-
-% ============================================================
-% DECLARATIONS
-% ============================================================
+\input{sections/ijcnn_introduction}
+\input{sections/ijcnn_related_work}
+\input{sections/ijcnn_methodology}
+\input{sections/ijcnn_results}
+\input{sections/ijcnn_conclusion}
 \input{sections/declarations}
 
-% ============================================================
-% REFERENCES
-% ============================================================
 \bibliography{references}
-
 \end{document}

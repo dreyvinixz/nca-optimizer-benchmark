@@ -1,0 +1,81 @@
+\relax 
+\bibstyle{sn-mathphys-num}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{cardoso2022bovdb,souza2024dataset}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:introduction}{{1}{1}{Introduction}{section.1}{}}
+\citation{souza2026ijcnn}
+\citation{chicco2020mcc}
+\citation{lei2012feature,kumar2014feature}
+\citation{souza2026ijcnn}
+\citation{goldberg1989ga,kennedy1995pso,storn1997de,mirjalili2014gwo,bergstra2012random_search}
+\citation{chicco2020mcc}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Methodological progression from the GA-based precursor to the present benchmark.}}{3}{table.1}\protected@file@percent }
+\newlabel{tab:precursor_extension}{{1}{3}{Methodological progression from the GA-based precursor to the present benchmark}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work and Research Positioning}{3}{section.2}\protected@file@percent }
+\newlabel{sec:related_work}{{2}{3}{Related Work and Research Positioning}{section.2}{}}
+\citation{cardoso2022bovdb,souza2024dataset}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Materials and Methods}{4}{section.3}\protected@file@percent }
+\newlabel{sec:methods}{{3}{4}{Materials and Methods}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Dataset, Target, and Feature Representation}{4}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Temporal Protocol and Shared Search Controls}{4}{subsection.3.2}\protected@file@percent }
+\newlabel{eq:budget}{{1}{4}{Temporal Protocol and Shared Search Controls}{equation.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Dual-Fitness Design}{4}{subsection.3.3}\protected@file@percent }
+\newlabel{eq:mcc_fitness}{{2}{4}{Dual-Fitness Design}{equation.2}{}}
+\newlabel{eq:accuracy_fitness}{{3}{5}{Dual-Fitness Design}{equation.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Controlled dual-fitness benchmark. Shared data, temporal partition, model families, optimizer families, and budget are fixed; only the validation objective differs.}}{5}{figure.1}\protected@file@percent }
+\newlabel{fig:workflow}{{1}{5}{Controlled dual-fitness benchmark. Shared data, temporal partition, model families, optimizer families, and budget are fixed; only the validation objective differs}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Evidence Scope, Statistical Analysis, and Economic Evaluation}{5}{subsection.3.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Chronological 60/20/20 partition. The final test block is unavailable during feature fitting, candidate ranking, and hyperparameter selection.}}{6}{figure.2}\protected@file@percent }
+\newlabel{fig:temporal_split}{{2}{6}{Chronological 60/20/20 partition. The final test block is unavailable during feature fitting, candidate ranking, and hyperparameter selection}{figure.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results}{6}{section.4}\protected@file@percent }
+\newlabel{sec:results}{{4}{6}{Results}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Predictive Outcomes Under Two Selection Objectives}{6}{subsection.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Held-out test outcomes under the two validation objectives. Each connection is one model--optimizer cell averaged over paired seeds 1--3. Colour denotes the model backbone; marker shape denotes the optimizer. Horizontal segments show macro means across the 20 cells.}}{7}{figure.3}\protected@file@percent }
+\newlabel{fig:paired_outcomes}{{3}{7}{Held-out test outcomes under the two validation objectives. Each connection is one model--optimizer cell averaged over paired seeds 1--3. Colour denotes the model backbone; marker shape denotes the optimizer. Horizontal segments show macro means across the 20 cells}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Search Dynamics}{7}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Exploratory Statistical Evidence}{7}{subsection.4.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Configuration-level difference between protocols (accuracy fitness minus MCC/$F_1$ fitness) on the locked test set. Left: accuracy in percentage points. Right: MCC in raw units.}}{8}{figure.4}\protected@file@percent }
+\newlabel{fig:delta_heatmaps}{{4}{8}{Configuration-level difference between protocols (accuracy fitness minus MCC/$F_1$ fitness) on the locked test set. Left: accuracy in percentage points. Right: MCC in raw units}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces MLP convergence under the two validation objectives. Lines are means and shaded regions are $\pm 1$ standard deviation across paired seeds 1--3. Left: compound MCC/$F_1$ fitness. Right: validation accuracy.}}{8}{figure.5}\protected@file@percent }
+\newlabel{fig:convergence}{{5}{8}{MLP convergence under the two validation objectives. Lines are means and shaded regions are $\pm 1$ standard deviation across paired seeds 1--3. Left: compound MCC/$F_1$ fitness. Right: validation accuracy}{figure.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Exploratory statistical evidence within each holdout protocol. Left: Friedman mean ranks across 15 matched optimizer--seed blocks (lower is better). Right: Holm-adjusted paired Wilcoxon evidence for MLP versus the other models under accuracy fitness; the dashed line denotes $\alpha =0.05$.}}{9}{figure.6}\protected@file@percent }
+\newlabel{fig:statistical_summary}{{6}{9}{Exploratory statistical evidence within each holdout protocol. Left: Friedman mean ranks across 15 matched optimizer--seed blocks (lower is better). Right: Holm-adjusted paired Wilcoxon evidence for MLP versus the other models under accuracy fitness; the dashed line denotes $\alpha =0.05$}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Economic Evaluation}{9}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{9}{section.5}\protected@file@percent }
+\newlabel{sec:discussion}{{5}{9}{Discussion}{section.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Exploratory economic evaluation on the locked test block. Left: total-profit observations and mean $\pm 1$ standard deviation across 15 optimizer--seed blocks. Right: mean profit versus mean maximum drawdown; values farther right have less severe drawdown.}}{10}{figure.7}\protected@file@percent }
+\newlabel{fig:economic_summary}{{7}{10}{Exploratory economic evaluation on the locked test block. Left: total-profit observations and mean $\pm 1$ standard deviation across 15 optimizer--seed blocks. Right: mean profit versus mean maximum drawdown; values farther right have less severe drawdown}{figure.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{11}{section.6}\protected@file@percent }
+\newlabel{sec:conclusion}{{6}{11}{Conclusion}{section.6}{}}
+\bibdata{references}
+\bibcite{souza2025iccsa}{{1}{2025}{{Souza et~al.}}{{}}}
+\bibcite{al_bannoud2026accelerating}{{2}{2026}{{Al~Bannoud et~al.}}{{}}}
+\bibcite{cardoso2022bovdb}{{3}{2022}{{Cardoso et~al.}}{{}}}
+\bibcite{billah2024nca_moving_average}{{4}{2024}{{Billah et~al.}}{{}}}
+\bibcite{souza2024dataset}{{5}{2024}{{Souza et~al.}}{{}}}
+\bibcite{bashir2026evobagnet}{{6}{2026}{{Bashir et~al.}}{{}}}
+\bibcite{makridakis2018statistical}{{7}{2018}{{Makridakis et~al.}}{{}}}
+\bibcite{dhingra2025solar}{{8}{2025}{{Dhingra et~al.}}{{}}}
+\bibcite{naik2019optimal}{{9}{2019}{{Naik and Mohan}}{{}}}
+\bibcite{ecer2020mlp_ga_pso}{{10}{2020}{{Ecer et~al.}}{{}}}
+\bibcite{mutinda2026hybrid}{{11}{2026}{{Mutinda and Yong}}{{}}}
+\bibcite{hunter1986exponentially}{{12}{1986}{{Hunter}}{{}}}
+\bibcite{singh2022feature}{{13}{2022}{{Singh and Sharma}}{{}}}
+\bibcite{lei2012feature}{{14}{2012}{{Lei and Liu}}{{}}}
+\bibcite{kumar2014feature}{{15}{2014}{{Kumar and Minz}}{{}}}
+\bibcite{ding2011optimizing}{{16}{2011}{{Ding et~al.}}{{}}}
+\bibcite{faris2018gwo_review}{{17}{2018}{{Faris et~al.}}{{}}}
+\bibcite{rajwar2023exhaustive_review}{{18}{2023}{{Rajwar et~al.}}{{}}}
+\bibcite{goldberg1989ga}{{19}{1989}{{Goldberg}}{{}}}
+\bibcite{storn1997de}{{20}{1997}{{Storn and Price}}{{}}}
+\bibcite{kennedy1995pso}{{21}{1995}{{Kennedy and Eberhart}}{{}}}
+\bibcite{bareket2024adaptive}{{22}{2024}{{Bareket and P{\^a}rv}}{{}}}
+\bibcite{simatupang2026stock}{{23}{2026}{{Simatupang et~al.}}{{}}}
+\bibcite{souza2026ijcnn}{{24}{2026}{{Souza et~al.}}{{}}}
+\bibcite{chicco2020mcc}{{25}{2020}{{Chicco and Jurman}}{{}}}
+\bibcite{rahim2025technical}{{26}{2025}{{Rahim et~al.}}{{}}}
+\bibcite{bandgar2025finchronos}{{27}{2025}{{Bandgar et~al.}}{{}}}
+\gdef \@abspage@last{14}

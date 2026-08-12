@@ -1,0 +1,23 @@
+\section{Introduction}\label{sec:introduction}
+
+Financial markets provide a setting in which computational prediction must contend with noisy observations, short-lived regularities, and changing market regimes. Futures contracts are particularly relevant because they combine high liquidity with rapid reactions to macroeconomic news, order flow, and changes in perceived risk. The Brazilian Mini-Index futures contract (WIN), referenced to the Ibovespa index, is consequently an appropriate instrument for studying short-horizon intraday trend classification.
+
+Five-minute price series contain information about local momentum, dispersion, and trading activity, but they also contain substantial microstructure noise. Technical indicators, including moving averages, exponential moving averages, and volatility transformations, remain a practical way to convert raw prices into supervised-learning descriptors \cite{hunter1986exponentially,rahim2025technical}. Their usefulness depends on avoiding redundant inputs and on evaluating candidate models without allowing future observations to influence the selection process.
+
+Machine-learning methods provide flexible nonlinear decision functions for this problem. Random Forest (RF) and Support Vector Machine (SVM) classifiers are established baselines, whereas Multilayer Perceptrons (MLPs) and one-dimensional convolutional neural networks (1D-CNNs) can represent nonlinear interactions between technical descriptors. In all four cases, predictive behaviour depends materially on architecture and training hyperparameters. Metaheuristics are therefore useful because the search space combines continuous, integer, and categorical decisions that are difficult to set manually \cite{goldberg1989ga,kennedy1995pso,storn1997de,faris2018gwo_review}.
+
+The conference precursor to this work combined technical indicators, Information Gain feature selection, and genetic-algorithm (GA) tuning for RF, SVM, and MLP models \cite{souza2026ijcnn}. Its central idea remains useful: a compact technical representation can make evolutionary model selection feasible for intraday data. The present study changes the experimental question. Rather than considering only GA-tuned models under randomized cross-validation, it compares Random Search (RS), GA, Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimization (GWO) under a common chronological protocol and an identical evaluation allowance.
+
+The objective is to determine how the choice of validation objective interacts with model and optimizer selection on a locked, chronological test segment. Two controlled protocols are considered: an imbalance-aware compound MCC/$F_1$ fitness and a weighted training/validation accuracy fitness. The test block is kept inaccessible during feature selection, candidate ranking, and hyperparameter search. This separation is essential because high validation performance does not, by itself, establish robust out-of-sample predictive or economic utility \cite{chicco2020mcc,demsar2006statistical}.
+
+This manuscript makes six contributions:
+\begin{itemize}
+    \item \textbf{Preserves} the precursor's Information-Gain-selected seven-indicator representation for WIN futures.
+    \item \textbf{Replaces} randomized validation with a chronological 60/20/20 train/validation/locked-test protocol.
+    \item \textbf{Compares} RS, GA, PSO, DE, and GWO across RF, SVM, MLP, and 1D-CNN backbones.
+    \item \textbf{Controls} optimizer opportunity through 1,000 candidate evaluations per optimizer and seed.
+    \item \textbf{Separates} MCC/$F_1$ and weighted accuracy fitness functions from the final reported test metrics.
+    \item \textbf{Extends} predictive evaluation with exploratory Friedman--Wilcoxon analysis and an intraday economic backtest.
+\end{itemize}
+
+The remainder of the article follows the organizational pattern of the precursor. Section~\ref{sec:relatedwork} reviews related work. Section~\ref{sec:methodology} describes the data, technical indicators, feature selection, and optimization design. Section~\ref{sec:results} presents the experimental setup, model results, statistical analysis, and economic evaluation. Section~\ref{sec:conclusion} concludes the study.

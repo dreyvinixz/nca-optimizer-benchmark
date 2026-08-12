@@ -1,0 +1,22 @@
+\section{Introduction}\label{sec:introduction}
+
+Futures contracts are central instruments for hedging and speculation because their prices respond rapidly to expectations, order flow, and changing risk conditions. For computational prediction, this responsiveness is attractive but difficult: five-minute price series contain short-lived patterns, regime changes, and substantial noise. The Brazilian Mini-Index futures contract (WIN), referenced to the Ibovespa index, is a relevant setting because it is highly liquid and supports short-horizon intraday trading. Public BovDB resources make this setting reproducible for financial machine-learning research \cite{cardoso2022bovdb,souza2024dataset}.
+
+The precursor to the present study investigated the same problem through technical indicators, Information Gain feature selection, and genetic-algorithm (GA) tuning of Random Forest, Support Vector Machine, and Multilayer Perceptron classifiers \cite{souza2026ijcnn}. Its central premise remains useful: compact technical representations and global hyperparameter search can improve nonlinear classifiers in noisy financial data. Yet its experimental design was intentionally exploratory. It relied on randomized cross-validation, compared only one metaheuristic, did not equalize search budgets across optimizer families, and stopped at predictive metrics. Those limitations prevent a reliable claim about either temporal generalization or the comparative merit of an optimizer.
+
+This study retains the precursor's practical narrative---technical indicators provide a compact representation of intraday price dynamics, and metaheuristics search the mixed discrete--continuous hyperparameter space more broadly than manual tuning---while changing the experimental question. Rather than asking whether GA-tuned models exceed an untuned baseline, we ask how a fixed optimization budget and the choice of validation fitness affect the behaviour of multiple model--optimizer combinations on a locked chronological test block.
+
+Three design issues motivate this question. First, random shuffling in financial time series can allow future observations to influence model selection. Second, metaheuristics can appear superior simply because they receive more candidate evaluations than a comparator. Third, accuracy is not interchangeable with an imbalance-robust criterion such as Matthews correlation coefficient (MCC), nor does either predictive metric by itself establish economic usefulness \cite{chicco2020mcc}. The distinction between the score used to select a candidate and the score reported after testing is especially important in financial classification.
+
+The present work makes six contributions:
+
+\begin{itemize}
+    \item \textbf{Reframe} the GA-based precursor as an equal-budget comparison of Random Search (RS), GA, Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimization (GWO).
+    \item \textbf{Replace} randomized validation with a chronological 60/20/20 train/validation/test protocol on 15,057 five-minute WIN bars.
+    \item \textbf{Preserve} a compact seven-indicator representation selected from 66 engineered inputs using Information Gain.
+    \item \textbf{Separate} two validation objectives: compound $0.60\,\mathrm{MCC}+0.40\,F_1$ fitness and conventional validation accuracy.
+    \item \textbf{Report} MCC, accuracy, and $F_1$ only on the locked test set after candidate selection, with direct fitness comparisons limited to paired seeds that are available in both protocols.
+    \item \textbf{Extend} predictive assessment with exploratory within-protocol non-parametric tests and an intraday economic evaluation based on total profit and drawdown.
+\end{itemize}
+
+The article is organized as follows. Section~\ref{sec:related_work} situates the work in the literature and clarifies its relationship with the precursor. Section~\ref{sec:methods} describes the shared search controls and the two fitness protocols. Section~\ref{sec:results} reports predictive, statistical, and economic results. Sections~\ref{sec:discussion} and \ref{sec:conclusion} discuss the implications and limitations.

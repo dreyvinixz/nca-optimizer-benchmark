@@ -1,0 +1,29 @@
+\section{Related Work and Research Positioning}\label{sec:related_work}
+
+Technical indicators remain a common bridge between market data and supervised learning. Moving averages, exponential smoothing, and volatility transformations summarize local momentum and dispersion; however, a large indicator pool can produce redundant inputs and unstable models. Information-theoretic filters such as Information Gain offer a computationally simple way to retain attributes that reduce uncertainty about the target class \cite{lei2012feature,kumar2014feature}. The precursor study adopted this strategy to reduce 66 candidate descriptors to seven indicators and then used GA to tune classifier hyperparameters \cite{souza2026ijcnn}.
+
+Hyperparameter tuning is a natural target for metaheuristics because neural and kernel models combine continuous variables, integer architecture choices, and categorical settings. GA and DE introduce variation through recombination and mutation; PSO and GWO use population-based attraction mechanisms; Random Search supplies an unguided but essential budget-matched baseline \cite{goldberg1989ga,kennedy1995pso,storn1997de,faris2018gwo_review,bergstra2012random_search}. Their comparative behaviour is difficult to interpret unless every optimizer evaluates the same number of candidate configurations.
+
+Recent financial-learning work has also strengthened the case for temporally ordered assessment. When observations are shuffled, a model can learn distributional information from a later market state while being evaluated on an earlier state. A sequential holdout avoids that direct leakage, although it does not eliminate the broader challenge of market-regime shift. Similarly, MCC offers a balanced summary of binary predictions and should be kept distinct from conventional accuracy when the selection objective is discussed \cite{chicco2020mcc}.
+
+Table~\ref{tab:precursor_extension} positions the article as a substantial methodological extension, rather than a repetition, of the precursor. The change is not merely an increase in the number of models: it changes the validation logic, comparator set, scope of evidence, and economic endpoint.
+
+\begin{table}[htbp]
+\centering
+\caption{Methodological progression from the GA-based precursor to the present benchmark.}
+\label{tab:precursor_extension}
+\small
+\begin{tabularx}{\linewidth}{@{}L L L@{}}
+\toprule
+Component & Precursor study & Present study \\
+\midrule
+Validation & Randomized cross-validation & Chronological 60/20/20 holdout \\
+Optimizer comparison & GA only & RS, GA, PSO, DE, and GWO \\
+Search budget & Generation-based GA configuration & 1,000 candidate evaluations per optimizer and seed \\
+Selection objective & Cross-validation accuracy & MCC/$F_1$ fitness or validation accuracy \\
+Evaluation & Predictive metrics & Locked predictive, statistical, and economic assessment \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The resulting research position is deliberately conservative. This manuscript does not claim that one fitness is globally superior from the currently available three common seeds. It instead establishes a controlled comparison and makes clear which analyses describe the fitness contrast and which test model separation within a fixed protocol.
