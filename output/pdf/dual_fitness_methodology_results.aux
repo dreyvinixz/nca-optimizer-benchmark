@@ -17,14 +17,20 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Objective-Dependent Out-of-Sample Performance}{3}{subsection.2.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Where the Objective Changes Performance}{3}{subsection.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Convergence Under the Two Objectives}{3}{subsection.2.3}\protected@file@percent }
-\bibdata{references}
-\bibcite{cardoso2022bovdb}{{1}{2022}{{Cardoso et~al.}}{{}}}
-\bibcite{souza2024dataset}{{2}{2024}{{Souza et~al.}}{{}}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Held-out performance under the two validation objectives. Each connected pair is the mean of the same three seeds for one model--optimizer cell; colour identifies the backbone and marker shape identifies the optimizer. Short horizontal segments give the macro mean across the 20 cells.}}{4}{figure.3}\protected@file@percent }
 \newlabel{fig:paired_outcomes}{{3}{4}{Held-out performance under the two validation objectives. Each connected pair is the mean of the same three seeds for one model--optimizer cell; colour identifies the backbone and marker shape identifies the optimizer. Short horizontal segments give the macro mean across the 20 cells}{figure.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Interpretation and Confirmatory Next Step}{4}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Exploratory Statistical Evidence}{4}{subsection.2.4}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Configuration-level change in held-out metrics induced by the validation objective. Values are accuracy-fitness minus MCC/F1-fitness means over the paired seeds 1--3. The left panel uses percentage points; the right panel uses raw MCC units.}}{5}{figure.4}\protected@file@percent }
 \newlabel{fig:delta_heatmaps}{{4}{5}{Configuration-level change in held-out metrics induced by the validation objective. Values are accuracy-fitness minus MCC/F1-fitness means over the paired seeds 1--3. The left panel uses percentage points; the right panel uses raw MCC units}{figure.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Convergence trajectories for the MLP reference backbone under the two validation objectives. Solid lines are means and shaded ribbons are $\pm 1$ standard deviation across the three paired seeds. Left: composite MCC/F1 validation fitness. Right: validation accuracy.}}{5}{figure.5}\protected@file@percent }
 \newlabel{fig:dual_convergence}{{5}{5}{Convergence trajectories for the MLP reference backbone under the two validation objectives. Solid lines are means and shaded ribbons are $\pm 1$ standard deviation across the three paired seeds. Left: composite MCC/F1 validation fitness. Right: validation accuracy}{figure.5}{}}
-\gdef \@abspage@last{5}
+\bibdata{references}
+\bibcite{cardoso2022bovdb}{{1}{2022}{{Cardoso et~al.}}{{}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Exploratory model-level statistical evidence. Left: Friedman mean ranks across 15 matched optimizer--seed blocks per holdout protocol; lower rank is better. Right: Holm-adjusted paired Wilcoxon evidence for MLP against the other models under the accuracy-fitness protocol; the dashed line marks $\alpha =0.05$.}}{6}{figure.6}\protected@file@percent }
+\newlabel{fig:statistical_summary}{{6}{6}{Exploratory model-level statistical evidence. Left: Friedman mean ranks across 15 matched optimizer--seed blocks per holdout protocol; lower rank is better. Right: Holm-adjusted paired Wilcoxon evidence for MLP against the other models under the accuracy-fitness protocol; the dashed line marks $\alpha =0.05$}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Economic Evaluation}{6}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Interpretation and Confirmatory Next Step}{6}{subsection.2.6}\protected@file@percent }
+\bibcite{souza2024dataset}{{2}{2024}{{Souza et~al.}}{{}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Exploratory economic evaluation under the two holdout protocols. Left: total-profit observations and mean $\pm 1$ standard deviation across 15 optimizer--seed blocks. Right: mean return versus mean maximum drawdown; values farther right have less severe drawdown.}}{7}{figure.7}\protected@file@percent }
+\newlabel{fig:economic_summary}{{7}{7}{Exploratory economic evaluation under the two holdout protocols. Left: total-profit observations and mean $\pm 1$ standard deviation across 15 optimizer--seed blocks. Right: mean return versus mean maximum drawdown; values farther right have less severe drawdown}{figure.7}{}}
+\gdef \@abspage@last{7}

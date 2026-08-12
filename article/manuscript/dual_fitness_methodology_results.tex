@@ -59,7 +59,7 @@ The objective is used solely to rank candidate configurations on the validation 
 
 \subsection{Available Evidence and Reporting Scope}
 
-The audit uses the three paired seeds available in both protocols (seeds 1--3) for every one of the 20 model--optimizer cells, yielding 60 seed-level observations per protocol. Results are therefore descriptive: figures display configuration means across the three matched seeds and their search trajectories. No Friedman, Wilcoxon, Holm-adjusted $p$-values, or standardized effect sizes are claimed in this report. Confirmatory inference requires a prespecified rerun with at least 20 common seeds per cell.
+The direct protocol comparison uses the three paired seeds available in both protocols (seeds 1--3) for every one of the 20 model--optimizer cells, yielding 60 seed-level observations per protocol. Figures that contrast the two objectives therefore remain descriptive. A complementary, model-level exploratory analysis treats the five optimizer--seed combinations as 15 matched blocks within each protocol and applies Friedman tests followed by Holm-adjusted paired Wilcoxon contrasts. This analysis compares models \emph{within} a protocol; it does not establish a confirmatory difference between the two fitness functions. Confirmatory inference on the fitness contrast requires a prespecified rerun with at least 20 common seeds per cell.
 
 \section{Results}
 
@@ -98,9 +98,33 @@ Figure~\ref{fig:dual_convergence} shows search dynamics for the MLP reference ba
 \label{fig:dual_convergence}
 \end{figure}
 
+\subsection{Exploratory Statistical Evidence}
+
+Figure~\ref{fig:statistical_summary} reports the precomputed model-level tests separately for the two holdout protocols. Each Friedman test compares the four model backbones within 15 matched optimizer--seed blocks. Under MCC/F1 fitness, the test-MCC ranking differs across models ($\chi^2=22.84$, $p=4.36\times10^{-5}$). Under accuracy fitness, the test-accuracy ranking also differs across models ($\chi^2=42.92$, $p=2.56\times10^{-9}$), with MLP obtaining mean rank 1.00. The Holm-adjusted MLP contrasts in Protocol B are significant against CNN, RF, and SVM ($p_{\mathrm{Holm}}=0.00194$ for each comparison).
+
+These are useful exploratory checks of model separation under a fixed protocol, but they must not be recast as a direct significance test of MCC/F1 fitness versus accuracy fitness. The three common seeds remain insufficient for that confirmatory claim.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/dual_fitness_statistical_summary.pdf}
+\caption{Exploratory model-level statistical evidence. Left: Friedman mean ranks across 15 matched optimizer--seed blocks per holdout protocol; lower rank is better. Right: Holm-adjusted paired Wilcoxon evidence for MLP against the other models under the accuracy-fitness protocol; the dashed line marks $\alpha=0.05$.}
+\label{fig:statistical_summary}
+\end{figure}
+
+\subsection{Economic Evaluation}
+
+The same held-out predictions were assessed by an intraday long/short trading simulation. Figure~\ref{fig:economic_summary} summarizes total profit and the return--drawdown trade-off over the 15 optimizer--seed blocks for each model and protocol. Under MCC/F1 fitness, RF has the highest mean total profit (26,465 points), but the corresponding Holm-adjusted pairwise profit contrasts are not significant. Under accuracy fitness, MLP has the highest mean total profit (27,737 points); its profit advantage is significant versus RF ($p_{\mathrm{Holm}}=0.00018$) and SVM ($p_{\mathrm{Holm}}=0.00305$), but not versus CNN ($p_{\mathrm{Holm}}=0.169$). RF retains the least negative mean drawdown under accuracy fitness ($-1,866$ points), illustrating that economic preference depends on the chosen risk criterion rather than on predictive accuracy alone.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/dual_fitness_economic_summary.pdf}
+\caption{Exploratory economic evaluation under the two holdout protocols. Left: total-profit observations and mean $\pm1$ standard deviation across 15 optimizer--seed blocks. Right: mean return versus mean maximum drawdown; values farther right have less severe drawdown.}
+\label{fig:economic_summary}
+\end{figure}
+
 \subsection{Interpretation and Confirmatory Next Step}
 
-The present results establish a controlled, visually auditable comparison between two fitness functions, but they do not yet support confirmatory ranking claims. The next experimental stage should complete a common 20-seed design for every model--optimizer cell, retain the same temporal split and budget, and apply a prespecified paired analysis separately for test MCC and test accuracy. Only then should omnibus and post-hoc tests be used to quantify objective-specific advantages.
+The present results establish a controlled, visually auditable comparison between two fitness functions, together with exploratory model-level predictive and economic evidence. The next experimental stage should complete a common 20-seed design for every model--optimizer cell, retain the same temporal split and budget, and apply a prespecified paired analysis separately for test MCC, test accuracy, and economic outcomes. Only then should omnibus and post-hoc tests be used to quantify objective-specific advantages.
 
 \bibliography{references}
 

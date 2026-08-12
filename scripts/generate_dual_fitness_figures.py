@@ -33,6 +33,7 @@ PROTOCOLS = {
     "MCC/F1 fitness": ROOT / "outputs" / "article_official" / "metrics",
     "Accuracy fitness": ROOT / "outputs" / "article_official_accuracy_holdout" / "metrics",
 }
+ANALYSIS_DIR = ROOT / "outputs" / "professor_presentation" / "statistical_economic_model_selection"
 
 
 def style() -> None:
@@ -125,7 +126,7 @@ def temporal_split() -> None:
 
 def paired_outcomes(records: pd.DataFrame) -> None:
     means = records.groupby(["protocol", "model", "optimizer"], as_index=False)[["accuracy_test", "mcc_test"]].mean()
-    fig, axes = plt.subplots(1, 2, figsize=(6.25, 4.6), gridspec_kw={"wspace": 0.36})
+    fig, axes = plt.subplots(1, 2, figsize=(6.25, 4.85), gridspec_kw={"wspace": 0.36})
     for ax, metric, title, fmt in zip(axes, ["accuracy_test", "mcc_test"], ["Test accuracy", "Test MCC"], [".3f", ".3f"]):
         wide = means.pivot(index=["model", "optimizer"], columns="protocol", values=metric)
         for (model, optimizer), values in wide.iterrows():
@@ -145,7 +146,8 @@ def paired_outcomes(records: pd.DataFrame) -> None:
         ax.spines[["top", "right"]].set_visible(False)
     axes[0].set_ylabel("Held-out test score", weight="bold")
     handles = [Line2D([0], [0], marker="o", color="none", label=MODELS_LABEL[m], markerfacecolor=MODEL_COLORS[m], markeredgecolor="white", markersize=6) for m in MODELS]
-    fig.legend(handles=handles, title="Backbone colour", loc="lower center", bbox_to_anchor=(0.5, -0.02), ncol=4, frameon=False)
+    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.02), ncol=4, frameon=False)
+    fig.subplots_adjust(bottom=0.25, top=0.94)
     save(fig, "dual_fitness_paired_outcomes.pdf")
 
 
@@ -199,6 +201,110 @@ def convergence() -> None:
     save(fig, "dual_fitness_convergence.pdf")
 
 
+def statistical_summary() -> None:
+    friedman = pd.read_csv(ANALYSIS_DIR / "predictive_friedman_tests.csv")
+    pairwise = pd.read_csv(ANALYSIS_DIR / "predictive_pairwise_wilcoxon_holm.csv")
+    scopes = [
+        ("exp1_holdout_mcc_f1", "mcc_test", "MCC/F1 fitness: test MCC"),
+        ("exp2_holdout_accuracy", "accuracy_test", "Accuracy fitness: test accuracy"),
+    ]
+    fig, axes = plt.subplots(1, 2, figsize=(6.25, 3.65), gridspec_kw={"wspace": 0.38})
+    ax = axes[0]
+    y = np.arange(2)
+    for idx, (scope, metric, label) in enumerate(scopes):
+        row = friedman[(friedman.scope == scope) & (friedman.metric == metric)].iloc[0]
+        ranks = [row[f"mean_rank_{model}"] for model in ["mlp", "rf", "cnn", "svm"]]
+        colors = [MODEL_COLORS[model] for model in ["mlp", "rf", "cnn", "svm"]]
+        ax.scatter(ranks, np.full(4, idx), c=colors, s=52, edgecolors="white", linewidths=0.7, zorder=3)
+        p = row.friedman_p_value
+        p_text = "p < 0.001" if p < 0.001 else f"p = {p:.3f}"
+        ax.text(4.12, idx, f"chi2 = {row.friedman_statistic:.2f}\n{p_text}", ha="left", va="center", fontsize=6.8, color=INK)
+    ax.set_yticks(y, ["Protocol A", "Protocol B"])
+    ax.invert_yaxis()
+    ax.set_xlim(0.75, 5.2)
+    ax.set_xticks([1, 2, 3, 4])
+    ax.set_xlabel("Friedman mean rank (1 = best)", weight="bold")
+    ax.set_title("Model ranking by protocol", weight="bold", fontsize=9, pad=7)
+    ax.grid(axis="x", color=GRID, lw=0.8)
+    ax.set_axisbelow(True)
+    ax.spines[["top", "right", "left"]].set_visible(False)
+    ax.tick_params(axis="y", length=0)
+
+    ax = axes[1]
+    sub = pairwise[(pairwise.scope == "exp2_holdout_accuracy") & (pairwise.metric == "accuracy_test")].copy()
+    sub["label"] = sub.comparison.str.replace("mlp vs ", "MLP vs ", regex=False).str.upper()
+    values = -np.log10(sub.holm_p_value.to_numpy())
+    colors = [MODEL_COLORS["cnn"], MODEL_COLORS["rf"], MODEL_COLORS["svm"]]
+    yy = np.arange(len(sub))
+    ax.barh(yy, values, color=colors, height=0.55)
+    ax.axvline(-np.log10(0.05), color="#52616B", lw=0.9, ls=(0, (3, 3)))
+    ax.set_yticks(yy, sub.label.tolist())
+    ax.invert_yaxis()
+    ax.set_xlabel("-log10(Holm-adjusted p-value)", weight="bold")
+    ax.set_title("Protocol B: MLP pairwise contrasts", weight="bold", fontsize=9, pad=7)
+    ax.grid(axis="x", color=GRID, lw=0.8)
+    ax.set_axisbelow(True)
+    ax.spines[["top", "right", "left"]].set_visible(False)
+    ax.tick_params(axis="y", length=0)
+    handles = [Line2D([0], [0], marker="o", color="none", label=MODELS_LABEL[m], markerfacecolor=MODEL_COLORS[m], markeredgecolor="white", markersize=6) for m in ["mlp", "rf", "cnn", "svm"]]
+    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.01), ncol=4, frameon=False)
+    fig.subplots_adjust(bottom=0.24, top=0.90)
+    save(fig, "dual_fitness_statistical_summary.pdf")
+
+
+def economic_summary() -> None:
+    by_seed = pd.read_csv(ANALYSIS_DIR / "economic_by_seed.csv")
+    by_model = pd.read_csv(ANALYSIS_DIR / "economic_by_model_experiment.csv")
+    experiments = ["exp1_holdout_mcc_f1", "exp2_holdout_accuracy"]
+    labels = {"exp1_holdout_mcc_f1": "MCC/F1 fitness", "exp2_holdout_accuracy": "Accuracy fitness"}
+    colours = {"exp1_holdout_mcc_f1": MCC_MODE, "exp2_holdout_accuracy": ACC_MODE}
+    part = by_seed[by_seed.experiment.isin(experiments)].copy()
+    summary = part.groupby(["experiment", "model"])["total_profit_points"].agg(["mean", "std"]).reset_index()
+    fig, axes = plt.subplots(1, 2, figsize=(6.25, 3.45), gridspec_kw={"wspace": 0.45})
+
+    ax = axes[0]
+    yy = np.arange(len(MODELS))
+    for offset, experiment in [(-0.14, "exp1_holdout_mcc_f1"), (0.14, "exp2_holdout_accuracy")]:
+        sub = summary[summary.experiment == experiment].set_index("model").reindex(MODELS)
+        raw = part[part.experiment == experiment]
+        for i, model in enumerate(MODELS):
+            points = raw[raw.model == model].total_profit_points.to_numpy()
+            jitter = np.linspace(-0.045, 0.045, len(points))
+            ax.scatter(points, np.full(len(points), yy[i] + offset) + jitter, color=colours[experiment], alpha=0.25, s=9, zorder=1)
+        ax.errorbar(sub["mean"], yy + offset, xerr=sub["std"], fmt="o", color=colours[experiment], capsize=2.5, lw=1.25, ms=4.8, label=labels[experiment], zorder=3)
+    ax.set_yticks(yy, [MODELS_LABEL[x] for x in MODELS])
+    ax.invert_yaxis()
+    ax.set_xlabel("Total profit (points)", weight="bold")
+    ax.set_title("Economic outcome", weight="bold", fontsize=9, pad=7)
+    ax.grid(axis="x", color=GRID, lw=0.8)
+    ax.set_axisbelow(True)
+    ax.spines[["top", "right", "left"]].set_visible(False)
+    ax.tick_params(axis="y", length=0)
+    ax.legend(loc="lower right", frameon=True, edgecolor=GRID, fontsize=6.5)
+
+    ax = axes[1]
+    subset = by_model[by_model.experiment.isin(experiments)]
+    for experiment in experiments:
+        sub = subset[subset.experiment == experiment]
+        ax.scatter(sub.max_drawdown_mean, sub.total_profit_mean, color=colours[experiment], s=48, edgecolors="white", linewidths=0.65, label=labels[experiment], zorder=3)
+        for row in sub.itertuples():
+            offsets = {
+                ("exp2_holdout_accuracy", "mlp"): (4, 4),
+                ("exp2_holdout_accuracy", "cnn"): (4, -11),
+                ("exp2_holdout_accuracy", "rf"): (4, 4),
+                ("exp2_holdout_accuracy", "svm"): (4, 4),
+            }
+            ax.annotate(MODELS_LABEL[row.model], (row.max_drawdown_mean, row.total_profit_mean), xytext=offsets.get((experiment, row.model), (4, 4)), textcoords="offset points", fontsize=6.5, color=INK)
+    ax.axhline(0, color="#52616B", lw=0.7)
+    ax.set_xlabel("Mean maximum drawdown (points)", weight="bold")
+    ax.set_ylabel("Mean total profit (points)", weight="bold")
+    ax.set_title("Return-risk trade-off", weight="bold", fontsize=9, pad=7)
+    ax.grid(color=GRID, lw=0.8)
+    ax.set_axisbelow(True)
+    ax.spines[["top", "right"]].set_visible(False)
+    save(fig, "dual_fitness_economic_summary.pdf")
+
+
 def main() -> None:
     FIGURES.mkdir(parents=True, exist_ok=True)
     style()
@@ -208,6 +314,8 @@ def main() -> None:
     paired_outcomes(records)
     delta_heatmaps(records)
     convergence()
+    statistical_summary()
+    economic_summary()
     print("Generated audited dual-fitness figures in", FIGURES)
 
 

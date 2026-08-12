@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  10 AUG 2026 16:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  10 AUG 2026 16:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -601,13 +601,13 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 20.
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<figures/dual_fitness_protocol_overview.pdf, id=46, 350.39139pt x 293.70528pt>
+<figures/dual_fitness_protocol_overview.pdf, id=54, 350.39139pt x 293.70528pt>
 File: figures/dual_fitness_protocol_overview.pdf Graphic file (type pdf)
 <use figures/dual_fitness_protocol_overview.pdf>
 Package pdftex.def Info: figures/dual_fitness_protocol_overview.pdf  used on in
 put line 30.
 (pdftex.def)             Requested size: 345.95728pt x 289.99829pt.
-<figures/dual_fitness_temporal_split.pdf, id=47, 385.36063pt x 187.78482pt>
+<figures/dual_fitness_temporal_split.pdf, id=55, 385.36063pt x 187.78482pt>
 File: figures/dual_fitness_temporal_split.pdf Graphic file (type pdf)
 <use figures/dual_fitness_temporal_split.pdf>
 Package pdftex.def Info: figures/dual_fitness_temporal_split.pdf  used on input
@@ -623,19 +623,19 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [2 <./figures/dual_fitness_protocol_overview.pdf> <./figures/dual_fitness_temp
 oral_split.pdf>]
-<figures/dual_fitness_paired_outcomes.pdf, id=104, 409.69624pt x 315.6731pt>
+<figures/dual_fitness_paired_outcomes.pdf, id=112, 409.69624pt x 338.94406pt>
 File: figures/dual_fitness_paired_outcomes.pdf Graphic file (type pdf)
 <use figures/dual_fitness_paired_outcomes.pdf>
 Package pdftex.def Info: figures/dual_fitness_paired_outcomes.pdf  used on inpu
 t line 74.
-(pdftex.def)             Requested size: 357.1225pt x 275.16803pt.
-<figures/dual_fitness_delta_heatmaps.pdf, id=106, 417.56061pt x 235.84035pt>
+(pdftex.def)             Requested size: 357.1225pt x 295.45302pt.
+<figures/dual_fitness_delta_heatmaps.pdf, id=114, 417.56061pt x 235.84035pt>
 File: figures/dual_fitness_delta_heatmaps.pdf Graphic file (type pdf)
 <use figures/dual_fitness_delta_heatmaps.pdf>
 Package pdftex.def Info: figures/dual_fitness_delta_heatmaps.pdf  used on input
  line 85.
 (pdftex.def)             Requested size: 364.55841pt x 205.91716pt.
-<figures/dual_fitness_convergence.pdf, id=108, 400.50378pt x 224.88065pt>
+<figures/dual_fitness_convergence.pdf, id=116, 400.50378pt x 224.88065pt>
 File: figures/dual_fitness_convergence.pdf Graphic file (type pdf)
 <use figures/dual_fitness_convergence.pdf>
 Package pdftex.def Info: figures/dual_fitness_convergence.pdf  used on input li
@@ -645,8 +645,14 @@ ne 96.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [3]
-(C:\mysystems\projects\nca-optimizer-benchmark\output\pdf\dual_fitness_methodol
-ogy_results.bbl)
+<figures/dual_fitness_statistical_summary.pdf, id=125, 411.3086pt x 249.48784pt
+>
+File: figures/dual_fitness_statistical_summary.pdf Graphic file (type pdf)
+<use figures/dual_fitness_statistical_summary.pdf>
+Package pdftex.def Info: figures/dual_fitness_statistical_summary.pdf  used on 
+input line 109.
+(pdftex.def)             Requested size: 364.55841pt x 221.14124pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [4 <./figures/dual_fitness_paired_outcomes.pdf>]
@@ -654,6 +660,21 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [5 <./figures/dual_fitness_delta_heatmaps.pdf> <./figures/dual_fitness_converg
 ence.pdf>]
+<figures/dual_fitness_economic_summary.pdf, id=192, 400.83789pt x 237.78888pt>
+File: figures/dual_fitness_economic_summary.pdf Graphic file (type pdf)
+<use figures/dual_fitness_economic_summary.pdf>
+Package pdftex.def Info: figures/dual_fitness_economic_summary.pdf  used on inp
+ut line 120.
+(pdftex.def)             Requested size: 364.55841pt x 216.27936pt.
+
+(C:\mysystems\projects\nca-optimizer-benchmark\output\pdf\dual_fitness_methodol
+ogy_results.bbl
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6 <./figures/dual_fitness_statistical_summary.pdf>])
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7 <./figures/dual_fitness_economic_summary.pdf>]
 (C:\mysystems\projects\nca-optimizer-benchmark\output\pdf\dual_fitness_methodol
 ogy_results.aux)
  ***********
@@ -662,34 +683,37 @@ L3 programming layer <2026-03-20>
  ***********
 Package rerunfilecheck Info: File `dual_fitness_methodology_results.out' has no
 t changed.
-(rerunfilecheck)             Checksum: A7EB1FD07ED622ACC79CAFCDF9F32D32;2195.
+(rerunfilecheck)             Checksum: 0CCFA3AB3096C8A9CF42948502D4992F;2573.
  ) 
 Here is how much of TeX's memory you used:
- 12166 strings out of 467691
- 188532 string characters out of 5415471
- 613972 words of memory out of 5000000
- 40998 multiletter control sequences out of 15000+600000
+ 12190 strings out of 467691
+ 189406 string characters out of 5415471
+ 614578 words of memory out of 5000000
+ 41016 multiletter control sequences out of 15000+600000
  639254 words of font info for 83 fonts, out of 8000000 for 9000
  1151 hyphenation exceptions out of 8191
- 90i,7n,93p,661b,448s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,7n,93p,914b,612s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
 mbx10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
 nts/cm/cmbx12.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
 ic/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
 e1/public/amsfonts/cm/cmmi10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/f
 onts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/User/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/User/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/User/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/User/A
-ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/
-User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/
-Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.p
+iKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/User/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/User/AppData/
+Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/User/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users
+/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:
+/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.p
 fb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmti10.pfb>
+cmsy10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmsy7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmsy8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmti10.pfb>
 Output written on C:\mysystems\projects\nca-optimizer-benchmark\output\pdf\dual
-_fitness_methodology_results.pdf (5 pages, 384905 bytes).
+_fitness_methodology_results.pdf (7 pages, 468263 bytes).
 PDF statistics:
- 239 PDF objects out of 1000 (max. 8388607)
- 26 named destinations out of 1000 (max. 500000)
- 106 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 323 PDF objects out of 1000 (max. 8388607)
+ 32 named destinations out of 1000 (max. 500000)
+ 132 words of extra memory for PDF output out of 10000 (max. 10000000)
 
