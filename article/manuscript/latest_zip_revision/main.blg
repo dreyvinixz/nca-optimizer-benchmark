@@ -1,0 +1,70 @@
+This is BibTeX, Version 0.99e
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+Reallocating 'name_of_file' (item size: 1) to 16 items.
+The style file: sn-mathphys-num.bst
+Reallocating 'name_of_file' (item size: 1) to 11 items.
+Reallocating 'glb_str_end' (item size: 4) to 20 items.
+Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
+Reallocating 'global_strs' (item size: 1) to 4000000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Database file #1: references.bib
+Reallocating 'wiz_functions' (item size: 4) to 9000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+You've used 38 entries,
+            7480 wiz_defined-function locations,
+            1404 strings with 17243 characters,
+and the built_in function-call counts, 343084 in all, are:
+= -- 58649
+> -- 1401
+< -- 698
++ -- 32085
+- -- 368
+* -- 11306
+:= -- 61381
+add.period$ -- 41
+call.type$ -- 38
+change.case$ -- 249
+chr.to.int$ -- 1877
+cite$ -- 38
+duplicate$ -- 1850
+empty$ -- 8404
+format.name$ -- 921
+if$ -- 86771
+int.to.chr$ -- 1
+int.to.str$ -- 68
+missing$ -- 0
+newline$ -- 585
+num.names$ -- 190
+pop$ -- 826
+preamble$ -- 1
+purify$ -- 181
+quote$ -- 0
+skip$ -- 35635
+stack$ -- 0
+substring$ -- 34336
+swap$ -- 1093
+text.length$ -- 490
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 1650
+warning$ -- 0
+while$ -- 1139
+width$ -- 0
+write$ -- 812

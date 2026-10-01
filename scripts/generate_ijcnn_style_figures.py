@@ -114,7 +114,7 @@ def temporal_partition() -> None:
     for boundary in [9034, 12045]:
         ax.axvline(boundary, ymin=0.38, ymax=0.91, color=INK, lw=0.75, ls=(0, (3, 3)))
     ax.annotate("chronological order", xy=(total, 1.13), xytext=(0, 1.13), ha="center", va="center", fontsize=8.3, weight="bold", color=INK, arrowprops={"arrowstyle": "-|>", "lw": 0.9, "color": INK})
-    ax.text(13551, 0.97, "not accessed during\nfeature selection or search", ha="center", va="bottom", fontsize=6.8, color=INK, weight="bold")
+    ax.text(13551, 0.97, "not accessed during\nhyperparameter search or model selection", ha="center", va="bottom", fontsize=6.8, color=INK, weight="bold")
     ax.set(xlim=(0, total), ylim=(0.0, 1.35), yticks=[])
     ax.set_xticks([0, 3000, 6000, 9034, 12045, 15057])
     ax.set_xlabel("Chronological five-minute bar index", weight="bold")

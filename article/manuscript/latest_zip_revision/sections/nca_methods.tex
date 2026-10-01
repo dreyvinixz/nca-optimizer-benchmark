@@ -1,0 +1,135 @@
+\section{Materials and Methods}\label{sec:methods}\label{sec:methodology}
+
+This section presents the methodology adopted in this study. Figure~\ref{fig:workflow} provides an overview of the methodological flow adopted in this study. The diagram highlights each step of the process, illustrating the flow from data acquisition to model optimization and evaluation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/methodology_workflow_vector.pdf}
+    \caption{Overview of the proposed methodology. The benchmark reuses the precursor’s fixed
+Information-Gain representation while enforcing a chronological split, equal optimizer budget, and
+two separated validation objectives.}
+    \label{fig:workflow}
+\end{figure}
+
+\subsection{Input Data}
+\label{sec:data}
+
+The data used in this study were obtained from BovDbV2 \cite{souza2024dataset}, an extension of the original BovDb \cite{cardoso2022bovdb}. The database provides publicly available and pre-processed B3 market data for research purposes, covering listed assets from 1995 to 2024. BovDbV2 additionally includes intraday observations aggregated into 5-minute intervals for the first half of 2024, enabling the analysis of short-horizon market behaviour.
+
+For the present study, the analysis focuses on Mini Ibovespa Futures (WIN) contracts traded between January and June 2024. The selected contracts correspond to the most actively traded maturities over the analyzed period: WING24 and WINJ24 in January--February, WINJ24 and WINM24 in March--April, and WINM24 and WINQ24 in May--June. After preprocessing and construction of the modelling dataset, the final sample contains 15,057 chronological observations.
+
+The explanatory variables are technical indicators computed from the intraday price and volume series. The prediction target is a binary market-trend label, where 0 denotes a downtrend and 1 denotes an uptrend. These labels were generated using the peak-and-trough identification procedure established in previous work and retained here to preserve consistency with the earlier experimental pipeline.
+
+All observations are kept in their original chronological order. The first 9,034 observations are assigned to the training set, the following 3,011 observations to the validation set, and the final 3,012 observations to the locked test set. No random shuffling is performed in the primary holdout protocol, ensuring that the test block remains temporally subsequent to the data used for model fitting and hyperparameter selection.
+
+\subsection{Generation of Technical Analysis Indicators}
+\label{sec:indicators}
+
+Technical indicators were built from the intraday dataset to capture short-term price changes. Key metrics—Simple Moving Average (SMA), Exponential Moving Average (EMA), and Standard Deviation—were calculated using short time windows (3, 5, 7, and 9 periods) to enhance sensitivity to rapid market shifts, where significant moves can happen in minutes \cite{hunter1986exponentially}.
+
+To capture changes in trend slope and momentum, attributes derived from the differences between calculated moving averages were also constructed. For example, the difference between the 7-period SMA and the 3-period SMA is defined in Eq. (1) as:
+
+\begin{equation}
+\text{SMA}_{7-3} = \text{SMA}_{7} - \text{SMA}_{3},
+\end{equation}
+
+A central preprocessing step consisted of normalizing the technical indicators \cite{singh2022feature}, as well as the opening and closing prices, in order to place all variables on a common numerical scale. For each 5-minute intraday window, a min–max–type scaling was applied, in which each feature was transformed according to Eq. (2):
+
+\begin{equation}
+\text{Feature}_{\text{norm}} = \frac{\text{Feature} - \text{Low}}{\text{High} - \text{Low}}.
+\end{equation}
+
+Where \textit{High} and \textit{Low} correspond to the maximum and minimum prices observed within the same 5-minute interval, and \textit{Feature} denotes any technical indicator or price-based variable being normalized. This transformation maps the features predominantly to the interval $[0,1]$, while preserving their relative positions within the intraday price range, thereby reducing the impact of heterogeneous attribute scales and facilitating the learning of machine learning models. This normalization procedure, combined with historical information on open, high, low, average, close, bid, ask, trade volume, and number of shares, results in a total of 66 constructed features.
+
+\subsection{Feature Selection Method}
+\label{sec:featureselection}
+The predictive pipeline incorporates a structured feature selection stage based on technical analysis indicators. Following the approach proposed in \cite{souza2024dataset}, multiple selection strategies are evaluated to identify the most informative feature subsets, thereby enhancing model discrimination while reducing redundancy and noise inherent in high-dimensional financial data.
+
+Based on the results presented, we evaluated several feature selection approaches using filters and wrappers. Among the methods evaluated, the \textit{Information Gain Method }\cite{lei2012feature} demonstrated superior performance in terms of model stability compared to all other methods tested, showing generalization and training efficiency when applied to the %our%
+intraday dataset. This method identified a compact and informative subset, selecting 7 features from the original 66.
+
+The selected features, ranked by their Information Gain scores, include the EMA-based differences $5\!-\!3$ and $7\!-\!3$, their normalized counterparts, the normalized 9-period SMA, the $9\!-\!3$ EMA difference, and the normalized 7-period EMA. 
+
+This ranked subset was subsequently used as the optimized input space for training the models using a GA-based hyperparameter optimization procedure. Limiting the learning space to key indicators allowed the genetic algorithm's optimization to run more efficiently, finding parameters with better predictive capacity and less variance \cite{kumar2014feature}.
+
+\subsection{Implemented Classifier Architectures and Search Spaces}
+\label{sec:classifier_architectures}
+
+To benchmark metaheuristic search performance across fundamentally distinct hypothesis spaces, four classifier backbones were implemented: Random Forest (RF), Support Vector Machines (SVM), Multilayer Perceptron (MLP), and 1D Convolutional Neural Networks (1D-CNN). Figure~\ref{fig:classifier_backbones} illustrates the structural decision mechanisms and layer topologies of these four implemented architectures.
+
+
+
+The hyperparameter search space bounds $\bm{\theta} \in \mathcal{S}$ for each implemented model are defined as follows:
+\begin{itemize}
+    \item \textbf{RF}: Number of trees $n_{\text{estimators}} \in [50,500]$, maximum tree depth $d_{\text{max}} \in [5,50]$, minimum split samples $s_{\text{split}} \in [2,20]$, minimum leaf samples $s_{\text{leaf}} \in [1,20]$, and categorical choices for \texttt{max\_features} ($\{\texttt{sqrt},\texttt{log2},\texttt{None}\}$) and \texttt{class\_weight} ($\{\texttt{None},\texttt{balanced}\}$).
+    \item \textbf{SVM}: Soft-margin penalty $C \in [10^{-3},10^3]$ and kernel bandwidth $\gamma \in [10^{-5},10^1]$, both sampled on logarithmic scales, with linear and radial-basis-function kernels considered.
+    \item \textbf{MLP}: Hidden-layer width $n_{\text{hidden}} \in [5,500]$, L2 penalty coefficient $\alpha \in [10^{-8},10^{-2}]$, initial learning rate $\eta_0 \in [10^{-8},10^{-2}]$, dropout $p_{\text{drop}} \in [0,0.10]$, and batch size in $\{16,32,64,80,112,128\}$.
+    \item \textbf{1D-CNN}: Filter count $n_{\text{filter}} \in [8,128]$, kernel size $k_{\text{size}} \in [2,5]$, dense-layer width $n_{\text{dense}} \in [16,256]$, L2 penalty coefficient $\alpha \in [10^{-8},10^{-2}]$, Adam learning rate $\eta \in [10^{-8},10^{-2}]$, dropout $p_{\text{drop}} \in [0,0.10]$, and batch size in $\{16,32,64,80,112,128\}$.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/classifier_backbones_vector.pdf}
+    \caption{Architectural topologies and structural decision mechanisms of the four candidate classifier
+backbones evaluated under the equal-budget metaheuristic optimization framework.}
+    \label{fig:classifier_backbones}
+\end{figure}
+
+
+\subsection{Optimizer Configuration, Search Operators, and Validation Objectives}
+\label{sec:optimizerconfiguration}
+
+To ensure complete experimental reproducibility, five search paradigms were evaluated: Random Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differential Evolution (DE), and Grey Wolf Optimizer (GWO). All optimizers operate under a strict candidate evaluation cap of $N_{\mathrm{eval}} = 1{,}000$ per model and random seed. For all population-based algorithms (GA, PSO, DE, GWO), the population size is fixed to $N_{\mathrm{pop}} = 10$ candidates evaluated across $G = 100$ generations or iterations ($10 \times 100 = 1{,}000$ function evaluations). RS generates $N_{\mathrm{eval}} = 1{,}000$ independent uniform random samples across the search space.
+
+Candidate vectors use the bounds stated above. Integer parameters and categorical-option indices are rounded and clipped to their admissible bounds:
+\begin{equation}\label{eq:decoding_discrete}
+\theta_d = \mathrm{clip}\!\left(\mathrm{round}(u_d),\theta_{d,\mathrm{min}},\theta_{d,\mathrm{max}}\right).
+\end{equation}
+For continuous parameters defined on logarithmic scales (such as $C$, $\alpha$, and learning rates), optimizers act on $u_d\in[\log_{10}(\theta_{d,\mathrm{min}}),\log_{10}(\theta_{d,\mathrm{max}})]$ and values are decoded by
+\begin{equation}\label{eq:decoding_log}
+\theta_d = 10^{u_d}.
+\end{equation}
+
+The specific search operators and update formulations governing each optimizer are defined as follows:
+\begin{itemize}
+    \item \textbf{Genetic Algorithm (GA)}: Utilizes tournament selection ($k=3$), uniform crossover with probability $P_c = 0.80$, and mutation with probability $P_m = 0.20$. When a gene is mutated, its perturbation scale is 0.10 of the corresponding encoded search range.
+    \item \textbf{Particle Swarm Optimization (PSO)}: Velocity vectors $\mathbf{v}_i$ and positions $\mathbf{u}_i$ for particle $i$ at iteration $g$ are updated using inertia weight $w = 0.70$ and cognitive/social coefficients $c_1 = c_2 = 1.50$:
+    \begin{equation}\label{eq:pso_update}
+    \mathbf{v}_i^{g+1} = w \mathbf{v}_i^g + c_1 r_1 (\mathbf{pbest}_i - \mathbf{u}_i^g) + c_2 r_2 (\mathbf{gbest} - \mathbf{u}_i^g),
+    \end{equation}
+    \begin{equation}
+    \mathbf{u}_i^{g+1} = \mathrm{clip}\left(\mathbf{u}_i^g + \mathbf{v}_i^{g+1}, 0, 1\right),
+    \end{equation}
+    where $r_1, r_2 \sim U(0, 1)$.
+    \item \textbf{Differential Evolution (DE)}: Implements the DE/best/1/bin strategy with mutation factor $F = 0.80$ and binomial crossover probability $CR = 0.90$:
+    \begin{equation}\label{eq:de_update}
+    \mathbf{v}_i^{g+1} = \mathbf{gbest}^g + F (\mathbf{u}_{r1}^g - \mathbf{u}_{r2}^g),
+    \end{equation}
+    where $r1, r2$ are distinct randomly chosen population indices.
+    \item \textbf{Grey Wolf Optimizer (GWO)}: Candidate position vectors are updated by simulating encirclement of the three leading wolves ($\bm{\alpha}, \bm{\beta}, \bm{\delta}$):
+    \begin{equation}\label{eq:gwo_update}
+    \mathbf{u}_i^{g+1} = \frac{\mathbf{x}_1 + \mathbf{x}_2 + \mathbf{x}_3}{3},
+    \end{equation}
+    where $\mathbf{x}_1 = \bm{\alpha} - \mathbf{A}_1 \cdot |\mathbf{C}_1 \cdot \bm{\alpha} - \mathbf{u}_i^g|$, with analogous terms for $\mathbf{x}_2$ ($\bm{\beta}$) and $\mathbf{x}_3$ ($\bm{\delta}$).
+\end{itemize}
+
+Candidate configurations are evaluated against two separated validation objectives:
+\begin{itemize}
+    \item \textbf{Protocol A (MCC/$F_1$ Compound Objective)}:
+    \begin{equation}\label{eq:fitness_protocol_a}
+    f_{\mathrm{MCC/F1}}(\boldsymbol{\theta}) = 0.60\,\mathrm{MCC}_{\mathrm{val}}(\boldsymbol{\theta}) + 0.40\,F_{1,\mathrm{val}}(\boldsymbol{\theta}).
+    \end{equation}
+    \item \textbf{Protocol B (Weighted Accuracy Objective)}:
+    \begin{equation}\label{eq:fitness_protocol_b}
+    f_{\mathrm{Acc}}(\boldsymbol{\theta}) = 0.40\,\mathrm{Accuracy}_{\mathrm{train}}(\boldsymbol{\theta}) + 0.60\,\mathrm{Accuracy}_{\mathrm{val}}(\boldsymbol{\theta}).
+    \end{equation}
+\end{itemize}
+
+Upon completion of the $N_{\mathrm{eval}} = 1{,}000$ search budget, the optimal candidate vector $\boldsymbol{\theta}^* = \arg\max f(\boldsymbol{\theta})$ is refit on the concatenated training and validation dataset ($N = 12{,}045$ bars) and evaluated exactly once on the locked test block ($N = 3{,}012$ bars). The exploratory economic assessment maps an uptrend prediction to a long position and a downtrend prediction to a short position, opened at the bar open and closed at its close. Each bar is treated as one round-trip trade and is charged a fixed cost of five index points. We report total net profit, maximum drawdown, profit factor, and annualized Sharpe ratio; these quantities are therefore specific to this simplified intrabar execution rule rather than a claim of deployable live performance.
+
+\subsection{Statistical Analysis}
+\label{sec:statistical_analysis}
+
+Statistical comparisons are conducted separately within each holdout protocol and use the four classifier backbones as the groups of interest. For a given endpoint, each optimizer--seed pair defines one matched block, giving 15 blocks (five optimizers and three seeds) per protocol. We first apply the Friedman rank test to assess whether model outcomes differ across these matched blocks. When summarizing pairwise contrasts, the model with the highest marginal mean for the endpoint is compared with each of the other three models using two-sided paired Wilcoxon signed-rank tests. The resulting three $p$-values are adjusted together using the Holm step-down procedure, with family-wise significance level $\alpha=0.05$.
+
+These tests are exploratory. The blocks share one chronological test segment, and the five optimizers and three seeds do not provide 15 independent market periods. Accordingly, the tests quantify consistency of model ordering across the evaluated optimizer--seed combinations on this fixed test period; they do not establish replication across market regimes or a confirmatory difference between validation protocols. No optimizer-superiority claim is inferred from these model-level tests.
