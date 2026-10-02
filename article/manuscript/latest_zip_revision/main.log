@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  1 OCT 2026 17:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.27)  2 OCT 2026 12:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -488,6 +488,8 @@ Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
 \TX@cols=\count332
 \TX@ftn=\toks32
 )
+Package hyperref Info: Option `hypertexnames' set `false' on input line 12.
+
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/placeins\placeins.sty
 Package: placeins 2005/04/18  v 2.2
 )
@@ -847,24 +849,24 @@ File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -927,32 +929,32 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 g
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring ON on input line 26.
+Package hyperref Info: Link coloring ON on input line 28.
  (main.out) (main.out)
 \@outlinefile=\write5
 \openout5 = `main.out'.
 
-LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 35.
+LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 37.
 
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.51686> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 35.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 37.
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 35.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 37.
 
 
 (C:\Users\User\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -960,40 +962,40 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.51686> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 35.
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 37.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.015> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.015> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 35.
+(Font)              size <5> substituted on input line 37.
 
 (sections/nca_introduction.tex
 LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 7.
@@ -1074,65 +1076,39 @@ Underfull \hbox (badness 10000) in paragraph at lines 76--76
 []\OT1/cmr/m/n/10 Non-reproducible exper-i-men-tal
  []
 
-<figures/literature_scope_by_year.pdf, id=257, 445.77943pt x 217.1895pt>
+<figures/literature_scope_by_year.pdf, id=269, 384.48431pt x 245.86278pt>
 File: figures/literature_scope_by_year.pdf Graphic file (type pdf)
 <use figures/literature_scope_by_year.pdf>
 Package pdftex.def Info: figures/literature_scope_by_year.pdf  used on input li
 ne 83.
-(pdftex.def)             Requested size: 334.79773pt x 163.127pt.
+(pdftex.def)             Requested size: 353.39886pt x 225.99016pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [5
-pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.87 \FloatBarrier
-                  ]
+ [5]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [6
-pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.98     \item \textbf
-                      {Kernel margin classifiers}, represented by Support Ve...
- <./figures/literature_scope_by_year.pdf>]
+ [6 <./figures/literature_scope_by_year.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8
-pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.327 
-      ]
+ [8]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [9]
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <6.5> not available
-(Font)              size <6> substituted on input line 350.
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10
-pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.380 
-      ]) (sections/nca_methods.tex
-<figures/methodology_workflow_vector.pdf, id=411, 602.99478pt x 355.15486pt>
+ [10]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [11])
+(sections/nca_methods.tex
+<figures/methodology_workflow_vector.pdf, id=429, 602.99478pt x 355.15486pt>
 File: figures/methodology_workflow_vector.pdf Graphic file (type pdf)
 <use figures/methodology_workflow_vector.pdf>
 Package pdftex.def Info: figures/methodology_workflow_vector.pdf  used on input
@@ -1141,16 +1117,10 @@ Package pdftex.def Info: figures/methodology_workflow_vector.pdf  used on input
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [11
-pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.18 
-      <./figures/methodology_workflow_vector.pdf>]
+ [12 <./figures/methodology_workflow_vector.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [12]
+ [13]
 Underfull \hbox (badness 1331) in paragraph at lines 58--59
 \OT1/cmr/m/n/10 To bench-mark meta-heuris-tic search per-for-mance across fun-d
 a-men-tally dis-tinct
@@ -1159,375 +1129,261 @@ a-men-tally dis-tinct
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [13]
-<figures/classifier_backbones_vector.pdf, id=469, 420.38754pt x 197.03311pt>
+ [14]
+<figures/classifier_backbones_vector.pdf, id=488, 420.38754pt x 197.03311pt>
 File: figures/classifier_backbones_vector.pdf Graphic file (type pdf)
 <use figures/classifier_backbones_vector.pdf>
 Package pdftex.def Info: figures/classifier_backbones_vector.pdf  used on input
  line 72.
-(pdftex.def)             Requested size: 372.0pt x 174.35774pt.
+(pdftex.def)             Requested size: 353.39886pt x 165.63895pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
+ [15 <./figures/classifier_backbones_vector.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [14
-pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.91 \end{equation}
-                    <./figures/classifier_backbones_vector.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [15])
+ [16])
 (sections/nca_results.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [16]
+ [17]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [17
-pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.55 \FloatBarrier
-                  ]
+ [18]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [18
-pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.55 \FloatBarrier
-                  ]
-<figures/rf_convergence_mccf1.pdf, id=542, 516.45761pt x 292.07593pt>
+ [19]
+<figures/rf_convergence_mccf1.pdf, id=565, 428.21504pt x 255.50443pt>
 File: figures/rf_convergence_mccf1.pdf Graphic file (type pdf)
 <use figures/rf_convergence_mccf1.pdf>
-Package pdftex.def Info: figures/rf_convergence_mccf1.pdf  used on input line 6
-9.
-(pdftex.def)             Requested size: 338.52136pt x 191.4515pt.
-<figures/rf_convergence_accuracy.pdf, id=543, 511.34477pt x 292.07593pt>
+Package pdftex.def Info: figures/rf_convergence_mccf1.pdf  used on input line 8
+6.
+(pdftex.def)             Requested size: 353.39886pt x 210.87563pt.
+<figures/rf_convergence_accuracy.pdf, id=566, 428.21504pt x 255.50443pt>
 File: figures/rf_convergence_accuracy.pdf Graphic file (type pdf)
 <use figures/rf_convergence_accuracy.pdf>
 Package pdftex.def Info: figures/rf_convergence_accuracy.pdf  used on input lin
-e 74.
-(pdftex.def)             Requested size: 338.52136pt x 193.3679pt.
+e 91.
+(pdftex.def)             Requested size: 353.39886pt x 210.87563pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [19
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.79 
-      <./figures/rf_convergence_mccf1.pdf>]
-<figures/svm_convergence_mccf1.pdf, id=569, 511.34477pt x 292.07593pt>
+ [20 <./figures/rf_convergence_mccf1.pdf>]
+<figures/svm_convergence_mccf1.pdf, id=606, 428.21504pt x 255.50443pt>
 File: figures/svm_convergence_mccf1.pdf Graphic file (type pdf)
 <use figures/svm_convergence_mccf1.pdf>
 Package pdftex.def Info: figures/svm_convergence_mccf1.pdf  used on input line 
-85.
-(pdftex.def)             Requested size: 338.52136pt x 193.3679pt.
-<figures/svm_convergence_accuracy.pdf, id=570, 511.34477pt x 292.07593pt>
+102.
+(pdftex.def)             Requested size: 353.39886pt x 210.87563pt.
+<figures/svm_convergence_accuracy.pdf, id=607, 428.21504pt x 255.50443pt>
 File: figures/svm_convergence_accuracy.pdf Graphic file (type pdf)
 <use figures/svm_convergence_accuracy.pdf>
 Package pdftex.def Info: figures/svm_convergence_accuracy.pdf  used on input li
-ne 90.
-(pdftex.def)             Requested size: 338.52136pt x 193.3679pt.
+ne 107.
+(pdftex.def)             Requested size: 353.39886pt x 210.87563pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [20
-pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.93 \FloatBarrier
-                   <./figures/rf_convergence_accuracy.pdf>]
+ [21 <./figures/rf_convergence_accuracy.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [21
-pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.93 \FloatBarrier
-                  
-pdfTeX warning (ext4): destination with the same identifier (name{figure.9}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.93 \FloatBarrier
-                   <./figures/svm_convergence_mccf1.pdf> <./figures/svm_converg
-ence_accuracy.pdf>]
-<figures/mlp_convergence_mccf1.pdf, id=630, 511.34477pt x 292.07593pt>
+ [22 <./figures/svm_convergence_mccf1.pdf> <./figures/svm_convergence_accuracy.
+pdf>]
+<figures/mlp_convergence_mccf1.pdf, id=712, 428.21504pt x 255.50443pt>
 File: figures/mlp_convergence_mccf1.pdf Graphic file (type pdf)
 <use figures/mlp_convergence_mccf1.pdf>
 Package pdftex.def Info: figures/mlp_convergence_mccf1.pdf  used on input line 
-102.
-(pdftex.def)             Requested size: 338.52136pt x 193.3679pt.
-<figures/mlp_convergence_accuracy.pdf, id=631, 516.45761pt x 292.07593pt>
+119.
+(pdftex.def)             Requested size: 353.39886pt x 210.87563pt.
+<figures/mlp_convergence_accuracy.pdf, id=713, 428.21504pt x 255.50443pt>
 File: figures/mlp_convergence_accuracy.pdf Graphic file (type pdf)
 <use figures/mlp_convergence_accuracy.pdf>
 Package pdftex.def Info: figures/mlp_convergence_accuracy.pdf  used on input li
-ne 107.
-(pdftex.def)             Requested size: 338.52136pt x 191.4515pt.
+ne 124.
+(pdftex.def)             Requested size: 353.39886pt x 210.87563pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [22
-pdfTeX warning (ext4): destination with the same identifier (name{figure.10}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.116 
-       <./figures/mlp_convergence_mccf1.pdf>]
-<figures/cnn_convergence_mccf1.pdf, id=657, 511.34477pt x 292.07593pt>
+ [23 <./figures/mlp_convergence_mccf1.pdf>]
+<figures/cnn_convergence_mccf1.pdf, id=754, 428.21504pt x 255.50443pt>
 File: figures/cnn_convergence_mccf1.pdf Graphic file (type pdf)
 <use figures/cnn_convergence_mccf1.pdf>
 Package pdftex.def Info: figures/cnn_convergence_mccf1.pdf  used on input line 
-118.
-(pdftex.def)             Requested size: 338.52136pt x 193.3679pt.
-<figures/cnn_convergence_accuracy.pdf, id=658, 511.34477pt x 292.07593pt>
+135.
+(pdftex.def)             Requested size: 353.39886pt x 210.87563pt.
+<figures/cnn_convergence_accuracy.pdf, id=755, 428.21504pt x 255.50443pt>
 File: figures/cnn_convergence_accuracy.pdf Graphic file (type pdf)
 <use figures/cnn_convergence_accuracy.pdf>
 Package pdftex.def Info: figures/cnn_convergence_accuracy.pdf  used on input li
-ne 123.
-(pdftex.def)             Requested size: 338.52136pt x 193.3679pt.
+ne 140.
+(pdftex.def)             Requested size: 353.39886pt x 210.87563pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [23
-pdfTeX warning (ext4): destination with the same identifier (name{figure.11}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.126 \FloatBarrier
-                    <./figures/mlp_convergence_accuracy.pdf>]
+ [24 <./figures/mlp_convergence_accuracy.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [24
-pdfTeX warning (ext4): destination with the same identifier (name{figure.12}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.126 \FloatBarrier
-                   
-pdfTeX warning (ext4): destination with the same identifier (name{figure.13}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.126 \FloatBarrier
-                    <./figures/cnn_convergence_mccf1.pdf> <./figures/cnn_conver
-gence_accuracy.pdf>]
+ [25 <./figures/cnn_convergence_mccf1.pdf> <./figures/cnn_convergence_accuracy.
+pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [25
-pdfTeX warning (ext4): destination with the same identifier (name{table.4}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.161 
-      ]
-<figures/ijcnn_style_model_performance.pdf, id=722, 390.46754pt x 188.48605pt>
-File: figures/ijcnn_style_model_performance.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_model_performance.pdf>
-Package pdftex.def Info: figures/ijcnn_style_model_performance.pdf  used on inp
-ut line 187.
-(pdftex.def)             Requested size: 349.68091pt x 168.80756pt.
+ [26]
+<figures/exp1_holdout_mcc_by_optimizer.pdf, id=867, 376.69435pt x 375.804pt>
+File: figures/exp1_holdout_mcc_by_optimizer.pdf Graphic file (type pdf)
+<use figures/exp1_holdout_mcc_by_optimizer.pdf>
+Package pdftex.def Info: figures/exp1_holdout_mcc_by_optimizer.pdf  used on inp
+ut line 205.
+(pdftex.def)             Requested size: 353.39886pt x 352.56769pt.
+<figures/exp1_exp2_holdout_accuracy.pdf, id=868, 388.49689pt x 333.05229pt>
+File: figures/exp1_exp2_holdout_accuracy.pdf Graphic file (type pdf)
+<use figures/exp1_exp2_holdout_accuracy.pdf>
+Package pdftex.def Info: figures/exp1_exp2_holdout_accuracy.pdf  used on input 
+line 210.
+(pdftex.def)             Requested size: 353.39886pt x 302.98149pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+ [27]
+<figures/exp3_temporal_cv_accuracy_by_optimizer.pdf, id=878, 375.07893pt x 368.
+57701pt>
+File: figures/exp3_temporal_cv_accuracy_by_optimizer.pdf Graphic file (type pdf
+)
+<use figures/exp3_temporal_cv_accuracy_by_optimizer.pdf>
+Package pdftex.def Info: figures/exp3_temporal_cv_accuracy_by_optimizer.pdf  us
+ed on input line 221.
+(pdftex.def)             Requested size: 353.39886pt x 347.28352pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [26
-pdfTeX warning (ext4): destination with the same identifier (name{table.5}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.196 
-      ]
+ [28 <./figures/exp1_holdout_mcc_by_optimizer.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [27
-pdfTeX warning (ext4): destination with the same identifier (name{figure.14}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.255 \end{table}
-                  <./figures/ijcnn_style_model_performance.pdf>]
-<figures/ijcnn_style_economic_summary.pdf, id=758, 397.46242pt x 202.24698pt>
-File: figures/ijcnn_style_economic_summary.pdf Graphic file (type pdf)
-<use figures/ijcnn_style_economic_summary.pdf>
-Package pdftex.def Info: figures/ijcnn_style_economic_summary.pdf  used on inpu
-t line 258.
-(pdftex.def)             Requested size: 349.68091pt x 177.94394pt.
-
+ [29 <./figures/exp1_exp2_holdout_accuracy.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [28
-pdfTeX warning (ext4): destination with the same identifier (name{table.6}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.263 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{table.7}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.263 
-      ]) (sections/nca_discussion.tex
+ [30 <./figures/exp3_temporal_cv_accuracy_by_optimizer.pdf>]
+<figures/dual_fitness_statistical_summary.pdf, id=965, 479.4221pt x 259.01042pt
+>
+File: figures/dual_fitness_statistical_summary.pdf Graphic file (type pdf)
+<use figures/dual_fitness_statistical_summary.pdf>
+Package pdftex.def Info: figures/dual_fitness_statistical_summary.pdf  used on 
+input line 265.
+(pdftex.def)             Requested size: 353.39886pt x 190.9296pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [29
-pdfTeX warning (ext4): destination with the same identifier (name{figure.15}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.8 
-     <./figures/ijcnn_style_economic_summary.pdf>]
+ [31]
+<figures/economic_return_drawdown.pdf, id=975, 394.81563pt x 269.23572pt>
+File: figures/economic_return_drawdown.pdf Graphic file (type pdf)
+<use figures/economic_return_drawdown.pdf>
+Package pdftex.def Info: figures/economic_return_drawdown.pdf  used on input li
+ne 298.
+(pdftex.def)             Requested size: 353.39886pt x 240.99117pt.
+
+(sections/nca_benchmark_visualizations.tex
+<figures/heatmap_mccf1_mcc_test.pdf, id=980, 406.64906pt x 268.92845pt>
+File: figures/heatmap_mccf1_mcc_test.pdf Graphic file (type pdf)
+<use figures/heatmap_mccf1_mcc_test.pdf>
+Package pdftex.def Info: figures/heatmap_mccf1_mcc_test.pdf  used on input line
+ 7.
+(pdftex.def)             Requested size: 353.39886pt x 233.72374pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+ [32 <./figures/dual_fitness_statistical_summary.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [33 <./figures/economic_return_drawdown.pdf>]
+<figures/heatmap_accuracy_accuracy_test.pdf, id=1068, 406.68431pt x 268.84915pt
+>
+File: figures/heatmap_accuracy_accuracy_test.pdf Graphic file (type pdf)
+<use figures/heatmap_accuracy_accuracy_test.pdf>
+Package pdftex.def Info: figures/heatmap_accuracy_accuracy_test.pdf  used on in
+put line 12.
+(pdftex.def)             Requested size: 353.39886pt x 233.63841pt.
+<figures/test_mcc_seed_points.pdf, id=1071, 427.0699pt x 331.24338pt>
+File: figures/test_mcc_seed_points.pdf Graphic file (type pdf)
+<use figures/test_mcc_seed_points.pdf>
+Package pdftex.def Info: figures/test_mcc_seed_points.pdf  used on input line 2
+1.
+(pdftex.def)             Requested size: 353.39886pt x 274.10301pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [30]
+ [34 <./figures/heatmap_mccf1_mcc_test.pdf>]
+<figures/optimizer_average_ranks.pdf, id=1104, 400.34995pt x 252.27812pt>
+File: figures/optimizer_average_ranks.pdf Graphic file (type pdf)
+<use figures/optimizer_average_ranks.pdf>
+Package pdftex.def Info: figures/optimizer_average_ranks.pdf  used on input lin
+e 30.
+(pdftex.def)             Requested size: 353.39886pt x 222.69447pt.
+<figures/performance_vs_fit_time_mccf1.pdf, id=1108, 418.8311pt x 348.56999pt>
+File: figures/performance_vs_fit_time_mccf1.pdf Graphic file (type pdf)
+<use figures/performance_vs_fit_time_mccf1.pdf>
+Package pdftex.def Info: figures/performance_vs_fit_time_mccf1.pdf  used on inp
+ut line 39.
+(pdftex.def)             Requested size: 353.39886pt x 294.12648pt.
+<figures/performance_vs_fit_time_accuracy.pdf, id=1109, 415.92964pt x 348.56999
+pt>
+File: figures/performance_vs_fit_time_accuracy.pdf Graphic file (type pdf)
+<use figures/performance_vs_fit_time_accuracy.pdf>
+Package pdftex.def Info: figures/performance_vs_fit_time_accuracy.pdf  used on 
+input line 44.
+(pdftex.def)             Requested size: 353.39886pt x 296.1795pt.
+<figures/radar_overview_normalized.pdf, id=1110, 481.39342pt x 290.54283pt>
+File: figures/radar_overview_normalized.pdf Graphic file (type pdf)
+<use figures/radar_overview_normalized.pdf>
+Package pdftex.def Info: figures/radar_overview_normalized.pdf  used on input l
+ine 49.
+(pdftex.def)             Requested size: 353.39886pt x 213.29593pt.
+)) (sections/nca_discussion.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [31])
-(sections/nca_conclusion.tex
+ [35 <./figures/heatmap_accuracy_accuracy_test.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [36 <./figures/test_mcc_seed_points.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [37 <./figures/optimizer_average_ranks.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [38 <./figures/performance_vs_fit_time_mccf1.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [39 <./figures/performance_vs_fit_time_accuracy.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [40 <./figures/radar_overview_normalized.pdf>]) (sections/nca_conclusion.tex
 Underfull \hbox (badness 1117) in paragraph at lines 3--4
 \OT1/cmr/m/n/10 tech-ni-cal rep-re-sen-ta-tion can sup-port meta-heuris-tic hyp
 er-pa-ram-e-ter search---but
  []
 
-) (sections/nca_benchmark_appendix.tex
-<figures/heatmap_mccf1_mcc_test.pdf, id=816, 587.53143pt x 298.41737pt>
-File: figures/heatmap_mccf1_mcc_test.pdf Graphic file (type pdf)
-<use figures/heatmap_mccf1_mcc_test.pdf>
-Package pdftex.def Info: figures/heatmap_mccf1_mcc_test.pdf  used on input line
- 9.
-(pdftex.def)             Requested size: 357.1225pt x 181.39684pt.
-<figures/heatmap_accuracy_accuracy_test.pdf, id=817, 587.53143pt x 298.41737pt>
-
-File: figures/heatmap_accuracy_accuracy_test.pdf Graphic file (type pdf)
-<use figures/heatmap_accuracy_accuracy_test.pdf>
-Package pdftex.def Info: figures/heatmap_accuracy_accuracy_test.pdf  used on in
-put line 14.
-(pdftex.def)             Requested size: 357.1225pt x 181.39684pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [32]
+ [41])
+(sections/declarations.tex) (main.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [33
-pdfTeX warning (ext4): destination with the same identifier (name{figure.16}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.17 \FloatBarrier
-                  
-pdfTeX warning (ext4): destination with the same identifier (name{figure.17}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.17 \FloatBarrier
-                   <./figures/heatmap_mccf1_mcc_test.pdf> <./figures/heatmap_ac
-curacy_accuracy_test.pdf>]
-<figures/test_mcc_seed_boxplots.pdf, id=859, 645.50381pt x 430.36458pt>
-File: figures/test_mcc_seed_boxplots.pdf Graphic file (type pdf)
-<use figures/test_mcc_seed_boxplots.pdf>
-Package pdftex.def Info: figures/test_mcc_seed_boxplots.pdf  used on input line
- 24.
-(pdftex.def)             Requested size: 364.55841pt x 243.05136pt.
-<figures/optimizer_average_ranks.pdf, id=860, 570.11217pt x 259.78178pt>
-File: figures/optimizer_average_ranks.pdf Graphic file (type pdf)
-<use figures/optimizer_average_ranks.pdf>
-Package pdftex.def Info: figures/optimizer_average_ranks.pdf  used on input lin
-e 29.
-(pdftex.def)             Requested size: 357.1225pt x 162.73186pt.
-
-Underfull \hbox (badness 1028) in paragraph at lines 35--36
-[]\OT1/cmr/m/n/10 Figure [][]20[][] places pre-dic-tive score against recorded 
-candidate-fit effort, and
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [34
-pdfTeX warning (ext4): destination with the same identifier (name{figure.18}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.36 
-      <./figures/test_mcc_seed_boxplots.pdf>]
-<figures/performance_vs_candidate_fit_time.pdf, id=883, 651.93587pt x 284.65598
-pt>
-File: figures/performance_vs_candidate_fit_time.pdf Graphic file (type pdf)
-<use figures/performance_vs_candidate_fit_time.pdf>
-Package pdftex.def Info: figures/performance_vs_candidate_fit_time.pdf  used on
- input line 38.
-(pdftex.def)             Requested size: 364.55841pt x 159.18039pt.
-<figures/radar_overview_normalized.pdf, id=884, 674.73454pt x 340.93854pt>
-File: figures/radar_overview_normalized.pdf Graphic file (type pdf)
-<use figures/radar_overview_normalized.pdf>
-Package pdftex.def Info: figures/radar_overview_normalized.pdf  used on input l
-ine 43.
-(pdftex.def)             Requested size: 364.55841pt x 184.2081pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [35
-pdfTeX warning (ext4): destination with the same identifier (name{figure.19}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.46 \FloatBarrier
-                  
-pdfTeX warning (ext4): destination with the same identifier (name{figure.20}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.46 \FloatBarrier
-                   <./figures/optimizer_average_ranks.pdf> <./figures/performan
-ce_vs_candidate_fit_time.pdf>]) (sections/declarations.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [36
-pdfTeX warning (ext4): destination with the same identifier (name{figure.21}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.20 \subsection
-                *{Author Contributions} <./figures/radar_overview_normalized.pd
-f>]) (main.bbl
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [37]
+ [42]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [38]
-Underfull \hbox (badness 1661) in paragraph at lines 456--467
+ [43]
+Underfull \hbox (badness 1661) in paragraph at lines 461--472
 []\OT1/cmr/m/n/10 Wang, D., Tan, D., Liu, L.: Par-ti-cle swarm opti-miza-tion a
 lgo-rithm: an
  []
 
 
-Underfull \hbox (badness 1824) in paragraph at lines 456--467
+Underfull \hbox (badness 1824) in paragraph at lines 461--472
 \OT1/cmr/m/n/10 overview. Soft Com-put-ing \OT1/cmr/bx/n/10 22\OT1/cmr/m/n/10 (
 2), 387--408 (2018) [][]$https : / / doi . org / 10 . 1007 /
  []
@@ -1538,10 +1394,10 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [39])
+ [44])
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [40]
+ [45]
 (main.aux)
  ***********
 LaTeX2e <2025-11-01>
@@ -1550,58 +1406,55 @@ L3 programming layer <2026-03-20>
 
 
 LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 1.75pt have occurred.
+(Font)              up to 0.985pt have occurred.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: E00E68C08E755841F5B98131BB253074;8037.
+(rerunfilecheck)             Checksum: 9FA564749CA71027F7B257424D9AF43D;8862.
  ) 
 Here is how much of TeX's memory you used:
- 24044 strings out of 467691
- 449765 string characters out of 5415471
- 861785 words of memory out of 5000000
- 52462 multiletter control sequences out of 15000+600000
- 649643 words of font info for 128 fonts, out of 8000000 for 9000
+ 24087 strings out of 467691
+ 451243 string characters out of 5415471
+ 853424 words of memory out of 5000000
+ 52461 multiletter control sequences out of 15000+600000
+ 647707 words of font info for 119 fonts, out of 8000000 for 9000
  1151 hyphenation exceptions out of 8191
- 90i,18n,104p,1645b,876s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,18n,104p,1845b,876s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
 mbx10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
 nts/cm/cmbx12.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmbx6.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cm/cmbx7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/User/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/User/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users
-/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C
-:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6
+ic/amsfonts/cm/cmbx7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmbx8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/User/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/User/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/User/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/User/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users
+/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C
+:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8
 .pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmmi7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmmi8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/amsfonts/cm/cmmi9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmmib10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><C:/Users/User/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/User/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/User/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/
-User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/
-Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pf
-b><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
-mr7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
-s/cm/cmr8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmr9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/pu
-blic/amsfonts/cm/cmsy10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/User/AppData/Local/Programs
-/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/User/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/User/AppData
-/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti7.pfb><C:/Users/User/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Use
-rs/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
-
-Output written on main.pdf (40 pages, 1078664 bytes).
+m/cmmi9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmmib10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cmextra/cmmib7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/User/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/User/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/User/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/User/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/Us
+er/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Us
+ers/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb>
+<C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr
+9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmsy10.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmsy7.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmsy8.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/User/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/User/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/amsfonts/cm/cmti7.pfb><C:/Users/User/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/User/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on main.pdf (45 pages, 1295847 bytes).
 PDF statistics:
- 1148 PDF objects out of 1200 (max. 8388607)
- 172 named destinations out of 1000 (max. 500000)
- 380 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1567 PDF objects out of 1728 (max. 8388607)
+ 216 named destinations out of 1000 (max. 500000)
+ 424 words of extra memory for PDF output out of 10000 (max. 10000000)
 

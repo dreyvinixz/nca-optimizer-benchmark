@@ -19,19 +19,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.lines import Line2D
-from matplotlib.patches import Patch
+from matplotlib.ticker import FormatStrFormatter, StrMethodFormatter
+from nca_figure_style import (
+    FIGURE_MULTIPANEL, FIGURE_SINGLE, MODEL_COLORS, MODEL_LABELS,
+    OPTIMIZER_COLORS, OPTIMIZER_LINESTYLES, OPTIMIZER_MARKERS,
+    apply_publication_style,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 FIG_DIR = ROOT / "article" / "manuscript" / "latest_zip_revision" / "figures"
 SEEDS = (1, 2, 3)
 MODELS = ("rf", "svm", "mlp", "cnn")
-MODEL_LABELS = {
-    "rf": "Random Forest",
-    "svm": "Support Vector Machine",
-    "mlp": "Multilayer Perceptron",
-    "cnn": "1D-CNN",
-}
 OPTIMIZERS = ("random_search", "ga", "pso", "de", "gwo")
 OPT_LABELS = {
     "random_search": "RS",
@@ -40,72 +39,33 @@ OPT_LABELS = {
     "de": "DE",
     "gwo": "GWO",
 }
-OPT_COLORS = {
-    "random_search": "#0072B2",
-    "ga": "#D55E00",
-    "pso": "#009E73",
-    "de": "#CC79A7",
-    "gwo": "#E69F00",
-}
-OPT_LINESTYLES = {
-    "random_search": "-",
-    "ga": (0, (5, 2)),
-    "pso": (0, (3, 1, 1, 1)),
-    "de": (0, (1, 1.5)),
-    "gwo": (0, (7, 1.5, 1, 1.5)),
-}
-MODEL_COLORS = {
-    "rf": "#0072B2",
-    "svm": "#E69F00",
-    "mlp": "#009E73",
-    "cnn": "#CC79A7",
-}
 MODE_CONFIG = {
     "mcc_f1": {
-        "label": "MCC/F1 objective",
+        "label": "MCC/$F_1$ fitness",
         "data": ROOT / "outputs" / "article_official",
         "metric": "mcc_test",
         "metric_label": "Locked-test MCC",
-        "y_title": "MCC/F1 validation objective",
+        "y_title": "MCC/$F_1$ fitness",
         "convergence_suffix": "mccf1",
         "heatmap_file": "heatmap_mccf1_mcc_test.pdf",
     },
     "accuracy": {
-        "label": "Weighted-accuracy objective",
+        "label": "Weighted-accuracy fitness",
         "data": ROOT / "outputs" / "article_official_accuracy_holdout",
         "metric": "accuracy_test",
         "metric_label": "Locked-test accuracy",
-        "y_title": "Weighted-accuracy validation objective",
+        "y_title": "Weighted-accuracy fitness",
         "convergence_suffix": "accuracy",
         "heatmap_file": "heatmap_accuracy_accuracy_test.pdf",
     },
 }
 
-SEED_MARKERS = {1: "o", 2: "s", 3: "^"}
-SEED_COLORS = {1: "#0072B2", 2: "#D55E00", 3: "#009E73"}
+apply_publication_style()
+OPT_COLORS = OPTIMIZER_COLORS
+OPT_LINESTYLES = OPTIMIZER_LINESTYLES
+OPT_MARKERS = OPTIMIZER_MARKERS
 
-plt.rcParams.update(
-    {
-        "font.family": "DejaVu Sans",
-        "font.size": 9,
-        "axes.labelsize": 9,
-        "axes.titlesize": 9.5,
-        "xtick.labelsize": 8,
-        "ytick.labelsize": 8,
-        "legend.fontsize": 8,
-        "axes.linewidth": 0.75,
-        "axes.spines.top": False,
-        "axes.spines.right": False,
-        "axes.grid": True,
-        "grid.color": "#E4E8ED",
-        "grid.linewidth": 0.6,
-        "grid.alpha": 0.9,
-        "pdf.fonttype": 42,
-        "ps.fonttype": 42,
-        "savefig.facecolor": "white",
-        "figure.facecolor": "white",
-    }
-)
+ECONOMIC_CSV = ROOT / "outputs" / "professor_presentation" / "statistical_economic_model_selection" / "economic_by_model_experiment.csv"
 
 
 def read_run_csv(path: Path) -> pd.DataFrame:
@@ -210,7 +170,7 @@ def plot_convergence(data: dict[str, pd.DataFrame], mode: str) -> None:
         observed_span = observed_max - observed_min
         ypadding = max(observed_span * 0.05, 0.0001)
 
-        fig, ax = plt.subplots(figsize=(7.1, 4.45))
+        fig, ax = plt.subplots(figsize=FIGURE_SINGLE)
         for optimizer in OPTIMIZERS:
             curve = summary[(summary.model_type == model) & (summary.optimizer == optimizer)]
             x = curve.evaluation_id.to_numpy()
@@ -226,10 +186,11 @@ def plot_convergence(data: dict[str, pd.DataFrame], mode: str) -> None:
             )
         ax.set_xlim(1, 1000)
         ax.set_ylim(observed_min - ypadding, observed_max + ypadding)
-        ax.set_xticks((0, 250, 500, 750, 1000))
+        ax.set_xticks((1, 250, 500, 750, 1000))
         ax.set_xlabel("Objective-function evaluations")
         ax.set_ylabel("Best validation fitness")
-        ax.set_title(f"{MODEL_LABELS[model]} | {config['label']}", pad=8, weight="semibold")
+        ax.set_title(f"{MODEL_LABELS[model]} | {config['label']}", pad=8, weight="bold")
+        ax.yaxis.set_major_formatter(FormatStrFormatter("%.3f"))
         ax.grid(axis="y")
         ax.grid(axis="x", visible=False)
         ax.spines["left"].set_color("#66717D")
@@ -242,7 +203,7 @@ def plot_convergence(data: dict[str, pd.DataFrame], mode: str) -> None:
             curve = summary[
                 (summary.model_type == model)
                 & (summary.optimizer == optimizer)
-                & (summary.evaluation_id >= 750)
+                & (summary.evaluation_id >= 751)
             ]
             axins.plot(
                 curve.evaluation_id,
@@ -251,12 +212,13 @@ def plot_convergence(data: dict[str, pd.DataFrame], mode: str) -> None:
                 linewidth=1.0,
                 linestyle=OPT_LINESTYLES[optimizer],
             )
-        terminal = summary[(summary.model_type == model) & (summary.evaluation_id >= 750)]
+        terminal = summary[(summary.model_type == model) & (summary.evaluation_id >= 751)]
         zmin, zmax = float(terminal["mean"].min()), float(terminal["mean"].max())
         zpadding = max((zmax - zmin) * 0.12, observed_span * 0.002, 0.0001)
-        axins.set_xlim(750, 1000)
+        axins.set_xlim(751, 1000)
         axins.set_ylim(zmin - zpadding, zmax + zpadding)
-        axins.set_xticks((750, 875, 1000))
+        axins.set_xticks((751, 875, 1000))
+        axins.yaxis.set_major_formatter(FormatStrFormatter("%.3f"))
         axins.tick_params(axis="both", labelsize=6.5, length=2, pad=1.5)
         axins.set_title("Final 250 evaluations", fontsize=7.2, pad=2.5)
         axins.grid(axis="y", linewidth=0.45, alpha=0.75)
@@ -292,7 +254,7 @@ def plot_heatmap(data: dict[str, pd.DataFrame], mode: str) -> None:
     pad = max((high - low) * 0.09, 0.003)
     vmin, vmax = low - pad, high + pad
 
-    fig, ax = plt.subplots(figsize=(8.2, 4.2))
+    fig, ax = plt.subplots(figsize=FIGURE_SINGLE)
     mesh = ax.pcolormesh(
         np.arange(len(OPTIMIZERS) + 1),
         np.arange(len(MODELS) + 1),
@@ -310,7 +272,7 @@ def plot_heatmap(data: dict[str, pd.DataFrame], mode: str) -> None:
     ax.set_yticks(np.arange(len(MODELS)) + 0.5, [MODEL_LABELS[m] for m in MODELS])
     ax.set_xlabel("Optimizer")
     ax.set_ylabel("Model family")
-    ax.set_title(f"{config['label']}: {config['metric_label']}", weight="semibold", pad=11)
+    ax.set_title(f"{config['label']}: {config['metric_label']}", weight="bold", pad=11)
     for i, model in enumerate(MODELS):
         for j, optimizer in enumerate(OPTIMIZERS):
             value = mean.loc[model, optimizer]
@@ -327,73 +289,67 @@ def plot_heatmap(data: dict[str, pd.DataFrame], mode: str) -> None:
     save_pdf(fig, config["heatmap_file"])
 
 
-def plot_seed_boxplots(all_best: pd.DataFrame) -> None:
-    fig, axes = plt.subplots(2, 2, figsize=(9.2, 6.1), sharey=True, sharex=True)
-    mode_colors = {"mcc_f1": "#9CCAE5", "accuracy": "#F5C97A"}
+def plot_seed_distribution(all_best: pd.DataFrame) -> None:
+    """Show the three observed seed outcomes directly; avoid box summaries at n=3."""
+    fig, axes = plt.subplots(2, 2, figsize=FIGURE_MULTIPANEL, sharey=True, sharex=True)
+    mode_colors = {"mcc_f1": "#2878A5", "accuracy": "#D58B22"}
     mode_offsets = {"mcc_f1": -0.18, "accuracy": 0.18}
-    jitter = {1: -0.045, 2: 0.0, 3: 0.045}
+    seed_jitter = {1: -0.035, 2: 0.0, 3: 0.035}
     for ax, model in zip(axes.flat, MODELS):
         subset = all_best[all_best.model_type == model]
         for i, optimizer in enumerate(OPTIMIZERS, start=1):
             for mode in MODE_CONFIG:
                 values = subset[(subset.optimizer == optimizer) & (subset["mode"] == mode)].sort_values("seed")
                 position = i + mode_offsets[mode]
-                ax.boxplot(
-                    [values.mcc_test.to_numpy()],
-                    positions=[position],
-                    widths=0.30,
-                    patch_artist=True,
-                    showfliers=False,
-                    boxprops={"facecolor": mode_colors[mode], "edgecolor": "#44515E", "linewidth": 0.8},
-                    medianprops={"color": "#1B252D", "linewidth": 1.15},
-                    whiskerprops={"color": "#596671", "linewidth": 0.75},
-                    capprops={"color": "#596671", "linewidth": 0.75},
-                    showmeans=True,
-                    meanprops={"marker": "D", "markerfacecolor": "white", "markeredgecolor": "#1B252D", "markersize": 3.8},
+                color = mode_colors[mode]
+                ax.scatter(
+                    [position + seed_jitter[int(seed)] for seed in values.seed],
+                    values.mcc_test,
+                    s=24,
+                    color=color,
+                    alpha=0.78,
+                    edgecolor="white",
+                    linewidth=0.5,
+                    zorder=3,
                 )
-                for _, row in values.iterrows():
-                    ax.scatter(
-                        position + jitter[int(row.seed)],
-                        row.mcc_test,
-                        marker=SEED_MARKERS[int(row.seed)],
-                        s=20,
-                        color=SEED_COLORS[int(row.seed)],
-                        edgecolor="white",
-                        linewidth=0.45,
-                        zorder=4,
-                    )
-        ax.set_title(MODEL_LABELS[model], weight="semibold", pad=5)
+                mean = float(values.mcc_test.mean())
+                sd = float(values.mcc_test.std(ddof=1))
+                ax.errorbar(
+                    position,
+                    mean,
+                    yerr=sd,
+                    fmt="D",
+                    color=color,
+                    markerfacecolor="white",
+                    markeredgecolor=color,
+                    markeredgewidth=1.0,
+                    markersize=4.5,
+                    capsize=2.2,
+                    elinewidth=0.9,
+                    zorder=4,
+                )
+        ax.set_title(MODEL_LABELS[model], weight="bold", pad=5)
         ax.set_xticks(range(1, len(OPTIMIZERS) + 1), [OPT_LABELS[o] for o in OPTIMIZERS])
-        ax.set_xlim(0.45, len(OPTIMIZERS) + 0.55)
+        ax.set_xlim(0.55, len(OPTIMIZERS) + 0.45)
         ax.grid(axis="y")
         ax.grid(axis="x", visible=False)
     for ax in axes[:, 0]:
         ax.set_ylabel("Locked-test MCC")
+        ax.yaxis.set_major_formatter(FormatStrFormatter("%.3f"))
     for ax in axes[1, :]:
         ax.set_xlabel("Optimizer")
-    protocol_handles = [
-        Patch(facecolor=mode_colors["mcc_f1"], edgecolor="#44515E", label="MCC/F1 objective"),
-        Patch(facecolor=mode_colors["accuracy"], edgecolor="#44515E", label="Weighted-accuracy objective"),
+    handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=mode_colors[mode],
+               markeredgecolor="white", label=MODE_CONFIG[mode]["label"], markersize=5.5)
+        for mode in MODE_CONFIG
     ]
-    seed_handles = [
-        Line2D([0], [0], marker=SEED_MARKERS[s], color="none", markerfacecolor=SEED_COLORS[s], markeredgecolor="white", label=f"Seed {s}", markersize=5)
-        for s in SEEDS
-    ]
-    fig.legend(
-        handles=protocol_handles + seed_handles,
-        loc="upper center",
-        bbox_to_anchor=(0.5, 0.99),
-        ncol=5,
-        frameon=False,
-        columnspacing=1.25,
-        handletextpad=0.45,
-    )
-    fig.subplots_adjust(left=0.10, right=0.99, bottom=0.10, top=0.87, hspace=0.32, wspace=0.20)
-    save_pdf(fig, "test_mcc_seed_boxplots.pdf")
+    fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, 1.01), ncol=2, frameon=False)
+    fig.subplots_adjust(left=0.10, right=0.99, bottom=0.11, top=0.89, hspace=0.34, wspace=0.18)
+    save_pdf(fig, "test_mcc_seed_points.pdf")
 
 
 def plot_optimizer_ranks(all_best: pd.DataFrame) -> None:
-    fig, axes = plt.subplots(1, 2, figsize=(8.4, 4.0), sharex=True)
+    fig, axes = plt.subplots(1, 2, figsize=FIGURE_SINGLE, sharex=True)
     for ax, mode in zip(axes, MODE_CONFIG):
         metric = MODE_CONFIG[mode]["metric"]
         d = all_best[all_best["mode"] == mode]
@@ -417,7 +373,7 @@ def plot_optimizer_ranks(all_best: pd.DataFrame) -> None:
             )
         ax.set_yticks(y, [OPT_LABELS[o] for o in OPTIMIZERS])
         ax.invert_yaxis()
-        ax.set_title(f"{MODE_CONFIG[mode]['label']}\nranked by {metric}", weight="semibold", pad=8)
+        ax.set_title(f"{MODE_CONFIG[mode]['label']}\nranked by {metric}", weight="bold", pad=8)
         ax.set_xlim(0.8, 5.2)
         ax.set_xticks((1, 2, 3, 4, 5))
         ax.set_xlabel("Average rank (lower is better)")
@@ -430,10 +386,9 @@ def plot_optimizer_ranks(all_best: pd.DataFrame) -> None:
 
 def plot_performance_cost(all_best: pd.DataFrame, all_fit_time: pd.DataFrame) -> None:
     data = all_best.merge(all_fit_time, on=["mode", "model_type", "optimizer", "seed"], validate="one_to_one")
-    model_markers = {"rf": "s", "svm": "o", "mlp": "D", "cnn": "^"}
-    fig, axes = plt.subplots(1, 2, figsize=(9.3, 4.25))
-    for ax, mode in zip(axes, MODE_CONFIG):
-        cfg = MODE_CONFIG[mode]
+    model_order = MODELS
+    for mode, cfg in MODE_CONFIG.items():
+        fig, axes = plt.subplots(2, 2, figsize=FIGURE_MULTIPANEL, sharex=True, sharey=True)
         d = data[data["mode"] == mode]
         stats = d.groupby(["model_type", "optimizer"]).agg(
             score_mean=(cfg["metric"], "mean"),
@@ -441,39 +396,55 @@ def plot_performance_cost(all_best: pd.DataFrame, all_fit_time: pd.DataFrame) ->
             cost_mean=("candidate_fit_seconds", "mean"),
             cost_sd=("candidate_fit_seconds", "std"),
         )
-        for model in MODELS:
+        cost_low = (stats.cost_mean - stats.cost_sd).clip(lower=stats.cost_mean * 0.25).min()
+        cost_high = (stats.cost_mean + stats.cost_sd).max()
+        log_span = np.log10(cost_high) - np.log10(cost_low)
+        xlim = (10 ** (np.log10(cost_low) - 0.06 * log_span), 10 ** (np.log10(cost_high) + 0.06 * log_span))
+        score_low = (stats.score_mean - stats.score_sd).min()
+        score_high = (stats.score_mean + stats.score_sd).max()
+        score_pad = max((score_high - score_low) * 0.08, 0.004)
+        for ax, model in zip(axes.flat, model_order):
+            model_stats = stats.loc[model]
             for optimizer in OPTIMIZERS:
-                row = stats.loc[(model, optimizer)]
-                low_cost = max(row.cost_mean - row.cost_sd, row.cost_mean * 0.25)
-                xerr = np.array([[row.cost_mean - low_cost], [row.cost_sd]])
+                row = model_stats.loc[optimizer]
                 ax.errorbar(
                     row.cost_mean,
                     row.score_mean,
-                    xerr=xerr,
                     yerr=row.score_sd,
-                    fmt=model_markers[model],
+                    fmt=OPT_MARKERS[optimizer],
                     color=OPT_COLORS[optimizer],
                     markerfacecolor=OPT_COLORS[optimizer],
                     markeredgecolor="white",
-                    markeredgewidth=0.65,
-                    markersize=6.3,
-                    capsize=2.0,
-                    elinewidth=0.8,
-                    alpha=0.9,
+                    markeredgewidth=0.7,
+                    markersize=5.0,
+                    capsize=2.2,
+                    elinewidth=0.9,
                     zorder=3,
                 )
-        ax.set_xscale("log")
-        ax.set_xlabel("Summed uncached candidate fit time (s)")
-        ax.set_ylabel(cfg["metric_label"])
-        ax.set_title(f"{cfg['label']}\n{cfg['metric_label']}", weight="semibold", pad=8)
-        ax.grid(axis="both", which="major")
-        ax.grid(axis="x", which="minor", alpha=0.28, linewidth=0.45)
-    optimizer_handles = [Line2D([0], [0], marker="o", color=OPT_COLORS[o], linewidth=1.5, label=OPT_LABELS[o], markersize=5) for o in OPTIMIZERS]
-    model_handles = [Line2D([0], [0], marker=model_markers[m], color="#38434D", linestyle="none", markerfacecolor="white", label=MODEL_LABELS[m], markersize=6) for m in MODELS]
-    fig.legend(handles=optimizer_handles, loc="lower center", bbox_to_anchor=(0.5, 0.115), ncol=5, frameon=False, columnspacing=1.4)
-    fig.legend(handles=model_handles, loc="lower center", bbox_to_anchor=(0.5, 0.035), ncol=4, frameon=False, columnspacing=1.4)
-    fig.subplots_adjust(left=0.10, right=0.99, bottom=0.28, top=0.84, wspace=0.30)
-    save_pdf(fig, "performance_vs_candidate_fit_time.pdf")
+            ax.set_xscale("log")
+            ax.set_xlim(xlim)
+            ax.set_ylim(score_low - score_pad, score_high + score_pad)
+            ax.set_title(MODEL_LABELS[model], weight="bold", pad=5)
+            ax.grid(axis="both", which="major")
+            ax.grid(axis="x", which="minor", alpha=0.25, linewidth=0.45)
+            ax.set_axisbelow(True)
+        for ax in axes[:, 0]:
+            ax.set_ylabel(cfg["metric_label"])
+        for ax in axes.flat:
+            ax.yaxis.set_major_formatter(FormatStrFormatter("%.3f"))
+        for ax in axes[1, :]:
+            ax.set_xlabel("Fit time (s; log scale)")
+        optimizer_handles = [
+            Line2D([0], [0], marker=OPT_MARKERS[o], color=OPT_COLORS[o], linestyle="none",
+                   label=OPT_LABELS[o], markersize=5)
+            for o in OPTIMIZERS
+        ]
+        fig.legend(handles=optimizer_handles, loc="upper center", bbox_to_anchor=(0.5, 0.99),
+                   ncol=5, frameon=False, columnspacing=1.2)
+        fig.suptitle(f"{cfg['label']}: performance--effort by backbone", y=1.045, weight="bold", fontsize=10)
+        fig.subplots_adjust(left=0.11, right=0.98, bottom=0.11, top=0.86, hspace=0.35, wspace=0.22)
+        suffix = "mccf1" if mode == "mcc_f1" else "accuracy"
+        save_pdf(fig, f"performance_vs_fit_time_{suffix}.pdf")
 
 
 def plot_radar_overview(all_best: pd.DataFrame, all_fit_time: pd.DataFrame) -> None:
@@ -495,7 +466,7 @@ def plot_radar_overview(all_best: pd.DataFrame, all_fit_time: pd.DataFrame) -> N
     angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
     closed_angles = angles + angles[:1]
 
-    fig, axes = plt.subplots(1, 2, figsize=(9.0, 4.8), subplot_kw={"projection": "polar"})
+    fig, axes = plt.subplots(1, 2, figsize=FIGURE_MULTIPANEL, subplot_kw={"projection": "polar"})
     for ax, mode in zip(axes, MODE_CONFIG):
         for model in MODELS:
             row = metrics[(metrics["mode"] == mode) & (metrics.model_type == model)].iloc[0]
@@ -511,11 +482,75 @@ def plot_radar_overview(all_best: pd.DataFrame, all_fit_time: pd.DataFrame) -> N
         ax.set_rlabel_position(22)
         ax.grid(color="#D7DDE3", linewidth=0.65)
         ax.spines["polar"].set_color("#9AA4AE")
-        ax.set_title(MODE_CONFIG[mode]["label"], y=1.13, weight="semibold", fontsize=9.5)
+        ax.set_title(MODE_CONFIG[mode]["label"], y=1.13, weight="bold", fontsize=9.5)
     handles = [Line2D([0], [0], color=MODEL_COLORS[m], marker="o", linewidth=1.6, label=MODEL_LABELS[m], markersize=4) for m in MODELS]
     fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.015), ncol=4, frameon=False)
     fig.subplots_adjust(left=0.02, right=0.98, top=0.84, bottom=0.16, wspace=0.30)
     save_pdf(fig, "radar_overview_normalized.pdf")
+
+
+def plot_model_comparison(all_best: pd.DataFrame) -> None:
+    """Protocol-by-metric comparison with one persistent color per backbone."""
+    fig, axes = plt.subplots(2, 2, figsize=FIGURE_MULTIPANEL, sharex="col", sharey="col")
+    metric_specs = (("accuracy_test", "Locked-test accuracy"), ("mcc_test", "Locked-test MCC"))
+    labels = [m.upper() if m != "cnn" else "1D-CNN" for m in MODELS]
+    for row, mode in enumerate(MODE_CONFIG):
+        subset = all_best[all_best["mode"] == mode]
+        for col, (metric, ylabel) in enumerate(metric_specs):
+            ax = axes[row, col]
+            values = subset.groupby("model_type")[metric].agg(["mean", "std"]).reindex(MODELS)
+            for pos, model in enumerate(MODELS):
+                ax.errorbar(pos, values.loc[model, "mean"], yerr=values.loc[model, "std"],
+                            fmt="o", color=MODEL_COLORS[model], markeredgecolor="white",
+                            markeredgewidth=0.7, markersize=5.5, capsize=2.3,
+                            elinewidth=0.9, zorder=3)
+            ax.set_xticks(range(len(MODELS)), labels, rotation=18, ha="right")
+            ax.set_ylabel("")
+            ax.yaxis.set_major_formatter(FormatStrFormatter("%.3f"))
+            ax.grid(axis="y")
+            ax.grid(axis="x", visible=False)
+            ax.set_axisbelow(True)
+            if row == 0:
+                ax.set_title(ylabel, weight="bold", pad=5)
+    for col, (metric, _ylabel) in enumerate(metric_specs):
+        pooled = all_best.groupby("model_type")[metric].agg(["mean", "std"]).reindex(MODELS)
+        lo = float((pooled["mean"] - pooled["std"]).min())
+        hi = float((pooled["mean"] + pooled["std"]).max())
+        margin = max((hi - lo) * 0.08, 0.004)
+        axes[0, col].set_ylim(lo - margin, hi + margin)
+    fig.text(0.03, 0.70, "MCC/$F_1$ fitness", rotation=90, ha="center", va="center", fontsize=8, weight="bold")
+    fig.text(0.03, 0.29, "Weighted-accuracy fitness", rotation=90, ha="center", va="center", fontsize=8, weight="bold")
+    fig.text(0.11, 0.50, "Locked-test metric", rotation=90, ha="center", va="center", fontsize=8)
+    fig.subplots_adjust(left=0.19, right=0.98, bottom=0.15, top=0.91, hspace=0.38, wspace=0.28)
+    save_pdf(fig, "model_comparison_protocols.pdf")
+
+
+def plot_economic_comparison() -> None:
+    """Return--drawdown scatter, with model colors shared by all model figures."""
+    frame = pd.read_csv(ECONOMIC_CSV)
+    frame = frame[frame["experiment"].isin(("exp1_holdout_mcc_f1", "exp2_holdout_accuracy"))].copy()
+    protocol_order = ("exp1_holdout_mcc_f1", "exp2_holdout_accuracy")
+    titles = ("MCC/$F_1$ fitness", "Weighted-accuracy fitness")
+    fig, axes = plt.subplots(1, 2, figsize=FIGURE_SINGLE, sharex=True, sharey=True)
+    for ax, protocol, title in zip(axes, protocol_order, titles):
+        part = frame[frame.experiment == protocol].set_index("model").reindex(MODELS)
+        for model in MODELS:
+            row = part.loc[model]
+            ax.scatter(row.total_profit_mean, row.max_drawdown_mean, s=42,
+                       color=MODEL_COLORS[model], edgecolor="white", linewidth=0.7,
+                       label=MODEL_LABELS[model], zorder=3)
+        ax.set_title(title, weight="bold", pad=6)
+        ax.grid(axis="both")
+        ax.set_axisbelow(True)
+        ax.set_xlabel("Mean net profit (points)")
+        ax.xaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
+        ax.yaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
+    axes[0].set_ylabel("Mean maximum drawdown (points)")
+    handles = [Line2D([0], [0], marker="o", color="none", markerfacecolor=MODEL_COLORS[m],
+                      markeredgecolor="white", label=MODEL_LABELS[m], markersize=5.5) for m in MODELS]
+    fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.55, 1.03), ncol=4, frameon=False)
+    fig.subplots_adjust(left=0.19, right=0.98, bottom=0.19, top=0.82, wspace=0.25)
+    save_pdf(fig, "economic_return_drawdown.pdf")
 
 
 def main() -> None:
@@ -530,13 +565,15 @@ def main() -> None:
     for mode, data in protocol_data.items():
         plot_convergence(data, mode)
         plot_heatmap(data, mode)
-    plot_seed_boxplots(all_best)
+    plot_seed_distribution(all_best)
     plot_optimizer_ranks(all_best)
     plot_performance_cost(all_best, all_fit_time)
     plot_radar_overview(all_best, all_fit_time)
+    plot_model_comparison(all_best)
+    plot_economic_comparison()
 
-    expected_figures = 14
-    actual_figures = len(list(FIG_DIR.glob("*_convergence_*.pdf"))) + 6
+    expected_figures = 17
+    actual_figures = len(list(FIG_DIR.glob("*_convergence_*.pdf"))) + 9
     if actual_figures != expected_figures:
         raise RuntimeError(f"Expected {expected_figures} vector figures, found {actual_figures}")
     print(f"Generated {expected_figures} vector PDF figures in {FIG_DIR}")

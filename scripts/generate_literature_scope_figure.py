@@ -10,6 +10,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MaxNLocator
+from nca_figure_style import FIGURE_SINGLE, apply_publication_style
 
 
 YEARS = np.array([2019, 2020, 2024, 2025, 2026])
@@ -34,22 +35,15 @@ def main() -> None:
         Path(__file__).resolve().parents[1]
         / "article"
         / "manuscript"
+        / "latest_zip_revision"
         / "figures"
         / "literature_scope_by_year.pdf"
     )
     output.parent.mkdir(parents=True, exist_ok=True)
 
-    plt.rcParams.update(
-        {
-            "font.family": "serif",
-            "font.size": 8,
-            "axes.labelweight": "normal",
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-        }
-    )
+    apply_publication_style()
 
-    figure, axis = plt.subplots(figsize=(6.7, 3.35))
+    figure, axis = plt.subplots(figsize=FIGURE_SINGLE)
     x_positions = np.arange(len(YEARS))
     bar_width = 0.22
     offsets = (-bar_width, 0.0, bar_width)
@@ -72,12 +66,12 @@ def main() -> None:
                     str(value),
                     ha="center",
                     va="bottom",
-                    fontsize=6.5,
+                    fontsize=8,
                     color="#263238",
                 )
 
-    axis.set_xlabel("Publication year", fontsize=7.5, labelpad=5)
-    axis.set_ylabel("Representative studies", fontsize=7.5, labelpad=5)
+    axis.set_xlabel("Publication year", labelpad=5)
+    axis.set_ylabel("Representative studies", labelpad=5)
     axis.set_xticks(x_positions, YEARS)
     axis.set_ylim(0, 3.8)
     axis.yaxis.set_major_locator(MaxNLocator(integer=True))
@@ -95,7 +89,7 @@ def main() -> None:
         columnspacing=1.6,
         handlelength=1.15,
         handletextpad=0.45,
-        prop={"size": 7},
+            prop={"size": 8},
     )
     for text in legend.get_texts():
         text.set_color("#263238")

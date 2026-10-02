@@ -13,35 +13,34 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import FancyBboxPatch, Rectangle
 import numpy as np
 import pandas as pd
+from nca_figure_style import (
+    FIGURE_MULTIPANEL, FIGURE_SINGLE, MODEL_COLORS, MODEL_LABELS,
+    OPTIMIZER_COLORS, apply_publication_style,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FIGURES = ROOT / "article" / "manuscript" / "figures"
+FIGURES = ROOT / "article" / "manuscript" / "latest_zip_revision" / "figures"
 SEEDS = [1, 2, 3]
-MODELS = ["mlp", "rf", "svm", "cnn"]
+MODELS = ["rf", "svm", "mlp", "cnn"]
 OPTIMIZERS = ["random_search", "ga", "pso", "de", "gwo"]
-MODELS_LABEL = {"mlp": "MLP", "rf": "RF", "svm": "SVM", "cnn": "1D-CNN"}
+MODELS_LABEL = MODEL_LABELS
 OPT_LABELS = {"random_search": "RS", "ga": "GA", "pso": "PSO", "de": "DE", "gwo": "GWO"}
 
 INK = "#1F2933"
 GRID = "#D9E2EC"
 MCC_MODE = "#2166AC"
 ACC_MODE = "#D97706"
-MODEL_COLORS = {"mlp": "#0072B2", "rf": "#009E73", "svm": "#8E6BBE", "cnn": "#C65D7B"}
-OPT_COLORS = {"random_search": "#6B7280", "ga": "#0072B2", "pso": "#E69F00", "de": "#009E73", "gwo": "#8E6BBE"}
+OPT_COLORS = OPTIMIZER_COLORS
 PROTOCOLS = {
-    "MCC/F1 fitness": ROOT / "outputs" / "article_official" / "metrics",
-    "Accuracy fitness": ROOT / "outputs" / "article_official_accuracy_holdout" / "metrics",
+    "MCC/$F_1$ fitness": ROOT / "outputs" / "article_official" / "metrics",
+    "Weighted-accuracy fitness": ROOT / "outputs" / "article_official_accuracy_holdout" / "metrics",
 }
 ANALYSIS_DIR = ROOT / "outputs" / "professor_presentation" / "statistical_economic_model_selection"
 
 
 def style() -> None:
-    plt.rcParams.update({
-        "font.family": "DejaVu Sans", "font.size": 8.5, "axes.labelsize": 8.5,
-        "xtick.labelsize": 7.5, "ytick.labelsize": 7.5, "legend.fontsize": 7,
-        "pdf.fonttype": 42, "ps.fonttype": 42, "savefig.facecolor": "white",
-    })
+    apply_publication_style()
 
 
 def save(fig: plt.Figure, name: str) -> None:
@@ -80,15 +79,15 @@ def arrow(ax, start, end) -> None:
 
 
 def dual_protocol_overview() -> None:
-    fig, ax = plt.subplots(figsize=(6.1, 5.2))
+    fig, ax = plt.subplots(figsize=FIGURE_MULTIPANEL)
     ax.set_xlim(0, 10)
     ax.set_ylim(0, 10)
     ax.axis("off")
     box(ax, (1.0, 8.55), 8.0, 0.95, "Shared data and features", "WIN 5-minute futures | 15,057 bars | Information Gain: 7 features", "#2F6690")
     box(ax, (1.0, 7.05), 8.0, 0.95, "Shared temporal protocol", "60% training | 20% validation | 20% locked test | no shuffling", "#52616B")
     box(ax, (1.0, 5.55), 8.0, 0.95, "Shared search control", "RS, GA, PSO, DE, GWO | four backbones | 1,500 evaluations per seed", "#8A6D3B")
-    box(ax, (0.55, 3.55), 4.0, 1.10, "Protocol A: MCC/F1 fitness", "Validation objective\n0.60 MCC + 0.40 F1", MCC_MODE)
-    box(ax, (5.45, 3.55), 4.0, 1.10, "Protocol B: accuracy fitness", "Validation objective\nAccuracy", ACC_MODE)
+    box(ax, (0.55, 3.55), 4.0, 1.10, "Protocol A: MCC/$F_1$ fitness", "Validation objective\n0.60 MCC + 0.40 $F_1$", MCC_MODE)
+    box(ax, (5.45, 3.55), 4.0, 1.10, "Protocol B: weighted-accuracy fitness", "Weighted training/validation accuracy", ACC_MODE)
     box(ax, (1.0, 1.20), 8.0, 1.05, "Common locked evaluation", "Test MCC, F1, and accuracy reported after selection\nNo test-set feedback during search", "#A23E48")
     arrow(ax, (5.0, 8.55), (5.0, 8.00))
     arrow(ax, (5.0, 7.05), (5.0, 6.50))
@@ -102,7 +101,7 @@ def dual_protocol_overview() -> None:
 
 
 def temporal_split() -> None:
-    fig, ax = plt.subplots(figsize=(5.8, 2.8))
+    fig, ax = plt.subplots(figsize=FIGURE_SINGLE)
     total = 15057
     segments = [(0, 9034, "#3B82A0", "Training", "60% | 9,034 bars", "Model fitting"),
                 (9034, 3011, "#D69E2E", "Validation", "20% | 3,011 bars", "Fitness evaluation"),
@@ -126,21 +125,21 @@ def temporal_split() -> None:
 
 def paired_outcomes(records: pd.DataFrame) -> None:
     means = records.groupby(["protocol", "model", "optimizer"], as_index=False)[["accuracy_test", "mcc_test"]].mean()
-    fig, axes = plt.subplots(1, 2, figsize=(6.25, 4.85), gridspec_kw={"wspace": 0.36})
+    fig, axes = plt.subplots(1, 2, figsize=FIGURE_MULTIPANEL, gridspec_kw={"wspace": 0.36})
     for ax, metric, title, fmt in zip(axes, ["accuracy_test", "mcc_test"], ["Test accuracy", "Test MCC"], [".3f", ".3f"]):
         wide = means.pivot(index=["model", "optimizer"], columns="protocol", values=metric)
         for (model, optimizer), values in wide.iterrows():
-            ax.plot([0, 1], values[["MCC/F1 fitness", "Accuracy fitness"]], color="#BAC5D1", lw=0.8, zorder=1)
+            ax.plot([0, 1], values[["MCC/$F_1$ fitness", "Weighted-accuracy fitness"]], color="#BAC5D1", lw=0.8, zorder=1)
             marker = {"random_search": "o", "ga": "s", "pso": "^", "de": "D", "gwo": "P"}[optimizer]
-            ax.scatter(0, values["MCC/F1 fitness"], s=28, color=MODEL_COLORS[model], marker=marker, edgecolor="white", linewidth=0.45, zorder=2)
-            ax.scatter(1, values["Accuracy fitness"], s=28, color=MODEL_COLORS[model], marker=marker, edgecolor="white", linewidth=0.45, zorder=2)
+            ax.scatter(0, values["MCC/$F_1$ fitness"], s=28, color=MODEL_COLORS[model], marker=marker, edgecolor="white", linewidth=0.45, zorder=2)
+            ax.scatter(1, values["Weighted-accuracy fitness"], s=28, color=MODEL_COLORS[model], marker=marker, edgecolor="white", linewidth=0.45, zorder=2)
         aggregate = means.groupby("protocol")[metric].mean()
-        ax.hlines(aggregate["MCC/F1 fitness"], -0.12, 0.12, color=MCC_MODE, lw=2.0)
-        ax.hlines(aggregate["Accuracy fitness"], 0.88, 1.12, color=ACC_MODE, lw=2.0)
-        ax.text(-0.15, aggregate["MCC/F1 fitness"], f"{aggregate['MCC/F1 fitness']:{fmt}}", ha="right", va="center", fontsize=7, color=MCC_MODE, weight="bold")
-        ax.text(1.15, aggregate["Accuracy fitness"], f"{aggregate['Accuracy fitness']:{fmt}}", ha="left", va="center", fontsize=7, color=ACC_MODE, weight="bold")
+        ax.hlines(aggregate["MCC/$F_1$ fitness"], -0.12, 0.12, color=MCC_MODE, lw=2.0)
+        ax.hlines(aggregate["Weighted-accuracy fitness"], 0.88, 1.12, color=ACC_MODE, lw=2.0)
+        ax.text(-0.15, aggregate["MCC/$F_1$ fitness"], f"{aggregate['MCC/$F_1$ fitness']:{fmt}}", ha="right", va="center", fontsize=7, color=MCC_MODE, weight="bold")
+        ax.text(1.15, aggregate["Weighted-accuracy fitness"], f"{aggregate['Weighted-accuracy fitness']:{fmt}}", ha="left", va="center", fontsize=7, color=ACC_MODE, weight="bold")
         ax.set_title(title, weight="bold", pad=8)
-        ax.set_xticks([0, 1], ["MCC/F1\nfitness", "Accuracy\nfitness"])
+        ax.set_xticks([0, 1], ["MCC/$F_1$\nfitness", "Weighted-accuracy\nfitness"])
         ax.grid(axis="y", color=GRID, lw=0.8)
         ax.set_axisbelow(True)
         ax.spines[["top", "right"]].set_visible(False)
@@ -153,11 +152,11 @@ def paired_outcomes(records: pd.DataFrame) -> None:
 
 def delta_heatmaps(records: pd.DataFrame) -> None:
     means = records.groupby(["protocol", "model", "optimizer"], as_index=False)[["accuracy_test", "mcc_test"]].mean()
-    fig, axes = plt.subplots(1, 2, figsize=(6.3, 3.45), gridspec_kw={"wspace": 0.42})
+    fig, axes = plt.subplots(1, 2, figsize=FIGURE_SINGLE, gridspec_kw={"wspace": 0.42})
     maps = [("accuracy_test", "Delta test accuracy (percentage points)", 100), ("mcc_test", "Delta test MCC", 1)]
     for ax, (metric, title, scale) in zip(axes, maps):
         wide = means.pivot(index=["model", "optimizer"], columns="protocol", values=metric)
-        delta = (wide["Accuracy fitness"] - wide["MCC/F1 fitness"]).mul(scale).unstack("optimizer").reindex(index=MODELS, columns=OPTIMIZERS)
+        delta = (wide["Weighted-accuracy fitness"] - wide["MCC/$F_1$ fitness"]).mul(scale).unstack("optimizer").reindex(index=MODELS, columns=OPTIMIZERS)
         limit = max(abs(delta.to_numpy()).max(), 0.01)
         im = ax.imshow(delta, cmap="RdBu_r", norm=TwoSlopeNorm(vcenter=0, vmin=-limit, vmax=limit), aspect="auto")
         for i in range(len(MODELS)):
@@ -172,14 +171,14 @@ def delta_heatmaps(records: pd.DataFrame) -> None:
         for spine in ax.spines.values(): spine.set_visible(False)
         bar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
         bar.ax.tick_params(labelsize=6.5)
-    fig.text(0.5, 0.01, "Delta = accuracy-fitness protocol minus MCC/F1-fitness protocol; positive values favour accuracy fitness.", ha="center", fontsize=7, color="#52616B")
+    fig.text(0.5, 0.01, "Delta = weighted-accuracy fitness minus MCC/$F_1$ fitness; positive values favour weighted-accuracy fitness.", ha="center", fontsize=7, color="#52616B")
     save(fig, "dual_fitness_delta_heatmaps.pdf")
 
 
 def convergence() -> None:
-    fig, axes = plt.subplots(1, 2, figsize=(6.25, 3.2), gridspec_kw={"wspace": 0.32})
-    settings = [("MCC/F1 fitness", "Composite validation fitness (0.60 MCC + 0.40 F1)", MCC_MODE),
-                ("Accuracy fitness", "Validation accuracy", ACC_MODE)]
+    fig, axes = plt.subplots(1, 2, figsize=FIGURE_SINGLE, gridspec_kw={"wspace": 0.32})
+    settings = [("MCC/$F_1$ fitness", "Composite validation fitness (0.60 MCC + 0.40 $F_1$)", MCC_MODE),
+                ("Weighted-accuracy fitness", "Weighted training/validation accuracy", ACC_MODE)]
     for ax, (protocol, ylabel, accent) in zip(axes, settings):
         directory = PROTOCOLS[protocol] / "convergence"
         for optimizer in OPTIMIZERS:
@@ -205,21 +204,24 @@ def statistical_summary() -> None:
     friedman = pd.read_csv(ANALYSIS_DIR / "predictive_friedman_tests.csv")
     pairwise = pd.read_csv(ANALYSIS_DIR / "predictive_pairwise_wilcoxon_holm.csv")
     scopes = [
-        ("exp1_holdout_mcc_f1", "mcc_test", "MCC/F1 fitness: test MCC"),
-        ("exp2_holdout_accuracy", "accuracy_test", "Accuracy fitness: test accuracy"),
+        ("exp1_holdout_mcc_f1", "mcc_test", "MCC/$F_1$ fitness: test MCC"),
+        ("exp2_holdout_accuracy", "accuracy_test", "Weighted-accuracy fitness: test accuracy"),
     ]
-    fig, axes = plt.subplots(1, 2, figsize=(6.25, 3.65), gridspec_kw={"wspace": 0.38})
+    fig, axes = plt.subplots(1, 2, figsize=FIGURE_SINGLE, gridspec_kw={"wspace": 0.38})
     ax = axes[0]
     y = np.arange(2)
+    model_order = ["rf", "svm", "mlp", "cnn"]
     for idx, (scope, metric, label) in enumerate(scopes):
         row = friedman[(friedman.scope == scope) & (friedman.metric == metric)].iloc[0]
-        ranks = [row[f"mean_rank_{model}"] for model in ["mlp", "rf", "cnn", "svm"]]
-        colors = [MODEL_COLORS[model] for model in ["mlp", "rf", "cnn", "svm"]]
+        ranks = [row[f"mean_rank_{model}"] for model in model_order]
+        colors = [MODEL_COLORS[model] for model in model_order]
         ax.scatter(ranks, np.full(4, idx), c=colors, s=52, edgecolors="white", linewidths=0.7, zorder=3)
         p = row.friedman_p_value
-        p_text = "p < 0.001" if p < 0.001 else f"p = {p:.3f}"
-        ax.text(4.12, idx, f"chi2 = {row.friedman_statistic:.2f}\n{p_text}", ha="left", va="center", fontsize=6.8, color=INK)
-    ax.set_yticks(y, ["Protocol A", "Protocol B"])
+        exponent = int(np.floor(np.log10(p)))
+        coefficient = p / (10 ** exponent)
+        p_text = rf"$p = {coefficient:.3g}\times 10^{{{exponent}}}$"
+        ax.text(4.12, idx, f"$\\chi^2 = {row.friedman_statistic:.3f}$\n{p_text}", ha="left", va="center", fontsize=6.8, color=INK)
+    ax.set_yticks(y, ["MCC/$F_1$ fitness", "Weighted-accuracy fitness"])
     ax.invert_yaxis()
     ax.set_xlim(0.75, 5.2)
     ax.set_xticks([1, 2, 3, 4])
@@ -234,19 +236,20 @@ def statistical_summary() -> None:
     sub = pairwise[(pairwise.scope == "exp2_holdout_accuracy") & (pairwise.metric == "accuracy_test")].copy()
     sub["label"] = sub.comparison.str.replace("mlp vs ", "MLP vs ", regex=False).str.upper()
     values = -np.log10(sub.holm_p_value.to_numpy())
-    colors = [MODEL_COLORS["cnn"], MODEL_COLORS["rf"], MODEL_COLORS["svm"]]
+    contrast_models = sub.comparison.str.rsplit(" ", n=1).str[-1].str.lower().tolist()
+    colors = [MODEL_COLORS[model] for model in contrast_models]
     yy = np.arange(len(sub))
     ax.barh(yy, values, color=colors, height=0.55)
     ax.axvline(-np.log10(0.05), color="#52616B", lw=0.9, ls=(0, (3, 3)))
     ax.set_yticks(yy, sub.label.tolist())
     ax.invert_yaxis()
     ax.set_xlabel("-log10(Holm-adjusted p-value)", weight="bold")
-    ax.set_title("Protocol B: MLP pairwise contrasts", weight="bold", fontsize=9, pad=7)
+    ax.set_title("Weighted-accuracy fitness: MLP contrasts", weight="bold", pad=7)
     ax.grid(axis="x", color=GRID, lw=0.8)
     ax.set_axisbelow(True)
     ax.spines[["top", "right", "left"]].set_visible(False)
     ax.tick_params(axis="y", length=0)
-    handles = [Line2D([0], [0], marker="o", color="none", label=MODELS_LABEL[m], markerfacecolor=MODEL_COLORS[m], markeredgecolor="white", markersize=6) for m in ["mlp", "rf", "cnn", "svm"]]
+    handles = [Line2D([0], [0], marker="o", color="none", label=MODELS_LABEL[m], markerfacecolor=MODEL_COLORS[m], markeredgecolor="white", markersize=6) for m in model_order]
     fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.01), ncol=4, frameon=False)
     fig.subplots_adjust(bottom=0.24, top=0.90)
     save(fig, "dual_fitness_statistical_summary.pdf")
@@ -256,11 +259,11 @@ def economic_summary() -> None:
     by_seed = pd.read_csv(ANALYSIS_DIR / "economic_by_seed.csv")
     by_model = pd.read_csv(ANALYSIS_DIR / "economic_by_model_experiment.csv")
     experiments = ["exp1_holdout_mcc_f1", "exp2_holdout_accuracy"]
-    labels = {"exp1_holdout_mcc_f1": "MCC/F1 fitness", "exp2_holdout_accuracy": "Accuracy fitness"}
+    labels = {"exp1_holdout_mcc_f1": "MCC/$F_1$ fitness", "exp2_holdout_accuracy": "Weighted-accuracy fitness"}
     colours = {"exp1_holdout_mcc_f1": MCC_MODE, "exp2_holdout_accuracy": ACC_MODE}
     part = by_seed[by_seed.experiment.isin(experiments)].copy()
     summary = part.groupby(["experiment", "model"])["total_profit_points"].agg(["mean", "std"]).reset_index()
-    fig, axes = plt.subplots(1, 2, figsize=(6.25, 3.45), gridspec_kw={"wspace": 0.45})
+    fig, axes = plt.subplots(1, 2, figsize=FIGURE_SINGLE, gridspec_kw={"wspace": 0.45})
 
     ax = axes[0]
     yy = np.arange(len(MODELS))
