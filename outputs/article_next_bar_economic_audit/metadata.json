@@ -1,0 +1,13 @@
+{
+  "signal_execution_rule": "features at row t predict stored label for next 5-minute candle; signal at row t enters next candle at its open and exits at its close",
+  "cost_points": 5.0,
+  "confidence_threshold": 0.0,
+  "stop_points": null,
+  "target_points": null,
+  "max_trades_per_day": null,
+  "experiment_keys": [
+    "exp1_holdout_mcc_f1",
+    "exp2_holdout_accuracy"
+  ],
+  "missing_prediction_files": []
+}

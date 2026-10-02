@@ -1,15 +1,16 @@
 protocol:
   name: professor_2x2_validation_fitness_protocol
   description: >
-    Two validation protocols crossed with two fitness functions. The blind
-    X_test split is held out for final comparison in every experiment.
+    Three configurations are reported: two fitness objectives under a
+    chronological holdout and weighted accuracy under temporal cross-validation.
+    The complementary MCC/F1 temporal-CV configuration is defined but unrun.
 
 common:
   models: [mlp, rf, svm, cnn]
   optimizers: [random_search, ga, pso, de, gwo]
   seeds: [1, 2, 3]
   evaluations_per_seed: 1000
-  final_test: X_test blind 20 percent split
+  final_test: chronological 20 percent feature block; target boundary exceptions are documented
 
 experiments:
   exp_1_holdout_mcc_f1:
@@ -21,7 +22,7 @@ experiments:
     notes: Current official MCC/F1 experiment.
 
   exp_2_holdout_accuracy:
-    status: ready_not_run
+    status: already_run
     fitness_mode: accuracy_holdout
     output_root: outputs/article_official_accuracy_holdout
     validation_protocol: temporal_holdout_60_20_20
@@ -32,7 +33,7 @@ experiments:
       --seeds 1 2 3
       --evaluations-per-seed 1000
 
-  exp_3_cv_mcc_f1:
+  planned_mcc_f1_temporal_cv:
     status: ready_not_run
     fitness_mode: mcc_f1_cv
     output_root: outputs/article_official_mcc_f1_cv
@@ -45,11 +46,11 @@ experiments:
       --seeds 1 2 3
       --evaluations-per-seed 1000
 
-  exp_4_cv_accuracy:
+  exp_3_temporal_cv_accuracy:
     status: already_run
     fitness_mode: accuracy_cv
     output_root: outputs/article_official_accuracy
     validation_protocol: temporal_cross_validation_on_train_validation_block
     n_splits: 3
     fitness_formula: mean(0.4 * Acc_train_fold + 0.6 * Acc_val_fold)
-    notes: Current official Accuracy-CV experiment.
+    notes: Published as Experiment 3 (temporal CV); the original exp_4 key was stale and has been reconciled with the manuscript and output directory.

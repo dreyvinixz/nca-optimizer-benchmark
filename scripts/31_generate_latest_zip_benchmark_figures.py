@@ -28,7 +28,7 @@ from nca_figure_style import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FIG_DIR = ROOT / "article" / "manuscript" / "latest_zip_revision" / "figures"
+FIG_DIR = ROOT / "article" / "manuscript" / "merged_parallel_working" / "figures"
 SEEDS = (1, 2, 3)
 MODELS = ("rf", "svm", "mlp", "cnn")
 OPTIMIZERS = ("random_search", "ga", "pso", "de", "gwo")
@@ -44,7 +44,7 @@ MODE_CONFIG = {
         "label": "MCC/$F_1$ fitness",
         "data": ROOT / "outputs" / "article_official",
         "metric": "mcc_test",
-        "metric_label": "Locked-test MCC",
+        "metric_label": "Test-block MCC",
         "y_title": "MCC/$F_1$ fitness",
         "convergence_suffix": "mccf1",
         "heatmap_file": "heatmap_mccf1_mcc_test.pdf",
@@ -53,7 +53,7 @@ MODE_CONFIG = {
         "label": "Weighted-accuracy fitness",
         "data": ROOT / "outputs" / "article_official_accuracy_holdout",
         "metric": "accuracy_test",
-        "metric_label": "Locked-test accuracy",
+        "metric_label": "Test-block accuracy",
         "y_title": "Weighted-accuracy fitness",
         "convergence_suffix": "accuracy",
         "heatmap_file": "heatmap_accuracy_accuracy_test.pdf",
@@ -334,7 +334,7 @@ def plot_seed_distribution(all_best: pd.DataFrame) -> None:
         ax.grid(axis="y")
         ax.grid(axis="x", visible=False)
     for ax in axes[:, 0]:
-        ax.set_ylabel("Locked-test MCC")
+        ax.set_ylabel("Test-block MCC")
         ax.yaxis.set_major_formatter(FormatStrFormatter("%.3f"))
     for ax in axes[1, :]:
         ax.set_xlabel("Optimizer")
@@ -462,7 +462,9 @@ def plot_radar_overview(all_best: pd.DataFrame, all_fit_time: pd.DataFrame) -> N
         high = float(metrics[col].max())
         metrics[f"norm_{col}"] = 0.5 if np.isclose(low, high) else (metrics[col] - low) / (high - low)
     metrics["norm_inverse_fit_time"] = 1.0 - metrics["norm_log_fit_time"]
-    labels = ("Test MCC", "Test accuracy", "Test F1", "Inverse\nfit time")
+    # Short labels leave the two inward-facing category names separated when
+    # the paired polar axes are included at single-column manuscript width.
+    labels = ("MCC", "Accuracy", "$F_1$", "Inverse\nfit time")
     angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
     closed_angles = angles + angles[:1]
 
@@ -479,20 +481,23 @@ def plot_radar_overview(all_best: pd.DataFrame, all_fit_time: pd.DataFrame) -> N
         ax.set_ylim(0, 1)
         ax.set_yticks((0.25, 0.5, 0.75, 1.0))
         ax.set_yticklabels(("0.25", "0.50", "0.75", "1.00"), fontsize=6.5, color="#66717D")
-        ax.set_rlabel_position(22)
+        if ax is axes[0]:
+            ax.set_rlabel_position(135)
+        else:
+            ax.set_yticklabels([])
         ax.grid(color="#D7DDE3", linewidth=0.65)
         ax.spines["polar"].set_color("#9AA4AE")
         ax.set_title(MODE_CONFIG[mode]["label"], y=1.13, weight="bold", fontsize=9.5)
     handles = [Line2D([0], [0], color=MODEL_COLORS[m], marker="o", linewidth=1.6, label=MODEL_LABELS[m], markersize=4) for m in MODELS]
     fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.015), ncol=4, frameon=False)
-    fig.subplots_adjust(left=0.02, right=0.98, top=0.84, bottom=0.16, wspace=0.30)
+    fig.subplots_adjust(left=0.04, right=0.96, top=0.84, bottom=0.16, wspace=0.72)
     save_pdf(fig, "radar_overview_normalized.pdf")
 
 
 def plot_model_comparison(all_best: pd.DataFrame) -> None:
     """Protocol-by-metric comparison with one persistent color per backbone."""
     fig, axes = plt.subplots(2, 2, figsize=FIGURE_MULTIPANEL, sharex="col", sharey="col")
-    metric_specs = (("accuracy_test", "Locked-test accuracy"), ("mcc_test", "Locked-test MCC"))
+    metric_specs = (("accuracy_test", "Test-block accuracy"), ("mcc_test", "Test-block MCC"))
     labels = [m.upper() if m != "cnn" else "1D-CNN" for m in MODELS]
     for row, mode in enumerate(MODE_CONFIG):
         subset = all_best[all_best["mode"] == mode]
@@ -520,7 +525,7 @@ def plot_model_comparison(all_best: pd.DataFrame) -> None:
         axes[0, col].set_ylim(lo - margin, hi + margin)
     fig.text(0.03, 0.70, "MCC/$F_1$ fitness", rotation=90, ha="center", va="center", fontsize=8, weight="bold")
     fig.text(0.03, 0.29, "Weighted-accuracy fitness", rotation=90, ha="center", va="center", fontsize=8, weight="bold")
-    fig.text(0.11, 0.50, "Locked-test metric", rotation=90, ha="center", va="center", fontsize=8)
+    fig.text(0.11, 0.50, "Test-block metric", rotation=90, ha="center", va="center", fontsize=8)
     fig.subplots_adjust(left=0.19, right=0.98, bottom=0.15, top=0.91, hspace=0.38, wspace=0.28)
     save_pdf(fig, "model_comparison_protocols.pdf")
 

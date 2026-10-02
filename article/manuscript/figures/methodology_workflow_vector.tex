@@ -14,11 +14,11 @@
   \node[process] (data) {\textbf{Input data}\\WIN futures\\five-minute bars\\$N=15{,}057$};
   \node[process, right=of data] (indicators) {\textbf{Technical}\\\textbf{indicators}\\66 technical\\variables\\price, trend,\\volatility\\volume,\\trading};
   \node[process, right=of indicators] (selection) {\textbf{Information}\\\textbf{Gain}\\seven\\selected\\features};
-  \node[process, below=0.95cm of indicators] (split) {\textbf{Temporal split}\\chronological\\60/20/20\\train /\\validation\\locked test};
+  \node[process, below=0.95cm of indicators] (split) {\textbf{Temporal split}\\chronological\\60/20/20\\train /\\validation\\nominal test};
   \node[process, right=1.05cm of split] (search) {\textbf{Equal-budget}\\\textbf{search}\\RS, GA, PSO,\\DE, GWO\\1,000 evals\\per seed};
   \node[protocol, below left=0.92cm and 0.25cm of search] (mcc) {\textbf{Protocol A:}\\\textbf{MCC/$F_1$}\\$0.60\,\mathrm{MCC}_{\mathrm{val}}$\\$+\;0.40\,F_{1,\mathrm{val}}$};
   \node[protocol, below right=0.92cm and 0.25cm of search] (accuracy) {\textbf{Protocol B:}\\\textbf{accuracy}\\$0.40\,\mathrm{Acc}_{\mathrm{train}}$\\$+\;0.60\,\mathrm{Acc}_{\mathrm{val}}$};
-  \node[outcome, right=0.85cm of accuracy] (test) {\textbf{Fitting and locked}\\\textbf{evaluation}\\RF, SVM, MLP, CNN\\three common seeds\\Predictive metrics\\Economic metrics};
+  \node[outcome, right=0.85cm of accuracy] (test) {\textbf{Fitting and test}\\\textbf{evaluation}\\RF, SVM, MLP, CNN\\three common seeds\\Predictive metrics\\Economic metrics};
   \draw[arrow] (data) -- (indicators);
   \draw[arrow] (indicators) -- (selection);
   \coordinate (splitroute) at ($(split.north)+(0,0.48cm)$);

@@ -1,0 +1,51 @@
+% Anonymous manuscript for Neural Computing and Applications.
+% The class file is the unmodified Springer Nature sn-jnl template distributed
+% with this repository under article/templates.
+\documentclass[sn-mathphys-num,Numbered]{sn-jnl}
+
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{hypertexnames=false}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage{comment}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+% Shared Springer-compatible table typography; local exceptions should be rare.
+\newcommand{\manuscripttablestyle}{\small\setlength{\tabcolsep}{4.5pt}\renewcommand{\arraystretch}{1.10}}
+
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.75}
+
+\begin{document}
+
+\title[Metaheuristic optimization for intraday trend classification]{Metaheuristic Hyperparameter Optimization for Intraday Financial Trend Classification: A Benchmark Across Classifier Backbones}
+
+\abstract{Short-horizon trend classification in futures markets is vulnerable to non-stationarity, weak signal-to-noise ratios, and temporal information leakage. An earlier conference precursor combined technical indicators, Information Gain feature selection, and genetic-algorithm tuning, but used randomized cross-validation, a single metaheuristic, and no economic assessment. This study advances that research line through an auditable benchmark on 15,057 five-minute B3 Mini-Index futures bars. Four model backbones (multilayer perceptron, random forest, support vector machine, and 1D convolutional neural network) are optimized by random search, genetic algorithm, particle swarm optimization, differential evolution, and grey wolf optimization under an identical 1,000-evaluation budget. A chronological 60/20/20 train/validation/test partition prevents look-ahead leakage. The study contrasts two validation objectives: a compound $0.60\,\mathrm{MCC}+0.40\,F_1$ fitness and a weighted training/validation accuracy fitness. The common, locked test block is used only after selection for predictive and trading evaluation. Results are reported transparently on the three seeds available in every model--optimizer cell. The direct fitness comparison is descriptive; complementary Friedman and Holm-adjusted Wilcoxon analyses compare models within each protocol across matched optimizer--seed blocks. The study provides a reproducible design for separating the selection criterion from the reported metric and for jointly examining predictive and economic consequences of metaheuristic tuning.}
+
+\keywords{Financial time series $\cdot$ Metaheuristic optimization $\cdot$ Hyperparameter tuning $\cdot$ Matthews correlation coefficient $\cdot$ Temporal validation $\cdot$ Intraday futures}
+
+\maketitle
+
+\input{sections/nca_introduction}
+\input{sections/literature_review}
+\input{sections/nca_methods}
+\input{sections/nca_results}
+\input{sections/nca_discussion}
+\input{sections/nca_conclusion}
+\FloatBarrier
+\input{sections/declarations}
+
+% Keep each reference together and tighten list spacing to avoid isolated lines at page breaks.
+{\interlinepenalty=10000\relax
+ \setlength{\bibsep}{0.5em}%
+ \bibliography{references}}
+\end{document}

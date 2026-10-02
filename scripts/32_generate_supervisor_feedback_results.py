@@ -22,7 +22,7 @@ from nca_figure_style import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-FIG_DIR = ROOT / "article/manuscript/latest_zip_revision/figures"
+FIG_DIR = ROOT / "article/manuscript/merged_parallel_working/figures"
 SEEDS = (1, 2, 3)
 MODELS = ("rf", "svm", "mlp", "cnn")
 OPTIMIZERS = ("random_search", "ga", "pso", "de", "gwo")
@@ -99,8 +99,8 @@ def plot_exp1_mcc(best):
         ax.set_title(MODEL_LABELS[model])
         ax.set_xticks(range(5), [OPT_LABEL[o] for o in OPTIMIZERS])
         ax.grid(axis="x", visible=False)
-    axs[0, 0].set_ylabel("Locked-test MCC")
-    axs[1, 0].set_ylabel("Locked-test MCC")
+    axs[0, 0].set_ylabel("Test-block MCC")
+    axs[1, 0].set_ylabel("Test-block MCC")
     fig.suptitle("Experiment 1 | MCC/$F_1$ holdout", y=1.01, fontsize=9.5, fontweight="bold")
     fig.supxlabel("Optimizer")
     fig.subplots_adjust(top=.89, bottom=.13, hspace=.48, wspace=.12)
@@ -123,7 +123,7 @@ def plot_holdout_accuracy(best):
         ax.set_title(title)
         ax.set_xticks(range(5), [OPT_LABEL[o] for o in OPTIMIZERS])
         ax.grid(axis="x", visible=False)
-    axs[0].set_ylabel("Locked-test accuracy")
+    axs[0].set_ylabel("Test-block accuracy")
     fig.supxlabel("Optimizer (model encoded by color)", y=.07)
     handles = [Line2D([0], [0], color=MODEL_COLORS[m], marker="o", linestyle="none", label=MODEL_LABELS[m]) for m in MODELS]
     fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(.5, 1.0), ncol=4)
@@ -143,8 +143,8 @@ def plot_exp3_accuracy(best):
         ax.set_title(MODEL_LABELS[model])
         ax.set_xticks(range(5), [OPT_LABEL[o] for o in OPTIMIZERS])
         ax.grid(axis="x", visible=False)
-    axs[0, 0].set_ylabel("Locked-test accuracy")
-    axs[1, 0].set_ylabel("Locked-test accuracy")
+    axs[0, 0].set_ylabel("Test-block accuracy")
+    axs[1, 0].set_ylabel("Test-block accuracy")
     fig.suptitle("Experiment 3 | temporal cross-validation accuracy objective", y=.99, fontsize=9.5, fontweight="bold")
     fig.supxlabel("Optimizer")
     handles = [Line2D([0], [0], color=OPTIMIZER_COLORS[o], marker=OPTIMIZER_MARKERS[o], linewidth=1, label=OPT_LABEL[o]) for o in OPTIMIZERS]
@@ -153,17 +153,59 @@ def plot_exp3_accuracy(best):
     save(fig, "exp3_temporal_cv_accuracy_by_optimizer.pdf")
 
 
+def plot_practical_fit_cost(effort):
+    """Median uncached candidate-model fits to each run's own 95%-gain point."""
+    fig, axs = plt.subplots(3, 1, figsize=(FIGURE_MULTIPANEL[0], 5.3), sharex=True, sharey=True)
+    # Keep visible gaps between optimizer bars; the original near-touching bars
+    # made the five categories difficult to distinguish at column width.
+    width = 0.12
+    offsets = (np.arange(len(OPTIMIZERS)) - (len(OPTIMIZERS) - 1) / 2) * 0.15
+    panels = [
+        ("exp1_mcc_f1_holdout", "Experiment 1 | MCC/$F_1$ holdout"),
+        ("exp2_accuracy_holdout", "Experiment 2 | weighted-accuracy holdout"),
+        ("exp3_accuracy_temporal_cv", "Experiment 3 | temporal cross-validation"),
+    ]
+    for ax, (exp, title) in zip(axs, panels):
+        d = effort[effort.experiment.eq(exp)]
+        for oi, opt in enumerate(OPTIMIZERS):
+            vals = []
+            for model in MODELS:
+                x = MODELS.index(model) + offsets[oi]
+                s = d[(d.model_type.eq(model)) & (d.optimizer.eq(opt))].actual_model_fits_to_95pct_gain
+                vals.append(float(s.median()) if len(s) else np.nan)
+                ax.bar(x, vals[-1], width=width * .92, color=OPTIMIZER_COLORS[opt],
+                       edgecolor="white", linewidth=.35)
+        ax.set_title(title, loc="left", fontsize=8.5, pad=6)
+        ax.grid(axis="y", which="major", linewidth=.45, alpha=.35)
+        ax.set_axisbelow(True)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.set_yscale("log")
+        ax.set_ylim(1, 4000)
+        ax.set_xlim(-0.55, len(MODELS) - 0.45)
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda value, _: f"{value:,.0f}"))
+    fig.supylabel("Candidate-model fits (log scale)", x=0.025, fontsize=9)
+    axs[-1].set_xticks(range(len(MODELS)), [MODEL_LABELS[m] for m in MODELS])
+    axs[-1].set_xlabel("Classifier backbone")
+    handles = [Line2D([0], [0], color=OPTIMIZER_COLORS[o], linewidth=5, label=OPT_LABEL[o]) for o in OPTIMIZERS]
+    fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(.5, .995), ncol=5,
+               handlelength=1.1, columnspacing=1.3)
+    fig.subplots_adjust(top=.92, bottom=.10, left=.13, right=.985, hspace=.43)
+    save(fig, "practical_candidate_fit_cost.pdf")
+
+
 def main():
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     best, effort = load_best_and_effort()
-    effort.to_csv(ROOT / "article/manuscript/latest_zip_revision/tmp/effort_to_95_validation_gain_by_seed.csv", index=False)
+    effort.to_csv(ROOT / "article/manuscript/merged_parallel_working/tmp/effort_to_95_validation_gain_by_seed.csv", index=False)
     summary = (effort.groupby(["experiment", "model_type", "optimizer"])
                [["objective_evaluations_to_95pct_gain", "actual_model_fits_to_95pct_gain"]]
                .median().reset_index())
-    summary.to_csv(ROOT / "article/manuscript/latest_zip_revision/tmp/effort_to_95_validation_gain_summary.csv", index=False)
+    summary.to_csv(ROOT / "article/manuscript/merged_parallel_working/tmp/effort_to_95_validation_gain_summary.csv", index=False)
     plot_exp1_mcc(best)
     plot_holdout_accuracy(best)
     plot_exp3_accuracy(best)
+    plot_practical_fit_cost(effort)
     print(summary.to_string(index=False))
 
 

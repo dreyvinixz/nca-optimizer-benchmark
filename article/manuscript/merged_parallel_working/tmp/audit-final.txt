@@ -1,0 +1,2357 @@
+    Metaheuristic Hyperparameter Optimization for
+      Intraday Financial Trend Classification: A
+       Benchmark Across Classifier Backbones
+                                           Abstract
+     Intraday trend classification in futures markets is vulnerable to non-stationarity,
+     weak signal-to-noise ratios, and temporal leakage. A conference precursor used
+     randomized cross-validation and a single optimizer. We extend that work with
+     an auditable benchmark on 15,057 five-minute B3 Mini-Index futures bars and
+     a fixed seven-feature representation inherited from the precursor. Five search
+     methods (RS, GA, PSO, DE, and GWO) tune four classifier backbones (RF,
+     SVM, MLP, and 1D-CNN) under a common 1,000-evaluation budget. A chrono-
+     logical 60/20/20 partition supports two primary holdout protocols: MCC/F1
+     fitness and weighted training/validation accuracy fitness. A separate exploratory
+     experiment uses three-fold temporal cross-validation with the weighted-accuracy
+     objective. The common chronological test block is scored after selection, with
+     three seeds available per model–optimizer cell; three one-row target alignments
+     cross split boundaries, limiting strict test isolation. We report objective calls
+     and uncached candidate-model fits required to reach 95% of each run’s attained
+     validation-fitness gain. RF leads the MCC/F1 holdout aggregates, whereas MLP
+     has the highest observed accuracy under weighted-accuracy holdout and temporal
+     cross-validation. These comparisons are descriptive; matched-block inference is
+     conditional on the single chronological test interval. Accuracy and MCC are dis-
+     played separately, and the cross-validation experiment is not pooled with holdout
+     evidence.
+
+     Keywords: Financial time series · Metaheuristic optimization · Hyperparameter
+     tuning · Matthews correlation coefficient · Temporal validation · Intraday futures
+
+
+
+
+1 Introduction
+Financial time-series forecasting remains a challenging computational problem because
+market data exhibit non-stationarity, nonlinear dependence, structural changes, and
+substantial noise [1, 2]. These characteristics become particularly relevant in short-
+horizon trading, where predictive relationships may weaken or change as market
+conditions evolve. Among traded financial instruments, futures contracts provide an
+important setting for this problem because they are widely used for both risk hedging
+
+
+
+                                                1
+and speculative exposure [3, 4]. In Brazil, the Mini-Index futures contract (symbol:
+WIN), traded on Brasil Bolsa Balcão (B3) and referenced to the Ibovespa index, is
+highly liquid and extensively used in intraday operations, making it a relevant envi-
+ronment for computational financial research [5, 6]. Predicting directional movements
+in such markets is therefore scientifically demanding and requires methods capable of
+extracting useful information from noisy and temporally evolving observations.
+     Traditional financial forecasting has relied on statistical models such as autore-
+gressive integrated moving average (ARIMA) techniques [7]. As finance and computer
+science increasingly converged under the computational intelligence paradigm [8],
+machine-learning models became widely investigated for financial prediction and clas-
+sification. Supervised approaches—including Random Forests (RF) [9], Support Vector
+Machines (SVM) [10], Multilayer Perceptrons (MLP) [11], and 1D Convolutional Neu-
+ral Networks (1D-CNN) [12]—can capture nonlinear relationships between market
+variables and future price movements. These models are commonly supplied with tech-
+nical indicators derived from price, volume, momentum, and volatility. However, large
+indicator sets may introduce redundant or weakly informative variables, increasing
+model complexity and potentially degrading generalization [13, 14]. Feature-selection
+techniques therefore provide an important mechanism for identifying compact and
+informative predictor subsets [4, 15].
+     Beyond feature selection, predictive performance also depends strongly on hyper-
+parameter configuration [16]. Neural and machine-learning models contain structural,
+regularization, and training parameters that jointly define mixed discrete–continuous
+and often non-convex search spaces. Gradient-based learning algorithms optimize
+model parameters once an architecture is defined, but they do not directly solve this
+outer hyperparameter-search problem when discrete and non-differentiable choices
+are involved [17]. Metaheuristic Optimization Algorithms (MOAs) provide an alter-
+native by exploring candidate configurations through stochastic search. Evolutionary
+approaches such as Genetic Algorithms (GA) [18] and Differential Evolution (DE) [19],
+together with swarm-based methods such as Particle Swarm Optimization (PSO) [20]
+and Grey Wolf Optimizer (GWO) [21], have consequently been applied to automated
+model tuning across neural computing problems [22, 23].
+     Despite the increasing use of metaheuristic optimization in predictive modelling,
+comparisons between algorithms remain strongly influenced by experimental design.
+Three methodological limitations are particularly relevant in financial time-series
+applications:
+1. Unequal computational budgets: Metaheuristics are commonly expressed using
+   different units such as generations, iterations, populations, particles, or wolves. As
+   a result, apparently similar experimental configurations may correspond to sub-
+   stantially different numbers of objective-function evaluations. Without a common
+   evaluation budget, observed differences may reflect unequal search opportunities
+   rather than differences in optimizer behaviour.
+2. Temporal data leakage: Randomized data partitioning and conventional shuf-
+   fled cross-validation can violate the chronological structure of financial observations
+
+
+
+
+                                            2
+   [2]. When future observations contribute directly or indirectly to model selec-
+   tion, validation results may provide an overly optimistic estimate of out-of-sample
+   generalization.
+3. Dependence on the optimization objective: Hyperparameter-search outcomes
+   depend not only on the optimizer but also on the metric used to rank candidate con-
+   figurations. Accuracy alone may provide an incomplete assessment of classification
+   quality, particularly when prediction errors or class distributions are unbalanced
+   [24]. Moreover, improvements in predictive metrics do not necessarily translate into
+   economically useful trading behaviour once transaction costs and signal frequency
+   are considered.
+    To address these limitations, this paper presents a controlled multi-optimizer
+benchmark for intraday trend classification using 5-minute B3 Mini-Index futures
+data. A compact seven-indicator subset previously identified through Information Gain
+is used as a fixed input representation, while five optimization strategies—Random
+Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differ-
+ential Evolution (DE), and Grey Wolf Optimizer (GWO)—are evaluated across four
+classifier families: MLP, SVM, RF, and 1D-CNN. All optimizers operate under the
+same objective-function evaluation budget of Neval = 1,000 evaluations per seed, and
+temporal ordering is preserved through chronological model selection followed by scor-
+ing on a nominally subsequent test block. Because three one-row-shifted target labels
+cross partition boundaries, strict test isolation is not achieved at those rows. The
+study further contrasts a compound MCC-driven objective (0.60 MCC + 0.40 F1 ) with
+accuracy-based optimization protocols. Predictive performance is complemented by
+convergence analysis, non-parametric statistical testing, and out-of-sample economic
+evaluation under transaction costs.
+    The main contribution of this study is the development of a controlled experi-
+mental framework that disentangles the effects of optimizer family, predictive model,
+validation objective, and computational budget in intraday financial classification.
+Rather than evaluating metaheuristics under isolated or algorithm-specific settings,
+the proposed benchmark places five optimization strategies and four predictive model
+families under the same temporal data partitions, the same feature representation, and
+an equal number of objective-function evaluations. By combining predictive metrics,
+convergence behaviour, matched statistical testing, and economic evaluation under
+transaction costs, the study provides a more complete assessment of optimizer robust-
+ness and practical relevance. In this sense, the proposed framework extends existing
+approaches to intraday futures classification by integrating feature selection, multiple
+optimization strategies, temporal validation, and equal computational budgets within
+a unified and reproducible comparative methodology.
+    The remainder of this manuscript is organized as follows. Section 2 presents
+the related literature and establishes the research gap. Section 3 describes the
+dataset, feature selection, predictive models, optimization algorithms, search spaces,
+and experimental protocol. Section 4 reports the predictive results, convergence
+behaviour, statistical analyses, and economic evaluation. Section 5 discusses the find-
+ings, methodological implications, and limitations. Finally, Section 6 summarizes the
+main conclusions and outlines future research directions.
+
+
+                                           3
+2 Related Work and Literature Positioning
+The intersection of computational intelligence, metaheuristic optimization, and finan-
+cial time-series forecasting has generated an extensive body of literature over the past
+decade [8, 17, 25]. Comprehensive surveys have categorized machine learning appli-
+cations in financial prediction [8, 25], systematically reviewed metaheuristic search
+paradigms such as Particle Swarm Optimization [26, 27] and Grey Wolf Optimizer
+[21], and benchmarked neural forecasting architectures under computational con-
+straints [16, 28]. However, despite substantial published progress in premier neural
+computing journals [12, 22, 23, 29], existing reviews and empirical benchmarks have
+not systematically evaluated the interaction between equal-budget metaheuristic tun-
+ing, temporal validation integrity, and out-of-sample trading performance. We use a
+structured search and narrative synthesis to position the benchmark across feature
+selection, model backbones, metaheuristic search, and validation protocols, and to
+identify methodological gaps relevant to this study.
+
+2.1 Search Scope and Research Questions
+Relevant literature was identified through a structured search of major scholarly
+databases: IEEE Xplore, Scopus, Web of Science, and SpringerLink (specifically target-
+ing Neural Computing and Applications). The search was executed using the following
+structured Boolean query:
+• ("metaheuristic" OR "genetic algorithm" OR "particle swarm" OR "grey
+  wolf")
+• AND ("feature selection" OR "technical indicators" OR "Information
+  Gain")
+• AND ("futures market" OR "intraday forecasting" OR "trend
+  classification")
+   The review was bounded to peer-reviewed journal articles and top-tier conference
+proceedings published between 2019 and 2026. Candidate studies were screened against
+explicit eligibility criteria:
+• Inclusion Criteria: (i) evaluation of automated feature selection or metaheuristic
+  hyperparameter tuning on financial or complex time-series classification/forecasting;
+  (ii) explicit disclosure of validation protocols and search space boundaries; and (iii)
+  reporting of empirical predictive or out-of-sample financial metrics.
+• Exclusion Criteria: Studies lacking reproducible experimental parameters, omit-
+  ting candidate evaluation budget details, or failing to disclose optimization
+  constraints were excluded.
+   The synthesis discusses 15 representative studies in Table 1. The benchmark is
+organized around three research questions (RQs):
+1. RQ1 (Budget Parity): How do stochastic metaheuristic search operators (RS,
+   GA, PSO, DE, GWO) compare across distinct classifier backbones (RF, SVM,
+   MLP, 1D-CNN) when restricted to a strictly equal candidate evaluation budget cap
+   (Neval = 1,000)?
+
+
+                                           4
+2. RQ2 (Chronological evaluation): How do the evaluated backbones and selec-
+   tion protocols perform on a common chronologically subsequent test interval when
+   model selection preserves temporal ordering?
+3. RQ3 (Predictive and economic outcomes): How do predictive outcomes under
+   the evaluated selection protocols relate to results from the study’s fixed-cost next-
+   bar trading calculation?
+
+
+2.2 Classifier Backbones and Input Representations
+The quality and information density of the input representation are central deter-
+minants of supervised intraday trend prediction [13]. Open, high, low, close, and
+volume observations encode the market state, but short-horizon bars are also affected
+by microstructural noise, regime shifts, and high variance. For this reason, financial
+machine-learning studies commonly transform raw bar data into technical descriptors
+representing complementary aspects of price behaviour: momentum, trend, dispersion,
+and volatility [29–31]. Such representations do not create information; rather, they
+provide a structured hypothesis space through which a learner can test whether recent
+price and volume dynamics carry directional content.
+    The expansion of the indicator set must nevertheless be controlled. Indicators
+derived from common prices and overlapping lookback windows are often strongly
+correlated, so a large technical library can amplify redundancy, increase estimation
+variance, and make model ranking sensitive to incidental patterns in the development
+sample [14, 15]. Feature selection is therefore a component of model design rather
+than a preliminary convenience: it reduces the dimensionality exposed to subsequent
+learning and hyperparameter search, while retaining descriptors with a demonstra-
+ble association with the target. Information Gain (IG) is a transparent filter criterion
+for this purpose, ranking candidate indicators by their reduction of class uncertainty
+[14, 32]. Although a univariate ranking does not guarantee an optimal multivariate
+subset, its low computational cost and auditability make it appropriate for construct-
+ing a compact technical representation. The mathematical formulation and empirical
+application of IG in the present benchmark are detailed in Section 3.3.
+    The literature spans several classifier families whose distinct inductive biases make
+a single preferred backbone unlikely across all market representations:
+• Ensemble decision trees, represented by Random Forest (RF), aggregate decor-
+  related trees built from bootstrap samples and randomly selected feature subsets.
+  Their partition-based structure accommodates non-linear interactions and can be
+  relatively robust to noisy descriptors [9].
+• Kernel margin classifiers, represented by Support Vector Machines (SVM),
+  seek separating hyperplanes with a maximum-margin principle. Kernel mappings,
+  including the radial-basis-function kernel, permit non-linear decision surfaces while
+  retaining a well-defined optimization objective [10].
+• Feedforward neural networks, represented by Multilayer Perceptrons (MLP),
+  learn non-linear mappings through stacked fully connected layers and backpropa-
+  gation. Their expressive capacity is accompanied by sensitivity to architectural and
+  regularization choices [11].
+
+
+                                           5
+• One-dimensional convolutional neural networks (1D-CNN) apply shared
+  local filters to ordered input windows. This construction can capture short-range
+  patterns while using parameter sharing to constrain the number of learned weights
+  [12, 28].
+    These families therefore represent different hypotheses about how directional infor-
+mation is encoded. Their comparative use is more informative than selecting a single
+algorithm a priori, particularly because changes in feature representation and hyper-
+parameterization can alter the observed ranking of classifiers [9, 33]. The specific
+representations, search domains, and fitted architectures adopted in this study are
+defined in Section 3.
+
+
+2.3 Metaheuristic Optimization Paradigms
+Hyperparameter selection is naturally formulated as a black-box optimization problem.
+Let θ ∈ Ω denote a feasible model configuration, where Ω can contain continuous,
+integer, categorical, and conditional variables. A validation criterion f (θ) is obtained
+only after fitting and evaluating the corresponding learning pipeline, and the search
+objective is
+                                  θ ⋆ = arg max f (θ).                               (1)
+                                          θ∈Ω
+
+Unlike weight training, this objective need not be differentiable with respect to θ. Tree
+depth, number of hidden units, kernel choices, and regularization settings may also
+be discrete or conditionally active. Population-based metaheuristics are consequently
+attractive because they navigate such mixed spaces without gradient information and
+can balance broad exploration against local refinement [16, 17, 21].
+    In this context, a “candidate evaluation” should mean one complete configuration
+assessment under an unchanged validation protocol. This distinction is important:
+iterations and generations are internal counters, whereas the number of evaluated
+candidates is the common computational unit through which heterogeneous search
+procedures can be compared.
+    Figure 1 provides a compact taxonomy of the learning and search families con-
+sidered in this literature. It distinguishes the classifier hypothesis spaces from the
+mechanisms used to select their configurations, while retaining the shared objective of
+validation-based model selection.
+    Evolutionary algorithms maintain a population of candidate configurations and
+improve it through selection and variation. Genetic Algorithms (GA) emulate selec-
+tion, crossover, and mutation: configurations with stronger fitness are preferentially
+retained or recombined, while mutation introduces new material into the population
+[16, 18]. This representation-agnostic cycle is well suited to mixed hyperparameter
+spaces after appropriate encoding and constraint handling.
+    Differential Evolution (DE) is also population based, but creates candidate
+displacements from scaled differences between population members. A canonical
+donor-vector form is
+                               vit = xtr1 + F xtr2 − xtr3 ,
+                                                         
+                                                                                      (2)
+
+
+                                           6
+                                                    Validation-based model selection
+
+
+
+
+                    Predictive backbones                                                Search paradigms
+
+
+
+
+     Random                                                                              Random Search
+      Forest                                    SVM
+                                            Kernel-margin                               Uniform sampling of
+   Tree ensemble                                                                       feasible configurations
+    and random                              classification
+     subspaces
+
+
+                                                                                       Evolutionary search
+                                              1D-CNN                                       GA: selection,
+                                               Local fil-                               crossover, mutation
+       MLP
+                                               ters over                                   DE: differen-
+    Feedforward
+                                           ordered windows                                 tial variation
+   neural mapping
+
+
+
+                                                                                        Swarm intelligence
+                                                                                            PSO: per-
+                                                                                         sonal/global best
+                                                                                       GWO: leader hierarchy
+
+
+Fig. 1 Conceptual taxonomy linking predictive backbones with hyperparameter-search strategies
+in the reviewed literature. The left branch denotes alternative classifier hypothesis spaces, whereas
+the right branch distinguishes unguided sampling, evolutionary search, and swarm intelligence. The
+precise search domains and experimental controls are specified in Section 3.
+
+
+
+where r1 , r2 , and r3 index distinct population members and F scales the differential
+displacement. Crossover then combines the donor with a target vector, and selec-
+tion retains the better candidate [19]. The use of population differences gives DE a
+self-adaptive search scale, although its practical behaviour still depends on encoding,
+bounds, and the chosen mutation and crossover strategy.
+    Swarm methods update candidates by combining individual experience with
+population-level information. In Particle Swarm Optimization (PSO), each particle has
+a position xti , a velocity vit , a personal best position pti , and an incumbent swarm-best
+position gt . Its standard update is
+
+                          vit+1 = ωvit + c1 r1 pti − xti + c2 r2 gt − xti ,
+                                                                        
+                                                                                                                 (3)
+                          xt+1
+                           i   = xti + vit+1 ,                                                                   (4)
+
+where ω controls inertia, c1 and c2 weight cognitive and social attraction, and r1 , r2
+are random variates. This formulation makes the exploration–exploitation trade-off
+explicit and is the foundation for the broad family of PSO variants reviewed by Gad
+[20, 26].
+    Grey Wolf Optimizer (GWO) uses a different collective metaphor. Candidate solu-
+tions are ranked into leading α, β, and δ wolves, while the remaining wolves update
+their positions by encircling and approaching these leaders. Its control schedule pro-
+gressively shifts the search from exploration to exploitation [21, 22]. Despite distinct
+metaphors, PSO and GWO share the same benchmarking requirement: each update
+must be translated into feasible configurations and assessed under the same validation
+rule.
+
+                                                             7
+    Random Search (RS) is an indispensable baseline because it samples feasible con-
+figurations without an adaptive search trajectory. It establishes whether the additional
+mechanisms of evolutionary or swarm search improve solution quality beyond unguided
+sampling from the same search space [34]. A credible comparison must therefore control
+the parameter domain, candidate-evaluation count, validation data, random replica-
+tion, and reporting metrics. Equalizing only the nominal number of generations or
+iterations is insufficient when algorithms evaluate different numbers of candidates per
+update.
+    The comparative evidence also highlights recurring weaknesses: unequal computa-
+tional budgets can confound search quality with search effort; randomized validation
+can compromise temporal integrity; and classification-only reporting may not estab-
+lish economic value after transaction costs [11, 12, 29]. These issues are synthesized in
+Section 2.4; the concrete controls used by the present benchmark are specified only in
+Section 3.
+
+2.4 Comparative Synthesis of Representative Studies
+To establish the state of the art and pinpoint persistent methodological gaps, Table 1
+synthesizes 15 representative published studies from 2019 to 2026 alongside the present
+benchmark work. Studies are evaluated across six technical dimensions: Study & Year,
+Application Domain & Data, Model Backbones, Optimization & Feature Paradigms,
+Validation Protocol, and Identified Methodological Gap.
+
+
+
+
+                                           8
+Table 1 Structured literature comparison matrix auditing representative studies in financial
+machine learning, metaheuristic hyperparameter tuning, and temporal validation protocols against
+identified methodological gaps.
+
+Study & Year           Domain and models        Optimization, features, and     Primary methodological
+                                                validation                      gap
+Nabipour et al.        Stock-index trend; RF,   Technical indicators;           No metaheuristic
+(2020) [9]             SVM, ANN, XGBoost        train/test split                hyperparameter tuning.
+Jovanovic et al.       Crop yield;              Metaheuristic tuning;           Non-financial domain; no
+(2024) [16]            weight-agnostic neural   train/test                      equal-budget financial
+                       networks                                                 benchmark.
+Naik & Mohan           NSE equities; ANN        Boruta feature selection;       Static parameters; no
+(2019) [10]            classifier               train/test                      metaheuristics.
+Ecer et al. (2020)     Financial trend; MLP     GA and PSO tuning; K-fold       Unconstrained budget;
+[11]                                            CV                              single classifier.
+Billah et al. (2024)   Intraday equities;       Moving-average rules;           No neural
+[29]                   heuristic models         standard split                  hyperparameter tuning.
+Bareket & Pârv        Surge detection;         Technical indicators;           Evaluation restricted to
+(2024) [35]            adaptive ML              medium-term split               static features.
+Bandgar et al.         Financial forecasting;   Default tuning; random split    No evaluation budget
+(2025) [12]            ensembles                                                cap; temporal leakage
+                                                                                risk.
+Rahim et al.           5-min futures; single    Single GA; train/test split     Single GA; no multi-
+(2025) [36]            neural model                                             optimizer benchmark.
+Dhingra et al.         Solar PV; LSTM,          RAdam, Lookahead, Adam;         Non-financial domain;
+(2025) [28]            CNN-LSTM                 sequential split                stochastic optimizers
+                                                                                omitted.
+Mutinda & Yong         Financial market;        SEDT feature selection;         Feature selection without
+(2026) [33]            ensembles                K-fold CV                       tuning.
+Simatupang et al.      IDX stock index;         Bayesian optimization;          Random CV risks
+(2026) [37]            Bayesian RF              random K-fold CV                temporal information
+                                                                                leakage.
+Al Bannoud et al.      Kinetics series;         GWO, PSO, GA, ABC;              Non-financial;
+(2026) [22]            ANN–ODE surrogate        multi-partition                 unconstrained search
+                                                                                budget.
+Bashir et al.          NSE equities; bagging    (1+1) evolutionary algorithm;   Single EA; no budget
+(2026) [23]            ensemble                 train/test                      cap.
+[Anonymized            Intraday B3 futures;     InfoGain + default RF;          Untuned baseline; no
+Precursor A]           RF                       sequential 60/20/20             metaheuristics.
+(2025) [32]
+[Anonymized            Intraday B3 futures;     InfoGain + single GA; 5-fold    Single GA; unconstrained
+Precursor B]           MLP, SVM, RF             CV                              generation budget.
+(2026) [38]
+Present Work           Intraday B3 futures;     InfoGain + RS, GA, PSO,         Equal Neval = 1,000, 3
+                       MLP, SVM, RF,            DE, GWO; sequential             seeds, fee backtest.
+                       1D-CNN                   60/20/20
+
+
+
+
+    As synthesized in Table 1, three primary methodological flaws permeate the
+existing literature on metaheuristic financial forecasting:
+1. The Budget Inequality Flaw : Prior studies routinely compare metaheuristics
+   without enforcing a strict candidate evaluation cap (Neval ). Because stochastic
+   optimization performance scales with function evaluations, superiority claims in
+   unconstrained studies often reflect unequal computational budgets rather than
+   algorithmic search efficiency [11, 28].
+2. The Temporal Data Leakage Flaw : Financial machine learning research frequently
+   relies on randomized K-fold cross-validation or data shuffling [2, 37]. Shuffling
+
+
+                                                    9
+   sequential intraday price bars allows future market information to contaminate his-
+   torical training folds, yielding artificially inflated predictive accuracy scores that
+   collapse during live execution.
+3. The Classification-Economic Disconnect Flaw : Hyperparameter tuning is over-
+   whelmingly conducted against raw accuracy or cross-entropy loss [24, 32]. In
+   high-frequency futures trading, raw accuracy ignores class imbalance and trade exe-
+   cution costs. A classifier achieving high nominal accuracy can incur net financial
+   losses once exchange transaction fees and slippage are deducted.
+   Figure 2 shows the distribution of the 15 representative studies by publication year
+and optimizer-comparison scope.
+
+
+
+
+                                                                                       3
+                             3
+    Representative studies
+
+
+
+
+                                                                     2                                  2      2
+                             2
+
+
+
+
+                                 1                1          1            1                 1                        1
+                             1
+
+
+
+
+                             0
+                                     2019             2020               2024              2025               2026
+                                                                 Publication year
+
+
+                                            No metaheuristic        Single optimizer        Multi-optimizer
+
+Fig. 2 Distribution of the 15 representative prior studies included in the literature synthesis, grouped
+by publication year and the scope of optimizer comparison. A study is assigned to one category
+according to its primary experimental design; the present work is excluded. The limited number of
+multi-optimizer studies motivates the controlled benchmark developed in this paper.
+
+
+
+
+2.5 Research Positioning and Study Contribution
+The literature synthesis reveals that prior studies have typically addressed only subsets
+of the experimental problem considered here. Existing financial forecasting research
+has investigated feature selection, individual predictive models, or isolated metaheuris-
+tic tuning strategies, but these components are rarely evaluated simultaneously under
+common temporal and computational controls. The precursor studies in this research
+line first established the value of Information Gain feature selection for B3 Mini-Index
+futures and subsequently explored Genetic Algorithm-based hyperparameter tuning.
+
+
+                                                                     10
+The present work moves beyond these isolated stages by treating model selection and
+optimizer behaviour as components of a unified comparative benchmark.
+    The methodological extension is therefore not limited to increasing the number
+of models or optimization algorithms. The proposed framework changes the experi-
+mental control structure by combining four heterogeneous predictive backbones with
+five search strategies under a common feature representation, identical temporal par-
+titions, and an equal objective-function evaluation budget. It further evaluates how
+optimizer behaviour changes under alternative validation objectives and complements
+predictive metrics with convergence analysis, matched statistical testing, and economic
+evaluation under transaction costs.
+    This design allows the study to distinguish performance differences associated with
+optimizer behaviour from those induced by model architecture, validation objective, or
+unequal search effort. Accordingly, the contribution is positioned as a controlled and
+reproducible model–optimizer benchmark for intraday financial classification rather
+than as an incremental extension of a single metaheuristic method.
+
+
+3 Materials and Methods
+This section presents the methodology adopted in this study. Figure 3 provides an
+overview of the methodological flow adopted in this study. The diagram highlights each
+step of the process, illustrating the flow from data acquisition to model optimization
+and evaluation.
+
+
+                         Technical
+                        indicators
+        Input data      66 technical       Information
+       WIN futures        variables            Gain
+     five-minute bars   price, trend,           seven
+        N = 15,057        volatility          selected
+                          volume,             features
+                           trading
+
+
+                         Temporal          Equal-budget
+                            split             search
+                        chronological      RS, GA, PSO,
+                          60/20/20          DE, GWO
+                           train /          1,000 evals
+                         validation          per seed
+                        nominal test
+                                                                            Fitting and test
+                           Protocol A:                    Protocol B:          evaluation
+                            MCC/F1                         accuracy       RF, SVM, MLP, CNN
+                           0.60 MCCval                    0.40 Acctrain    three common seeds
+                           + 0.40 F1,val                  + 0.60 Accval     Predictive metrics
+                                                                            Economic metrics
+
+
+Fig. 3 Overview of the proposed methodology. The benchmark reuses the precursor’s fixed
+Information-Gain representation while enforcing a chronological split, equal optimizer budget, and
+two separated validation objectives.
+
+
+
+
+                                                   11
+3.1 Input Data
+The data used in this study were obtained from BovDbV2 [5], an extension of the
+original BovDb [6]. The database provides publicly available and pre-processed B3
+market data for research purposes, covering listed assets from 1995 to 2024. BovDbV2
+additionally includes intraday observations aggregated into 5-minute intervals for the
+first half of 2024, enabling the analysis of short-horizon market behaviour.
+    For the present study, the analysis focuses on Mini Ibovespa Futures (WIN) con-
+tracts traded between January and June 2024. The selected contracts correspond to
+the most actively traded maturities over the analyzed period: WING24 and WINJ24
+in January–February, WINJ24 and WINM24 in March–April, and WINM24 and
+WINQ24 in May–June. After preprocessing and construction of the modelling dataset,
+the final sample contains 15,057 chronological observations.
+    The explanatory variables are technical indicators computed from completed five-
+minute price and volume bars. The binary regime labels (0, downtrend; 1, uptrend)
+are generated from peak-and-trough structure detected on hourly candles resampled
+from the five-minute price series. The detector groups consecutive bullish and bearish
+hourly candles, locates the highest or lowest close within each run, refines that pivot to
+the corresponding extreme five-minute close, and checks the following hourly interval
+for a more extreme close. The resulting pivot states are assigned to five-minute obser-
+vations and carried forward; the initial segment is assigned retrospectively from the
+first detected pivot. We reproduced this procedure against the archived label database
+and obtained exact agreement for all 23,181 stored rows. In the modeling dataset,
+each five-minute feature row is paired with the next retained regime-label row for
+the same ticker, yi,t = ri,t+1 . This alignment agrees with the archived label database
+for all 15,053 rows with a successor, including 196 session-final rows whose successor
+is in the following session. Four final rows, one per ticker series, have no successor
+and retain their contemporaneous label. Thus, the benchmark is a next-observation
+regime-prediction task, with four terminal-row exceptions. Predictions are available
+after bar t closes; the economically aligned entry is at the open of bar t+1. The hourly
+pivots and their confirmation are retrospective, so this one-bar shift does not make
+the target itself causal.
+    All observations are kept in their original chronological order. The first 9,034
+observations are assigned to the training set, the following 3,011 observations to the
+validation set, and the final 3,012 observations to the nominal test set. No random
+shuffling is performed. Because the target is shifted by one retained row, however, one
+training observation at the split boundary is paired with a validation-period label, and
+two validation observations are paired with test-period labels. These three boundary
+observations were retained in the reported experiments; thus, the test block is chrono-
+logically subsequent, but its labels are not fully isolated from model selection. A cutoff
+audit that reran the recovered label routine using only price history available through
+each cutoff found no label changes among the other 9,032 training and 3,008 valida-
+tion targets checked. This audit addresses retrospective changes to the recovered pivot
+labels, not the three direct one-row crossings or the longer confirmation horizon of the
+pivot rule. In addition, four final per-ticker rows have no next retained observation
+
+
+
+                                           12
+and use their contemporaneous source label. Results should therefore be interpreted
+with these boundary and terminal-row exceptions in mind.
+
+3.2 Generation of Technical Analysis Indicators
+Technical indicators were built from the intraday dataset to capture short-term price
+changes. Key metrics—Simple Moving Average (SMA), Exponential Moving Average
+(EMA), and Standard Deviation—were calculated using short time windows (3, 5, 7,
+and 9 periods) to enhance sensitivity to rapid market shifts, where significant moves
+can happen in minutes [30].
+    To capture changes in trend slope and momentum, attributes derived from the
+differences between calculated moving averages were also constructed. For example,
+the difference between the 7-period SMA and the 3-period SMA is defined in Eq. (1)
+as:
+
+                             SMA7−3 = SMA7 − SMA3 ,                                 (5)
+   A central preprocessing step consisted of normalizing the technical indicators [13],
+as well as the opening and closing prices, in order to place all variables on a common
+numerical scale. For each 5-minute intraday window, a min–max–type scaling was
+applied, in which each feature was transformed according to Eq. (2):
+
+                                           Feature − Low
+                            Featurenorm =                  .                         (6)
+                                             High − Low
+    Where High and Low correspond to the maximum and minimum prices observed
+within the same 5-minute interval, and Feature denotes any technical indicator or
+price-based variable being normalized. This transformation maps the features pre-
+dominantly to the interval [0, 1], while preserving their relative positions within the
+intraday price range, thereby reducing the impact of heterogeneous attribute scales
+and facilitating the learning of machine learning models. This normalization proce-
+dure, combined with historical information on open, high, low, average, close, bid, ask,
+trade volume, and number of shares, results in a total of 66 constructed features.
+
+3.3 Feature Selection Method
+The predictive pipeline incorporates a structured feature selection stage based on
+technical analysis indicators. Following the approach proposed in [5], multiple selec-
+tion strategies are evaluated to identify the most informative feature subsets, thereby
+enhancing model discrimination while reducing redundancy and noise inherent in
+high-dimensional financial data.
+    In the precursor, feature-selection strategies included filters and wrappers. The
+Information Gain ranking was produced in WEKA using only the chronological
+training partition (January–March 2024), separated by the number of five-minute
+observations in that interval; the April–June test partition was excluded, as confirmed
+by the researcher. The ranking was then recorded as a fixed list in the Python work-
+flow. Its first seven features form the compact representation used here. The present
+benchmark applies that inherited mask without re-estimating selection on its own
+
+
+                                          13
+training partition, so its conclusions remain conditional on the selected representation.
+The original WEKA project/output is not archived, but the selected feature list and
+the subsequent train/test data split are preserved in the project files.
+    The selected features, ranked by their Information Gain scores, include the EMA-
+based differences 5−3 and 7−3, their normalized counterparts, the normalized 9-period
+SMA, the 9−3 EMA difference, and the normalized 7-period EMA.
+    The seven ranked descriptors listed above are used unchanged as the input
+representation for all four backbones and five optimizers in this benchmark.
+
+
+
+
+3.4 Implemented Classifier Architectures and Search Spaces
+To benchmark metaheuristic search performance across fundamentally distinct
+hypothesis spaces, four classifier backbones were implemented: Random Forest (RF),
+Support Vector Machines (SVM), Multilayer Perceptron (MLP), and 1D Convo-
+lutional Neural Networks (1D-CNN). Figure 4 illustrates the structural decision
+mechanisms and layer topologies of these four implemented architectures. For the
+neural backbones, the MLP has one tanh hidden layer with dropout and a sigmoid
+output; the implementation uses RMSprop, binary cross-entropy, a maximum of 10
+epochs, and early stopping on validation loss (patience 3, restoring the best weights).
+Its input is the seven-feature vector. The 1D-CNN reshapes each observation to (7, 1),
+so its convolution runs across the ordered feature axis rather than across a sequence
+of historical time steps. It uses a same-padded Conv1D layer, global max pooling, one
+dense hidden layer, dropout, and a sigmoid output, trained with Adam and binary
+cross-entropy under the same epoch and early-stopping limits. Both implementations
+use validation split=0.15 and disable epoch shuffling. Python, NumPy, and Ten-
+sorFlow seeds are set for each fit. The exact TensorFlow and scikit-learn versions used
+for the official runs are not recorded in the repository manifest, which limits bitwise
+reproduction.
+    The hyperparameter search space bounds θ ∈ S for each implemented model are
+defined as follows:
+• RF: Number of trees nestimators ∈ [50, 500], maximum tree depth dmax ∈ [5, 50],
+  minimum split samples ssplit ∈ [2, 20], minimum leaf samples sleaf ∈ [1, 20],
+  and categorical choices for max features ({sqrt, log2, None}) and class weight
+  ({None, balanced}).
+• SVM: Soft-margin penalty C ∈ [10−3 , 103 ] and kernel bandwidth γ ∈ [10−5 , 101 ],
+  both sampled on logarithmic scales, with linear and radial-basis-function kernels
+  considered.
+• MLP: Hidden-layer width nhidden ∈ [5, 500], L2 penalty coefficient α ∈ [10−8 , 10−2 ],
+  initial learning rate η0 ∈ [10−8 , 10−2 ], dropout pdrop ∈ [0, 0.10], and batch size in
+  {16, 32, 64, 80, 112, 128}.
+• 1D-CNN: Filter count nfilter ∈ [8, 128], kernel size ksize ∈ [2, 5], dense-layer width
+  ndense ∈ [16, 256], L2 penalty coefficient α ∈ [10−8 , 10−2 ], Adam learning rate η ∈
+  [10−8 , 10−2 ], dropout pdrop ∈ [0, 0.10], and batch size in {16, 32, 64, 80, 112, 128}.
+
+
+                                           14
+                                                                 x2
+
+                                        Majority   Class
+                                  ···    vote        ŷ                                        RBF           Predicted
+                                                                                              margin           class
+       Tree 1   Tree 2   Tree N
+                    Bootstrap aggregation                                            x1
+                                                                Nonlinear RBF boundary
+
+                    (a) Random Forest                                         (b) Support Vector Machine
+                                                                                         Global max      Dense
+                                                                      Input     Conv1D                             Sigmoid
+                                                                                           pooling     + dropout
+       Input    Dense hidden layer      Output
+
+                                             Class 1
+
+                                             Class 0            Time steps
+
+
+
+                 (c) Multilayer Perceptron                             (d) 1D Convolutional Neural Network
+
+Fig. 4 Architectural topologies and structural decision mechanisms of the four candidate classifier
+backbones evaluated under the equal-budget metaheuristic optimization framework.
+
+
+3.5 Optimizer Configuration, Search Operators, and
+    Validation Objectives
+To support a controlled comparison, five search paradigms were evaluated: Random
+Search (RS), Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Differ-
+ential Evolution (DE), and Grey Wolf Optimizer (GWO). All optimizers operate
+under a strict candidate evaluation cap of Neval = 1,000 per model and random seed.
+For all population-based algorithms (GA, PSO, DE, GWO), the population size is
+fixed to Npop = 10 candidates evaluated across G = 100 generations or iterations
+(10 × 100 = 1,000 function evaluations). RS generates Neval = 1,000 independent
+uniform random samples across the search space.
+    Candidate vectors use the bounds stated above. Integer parameters and categorical-
+option indices are rounded and clipped to their admissible bounds:
+
+                                     θd = clip(round(ud ), θd,min , θd,max ) .                                               (7)
+
+For continuous parameters defined on logarithmic scales (such as C, α, and learning
+rates), optimizers act on ud ∈ [log10 (θd,min ), log10 (θd,max )] and values are decoded by
+
+                                                       θd = 10ud .                                                           (8)
+
+   The specific search operators and update formulations governing each optimizer
+are defined as follows:
+• Genetic Algorithm (GA): Utilizes tournament selection (k = 3), uniform
+  crossover with probability Pc = 0.80, and mutation with probability Pm = 0.20.
+  When a gene is mutated, its perturbation scale is 0.10 of the corresponding encoded
+  search range.
+• Particle Swarm Optimization (PSO): Velocity vectors vi and positions ui
+  for particle i at iteration g are updated using inertia weight w = 0.70 and
+
+
+                                                           15
+  cognitive/social coefficients c1 = c2 = 1.50:
+
+                 vig+1 = wvig + c1 r1 (pbesti − ugi ) + c2 r2 (gbest − ugi ),         (9)
+                                                           
+                              ug+1
+                               i   = clip ugi + vig+1 , 0, 1 ,                       (10)
+  where r1 , r2 ∼ U (0, 1).
+• Differential Evolution (DE): Implements the DE/best/1/bin strategy with
+  mutation factor F = 0.80 and binomial crossover probability CR = 0.90:
+
+                             vig+1 = gbestg + F (ugr1 − ugr2 ),                      (11)
+
+  where r1, r2 are distinct randomly chosen population indices.
+• Grey Wolf Optimizer (GWO): Candidate position vectors are updated by
+  simulating encirclement of the three leading wolves (α, β, δ):
+
+                                           x1 + x 2 + x 3
+                                  ug+1
+                                   i   =                  ,                          (12)
+                                                3
+
+  where x1 = α − A1 · |C1 · α − ugi |, with analogous terms for x2 (β) and x3 (δ).
+   Candidate configurations are evaluated against two separated validation objectives:
+• Protocol A (MCC/F1 Fitness):
+
+                     fMCC/F1 (θ) = 0.60 MCCval (θ) + 0.40 F1,val (θ).                (13)
+
+• Protocol B (Weighted-Accuracy Fitness):
+
+                 fAcc (θ) = 0.40 Accuracytrain (θ) + 0.60 Accuracyval (θ).           (14)
+
+    In addition to the two primary holdout protocols, Experiment 3 uses a sep-
+arate exploratory weighted-accuracy objective with three-fold expanding-window
+temporal cross-validation on the concatenated training and validation observations
+(N = 12,045). For each fold, the candidate is fitted to the earlier portion and
+scored on the subsequent portion; its objective is the mean of 0.40 Accuracytrain +
+0.60 Accuracyvalidation across folds. The test feature rows are excluded from candidate
+selection and the selected candidate is refitted on all training-plus-validation observa-
+tions before test scoring. The folds were not purged for the one-row target shift: in each
+fold, the last training row’s target is taken from the first validation row. Experiment
+3 is reported separately because its selection protocol differs from the two holdout
+protocols.
+    The two primary holdout protocols differ in both the metric and the data contri-
+bution to fitness: Protocol A uses validation MCC/F1 , whereas Protocol B combines
+in-sample training accuracy and validation accuracy. Their outcome contrast therefore
+describes two complete selection protocols and does not isolate the effect of changing
+the metric alone.
+
+                                            16
+    Upon completion of the Neval = 1,000 search budget, the optimal candidate vector
+θ ∗ = arg max f (θ) is refit on the concatenated training and validation dataset (N =
+12,045 bars) and evaluated on the nominal test block (N = 3,012 feature bars). For
+the exploratory economic assessment, the prediction generated after bar t closes is
+applied to bar t + 1: an uptrend prediction opens a long position at the next bar’s
+open, while a downtrend prediction opens a short position; each position is closed at
+that bar’s close. The next-bar replay therefore contains at most 3,011 trades from the
+3,012-row test block. Each round trip is charged a fixed cost of five index points. We
+report total net profit, maximum√drawdown, profit factor, and annualized daily point-
+P&L Sharpe ratio, computed as 252 R̄d /sd from daily net point totals. These values
+describe this simplified one-bar execution rule, not deployable live performance. The
+target uses pivot-defined regime labels, whose endpoint is confirmed retrospectively;
+the temporal boundary implications of that labeling procedure remain a limitation of
+this benchmark.
+
+3.5.1 Asymptotic search overhead
+Let ds denote the number of encoded hyperparameters in a search space, P the pop-
+ulation size, and G the number of generations or iterations. For RS, GA, PSO, and
+GWO, sampling and updating candidate vectors requires O(Neval ds ) arithmetic oper-
+ations when population size and tournament size are fixed; bookkeeping over fitness
+values adds at most O(Neval ). DE also performs O(Neval ds ) mutation, crossover, and
+selection work. The present DE implementation additionally constructs a list of eligible
+peers for each target vector, giving an implementation-specific O(GP 2 ) bookkeeping
+term. Since P = 10 is fixed in this benchmark and Neval = P G, this term is linear in
+the number of evaluations here. Thus, the optimizer-side overhead of all five methods
+is linear in Neval for the fixed benchmark settings; this statement does not imply equal
+wall-clock cost.
+     The dominant computational cost is candidate-model fitting, not optimizer-vector
+arithmetic. A useful cost decomposition is Ctotal = Nfit Cfit (m, n, θ)+Csearch , where m
+is the backbone, n is the number of fitting observations, θ is the candidate configura-
+tion, and Nfit counts uncached fits (three fits per uncached candidate in Experiment 3).
+Because RF, SVM, MLP, and 1D-CNN have different data- and parameter-dependent
+training costs, one common closed-form training complexity would be misleading. We
+therefore report an empirical fit-count measure alongside the asymptotic optimizer
+overhead; wall-clock time was not consistently logged and is not inferred from fit
+counts.
+
+3.5.2 Empirical search effort
+The equal Neval budget counts objective calls, but repeated candidate configurations
+may be served from the evaluation cache. We therefore distinguish objective calls
+from actual candidate-model fits. For each model–optimizer–seed run, we record the
+first candidate at which best-so-far validation fitness reaches 95% of that run’s total
+observed improvement. If b1 and bT denote the initial and final best-so-far fitness, the
+threshold is b1 +0.95(bT −b1 ). Calls to threshold equal the candidate evaluation index;
+actual fits equal cumulative cache misses through that index, multiplied by three for
+
+
+                                           17
+Experiment 3 (one fit per temporal fold) and one for each holdout experiment. The
+final refit for test evaluation is excluded. This run-relative measure indicates effort to
+approach each run’s own achieved gain, not effort to reach a common absolute fitness
+level. Values are summarized by the median across the three seeds and interpreted
+descriptively.
+
+3.6 Statistical Analysis
+Statistical comparisons are conducted separately within each holdout protocol and
+use the four classifier backbones as the groups of interest. For a given endpoint, each
+optimizer–seed pair defines one matched block, giving 15 blocks (five optimizers and
+three seeds) per protocol. We first apply the Friedman rank test to assess whether
+model outcomes differ across these matched blocks. When summarizing pairwise con-
+trasts, the model with the highest marginal mean for the endpoint is compared with
+each of the other three models using two-sided paired Wilcoxon signed-rank tests. The
+resulting three p-values are adjusted together using the Holm step-down procedure,
+with family-wise significance level α = 0.05.
+    These tests are exploratory. The blocks share one chronological test segment, and
+the five optimizers and three seeds do not provide 15 independent market periods.
+Accordingly, the tests quantify consistency of model ordering across the evaluated
+optimizer–seed combinations on this fixed test period; they do not establish replication
+across market regimes or a confirmatory difference between validation protocols. No
+optimizer-superiority claim is inferred from these model-level tests.
+
+4 Results
+The data partition, search budget, validation objectives, and statistical procedures
+are defined in Section 3. This section focuses on the empirical patterns they produce:
+first the deterministic reference baselines, then optimization trajectories, test-block
+performance, model-level summaries, exploratory inference, and economic outcomes.
+Unless otherwise stated, optimizer summaries use the three common seeds; inferential
+blocks share the same chronological test interval and are interpreted accordingly.
+
+4.1 Reference Baselines
+Two deterministic reference models were evaluated on the same test block before inter-
+preting the optimizer benchmark. The majority-direction baseline predicts the class
+that is more frequent in the training partition; its probability is fixed at that training
+prevalence. The default RF baseline uses the same fixed seven-feature representation
+and the final-refit rule (training plus validation), but no hyperparameter search. These
+references are not additional optimizers and do not enter the matched optimizer–seed
+statistical tests.
+    Table 2 establishes two fixed reference points before the tuned models are com-
+pared. The majority-direction rule attains accuracy 0.510 and F1 = 0.675 but MCC
+0, showing how the prevalent class can inflate positive-class F1 without useful class
+association. The untuned RF improves on that rule (MCC 0.210; balanced accuracy
+
+
+                                           18
+0.604), but remains a single-backbone reference rather than a no-tuning baseline for
+every architecture. Thus, optimized outcomes should be interpreted relative to these
+limited but informative anchors.
+
+ Table 2 Test-block reference baselines under the temporal protocol. The naive baseline selects
+ the training-majority direction (uptrend); the default RF is refitted on training plus validation
+ with 100 trees and no hyperparameter search.
+
+
+  Reference                    Accuracy       Bal. accuracy         F1   MCC       AUC-ROC
+  Naive majority direction           0.510               0.500 0.675       0.000           0.500
+  Default RF (no tuning)             0.605               0.604 0.630       0.210           0.645
+
+
+
+   The contrast in Table 2 motivates reporting MCC alongside accuracy and F1 :
+no single endpoint captures both the majority-class effect and balanced predictive
+association. Because only RF has a default-model reference here, the table does not
+support claims about the benefit of tuning for the other three backbones.
+
+4.2 Representative Search Configurations
+Table 3 summarizes the search domains and one illustrative GA-selected configuration
+per backbone (seed 1 under the MCC/F1 protocol). The selected values span distinct
+regions of the stated domains, particularly for network width and learning rate, under-
+scoring that a single example is not a model-family default. These four configurations
+are illustrative only; the benchmark conclusions below use all five optimizers and all
+three common seeds.
+    The RF example selects a shallow tree ensemble, while the neural-network exam-
+ples select different widths, regularization, and learning-rate scales. These individual
+settings clarify what the search space permits but do not explain comparative per-
+formance by themselves; that evidence comes from the repeated convergence and
+test-block summaries.
+
+
+
+
+                                                19
+  Table 3 Hyperparameter search domains and representative GA-selected configurations (seed
+  1 under MCC/F1 fitness) across the four classifier backbones.
+
+
+  Panel A: Random Forest (RF)
+  Hyperparameter        Search space                                           Selected
+  nestimators                  [50, 500]                                          58
+  max depth                    [5, 50]                                            6
+  min samples split            [2, 20]                                            13
+  min samples leaf             [1, 20]                                            15
+  max features                 {sqrt, log2, None}                                None
+  class weight                 {None, balanced}                                  None
+  Panel B: Support Vector Machine (SVM)
+  Hyperparameter         Search space                                          Selected
+                                  −3     3
+  C                            [10 , 10 ] (log scale)                            2.089
+  γ                            [10−5 , 101 ] (log scale)                         5.044
+  Kernel                       {linear, RBF}                                     linear
+  Panel C: Multilayer Perceptron (MLP)
+  Hyperparameter          Search space                                         Selected
+  Hidden neurons               [5, 500]                                           410
+  Learning rate                [10−8 , 10−2 ] (log scale)                     3.42 × 10−4
+  L2 regularization            [10−8 , 10−2 ] (log scale)                     1.66 × 10−7
+  Dropout rate                 [0, 0.10]                                         0.057
+  Batch size                   {16, 32, 64, 80, 112, 128}                         112
+  Panel D: 1D Convolutional Neural Network (1D-CNN)
+  Hyperparameter         Search space                                          Selected
+  Filters                      [8, 128]                                            48
+  Kernel size                  [2, 5]                                               3
+  Dense neurons                [16, 256]                                          251
+  Learning rate                [10−8 , 10−2 ] (log scale)                     3.90 × 10−6
+  L2 regularization            [10−8 , 10−2 ] (log scale)                     5.70 × 10−6
+  Dropout rate                 [0, 0.10]                                         0.026
+  Batch size                   {16, 32, 64, 80, 112, 128}                          16
+
+
+
+4.2.1 Random Forest
+Figures 5 and 6 show rapid early improvement under both fitness protocols. Under
+MCC/F1 fitness, the five trajectories approach a near-plateau early; thereafter RS
+continues a modest stepwise rise, while GA remains below the close DE, PSO, and
+GWO terminal values. Under weighted-accuracy fitness, the curves again rise sharply
+at the beginning and then change little, with narrow terminal separation and GWO
+slightly higher. Most progress therefore occurs well before the 1,000-evaluation limit.
+The endpoint gaps, particularly among the population methods, are descriptive and
+do not establish optimizer superiority.
+
+
+                                               20
+    The RF panels differ mainly in the extent of late refinement: the MCC/F1 tra-
+jectories retain somewhat more separation, whereas weighted-accuracy fitness ends in
+a tightly grouped set. Neither panel suggests a large payoff from spending the entire
+budget after the initial gains.
+
+4.2.2 Support Vector Machine
+Figures 7 and 8 display the strongest optimizer sensitivity. Under MCC/F1 fitness,
+GWO and PSO make larger later gains and finish above RS and DE, while GA levels
+off at a lower fitness. Under weighted-accuracy fitness, GWO, PSO, and RS form a
+close upper group, DE finishes lower, and GA is lowest. These distinctions remain
+visible in the terminal insets, despite a common evaluation budget.
+    This search sensitivity is consistent with the wide SVM test-block dispersion in
+Table 5. However, validation ranking does not determine the test ranking: under
+MCC/F1 fitness, GA has the largest mean test MCC (0.290), although its validation-
+fitness trajectory finishes below GWO and PSO. Under weighted-accuracy fitness,
+GWO leads both the validation trajectory and the test-accuracy means, an alignment
+observed here rather than a general guarantee.
+
+4.2.3 Multilayer Perceptron
+Figures 9 and 10 reveal objective-dependent behaviour. With MCC/F1 fitness, DE,
+PSO, GA, and GWO largely flatten during the later budget, whereas RS continues to
+improve and finishes above the other curves. That visual validation advantage does not
+carry through to test-block MCC: RS averages 0.106, compared with 0.305 for GWO
+and 0.302 for DE in Table 4. Under weighted-accuracy fitness, all five trajectories
+become tightly clustered after their early gains and remain nearly indistinguishable
+near termination.
+   The MLP curves show why visually similar terminal validation fitness must not
+be treated as identical generalization: under weighted-accuracy fitness, the test-block
+means still span optimizer-specific values, while the MCC/F1 panel’s late RS advan-
+tage is paired with the lowest RS test MCC. These descriptive contrasts indicate that
+the objective shapes the selected search region, but do not establish why a particular
+configuration generalizes better.
+
+4.2.4 One-Dimensional Convolutional Neural Network
+Figures 11 and 12 show rapid early progress followed by a stable tail. Under MCC/F1
+fitness, PSO and GWO end at the upper edge of a compact group; GA and DE level
+off slightly lower, and RS lies between them. Under weighted-accuracy fitness, tra-
+jectories are again close after the initial rise, with GWO finishing marginally above
+the others. Relative to SVM, optimizer separation is narrower, especially for the
+weighted-accuracy trajectory.
+    The test table qualifies these small validation gaps. Under MCC/F1 fitness, PSO
+has the largest mean test MCC (0.269), while GWO’s test MCC is 0.139 despite its
+near-leading validation trajectory. Under weighted-accuracy fitness, GWO also has the
+largest mean test accuracy (0.637), but the other four means are close (0.634–0.636).
+
+
+                                          21
+                                           RS      GA        PSO              DE       GWO
+
+                                                        RF | MCC/F1 fitness
+
+
+
+                               0.420
+
+
+     Best validation fitness
+                               0.415
+
+
+
+                               0.410                                               Final 250 evaluations
+
+
+                                                                  0.422
+                               0.405
+                                                                  0.420
+
+                                                                  0.418
+
+                               0.400                                    751                875             1000
+
+                                       1    250                   500                     750                1000
+                                                  Objective-function evaluations
+
+Fig. 5 Best-so-far validation fitness over 1,000 objective-function evaluations for RF under MCC/F1
+fitness. Curves show mean fitness across the three common seeds for RS, GA, PSO, DE, and GWO;
+the inset covers evaluations 751–1,000.
+
+
+
+
+                                           RS      GA        PSO              DE       GWO
+
+                                                RF | Weighted-accuracy fitness
+
+
+
+                               0.760
+     Best validation fitness
+
+
+
+
+                               0.740
+
+
+
+                               0.720                                               Final 250 evaluations
+
+
+                                                                  0.770
+                               0.700
+
+                                                                  0.768
+
+                               0.680
+                                                                        751                875             1000
+
+                                       1    250                   500                     750                1000
+                                                  Objective-function evaluations
+
+Fig. 6 Best-so-far validation fitness over 1,000 objective-function evaluations for RF under weighted-
+accuracy fitness. Curves show mean fitness across the three common seeds for RS, GA, PSO, DE,
+and GWO; the inset covers evaluations 751–1,000.
+
+
+
+
+                                                             22
+                                           RS       GA       PSO              DE       GWO
+
+                                                     SVM | MCC/F1 fitness
+
+                               0.440
+
+                               0.420
+     Best validation fitness
+
+
+
+
+                               0.400
+
+                               0.380
+
+                               0.360                                               Final 250 evaluations
+
+
+                               0.340
+                                                                  0.440
+
+                               0.320
+                                                                  0.430
+
+                               0.300
+                                                                        751                875             1000
+
+                                       1    250                   500                     750                1000
+                                                   Objective-function evaluations
+
+Fig. 7 Best-so-far validation fitness over 1,000 objective-function evaluations for SVM under
+MCC/F1 fitness. Curves show mean fitness across the three common seeds for RS, GA, PSO, DE,
+and GWO; the inset covers evaluations 751–1,000.
+
+
+
+
+                                           RS       GA       PSO              DE       GWO
+
+                                                SVM | Weighted-accuracy fitness
+
+
+                               0.680
+
+
+                               0.660
+     Best validation fitness
+
+
+
+
+                               0.640
+
+
+                               0.620
+                                                                                   Final 250 evaluations
+                                                                  0.690
+                               0.600
+                                                                  0.680
+
+                               0.580                              0.670
+
+                                                                  0.660
+                               0.560
+                                                                        751                875             1000
+
+                                       1    250                   500                     750                1000
+                                                   Objective-function evaluations
+
+Fig. 8 Best-so-far validation fitness over 1,000 objective-function evaluations for SVM under
+weighted-accuracy fitness. Curves show mean fitness across the three common seeds for RS, GA,
+PSO, DE, and GWO; the inset covers evaluations 751–1,000.
+
+
+
+
+                                                             23
+                                           RS       GA       PSO              DE       GWO
+
+                                                      MLP | MCC/F1 fitness
+
+
+                               0.430
+
+                               0.420
+     Best validation fitness
+
+
+                               0.410
+
+                               0.400
+                                                                                   Final 250 evaluations
+                               0.390                              0.435
+
+                               0.380
+                                                                  0.430
+                               0.370
+
+                                                                        751                875             1000
+                               0.360
+                                       1    250                   500                     750                1000
+                                                   Objective-function evaluations
+
+Fig. 9 Best-so-far validation fitness over 1,000 objective-function evaluations for MLP under
+MCC/F1 fitness. Curves show mean fitness across the three common seeds for RS, GA, PSO, DE,
+and GWO; the inset covers evaluations 751–1,000.
+
+
+
+
+                                           RS       GA       PSO              DE       GWO
+
+                                                MLP | Weighted-accuracy fitness
+                               0.650
+
+                               0.645
+     Best validation fitness
+
+
+
+
+                               0.640
+
+                               0.635
+
+                               0.630
+                                                                                   Final 250 evaluations
+
+                               0.625
+                                                                  0.649
+                               0.620
+                                                                  0.648
+                               0.615
+                                                                        751                875             1000
+
+                                       1    250                   500                     750                1000
+                                                   Objective-function evaluations
+
+Fig. 10 Best-so-far validation fitness over 1,000 objective-function evaluations for MLP under
+weighted-accuracy fitness. Curves show mean fitness across the three common seeds for RS, GA,
+PSO, DE, and GWO; the inset covers evaluations 751–1,000.
+
+
+
+
+                                                             24
+                                           RS      GA       PSO              DE       GWO
+
+                                                   1D-CNN | MCC/F1 fitness
+
+                               0.410
+
+                               0.400
+     Best validation fitness
+
+
+
+
+                               0.390
+
+                               0.380
+
+                               0.370                                              Final 250 evaluations
+                                                                 0.410
+
+                               0.360                             0.408
+
+                                                                 0.406
+                               0.350
+                                                                 0.404
+                               0.340                                   751                875             1000
+
+                                       1    250                  500                     750                1000
+                                                  Objective-function evaluations
+
+Fig. 11 Best-so-far validation fitness over 1,000 objective-function evaluations for 1D-CNN under
+MCC/F1 fitness. Curves show mean fitness across the three common seeds for RS, GA, PSO, DE,
+and GWO; the inset covers evaluations 751–1,000.
+
+
+
+
+                                           RS      GA       PSO              DE       GWO
+
+                                            1D-CNN | Weighted-accuracy fitness
+
+                               0.640
+
+
+
+                               0.630
+     Best validation fitness
+
+
+
+
+                               0.620
+
+
+                                                                                  Final 250 evaluations
+                               0.610
+                                                                 0.640
+
+
+                                                                 0.639
+                               0.600
+                                                                 0.638
+
+
+                               0.590                                   751                875             1000
+
+                                       1    250                  500                     750                1000
+                                                  Objective-function evaluations
+
+Fig. 12 Best-so-far validation fitness over 1,000 objective-function evaluations for 1D-CNN under
+weighted-accuracy fitness. Curves show mean fitness across the three common seeds for RS, GA,
+PSO, DE, and GWO; the inset covers evaluations 751–1,000.
+
+
+
+
+                                                            25
+4.3 Optimizer-Level Performance Under Equal Budget
+Convergence describes selection on validation fitness, not performance on the held-out
+period. Table 4 therefore compares the test-block endpoint aligned with each validation
+protocol: MCC for MCC/F1 fitness and accuracy for weighted-accuracy fitness. Entries
+are means over three common seeds under the same 1,000-evaluation budget; they are
+descriptive summaries, not tests of optimizer superiority.
+
+
+            Table 4 Optimizer-level test-block primary metrics under equal
+            budget. Each cell is a mean over three common seeds; boldface denotes
+            the largest mean within a model and protocol.
+
+
+             Model       RS      GA      PSO      DE             GWO
+                    Panel A: MCC/F1 fitness; test-block MCC
+             RF     0.281 0.293 0.293 0.292                      0.288
+             SVM    0.105 0.290 0.255 0.187                      0.232
+             MLP    0.106 0.290 0.299 0.302                      0.305
+             1D-CNN 0.179 0.268 0.269 0.267                      0.139
+             Panel B: weighted-accuracy fitness; test-block accuracy
+             RF     0.604       0.611    0.604    0.600          0.602
+             SVM    0.588       0.557    0.571    0.584          0.593
+             MLP    0.649       0.649    0.652    0.652          0.652
+             1D-CNN 0.636       0.634    0.635    0.634          0.637
+
+
+
+    The table shows an optimizer-by-model interaction rather than a common winner.
+Under MCC/F1 fitness, RF is comparatively insensitive among GA, PSO, and DE
+(0.293, 0.293, and 0.292), whereas its RS mean is 0.281. SVM is more sensitive: GA
+reaches 0.290, but RS reaches only 0.105; for MLP, GWO is highest at 0.305 while
+RS is again 0.106. The 1D-CNN is tightly grouped across GA, PSO, and DE (0.267–
+0.269), but lower for RS and particularly GWO. Under weighted-accuracy fitness, the
+five MLP means are tightly clustered (0.649–0.652); the SVM range is wider (0.557–
+0.593), while RF spans 0.600–0.611 and 1D-CNN spans 0.634–0.637. Thus, optimizer
+sensitivity depends on both the backbone and the selected endpoint. With only three
+common seeds, the within-row maxima are not evidence of a universally best optimizer;
+the cross-backbone summary in Table 5 describes how the model ordering changes
+between the primary protocols.
+
+
+4.4 Model-Level Aggregation Across Optimizers
+Table 5 summarizes the two primary holdout protocols over 15 optimizer–seed blocks
+per backbone. Experiment 3 uses a distinct temporal cross-validation selection proce-
+dure and is therefore shown separately below. These holdout summaries are descriptive
+and do not represent 15 independent market replications.
+
+
+                                             26
+                Table 5 Test-block predictive outcomes by backbone and
+                validation protocol. Entries are mean ± standard deviation
+                over 15 optimizer–seed blocks per row (five optimizers × three
+                common seeds).
+
+
+                        Panel A: MCC/F1 validation fitness
+                 Model           Accuracy             MCC                 F1
+                 RF     0.645 ± 0.004 0.289 ± 0.008 0.664 ± 0.006
+                 SVM    0.604 ± 0.060 0.214 ± 0.132 0.602 ± 0.122
+                 MLP    0.630 ± 0.070 0.261 ± 0.141 0.639 ± 0.071
+                 1D-CNN 0.613 ± 0.056 0.224 ± 0.120 0.597 ± 0.166
+                  Panel B: Weighted-accuracy validation fitness
+                 Model           Accuracy             MCC                 F1
+                 RF     0.604 ± 0.005 0.208 ± 0.009 0.624 ± 0.004
+                 SVM    0.578 ± 0.028 0.159 ± 0.053 0.600 ± 0.071
+                 MLP    0.651 ± 0.003 0.301 ± 0.005 0.658 ± 0.004
+                 1D-CNN 0.635 ± 0.002 0.271 ± 0.005 0.639 ± 0.007
+
+
+    In Panel A of Table 5, RF has the highest aggregate mean for accuracy, MCC, and
+F1 , and its standard deviations are small (0.004, 0.008, and 0.006). SVM, MLP, and
+1D-CNN show appreciably larger dispersion, especially for MCC/F1 selection. Panel
+B reverses the leading backbone: MLP has the highest mean across all three metrics
+and low dispersion; 1D-CNN is also competitive, while RF’s mean accuracy and MCC
+are lower than in Panel A. The pattern suggests that the validation objective changes
+which model/configuration regions the search favours; it does not establish that either
+objective is globally superior.
+    Figure 13 isolates MCC for the MCC/F1 holdout experiment, while Figure 14
+compares accuracy across the two holdout experiments using the same endpoint. This
+separation avoids visually treating MCC and accuracy as interchangeable scales. The
+figures show means and seed-level standard deviations; Table 5 retains the exact
+backbone-level holdout summaries.
+    On the common holdout endpoint, MLP has the largest observed mean accuracy
+in both experiments (0.653 for Experiment 1 with GWO; 0.652 for Experiment 2
+with PSO). This agreement in accuracy does not imply that the selection objectives
+are equivalent: Table 5 shows different dispersion and the separately reported MCC
+pattern. With three seeds and one chronological test interval, these mean differences
+remain descriptive.
+
+4.5 Exploratory Temporal Cross-Validation (Experiment 3)
+Experiment 3 applies the weighted-accuracy objective to three expanding temporal
+folds formed from the training-plus-validation observations; it is kept separate from
+the two holdout experiments. Figure 15 reports its test-block accuracy by optimizer
+and backbone. MLP again has the highest observed optimizer–backbone mean (0.652
+
+
+                                             27
+                                      Experiment 1 | MCC/F1 holdout
+
+
+                                     RF                              SVM
+                     0.4
+   Test-block MCC
+                     0.2
+
+
+
+                     0.0
+
+
+
+                    −0.2
+                           RS   GA   PSO   DE   GWO    RS     GA      PSO      DE     GWO
+
+
+
+                                     MLP                           1D-CNN
+                     0.4
+   Test-block MCC
+
+
+
+
+                     0.2
+
+
+
+                     0.0
+
+
+
+                    −0.2
+                           RS   GA   PSO   DE   GWO    RS     GA      PSO      DE     GWO
+
+
+                                                Optimizer
+
+Fig. 13 Test-block MCC for Experiment 1, which selects configurations using MCC/F1 fitness under
+temporal holdout. Points show means and error bars show standard deviations across three common
+seeds for each optimizer and backbone.
+
+
+for GWO), with its five optimizer means tightly grouped; the SVM outcomes vary
+more across optimizers. The test interval remains the same chronological block used
+in the holdout experiments, so this is an alternative selection-protocol analysis rather
+than an independent market replication or an additional holdout block.
+
+4.6 Objective Calls and Training Effort
+To quantify search effort, Table 6 reports median objective calls and actual candidate-
+model fits required to reach 95% of each run’s own achieved validation-fitness gain. The
+paired entries are calls/fits, aggregated across three seeds for each model–optimizer
+cell. This convergence threshold is run-relative and does not mean that all methods
+reached the same absolute fitness. Across cells, median actual fits to threshold were
+143 for Experiment 1, 46 for Experiment 2, and 149 for Experiment 3; however, the
+
+
+                                                 28
+                                            RF        SVM        MLP        1D-CNN
+
+
+
+
+                                 Exp. 1 | MCC/F1 fitness     Exp. 2 | weighted-accuracy fitness
+
+                         0.70
+
+
+                         0.65
+   Test-block accuracy
+
+
+
+
+                         0.60
+
+
+                         0.55
+
+
+                         0.50
+
+
+                         0.45
+
+
+                         0.40
+
+                                RS   GA    PSO   DE    GWO       RS    GA    PSO     DE   GWO
+
+
+                                          Optimizer (model encoded by color)
+
+Fig. 14 Test-block accuracy under the two temporal holdout experiments. Experiment 1 selects with
+MCC/F1 fitness and Experiment 2 with weighted-accuracy fitness. Points show means and error bars
+show standard deviations across three common seeds; color identifies the backbone.
+
+
+
+run-level ranges were broad (2–956, 2–708, and 6–3,000, respectively). These values
+describe the observed runs rather than establish a stable optimizer ranking. The full
+1,000-call budget produced median total candidate-fit counts of 902, 970, and 2,702
+per run, respectively; Experiment 3 has three fits for each uncached candidate because
+it evaluates three folds.
+    Figure 16 gives the same effort results as a visual comparison of median actual fits
+across backbones, optimizers, and protocols. The pattern does not support a blanket
+conclusion that RS is inferior: its run-relative threshold required many fits for some
+MCC/F1 cells (for example, 619 for RF and 678 for MLP), but few in others (29 for
+RF under weighted-accuracy holdout), while several directed methods also required
+hundreds of fits in particular cells. The archived fit counts therefore show that, under
+this finite budget, RS can lag in some model–objective combinations, but its relative
+effort depends on the backbone and protocol. The equal-budget experiment does not
+identify a universal ranking or a common quality-versus-cost frontier.
+    Calls and fits can differ substantially when the cache reuses a candidate, partic-
+ularly for GA. Accordingly, equal objective-call budgets do not always imply equal
+
+
+                                                            29
+                            Experiment 3 | temporal cross-validation accuracy objective
+
+
+                                          RS         GA         PSO        DE          GWO
+                                               RF                                SVM
+   Test-block accuracy   0.66
+
+                         0.64
+
+                         0.62
+
+                         0.60
+
+                         0.58
+
+                         0.56
+
+                                RS   GA        PSO   DE   GWO         RS   GA    PSO     DE   GWO
+
+
+                                           MLP                                  1D-CNN
+                         0.66
+   Test-block accuracy
+
+
+
+
+                         0.64
+
+                         0.62
+
+                         0.60
+
+                         0.58
+
+                         0.56
+
+                                RS   GA        PSO   DE   GWO         RS   GA    PSO     DE   GWO
+
+
+                                                          Optimizer
+
+Fig. 15 Test-block accuracy after configuration selection with the weighted-accuracy objective under
+three-fold temporal cross-validation (Experiment 3). Points show means and error bars show standard
+deviations across three common seeds for each optimizer and backbone.
+
+
+numbers of new model fits, and the tripled cross-validation fit count should not be
+read as three independent test evaluations. Because the stopping point is computed
+separately from each short run’s own terminal improvement, lower counts alone do not
+demonstrate superior predictive quality; they should be read alongside the test-block
+metrics above.
+
+4.7 Exploratory Statistical Evidence
+We compared the four backbones using Friedman tests on protocol-aligned test-block
+endpoints: MCC for MCC/F1 fitness and accuracy for weighted-accuracy fitness. Each
+test contains n = 15 matched optimizer–seed blocks (five optimizers crossed with
+three common seeds). For MCC/F1 , χ2 = 22.840 (p = 4.36 × 10−5 ), with mean ranks
+RF 2.067, SVM 2.733, MLP 1.533, and 1D-CNN 3.667. For weighted-accuracy fitness,
+
+
+                                                           30
+                                                                                                    RS    GA      PSO       DE     GWO
+                                                                                       Experiment 1 | MCC/F1 holdout
+
+
+                                                                                 103
+
+
+                                                                                 102
+   Median candidate-model fits to 95% of run-specific fitness gain (log scale)
+
+
+
+
+                                                                                 101
+
+
+
+                                                                                 100
+
+
+
+                                                                                       Experiment 2 | weighted-accuracy holdout
+
+
+                                                                                 103
+
+
+                                                                                 102
+
+
+                                                                                 101
+
+
+
+                                                                                 100
+
+
+
+                                                                                       Experiment 3 | temporal cross-validation
+
+
+                                                                                 103
+
+
+                                                                                 102
+
+
+                                                                                 101
+
+
+
+                                                                                 100
+                                                                                               RF              SVM                MLP    1D-CNN
+                                                                                                                Classifier backbone
+
+Fig. 16 Practical search effort measured as the median number of uncached candidate-model fits
+needed to reach 95% of each run’s own observed validation-fitness gain. Bars are grouped by backbone
+and optimizer; the three panels show the two holdout protocols and exploratory temporal cross-
+validation. The vertical axis is logarithmic. Experiment 3 counts one model fit per fold (three per
+uncached candidate). Because the threshold is run-specific, lower bars indicate fewer fits to the run’s
+own relative threshold, not less effort to attain a common absolute fitness or better test performance.
+
+
+
+
+                                                                                                                       31
+     Table 6 Median objective calls / actual candidate-model fits to reach 95% of the
+     run-specific validation-fitness gain. Values are medians across three seeds; Experiment 3
+     counts one fit per temporal fold.
+
+
+      Experiment       Model              RS         GA        PSO          DE       GWO
+                       Panel A: Experiment 1, MCC/F1 holdout
+                       RF            619/619      595/51   61/60 175/145            140/140
+                       SVM           501/501      780/46 225/224   53/49              75/75
+                       MLP           678/678       39/19 142/141 102/100            412/412
+                       1D-CNN        262/262       10/10 200/199 151/145            280/280
+                 Panel B: Experiment 2, weighted-accuracy holdout
+                       RF              29/29       32/21   43/41         42/42        42/42
+                       SVM           316/316         3/3   46/45         47/47        96/96
+                       MLP             15/15       56/21 114/113         79/78      229/229
+                       1D-CNN        295/295      140/33   54/53         85/85      156/156
+                  Panel C: Experiment 3, temporal cross-validation
+                       RF             86/258      37/69      40/114     34/102       40/120
+                       SVM           316/948    780/126      44/129      15/45       58/171
+                       MLP             15/45       9/27      70/207     82/234    534/1,602
+                       1D-CNN      764/2,292     242/93        8/24     98/285         8/24
+
+
+
+χ2 = 42.920 (p = 2.56×10−9 ), with mean ranks RF 3.133, SVM 3.867, MLP 1.000, and
+1D-CNN 2.000. Lower mean rank indicates a more favourable within-block ordering.
+    Under MCC/F1 , RF has the largest marginal mean MCC in Table 5, whereas
+MLP has the lowest block-wise mean rank; this is not contradictory. Marginal means
+aggregate metric magnitudes across blocks, while mean ranks first order backbones
+within each block and then average those ranks. Under weighted-accuracy fitness,
+MLP leads both mean accuracy and mean rank; its Holm-adjusted contrasts against
+RF, SVM, and 1D-CNN are significant (pHolm ≈ 0.00194) within this analysis. These
+results are exploratory: the 15 blocks share one chronological market test interval and
+are not independent market replications, so they do not establish replication across
+regimes or confirmatory superiority.
+
+
+4.8 Exploratory Economic Evaluation
+Figure 17 and Table 7 compare return and downside risk when each prediction is
+executed on the following five-minute bar. The table reports net profit and maximum
+drawdown with dispersion, alongside mean profit factor and annualized daily Sharpe;
+the figure places mean return against mean drawdown. This joint view is important
+because total profit alone does not represent a complete return–risk profile.
+   The next-bar return–risk comparison in Figure 17 shows a clear difference across
+backbones and protocols. Under MCC/F1 fitness, 1D-CNN has the largest mean
+
+
+                                                32
+                                                            RF         SVM             MLP        1D-CNN
+
+
+
+                                                    MCC/F1 fitness                        Weighted-accuracy fitness
+
+                                     −2,000
+   Mean maximum drawdown (points)
+
+
+
+
+                                     −3,000
+
+                                     −4,000
+
+                                     −5,000
+
+                                     −6,000
+
+                                     −7,000
+
+                                     −8,000
+
+                                     −9,000
+
+                                    −10,000
+                                                 15,000    20,000    25,000                   15,000   20,000    25,000
+                                                 Mean net profit (points)                    Mean net profit (points)
+
+Fig. 17 Mean next-bar net profit versus mean maximum drawdown by backbone under MCC/F1
+and weighted-accuracy fitness. Each signal enters at the next five-minute bar open and exits at its
+close; values aggregate 15 optimizer–seed blocks. Both axes are in points, and a drawdown closer to
+zero indicates a smaller peak-to-trough loss.
+
+
+                                     Table 7 Exploratory economic outcomes under the one-bar-ahead execution
+                                     rule, aggregated over 15 optimizer–seed blocks per model and protocol. Signals
+                                     enter at the next five-minute bar open and exit at its close. Net profit and
+                                     maximum drawdown (Max. DD; points) are mean ± standard deviation; profit
+                                     factor (PF) and annualized daily Sharpe ratio are means.
+
+
+                                                             Panel A: MCC/F1 fitness
+                                      Model      Net profit (points)        Max. DD (points)           PF   Sharpe
+                                      RF                   521 ± 1,494                −4,567 ± 251 1.008         0.279
+                                      SVM              −4,268 ± 18,340             −11,748 ± 14,575 0.967       -0.637
+                                      MLP                  91 ± 10,520              −7,111 ± 8,690 1.010         0.460
+                                      1D-CNN            3,330 ± 13,219              −7,871 ± 9,866 1.065         1.781
+                                                        Panel B: weighted-accuracy fitness
+                                      Model      Net profit (points)        Max. DD (points)           PF   Sharpe
+                                      RF                 −2,665 ± 856                 −4,979 ± 548 0.962        -1.938
+                                      SVM              −11,551 ± 7,470              −14,182 ± 5,612 0.851       -5.485
+                                      MLP                2,505 ± 1,068                 −5,030 ± 88 1.037         1.351
+                                      1D-CNN             6,933 ± 2,264                 −4,917 ± 93 1.106         2.907
+
+
+
+                                                                              33
+net profit (3,330 points), whereas RF has the least negative mean drawdown (-
+4,567 points) and the smallest drawdown dispersion. Under weighted-accuracy fitness,
+1D-CNN leads mean net profit (6,933 points), profit factor (1.106), and annualized
+daily Sharpe (2.907); it also has a slightly less negative mean drawdown than RF.
+Large between-block dispersion remains for several cells, so these are exploratory out-
+comes under one fixed test interval and a simplified execution rule, not a trading
+recommendation or a transaction-cost-complete assessment.
+
+
+
+4.9 Complementary Benchmark Diagnostics
+The tables above provide compact summaries, but averaging can conceal interactions
+between a backbone and an optimizer. Figures 18 and 19 therefore show the protocol-
+aligned test-block endpoint for every backbone–optimizer cell. Each cell reports the
+mean and standard deviation across the three common seeds; color encodes the mean.
+    The heatmaps make the optimizer-by-backbone interaction visible at cell level.
+RF remains comparatively uniform across optimizers under MCC/F1 fitness, whereas
+SVM, MLP, and 1D-CNN show greater variation. Under weighted-accuracy fitness,
+MLP forms the strongest row and 1D-CNN is competitive; SVM displays a wider
+optimizer-dependent range. These patterns are consistent with Table 4, while the small
+per-cell seed count means that color differences are descriptive rather than inferential.
+    Cell means can also obscure seed-level spread. Figure 20 displays all three test-block
+MCC observations for each backbone–optimizer combination under both protocols,
+alongside the cell mean and standard deviation. Because each cell has only three
+observations, the raw values are more informative than a box-and-whisker summary.
+    The raw points reveal a clear contrast in stability: RF outcomes remain tightly
+grouped, while several SVM and MLP cells show much wider seed-to-seed spread;
+1D-CNN also has conspicuous dispersion for selected optimizers, including RS and
+GWO. Under weighted-accuracy fitness, the MLP and 1D-CNN MCC points are more
+tightly clustered, whereas some SVM cells remain dispersed. These patterns com-
+plement Table 5 and show how the protocol and backbone jointly shape run-to-run
+variation. With only three seeds per cell, however, the plot describes the observed runs
+and cannot establish the underlying variability distribution.
+    The Friedman analysis described above compares backbones within matched
+optimizer–seed blocks. A separate descriptive view addresses how optimizer ordering
+changes across backbones. Figure 21 reports average optimizer ranks across the 12
+backbone–seed combinations within each protocol, using test-block MCC or accuracy
+as appropriate.
+    The rank ordering changes between validation protocols and has substantial block-
+level spread, so no optimizer occupies a uniformly leading position across both
+endpoints. These ranks summarize ordering, not score magnitudes, and the 12 blocks
+share one chronological test interval; this plot therefore adds a descriptive view of
+heterogeneity rather than independent statistical evidence. Finally, predictive score is
+only one consideration in a benchmark with non-negligible fitting effort.
+    Figure 22 provides a normalized, multi-metric overview and is included only as a
+secondary summary because normalization removes the metrics’ original units.
+
+
+                                           34
+                                     MCC/F1 fitness: Test-block MCC
+
+
+                            0.281      0.293     0.293       0.292     0.288          0.30
+                      RF   ± 0.016    ± 0.006   ± 0.001     ± 0.006   ± 0.004
+
+
+                                                                                      0.25
+                            0.105      0.290     0.255       0.187     0.232
+
+
+
+
+                                                                                             Mean mcc_test
+                    SVM
+   Model family
+
+
+
+
+                           ± 0.224    ± 0.005   ± 0.084     ± 0.171   ± 0.066
+
+
+                                                                                      0.20
+                            0.106      0.290     0.299       0.302     0.305
+                    MLP    ± 0.306    ± 0.002   ± 0.006     ± 0.000   ± 0.001
+
+                                                                                      0.15
+
+                            0.179      0.268     0.269       0.267     0.139
+                  1D-CNN   ± 0.155    ± 0.006   ± 0.001     ± 0.009   ± 0.232
+                                                                                      0.10
+
+                             RS         GA        PSO         DE       GWO
+                                                Optimizer
+
+Fig. 18 Test-block MCC by classifier backbone and optimizer after selection under MCC/F1 fitness.
+Cells report the mean and standard deviation across the three common seeds; color encodes the mean.
+
+
+
+                           Weighted-accuracy fitness: Test-block accuracy
+                                                                                      0.66
+
+                            0.604      0.611     0.604       0.600     0.602
+                      RF   ± 0.003    ± 0.002   ± 0.003     ± 0.001   ± 0.006
+                                                                                      0.64
+
+
+
+
+                                                                                             Mean accuracy_test
+                            0.588      0.557     0.571       0.584     0.593          0.62
+                    SVM
+   Model family
+
+
+
+
+                           ± 0.007    ± 0.030   ± 0.004     ± 0.043   ± 0.036
+
+
+                                                                                      0.60
+                            0.649      0.649     0.652       0.652     0.652
+                    MLP    ± 0.004    ± 0.004   ± 0.000     ± 0.000   ± 0.001
+                                                                                      0.58
+
+
+                            0.636      0.634     0.635       0.634     0.637
+                  1D-CNN   ± 0.002    ± 0.002   ± 0.003     ± 0.002   ± 0.001         0.56
+
+
+
+                             RS         GA        PSO         DE       GWO
+                                                Optimizer
+
+Fig. 19 Test-block accuracy by classifier backbone and optimizer after selection under weighted-
+accuracy fitness. Cells report the mean and standard deviation across the three common seeds; color
+encodes the mean.
+
+
+
+                                                    35
+                                           MCC/F1 fitness         Weighted-accuracy fitness
+
+                                            RF                                           SVM
+                      0.400
+
+
+
+
+     Test-block MCC
+                      0.200
+
+
+                      0.000
+
+
+                      -0.200
+
+
+
+
+                                           MLP                                         1D-CNN
+                      0.400
+     Test-block MCC
+
+
+
+
+                      0.200
+
+
+                      0.000
+
+
+                      -0.200
+
+                               RS   GA     PSO       DE     GWO           RS      GA      PSO      DE   GWO
+                                         Optimizer                                     Optimizer
+
+Fig. 20 Test-block MCC by optimizer and backbone under MCC/F1 and weighted-accuracy fitness.
+Facets show the four backbones; points are the three common seed-level outcomes, and diamonds
+with vertical bars show the mean and one standard deviation. With three observations per cell, the
+display is descriptive rather than inferential.
+
+
+
+    The MCC/F1 panels show that extra recorded fit time is not consistently accom-
+panied by higher test-block MCC: RF’s optimizer means are tightly grouped despite
+differences in fit time, while SVM and MLP show optimizer-dependent score and
+seed-spread patterns. Under weighted-accuracy fitness, MLP and 1D-CNN occupy nar-
+row accuracy ranges even where their fit-time positions differ; SVM shows a wider
+score range, but the more costly point is not uniformly the higher-scoring one. Thus,
+these observations do not support a general monotonic score–cost relationship. They
+describe cumulative uncached candidate fitting, not full search runtime, and should
+not be treated as an efficiency ranking. The radar profiles also vary by protocol and
+metric, reinforcing that no normalized shape can replace the original-scale results in
+Tables 5 and 7; it is a visual overview, not additional evidence for a ranking.
+
+
+5 Discussion
+The purpose of this benchmark is not to replace the practical pipeline of the blinded
+precursor, but to determine which conclusions remain when the temporal split, opti-
+mizer budget, validation objective, and economic endpoint are made explicit. The
+resulting evidence separates a model’s average test-block outcome, its sensitivity to
+
+
+                                                             36
+                        MCC/F1 fitness                                  Weighted-accuracy fitness
+                      ranked by mcc_test                                 ranked by accuracy_test
+
+         RS                                                       RS
+
+
+
+
+         GA                                                       GA
+
+
+
+
+        PSO                                                      PSO
+
+
+
+
+         DE                                                       DE
+
+
+
+
+        GWO                                                      GWO
+
+              1            2         3        4         5               1         2        3      4          5
+                  Average rank (lower is better)                            Average rank (lower is better)
+
+Fig. 21 Descriptive average ranks of the five optimizers across 12 backbone–seed combinations
+(four backbones and three common seeds). Rankings use test-block MCC under MCC/F1 fitness and
+test-block accuracy under weighted-accuracy fitness. Error bars show one standard deviation of block-
+level ranks; lower ranks indicate better ordering. This plot is descriptive and does not represent an
+optimizer significance test.
+
+
+
+                  MCC/F1 fitness                                        Weighted-accuracy fitness
+                          Accuracy                                                    Accuracy
+
+
+
+              1.00
+                   0.75
+                      0.50
+                           0.25
+
+   F1                                             MCC              F1                                        MCC
+
+
+
+
+                          Inverse                                                      Inverse
+                          fit time                                                     fit time
+
+
+
+
+                                         RF       SVM             MLP           1D-CNN
+
+
+Fig. 22 Complementary normalized overview of test-block MCC, accuracy, F1 , and inverse
+candidate-fit time by backbone and validation objective. Values are min–max normalized across the
+eight backbone–protocol averages; higher values indicate better values on each axis. Candidate-fit
+time is log-transformed before inversion and normalization.
+
+
+
+                                                            37
+the optimizer–seed block, and its simplified trading consequence. This distinction mat-
+ters for intraday financial prediction, where a change in selection criterion can alter
+a model ranking without demonstrating a stable change in market-wide forecasting
+ability.
+    The present design preserves the precursor’s technical-indicator workflow and fixed
+seven-feature representation, but changes the comparison unit. Rather than reporting
+a GA-selected configuration after randomized cross-validation, every backbone is eval-
+uated with RS, GA, PSO, DE, and GWO under the same 1,000-candidate allowance
+and the same chronological train/validation/test partition. Random Search is there-
+fore a budget-matched reference against which directed population methods can be
+interpreted [34]. The test features themselves are not used during candidate selection.
+However, because the target is shifted by one retained row, one training target crosses
+into validation and two validation targets cross into the nominal test interval. The
+test is therefore nominally subsequent but not strictly isolated at these three labels,
+and conclusions are interpreted as exploratory pending a purged rerun.
+    This control improves internal comparability, but it narrows the claim that the
+data can support. The evidence concerns four classifier families on one five-minute
+WIN period, conditional on an inherited input representation. It does not show that
+the seven indicators would be selected again in another training period, nor that
+an optimizer with a favourable result here will retain that advantage under another
+market regime. The contribution is consequently a controlled experimental frame, not
+a universal ordering of metaheuristics.
+    The test-block summaries in Table 5 show a clear reversal at the model level.
+Under MCC/F1 fitness, RF has the largest marginal means for accuracy, MCC, and
+F1 , and its small standard deviations indicate comparatively low sensitivity to the
+evaluated optimizer–seed blocks. Under weighted-accuracy fitness, MLP is first on all
+three reported predictive measures, while 1D-CNN is also stable but remains below
+MLP in mean accuracy and MCC. The change in ordering is descriptive. Because the
+two protocols differ in both the selection metric and the inclusion of in-sample training
+accuracy, it cannot be attributed to metric choice alone.
+    MCC is useful because it summarizes the association between predicted and
+observed binary classes beyond raw accuracy [24]; however, optimizing an imbalance-
+aware criterion cannot guarantee the best outcome for every backbone and search
+trajectory. Conversely, the MLP advantage under weighted-accuracy fitness is concen-
+trated in a low-variance regime, whereas MLP, SVM, and 1D-CNN outcomes under
+MCC/F1 fitness vary much more across the evaluated blocks. A reported mean must
+therefore be accompanied by its dispersion and by the selection rule that generated it.
+    The rank analysis reinforces this caution. Under MCC/F1 fitness, RF has the
+highest marginal mean MCC, but MLP has the lowest mean Friedman rank (1.533)
+across the matched blocks. This is not a contradiction: means weight score magnitude,
+whereas ranks summarize ordering within each block. Under weighted-accuracy fitness,
+both summaries place MLP first, and its Holm-adjusted contrasts against all other
+backbones are significant. Because all 15 blocks share one chronological test segment,
+these results indicate separation within the evaluated design rather than independent
+replication across time.
+
+
+
+                                           38
+    Figures 5–12 index progress by candidate evaluations rather than by optimizer-
+specific generation counts. Each line shows the mean trajectory over the three common
+seeds; variability envelopes are omitted to keep closely spaced optimizer curves legible.
+In each panel, the main y-axis is tightly bounded by the observed range of the five mean
+trajectories, with a small margin, and an inset magnifies the final 250 evaluations.
+Because limits are panel-specific, visual heights should not be compared across panels
+without reading their y-axis scales. Early gains indicate how quickly an optimizer
+locates useful regions of a search space, whereas later plateaus show the incremental
+benefit of additional evaluations under the fixed budget. Convergence in validation
+fitness does not establish equivalent generalization, so the test-block values and their
+dispersion in Table 5 remain necessary for interpretation.
+    Search behaviour interacts with the backbone and the objective. A method that
+improves early for RF need not be the most reliable procedure for MLP or 1D-CNN,
+whose mixed discrete–continuous hyperparameter spaces have different response sur-
+faces. The article therefore does not claim a universal winner among RS, GA, PSO,
+DE, and GWO. A stronger optimizer-level claim would require a dedicated analysis
+across more seeds and temporal replications, with the optimizer itself as the inferential
+factor.
+    Table 7 makes the distinction between predictive evaluation and the exploratory
+trading rule concrete. With next-bar execution, 1D-CNN has the largest mean net
+profit under both fitness protocols. Under MCC/F1 fitness, RF has the least nega-
+tive mean drawdown; under weighted-accuracy fitness, 1D-CNN leads mean profit,
+profit factor, and annualized daily Sharpe. Dispersion remains substantial for several
+model–protocol combinations, so the apparent return leader does not establish a stable
+economic advantage.
+    These values are reported as points under a fixed next-bar long/short rule with a
+five-point round-trip cost. They are not an investable-strategy claim: the evaluation
+does not model a full transaction-cost schedule, market impact, position sizing, or a
+live signal-selection policy. Its role is diagnostic: it shows that converting a one-bar-
+ahead regime prediction to trades can change the practical ranking of model families,
+and that economic reporting should accompany predictive metrics.
+
+5.1 Limitations and Research Agenda
+Seven limitations delimit the present evidence. First, only three seeds are common to
+every model–optimizer cell; standard deviations and rank tests describe the evaluated
+blocks, not repeated market samples. Second, exact library versions for the official
+TensorFlow and scikit-learn runs are not archived, and the precursor Information-
+Gain ranking can be traced only to the recorded seven-feature list and the researcher’s
+recollection of a WEKA ranking on the January–March training segment; the original
+WEKA project, output, and settings are unavailable for independent replay. Third,
+the test covers one instrument and one chronological segment, so regime sensitivity
+and cross-market transfer remain unknown. Fourth, the Information-Gain mask was
+inherited from the blinded precursor rather than re-estimated on the current train-
+ing segment; all conclusions are conditional on that representation. Fifth, labels are
+derived from retrospective hourly pivots and shifted to the next retained row. One
+
+
+                                           39
+training target crosses into validation and two validation targets cross into the nom-
+inal test block; these three rows were not purged. Four per-ticker terminal rows also
+lack a next-row target and retain their contemporaneous source label. A cutoff-only
+rerun found no other changed training or validation labels (9,032 and 3,008 checked,
+respectively), but this does not remove direct boundary crossings or establish causal
+availability of retrospective pivot labels. Consequently, test isolation is incomplete
+at these boundaries, and the reported comparisons should be treated as exploratory
+pending a purged rerun. Sixth, equalizing the budget at 1,000 evaluations establishes
+fairness at one computational scale but does not characterize larger-budget behaviour
+or wall-clock efficiency; the fit-count figure is a hardware-independent proxy and uses
+a run-relative threshold. Seventh, no-tuning baselines are available only for the major-
+ity rule and default RF, so the benefit of search is not isolated for SVM, MLP, or
+1D-CNN.
+    The next study should preserve chronological evaluation and add a preregistered
+common 20-seed design across multiple non-overlapping market periods. It should
+retain pivot-confirmation timestamps, purge boundary samples whose target regime
+uses observations beyond the training or validation cutoff, and rerun selection and eval-
+uation under that purged design. It should extend the present naive and default-RF
+references to no-tuning baselines for every backbone; archive every candidate eval-
+uation; report compute time; and test optimizer differences separately from model
+differences. Re-estimating feature selection within each training window would further
+distinguish the effect of representation from hyperparameter search.
+
+
+6 Conclusion
+This study transforms a GA-based conference precursor into a controlled bench-
+mark for neural intraday trend classification. It preserves the predecessor’s practical
+insight—a compact, Information-Gain-selected technical representation can support
+metaheuristic hyperparameter search—but replaces randomized validation and a
+single-optimizer design with two primary chronological holdout protocols, a separate
+exploratory temporal cross-validation analysis, five budget-matched optimizers, and
+predictive and economic assessment. The five-minute feature vector at bar t is paired
+with the regime label at t + 1, derived from an hourly peak-and-trough sequence
+detected on resampled five-minute price data.
+    The current evidence indicates configuration-dependent changes between the two
+primary fitness protocols, which differ in both metric and train/validation composition.
+MLP leads the predictive aggregates under weighted-accuracy fitness, while the aligned
+next-bar replay gives 1D-CNN the largest mean net profit under both protocols; RF
+has the least negative mean drawdown under MCC/F1 fitness. These results reinforce
+the central methodological lesson: selection objective, reported metric, and economic
+utility must be treated as related but distinct quantities.
+    The manuscript deliberately avoids a confirmatory claim about a universal best
+fitness function because only three paired seeds are available across every cell. The
+hourly pivot labels are retrospective. One training target crosses into validation, two
+validation targets cross into the nominal test interval, four per-ticker terminal rows
+
+
+                                           40
+lack a next-row target, and the temporal-CV folds were not purged for the one-row
+shift. A purged rerun is needed before claiming full test isolation; multiple market
+periods and more seeds are also needed before stronger generalization claims. The
+present benchmark is exploratory evidence for this fixed chronological interval.
+
+
+Declarations
+Funding
+Funding information is withheld during double-blind review and will be supplied in
+the title page after editorial decision.
+
+
+Conflict of Interest
+The authors declare that they have no conflict of interest or competing financial
+interests.
+
+
+Ethical Approval
+This article does not contain any studies with human participants or animals
+performed by any of the authors.
+
+
+Data and Code Availability
+The datasets generated and analyzed during the current study, along with the com-
+plete source code for all optimization algorithms, benchmark scripts, and evaluation
+pipelines, are available in the project repository upon reasonable request.
+
+
+Author Contributions
+Author-contribution information is withheld during double-blind review and will be
+supplied in the title page after editorial decision.
+
+
+References
+ [1] Jesus Jr., L.C., Fernández-Navarro, F., Carbonero-Ruz, M.: Enhancing financial
+     time series forecasting through topological data analysis. Neural Computing and
+     Applications 37, 6527–6545 (2025) https://doi.org/10.1007/s00521-024-10787-x
+ [2] Makridakis, S., Spiliotis, E., Assimakopoulos, V.: Statistical and machine learning
+     forecasting methods: Concerns and ways forward. PLoS ONE 13(3), 0194889
+     (2018)
+ [3] Jarrow, R.A., Oldfield, G.S.: Forward contracts and futures contracts. Journal of
+     Financial Economics 9(4), 373–382 (1981)
+
+
+                                          41
+ [4] Souza, A.V.S., Pinto, R.F., Dalmazo, B.L., Borges, E.N., Lucca, G., Mattos,
+     V.L.D., Berri, R.A.: Predictive analysis with technical indicators and features
+     selection for futures contracts trading. In: Computational Science and Its Appli-
+     cations – ICCSA 2025, Proceedings, Part II. Lecture Notes in Computer Science,
+     vol. 15649, pp. 349–367. Springer, Cham (2025)
+ [5] Souza, A.V.S., Lucca, G., Borges, E.N., Cardoso, F.C., Dalmazo, B.L., Berri,
+     R.A.: Dataset for Intraday Analysis of B3 Stock Prices. Harvard Dataverse (2024).
+     https://doi.org/10.7910/DVN/TMB4IG
+ [6] Cardoso, F.C., Malska, J.A.V., Ramiro, P.J., Lucca, G., Borges, E.N., Mattos,
+     V.L.D., Berri, R.A.: Bovdb: a data set of stock prices of all companies in b3 from
+     1995 to 2020. Journal of Information and Data Management 13(1) (2022)
+ [7] Box, G.E.P., Jenkins, G.M., Reinsel, G.C., Ljung, G.M.: Time Series Analysis:
+     Forecasting and Control, 5th edn. John Wiley & Sons, Hoboken, NJ (2015)
+ [8] Jiang, W.: Applications of deep learning in stock market prediction: recent
+     progress. Expert Systems with Applications 184, 115537 (2021)
+ [9] Nabipour, M., Nayyeri, P., Jabani, H., Mosavi, A., et al.: Predicting stock market
+     trends using machine learning and deep learning algorithms via continuous and
+     binary data: a comparative analysis. IEEE Access 8, 150199–150212 (2020)
+[10] Naik, N., Mohan, B.R.: Optimal feature selection using boruta for stock trend
+     prediction. Procedia Computer Science 165, 688–694 (2019)
+[11] Ecer, F., Ardabili, S., Band, S.S., Mosavi, A.: Training multilayer perceptron with
+     genetic algorithms and particle swarm optimization for modeling stock price index
+     prediction. Entropy 22(11), 1239 (2020) https://doi.org/10.3390/e22111239
+[12] Bandgar, S., Deshmukh, R., Kulkarni, P.: Finchronos: Financial time series
+     prediction using multi-model ensemble architectures. Neural Computing and
+     Applications 37(4), 2450–2468 (2025)
+[13] Singh, P., Sharma, R.: Feature engineering and normalization techniques in
+     financial machine learning. Expert Systems with Applications 195, 116548 (2022)
+[14] Lei, Y., Liu, H.: Feature selection for high-dimensional financial data using infor-
+     mation gain. IEEE Transactions on Knowledge and Data Engineering 24(3),
+     432–447 (2012)
+[15] Kumar, V., Minz, S.: Impact of feature selection on metaheuristic hyperparameter
+     tuning. Applied Soft Computing 21, 214–225 (2014)
+[16] Jovanovic, L., Zivkovic, M., Bacanin, N., Dobrojevic, M., Simic, V., Sadasivuni,
+     K.K., Tirkolaee, E.B.: Evaluating the performance of metaheuristic-tuned weight
+     agnostic neural networks for crop yield prediction. Neural Computing and Appli-
+     cations 36, 14727–14756 (2024) https://doi.org/10.1007/s00521-024-09850-4
+
+
+
+
+                                           42
+[17] Rajwar, K., Deep, K., Das, S.: An exhaustive review of the metaheuristic algo-
+     rithms for search and optimization: taxonomy, applications, and open challenges.
+     Artificial Intelligence Review 56, 13187–13257 (2023) https://doi.org/10.1007/
+     s10462-023-10470-y
+[18] Goldberg, D.E.: Genetic Algorithms in Search, Optimization and Machine
+     Learning. Addison-Wesley, Reading, MA, USA (1989)
+[19] Storn, R., Price, K.: Differential evolution – a simple and efficient heuristic for
+     global optimization over continuous spaces. Journal of Global Optimization 11(4),
+     341–359 (1997) https://doi.org/10.1023/A:1008202821328
+[20] Kennedy, J., Eberhart, R.: Particle swarm optimization. In: Proceedings of the
+     IEEE International Conference on Neural Networks, vol. 4, pp. 1942–1948 (1995).
+     https://doi.org/10.1109/ICNN.1995.488968
+[21] Faris, H., Hassonah, M.A., Ala’M, M., Mirjalili, S., Al-Zoubi, I.: Grey wolf opti-
+     mizer: A review of recent variants and applications. Neural Computing and
+     Applications 30(2), 413–435 (2018) https://doi.org/10.1007/s00521-017-3272-5
+[22] Al Bannoud, M., Dias Martins, T., Lima Montalvão, S.A., Annichino-Bizzacchi,
+     J.M., Maciel Filho, R., Wolf Maciel, M.R.: Accelerating hybrid ANN–ODE frame-
+     works using surrogate machine learning and metaheuristic optimization for pre-
+     dicting recurrent venous thromboembolism. Neural Computing and Applications
+     38, 285 (2026) https://doi.org/10.1007/s00521-026-12047-6
+[23] Bashir, U., Singh, K., Mansotra, V., Khanday, A.M.U.D., Neshat, M.: EvoBag-
+     Net: a decomposition-driven bagging ensemble with evolutionary hyperparameter
+     optimization for robust stock price prediction. Neural Computing and Applica-
+     tions 38, 31 (2026) https://doi.org/10.1007/s00521-025-11789-z
+[24] Chicco, D., Jurman, G.: The advantages of the matthews correlation coeffi-
+     cient (MCC) over f1 score and accuracy in binary classification evaluation. BMC
+     Genomics 21(1), 6 (2020) https://doi.org/10.1186/s12864-019-6413-7
+[25] Henrique, B.M., Sobreiro, V.A., Kimura, H.: Literature review: Machine learn-
+     ing techniques applied to financial market prediction. Expert Systems with
+     Applications 124, 226–251 (2019) https://doi.org/10.1016/j.eswa.2019.01.012
+[26] Gad, A.G.: Particle swarm optimization algorithm and its applications: A system-
+     atic review. Archives of Computational Methods in Engineering 29(5), 2531–2561
+     (2022) https://doi.org/10.1007/s11831-021-09694-4
+[27] Wang, D., Tan, D., Liu, L.: Particle swarm optimization algorithm: an
+     overview. Soft Computing 22(2), 387–408 (2018) https://doi.org/10.1007/
+     s00500-016-2474-6
+[28] Dhingra, S., Gruosso, G., Gajani, G.S.: A benchmark study of optimizers for
+     short-term solar pv power forecasting using neural networks under real-world
+     constraints. Neural Computing and Applications 37, 23909–23939 (2025) https:
+     //doi.org/10.1007/s00521-025-11546-2
+
+
+
+                                          43
+[29] Billah, M.M., Sultana, A., Bhuiyan, F., Kaosar, M.G.: Stock price prediction:
+     comparison of different moving average techniques using deep learning model.
+     Neural Computing and Applications 36(11), 5861–5871 (2024) https://doi.org/
+     10.1007/s00521-024-09412-1
+[30] Hunter, J.S.: The exponentially weighted moving average. Journal of Quality
+     Technology 18(4), 203–210 (1986)
+[31] Bollinger, J.: Using Bollinger bands. Stocks & Commodities 10(2), 47–51 (1992)
+[32] Anonymous: Blinded conference precursor on technical indicators and feature
+     selection for futures-contract trading. In: Reference Withheld for Double-blind
+     Review (2025)
+[33] Mutinda, J., Yong, S.: Hybrid feature selection using stability-enhanced dynamic
+     thresholding for financial market classification. Journal of Computational Finance
+     29(2), 85–112 (2026)
+[34] Bergstra, J., Bengio, Y.: Random search for hyper-parameter optimization.
+     Journal of Machine Learning Research 13, 281–305 (2012)
+[35] Bareket, O., Pârv, V.: Adaptive machine learning models for market surge detec-
+     tion in dynamic equity environments. Quantitative Finance 24(9), 1415–1432
+     (2024)
+[36] Rahim, A., Khan, M., Ahmed, S.: Technical indicator parameter optimization
+     using genetic algorithms on high-frequency intraday futures data. Applied Soft
+     Computing 152, 111240 (2025)
+[37] Simatupang, R., Lee, H., Park, S.: Stock market forecasting using bayesian-
+     optimized ensemble decision trees. Expert Systems with Applications 268, 126102
+     (2026)
+[38] Anonymous: Blinded conference precursor on technical indicators and genetic-
+     algorithm tuning for Mini-Index futures prediction. Reference withheld for
+     double-blind review (2026)
+
+
+
+
+                                          44
+
