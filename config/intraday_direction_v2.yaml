@@ -1,0 +1,97 @@
+study: intraday_binary_direction_forecast
+version: 2
+status: development_only_no_final_test
+purpose: >-
+  Forecast the sign of the realized close-to-close return over a fixed future
+  horizon and evaluate it separately by predeclared time-of-day band.
+source:
+  market_db: data/bovdb-v3.1-internal.2.sqlite
+  market_table: price1
+  roots: [WIN, IND]
+  source_read_only: true
+  labels_db_used: false
+  source_window: ['09:00:00', '18:00:00']
+  split_v1_reused_as_final_test: false
+forecast_target:
+  horizons_observed_bars: [5, 15, 30]
+  input_time: after_close_of_current_one_minute_bar
+  outcome: log(close_at_t_plus_h / close_at_t)
+  binary_rule: 1_if_forward_return_gt_zero_else_0
+  zero_return_class: 0
+  same_ticker_same_date_only: true
+  require_all_h_intervening_minutes_observed: true
+  no_cross_session_or_contract: true
+  retrospective_b0_target: excluded_from_primary_target
+time_of_day:
+  basis: bar_start_time_in_local_source_window
+  reference_window: ['09:00:00', '18:00:00']
+  bands:
+    early: ['09:00:00', '12:00:00']
+    middle: ['12:00:00', '15:00:00']
+    late: ['15:00:00', '18:00:00']
+  interpretation: fixed_research_bands_not_exchange_schedule_claim
+universe:
+  primary_roots: [WIN, IND]
+  contract_series_are_independent: true
+  roots_and_dates_are_split_together: true
+features:
+  only_current_and_past_observations: true
+  reset_rolling_state_at_session_contract_or_gap: true
+  warmup: full_window_required
+  imputation: none
+  allowed_raw_fields: [open, high, low, close, volume, business, amount_stock]
+  excluded_fields: [all_B4_columns, labels, segment_endpoints, future_bars]
+  families:
+    - returns_and_momentum
+    - candle_shape
+    - moving_average_and_macd
+    - rsi_and_stochastic
+    - atr_and_directional_movement
+    - realized_volatility_and_semivolatility
+    - bollinger_and_donchian_position
+    - volume_trade_count_and_quantity_surprise
+    - session_to_date_price_and_activity
+    - time_of_day_encoding
+selection:
+  methods:
+    - mutual_information_filter
+    - l1_logistic_embedded
+    - inner_temporal_validation_permutation_importance
+  permutation_model: HistGradientBoostingClassifier
+  permutation_inner_validation_sessions: 10
+  permutation_repeats: 3
+  permutation_max_samples: 2000
+  permutation_n_jobs: 1
+  top_k: [10, 20, all]
+  ranking_stability: [mean_rank, top_k_frequency, pairwise_spearman]
+  no_outer_validation_or_future_test_used_for_ranking: true
+models:
+  classifiers:
+    - majority_prevalence_baseline
+    - causal_momentum_baseline
+    - logistic_regression
+    - HistGradientBoostingClassifier
+  final_model_selection: none_development_results_only
+training_diagnostics:
+  mlp_epochs: not_in_primary_baseline
+  later_epoch_curve_study: separate_protocol_if_needed
+  random_seeds: [20261026, 20261027, 20261028]
+temporal_evaluation:
+  method: expanding_rolling_origin
+  outer_folds: 5
+  initial_train_sessions: 69
+  outer_validation_sessions: 10
+  inner_validation_sessions: 10
+  final_independent_test_available: false
+  old_june_2026_test_status: historical_development_only_already_opened
+  uncertainty_unit: trading_session_or_temporal_block
+  target_crossing_fold_boundary: purge
+metrics:
+  primary: [MCC, balanced_accuracy, macro_f1]
+  secondary: [accuracy, precision_per_class, recall_per_class, ROC_AUC, PR_average_precision, Brier, log_loss, confusion_matrix, coverage]
+  report_prevalence: true
+  report_results_by: [horizon, time_of_day_band, root, outer_fold]
+  do_not_treat_candles_as_independent_replicates: true
+claims:
+  no_profitability_claim_without_costed_execution_evaluation: true
+  future_direction_claim_only_after_untouched_future_test: true

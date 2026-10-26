@@ -6,6 +6,49 @@
 
 Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa como concluída somente quando o artefato ou evidência indicado estiver disponível. Não avance para treinamento antes de aprovar as Fases 0–3.
 
+## Estudo v2 — previsão direcional intradiária (em andamento)
+
+Esta trilha é independente do estudo B0 acima. Ela prevê o sinal do retorno futuro, não os rótulos B0, e não herda o teste final já aberto. Os resultados disponíveis de jan–jun/2026 são desenvolvimento; será necessário acrescentar datas futuras antes de alegar teste final independente.
+
+### Fase v2.0 — Hipótese, alvo e protocolo
+
+- [x] Definir retornos direcionais futuros de 5, 15 e 30 barras observadas, somente dentro do mesmo contrato, pregão e segmento contínuo.
+- [x] Fixar classes: alta quando o retorno futuro é positivo; zero/negativo na classe 0; sem banda neutra nesta baseline.
+- [x] Definir faixas horárias de pesquisa 09:00–12:00, 12:00–15:00 e 15:00–18:00, sem tratá-las como sessões oficiais da bolsa.
+- [x] Manter WIN/IND como universo principal e SQLite original somente para leitura; excluir B4 e campos de endpoints.
+- [x] Fixar cinco origens temporais expanding, com blocos externos de 10 pregões e seleção interna nos 10 pregões imediatamente anteriores à validação externa.
+- [x] Pré-especificar três métodos de ranking: informação mútua, coeficientes absolutos de regressão logística L1 e importância por permutação em validação temporal interna.
+- [x] Comparar top 10, top 20 e conjunto completo; métricas primárias MCC, balanced accuracy e macro-F1, com métricas de classe, ROC-AUC, PR-AUC, Brier, log-loss e matriz de confusão.
+- [x] Declarar o status exploratório/desenvolvimento e proibir o uso do teste histórico já aberto como teste final.
+- [x] Documentar as fórmulas, janelas, ranking e limites em [protocolo v2](reports/intraday_direction_v2_protocol.md).
+
+### Fase v2.1 — Indicadores e cache causal
+
+- [x] Implementar retornos/momentum, geometria dos candles, médias móveis/MACD, RSI/estocástico, ATR/direção, volatilidade/semivolatilidade, Bollinger/Donchian, atividade/volume, acumulados da sessão e codificação temporal.
+- [x] Reiniciar janelas em gaps, contratos e pregões; usar somente candles atuais/passados e aquecimento completo.
+- [x] Criar extrator em `scripts/build_intraday_direction_v2.py` e configuração separada em `config/intraday_direction_v2.yaml`.
+- [x] Gerar `data/derived/intraday_direction_v2_features.parquet` (ignorado pelo Git) e manifesto: 181.974 candles, 119 pregões, 101 features, 91.989 linhas completas, 528,76 s, arquivo de 104.222.448 bytes.
+- [x] Auditar chave, completude das features, alinhamento exato dos três horizontes, fronteiras de pregão/segmento e exclusão de colunas B4/futuras em [relatório de auditoria v2](reports/intraday_direction_v2_data_audit.md).
+
+### Fase v2.2 — Ranking e baseline temporal
+
+- [x] Implementar os três seletores e o avaliador temporal em `scripts/run_intraday_direction_v2_selection.py`; ranking ajustado somente dentro da janela de treino.
+- [x] Implementar baselines de regressão logística e HistGradientBoosting para cada seletor e cardinalidade de features.
+- [x] Implementar estabilidade por ranking médio, frequência no top 10/20 e correlação de Spearman entre métodos.
+- [x] Implementar auditoria do novo alvo em `scripts/audit_intraday_direction_v2.py`.
+- [x] Executar cinco folds e gerar métricas, rankings, estabilidade e concordância Spearman em `reports/intraday_direction_v2_selection*`.
+- [x] Inspecionar os rankings por horizonte/faixa e consistência WIN/IND; documentar baixa concordância, sinal pooled fraco e avisos de convergência em [resultados v2](reports/intraday_direction_v2_selection.md).
+- [ ] Medir explicitamente o gap treino–validação para estimar sobreajuste nos finalistas; os resultados atuais reportam variação entre folds, não esse gap.
+- [x] Escrever relatório de resultados v2 sem afirmação de teste final ou lucratividade.
+- [x] Gerar e revisar visualmente [relatório PDF v2](output/pdf/relatorio_previsao_direcional_intradiaria_v2.pdf) com introdução, metodologia, resultados, gráficos e tabelas.
+
+### Fase v2.3 — Generalização e épocas
+
+- [ ] Obter uma janela futura ainda não consultada para teste independente e congelar o protocolo antes de abri-la.
+- [ ] Só depois da baseline de seleção, estudar curva de aprendizado do MLP; usar máximo de 40 épocas, early stopping temporal interno e melhores pesos restaurados.
+- [ ] Avaliar em pregões/blocos como unidades dependentes; não tratar candles como replicações independentes.
+- [ ] Fazer avaliação de execução/custos separada antes de qualquer alegação de rentabilidade.
+
 ## Regras de execução
 
 - [x] Usar o checkout atual e o WSL2 existente; não criar outro clone/checkout nem copiar `.venv_wsl`.
