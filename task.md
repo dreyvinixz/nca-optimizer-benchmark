@@ -1,6 +1,6 @@
 # Plano de tarefas — estudo multi-escala B0
 
-**Status geral:** Fases 2–5 concluídas em desenvolvimento; preparação de generalização/inferência em andamento; métricas do teste final ainda não consultadas.
+**Status geral:** Fases 0–6 concluídas; Fase 7 descartada pelo critério condicional; manuscrito interno e pacote reproduzível preparados. O teste final foi aberto uma vez sob pré-registro. Seleção de periódico e revisão editorial específica permanecem pendentes.
 **Branch:** `feat/one-minute-labels-clean`  
 **Roadmap científico:** [ROADMAP_ONE_MINUTE_LABELS.md](ROADMAP_ONE_MINUTE_LABELS.md)
 
@@ -133,14 +133,14 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 
 **Objetivo:** estimar estabilidade entre pregões, blocos temporais e raízes.
 
-- [ ] Repetir comparações nos blocos temporais e raízes definidos no protocolo.
-- [ ] Calcular MCC, balanced accuracy e macro-F1 por cabeça/alvo, raiz e bloco.
-- [ ] Estimar intervalos de incerteza por sessão/bloco temporal, não tratando candles como observações independentes.
-- [ ] Aplicar correção de comparações múltiplas conforme protocolo (incluindo Friedman/Wilcoxon quando aplicável).
-- [ ] Reportar tamanhos de efeito e diferenças pareadas, além de valores-p.
-- [ ] Avaliar Brier, log-loss e calibração somente para saídas probabilísticas apropriadas.
-- [ ] Fazer análises de sensibilidade para cobertura, universo, cortes e políticas de contrato já previstas.
-- [ ] Registrar resultados negativos, falhas, exclusões e limitações sem selecionar somente resultados favoráveis.
+- [x] Repetir comparações nos blocos temporais e raízes definidos no protocolo; também manter resumos descritivos por contrato.
+- [x] Calcular MCC, balanced accuracy e macro-F1 por cabeça/alvo, raiz e bloco em [final_test_metrics.csv](reports/final_test_metrics.csv).
+- [x] Estimar intervalos pareados com bootstrap circular de blocos de cinco sessões e 10.000 replicações; candles não são tratados como replicações independentes.
+- [x] Aplicar Wilcoxon por sessão e Holm aos três alvos no desenvolvimento; não reportar valores-p no teste, conforme pré-registro.
+- [x] Reportar diferenças pareadas observadas e intervalos; os três intervalos independentes-vs-compartilhado incluem zero.
+- [x] Avaliar Brier e log-loss em saídas probabilísticas; não aplicar ajuste de calibração.
+- [x] Fazer análises por raiz, bloco, cobertura de cada alvo e contrato, conforme escopo; ver [final_test_contract_metrics.csv](reports/final_test_contract_metrics.csv).
+- [x] Registrar o resultado nulo da comparação principal, exclusões e limitações em [final_test.md](reports/final_test.md).
 
 **Entregáveis:** tabelas de inferência e generalização, scripts de análise e relatório de limitações.  
 **Saída da fase:** afirmações restritas ao período, universo e protocolo efetivamente avaliados.
@@ -149,12 +149,9 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 
 **Só iniciar se** a Fase 5 mostrar sinal útil, houver orçamento local e a extensão tiver hipótese própria e ablação planejada.
 
-- [ ] Decidir por escrito se alguma extensão atende aos critérios; caso contrário, registrar “não executada” e seguir para artigo.
-- [ ] Se aprovada, escolher uma extensão por vez: pré-treino autossupervisionado compacto, encoder temporal congelado ou adaptação de regime com dados passados.
-- [ ] Definir hipótese, conjunto de dados permitido, orçamento, folds e ablação antes do experimento.
-- [ ] Medir footprint e tempo antes de qualquer execução extensa; não fazer fine-tuning de modelo grande.
-- [ ] Comparar com o baseline correspondente em protocolo pareado.
-- [ ] Registrar resultados e custo, inclusive resultado nulo, e não misturar a extensão ao núcleo sem justificativa.
+- [x] Registrar por escrito a decisão condicional: nenhuma extensão atende ao gate de sinal útil; ver [phase7_decision.md](reports/phase7_decision.md).
+- [x] Formalizar a Fase 7 como não executada para esta versão do estudo; nenhuma hipótese adicional foi aberta depois do teste.
+- [x] Manter pré-treino, encoder temporal e adaptação de regime fora do escopo atual.
 
 **Entregáveis:** decisão documentada e, se executada, protocolo, ablação e relatório reproduzível.  
 **Saída da fase:** extensão opcional concluída com evidência ou formalmente descartada.
@@ -163,23 +160,23 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 
 **Objetivo:** escrever conclusões rastreáveis aos dados, código e resultados realmente produzidos.
 
-- [ ] Definir a estrutura do novo manuscrito sem alterar o manuscrito NCA anterior de 5 minutos.
-- [ ] Preparar método, proveniência, contrato, protocolo temporal e tratamento de rótulos ausentes.
-- [ ] Preparar tabelas/figuras diretamente dos artefatos versionados ou reproduzíveis.
-- [ ] Ligar cada número e afirmação a configuração, código, log e saída correspondentes.
-- [ ] Explicitar que B0 não é ground truth sem validação independente e que discordância não é incerteza epistêmica.
-- [ ] Explicitar limites: ausência de avaliação executável de lucro, escopo temporal jan–jun/2026, dados internos e cobertura B1/B2/Fuzzy insuficiente.
-- [ ] Revisar alegações, vazamento, dependência entre observações, múltiplas comparações e disponibilidade de dados/código.
-- [ ] Reproduzir as tabelas/figuras a partir das configurações arquivadas e conferir consistência com o manuscrito.
-- [ ] Fazer revisão final de anonimização e requisitos editoriais do periódico escolhido.
+- [x] Escrever novo rascunho em [manuscript/multiscale_b0_label_prediction_draft.md](manuscript/multiscale_b0_label_prediction_draft.md), mantendo o manuscrito NCA anterior separado.
+- [x] Documentar método, proveniência, contrato, protocolo temporal e tratamento de rótulos ausentes.
+- [x] Preparar tabelas reproduzíveis por modelo, raiz, bloco e contrato; os artefatos completos estão em `reports/`.
+- [x] Ligar números do rascunho às configurações, scripts e saídas listados no mapa de artefatos do manuscrito.
+- [x] Explicitar que B0 não é verdade-terreno independente e que discordância entre rótulos não é incerteza epistêmica.
+- [x] Explicitar ausência de avaliação executável de lucro, escopo temporal jan–jun/2026, dados internos e cobertura insuficiente de B1/B2/Fuzzy.
+- [x] Revisar alegações, vazamento, dependência por sessão, comparações múltiplas e limites de disponibilidade.
+- [x] Reproduzir as tabelas a partir das predições finais salvas com `scripts/summarize_final_test.py`; o script suplementar não retreina nem reavalia modelos.
+- [ ] Selecionar periódico e concluir revisão final de anonimização e requisitos editoriais específicos. Não há periódico escolhido nem submissão autorizada.
 
 **Entregáveis:** manuscrito e pacote mínimo de reprodução/documentação compatível com o status interno dos dados.  
 **Saída da fase:** nenhuma afirmação numérica sem rastreabilidade e todas as limitações materiais declaradas.
 
 ## Critério de conclusão do projeto
 
-- [ ] Fases 0–6 concluídas com critérios de saída atendidos.
-- [ ] Fase 7 concluída ou explicitamente descartada com justificativa.
-- [ ] Fase 8 concluída e reproduzida a partir dos artefatos documentados.
+- [x] Fases 0–6 concluídas com critérios de saída atendidos.
+- [x] Fase 7 explicitamente descartada com justificativa.
+- [x] Rascunho interno da Fase 8 preparado e reproduzido a partir dos artefatos documentados; revisão de submissão permanece pendente de escolha do periódico.
 - [ ] Repositório contém código, configurações, documentação e resumos pequenos; dados e saídas pesadas permanecem externos/temporários.
-- [ ] `git status` revisado para confirmar que nenhum banco, predição completa, checkpoint ou cache foi incluído.
+- [x] `git status` revisado para confirmar que nenhum banco, predição completa, checkpoint ou cache foi incluído no commit; uma alteração alheia no CSV da auditoria foi preservada sem staging.
