@@ -14,7 +14,6 @@ __pycache__/
 # Local legacy and generated artifacts
 experiments/
 outputs/
-output/
 tmp/
 logs/
 checkpoints/
