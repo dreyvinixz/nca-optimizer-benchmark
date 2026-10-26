@@ -21,34 +21,34 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 
 **Objetivo:** confirmar a proveniência dos SQLite locais e a funcionalidade do ambiente, mantendo as bases de origem inalteradas.
 
-- [ ] Confirmar branch ativa e estado limpo do Git; registrar commit base.
-- [ ] Ativar o ambiente existente com `source scripts/wsl_cuda_env.sh`.
-- [ ] Registrar versões de Ubuntu/WSL, Python, TensorFlow, CUDA/cuDNN e bibliotecas relevantes.
-- [ ] Verificar `nvidia-smi` e listar GPUs reconhecidas por `tf.config.list_physical_devices("GPU")`.
-- [ ] Verificar memória e espaço livre nos diretórios de código, ambiente e temporários.
-- [ ] Confirmar acesso somente leitura aos dois SQLite e que `data/` continua ignorada pelo Git.
-- [ ] Registrar hashes dos dois arquivos e conferir se o hash da origem corresponde a `source_sha256` em `label_run` do B4.
-- [ ] Localizar e validar o manifesto correspondente; se não estiver disponível, registrar a lacuna e usar os metadados internos do B4 sem inventar proveniência.
-- [ ] Confirmar que o ambiente WSL e o venv existentes estão funcionais.
+- [x] Confirmar branch ativa, registrar commit base e descrever o estado do Git (inclusive arquivos de auditoria ainda não versionados).
+- [x] Ativar o ambiente existente com `source scripts/wsl_cuda_env.sh`.
+- [x] Registrar versões de Ubuntu/WSL, Python, TensorFlow, CUDA/cuDNN e bibliotecas relevantes.
+- [x] Verificar `nvidia-smi` e listar GPUs reconhecidas por `tf.config.list_physical_devices("GPU")`.
+- [x] Verificar memória e espaço livre nos diretórios de código, ambiente e temporários.
+- [x] Confirmar acesso somente leitura aos dois SQLite e que `data/` continua ignorada pelo Git.
+- [x] Registrar hashes dos dois arquivos e conferir se o hash da origem corresponde a `source_sha256` em `label_run` do B4.
+- [x] Localizar e validar o manifesto correspondente; se não estiver disponível, registrar a lacuna e usar os metadados internos do B4 sem inventar proveniência.
+- [x] Confirmar que o ambiente WSL e o venv existentes estão funcionais.
 
-**Entregáveis:** `reports/environment.md` com comandos, versões, espaço livre, caminhos locais, hashes e limitações; bancos de origem inalterados.  
+**Entregáveis:** [reports/environment.md](reports/environment.md) com comandos, versões, espaço livre, caminhos locais, hashes e limitações; bancos de origem inalterados.
 **Saída da fase:** ambiente funcional, origem identificada e espaço de execução definido.
 
 ## Fase 1 — Auditoria dos rótulos (somente leitura)
 
 **Objetivo:** descrever cobertura e comportamento dos rótulos antes de escolher amostra, cortes ou modelos.
 
-- [ ] Inspecionar esquema, tipos, chaves, timestamps e limites temporais da base/manifesto.
-- [ ] Contar candles, pregões, tickers, raízes futuras e contratos por período.
-- [ ] Auditar duplicatas, ordenação, lacunas temporais e minutos ausentes por raiz/pregão.
-- [ ] Medir nulos e cobertura de `trend_5m`, `trend_10m`, `trend_15m` e `trend_mean` por raiz e pregão.
-- [ ] Medir prevalência de classes e duração/comprimento de segmentos por alvo, raiz e pregão.
-- [ ] Medir mudanças de classe e concordância entre escalas por raiz e pregão.
-- [ ] Recalcular `trend_mean` como média/voto dos três alvos disponíveis e verificar a regra de maioria nas linhas elegíveis.
-- [ ] Registrar linhas excluídas e divergências entre manifesto, banco e rótulos; não corrigir a base nesta fase.
-- [ ] Gerar tabelas pequenas reproduzíveis e um resumo descritivo com contagens por pregão independente.
+- [x] Inspecionar esquema, tipos, chaves, timestamps e limites temporais da base/manifesto.
+- [x] Contar candles, pregões, tickers, raízes futuras e contratos por período.
+- [x] Auditar duplicatas, ordenação, lacunas temporais e minutos ausentes por raiz/pregão.
+- [x] Medir nulos e cobertura de `trend_5m`, `trend_10m`, `trend_15m` e `trend_mean` por raiz e pregão.
+- [x] Medir prevalência de classes e duração/comprimento de segmentos por alvo, raiz e pregão.
+- [x] Medir mudanças de classe e concordância entre escalas por raiz e pregão.
+- [x] Recalcular `trend_mean` como média/voto dos três alvos disponíveis e verificar a regra de maioria nas linhas elegíveis.
+- [x] Registrar linhas excluídas e divergências entre manifesto, banco e rótulos; não corrigir a base nesta fase.
+- [x] Gerar tabelas pequenas reproduzíveis e um resumo descritivo com contagens por pregão independente.
 
-**Entregáveis:** script/notebook de auditoria reproduzível, configuração de consulta, tabelas resumidas e `reports/label_audit.md`.  
+**Entregáveis:** [scripts/audit_labels.py](scripts/audit_labels.py), [reports/label_audit.md](reports/label_audit.md) e [reports/label_audit_by_root_session.csv](reports/label_audit_by_root_session.csv).
 **Saída da fase:** inconsistências explicadas e cobertura suficiente para congelar a população do estudo.
 
 ## Fase 2 — Contrato dos dados e protocolo
