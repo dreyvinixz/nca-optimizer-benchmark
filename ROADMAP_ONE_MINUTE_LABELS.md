@@ -221,6 +221,12 @@ MCC agregado em 10 e 15 minutos; o MLP independente ficou ligeiramente acima
 em 5 minutos. A regressão de `mean_score` superou a média constante do treino,
 mas esse alvo é apenas a fração determinística dos votos B0.
 
+A avaliação adicional de sobreajuste encontrou gaps aparentes treino–validação
+moderados, sem queda do desempenho no teste posterior. O relatório detalha
+estabilidade por fold, pregão, bloco, raiz e contrato; o teste não foi usado
+para ajustar ou escolher modelos. Ver
+[`reports/overfitting_assessment.md`](reports/overfitting_assessment.md).
+
 A Fase 7 foi formalmente encerrada sem extensão: o gate condicional não foi
 atendido para comparar arquiteturas multi-escala, e não surgiu hipótese
 independente que justificasse pré-treino ou adaptação. Ver

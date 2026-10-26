@@ -24,6 +24,11 @@ The test has already been opened. Do not rerun it for model or hyperparameter
 selection. The original frozen run and the non-refitting summary command are
 shown below for provenance:
 
+The post-run overfitting assessment compares apparent train fit with
+chronological validation and describes the saved one-pass test by block and
+session. It did not fit on test data or change model settings. See
+[`reports/overfitting_assessment.md`](reports/overfitting_assessment.md).
+
 ```bash
 source scripts/wsl_cuda_env.sh
 .venv_wsl/bin/python scripts/build_features.py

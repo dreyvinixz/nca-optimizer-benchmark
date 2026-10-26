@@ -140,6 +140,7 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 - [x] Reportar diferenças pareadas observadas e intervalos; os três intervalos independentes-vs-compartilhado incluem zero.
 - [x] Avaliar Brier e log-loss em saídas probabilísticas; não aplicar ajuste de calibração.
 - [x] Fazer análises por raiz, bloco, cobertura de cada alvo e contrato, conforme escopo; ver [final_test_contract_metrics.csv](reports/final_test_contract_metrics.csv).
+- [x] Avaliar gap aparente treino–validação, estabilidade entre folds e sessões, e variação por bloco/raiz/contrato sem ajuste baseado no teste; ver [overfitting_assessment.md](reports/overfitting_assessment.md).
 - [x] Registrar o resultado nulo da comparação principal, exclusões e limitações em [final_test.md](reports/final_test.md).
 
 **Entregáveis:** tabelas de inferência e generalização, scripts de análise e relatório de limitações.  
