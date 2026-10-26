@@ -18,7 +18,7 @@ Pre-registered models were fit on the fixed training dates. Validation and final
 
 The confidence intervals include zero for all three paired differences. Independent and shared MLPs therefore show no clear separation on this test sample.
 
-## Pooled test metrics (both roots)
+## Primary overall metrics (both roots)
 
 | Model | Target | n | MCC | Balanced accuracy | Macro F1 | Brier | Log loss | MAE | MSE |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -44,6 +44,55 @@ The confidence intervals include zero for all three paired differences. Independ
 | logistic_regression | trend_5m | 20444 | 0.4891 | 0.7445 | 0.7438 | 0.1733 | 0.5194 | — | — |
 | majority_constant | trend_5m | 20444 | 0.0000 | 0.5000 | 0.3267 | 0.5147 | 8.2964 | — | — |
 | shared_multitask_mlp | trend_5m | 20444 | 0.4873 | 0.7434 | 0.7425 | 0.1659 | 0.4935 | — | — |
+
+## Supplementary classification metrics
+
+These metrics were computed from the saved one-pass predictions after the primary evaluation. They were not used to refit models, choose models, or tune thresholds. Binary classification metrics use the frozen 0.5 threshold. ROC-AUC uses continuous saved scores; PR-AUC is reported as average precision (AP). ECE uses 10 fixed-width probability bins.
+
+| Model | Target | n | Accuracy | Precision (class 1) | Recall (class 1) | F1 macro | ROC-AUC | PR-AUC (AP) | Specificity | Cohen kappa | ECE |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| majority_constant | majority | 20332 | 0.4843 | 0.4843 | 1.0000 | 0.3263 | 0.5000 | 0.4843 | 0.0000 | 0.0000 | 0.5157 |
+| majority_mlp | majority | 20332 | 0.7302 | 0.7059 | 0.7593 | 0.7302 | 0.8187 | 0.8096 | 0.7029 | 0.4612 | 0.0239 |
+| soft_score_mlp | mean_score | 20332 | — | — | — | — | — | — | — | — | — |
+| soft_score_training_mean | mean_score | 20332 | — | — | — | — | — | — | — | — | — |
+| causal_5m_momentum | trend_10m | 20395 | 0.7161 | 0.6990 | 0.7224 | 0.7160 | — | — | 0.7102 | 0.4321 | — |
+| hist_gradient_boosting | trend_10m | 20395 | 0.7252 | 0.7046 | 0.7409 | 0.7252 | 0.8093 | 0.8001 | 0.7106 | 0.4507 | 0.0191 |
+| independent_mlp | trend_10m | 20395 | 0.7206 | 0.6992 | 0.7385 | 0.7206 | 0.8067 | 0.7976 | 0.7039 | 0.4416 | 0.0231 |
+| logistic_regression | trend_10m | 20395 | 0.7206 | 0.6977 | 0.7425 | 0.7206 | 0.7945 | 0.7753 | 0.7002 | 0.4418 | 0.0418 |
+| majority_constant | trend_10m | 20395 | 0.4823 | 0.4823 | 1.0000 | 0.3254 | 0.5000 | 0.4823 | 0.0000 | 0.0000 | 0.5177 |
+| shared_multitask_mlp | trend_10m | 20395 | 0.7178 | 0.6887 | 0.7571 | 0.7178 | 0.8054 | 0.7973 | 0.6812 | 0.4368 | 0.0370 |
+| causal_5m_momentum | trend_15m | 20397 | 0.6898 | 0.6661 | 0.6973 | 0.6896 | — | — | 0.6830 | 0.3795 | — |
+| hist_gradient_boosting | trend_15m | 20397 | 0.7218 | 0.6947 | 0.7404 | 0.7217 | 0.8050 | 0.7866 | 0.7049 | 0.4439 | 0.0288 |
+| independent_mlp | trend_15m | 20397 | 0.7096 | 0.6642 | 0.7872 | 0.7091 | 0.7983 | 0.7838 | 0.6392 | 0.4227 | 0.0650 |
+| logistic_regression | trend_15m | 20397 | 0.7160 | 0.6863 | 0.7418 | 0.7160 | 0.7887 | 0.7660 | 0.6926 | 0.4327 | 0.0438 |
+| majority_constant | trend_15m | 20397 | 0.4756 | 0.4756 | 1.0000 | 0.3223 | 0.5000 | 0.4756 | 0.0000 | 0.0000 | 0.5244 |
+| shared_multitask_mlp | trend_15m | 20397 | 0.7112 | 0.6709 | 0.7709 | 0.7111 | 0.7973 | 0.7821 | 0.6571 | 0.4251 | 0.0559 |
+| causal_5m_momentum | trend_5m | 20444 | 0.7282 | 0.7142 | 0.7334 | 0.7281 | — | — | 0.7233 | 0.4563 | — |
+| hist_gradient_boosting | trend_5m | 20444 | 0.7444 | 0.7259 | 0.7606 | 0.7444 | 0.8403 | 0.8358 | 0.7292 | 0.4891 | 0.0234 |
+| independent_mlp | trend_5m | 20444 | 0.7459 | 0.7280 | 0.7605 | 0.7459 | 0.8388 | 0.8348 | 0.7321 | 0.4920 | 0.0215 |
+| logistic_regression | trend_5m | 20444 | 0.7438 | 0.7213 | 0.7693 | 0.7438 | 0.8235 | 0.8129 | 0.7198 | 0.4881 | 0.0375 |
+| majority_constant | trend_5m | 20444 | 0.4853 | 0.4853 | 1.0000 | 0.3267 | 0.5000 | 0.4853 | 0.0000 | 0.0000 | 0.5147 |
+| shared_multitask_mlp | trend_5m | 20444 | 0.7425 | 0.7172 | 0.7749 | 0.7425 | 0.8355 | 0.8308 | 0.7120 | 0.4858 | 0.0275 |
+
+## Existing and regression metrics
+
+The complete CSV also retains MCC, balanced accuracy, class-wise precision/recall/F1, prevalence, all four confusion-matrix cells, Brier score, log loss, ECE, MAE, and MSE. MAE/MSE apply to the continuous `mean_score` target; threshold-based classification and AUC metrics do not apply to it.
+
+## Confusion matrices for primary models
+
+Each cell is shown as `actual 0/1 × predicted 0/1`: TN, FP, FN, TP.
+
+| Target | Model | TN | FP | FN | TP |
+|---|---|---:|---:|---:|---:|
+| trend_10m | hist_gradient_boosting | 7503 | 3055 | 2549 | 7288 |
+| trend_10m | independent_mlp | 7432 | 3126 | 2572 | 7265 |
+| trend_10m | shared_multitask_mlp | 7192 | 3366 | 2389 | 7448 |
+| trend_15m | hist_gradient_boosting | 7540 | 3157 | 2518 | 7182 |
+| trend_15m | independent_mlp | 6837 | 3860 | 2064 | 7636 |
+| trend_15m | shared_multitask_mlp | 7029 | 3668 | 2222 | 7478 |
+| trend_5m | hist_gradient_boosting | 7673 | 2850 | 2375 | 7546 |
+| trend_5m | independent_mlp | 7704 | 2819 | 2376 | 7545 |
+| trend_5m | shared_multitask_mlp | 7492 | 3031 | 2233 | 7688 |
 
 ## Primary models by root
 

@@ -198,11 +198,20 @@
     "method": "recomputed_from_saved_one_pass_predictions",
     "model_refit_or_rerun": false,
     "rows_added": 66,
+    "test_group_rows": 240,
+    "supplementary_metrics": [
+      "accuracy",
+      "precision_recall_f1_per_class",
+      "weighted_f1",
+      "specificity",
+      "cohen_kappa",
+      "roc_auc",
+      "pr_average_precision",
+      "ece_10bin"
+    ],
+    "auc_probability_source": "saved model scores; omitted for hard-label momentum baseline and continuous mean_score regression target",
     "contract_level_rows": 110,
-    "contract_level_path": "reports/final_test_contract_metrics.csv",
-    "summary_script_sha256": "04407421e592d472b431d2541313160eef328176d3afa91fbd098bd1cba5d6bf",
-    "metrics_csv_sha256": "7b173c951f50817bc9325c1fa1486ded4f04e92a0e59b6e7ae1b4d0d3488f323",
-    "contract_metrics_sha256": "bbfeb1a12de7201bfe94f0682a3fb59b10c2f3075a14007bb45e62f94a73d4c4"
+    "contract_level_path": "reports/final_test_contract_metrics.csv"
   },
   "model_evaluation_commit": "261de54daeb43eaa6315e51051afcad8942a2ba2"
 }

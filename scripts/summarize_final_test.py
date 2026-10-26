@@ -6,7 +6,12 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import balanced_accuracy_score, brier_score_loss, f1_score, log_loss, matthews_corrcoef, mean_absolute_error, mean_squared_error
+from sklearn.metrics import (
+    accuracy_score, average_precision_score, balanced_accuracy_score,
+    brier_score_loss, cohen_kappa_score, f1_score, log_loss,
+    matthews_corrcoef, mean_absolute_error, mean_squared_error,
+    precision_score, recall_score, roc_auc_score,
+)
 
 
 TARGETS = {"trend_5m": "y5", "trend_10m": "y10", "trend_15m": "y15"}
@@ -22,11 +27,23 @@ MODEL_OUTPUTS = {
 
 
 def classification_metrics(y, pred, prob=None):
+    y = np.asarray(y, dtype=int)
+    pred = np.asarray(pred, dtype=int)
     row = {
         "n": int(len(y)),
+        "accuracy": float(accuracy_score(y, pred)),
         "mcc": float(matthews_corrcoef(y, pred)),
         "balanced_accuracy": float(balanced_accuracy_score(y, pred)),
         "macro_f1": float(f1_score(y, pred, labels=[0, 1], average="macro", zero_division=0)),
+        "weighted_f1": float(f1_score(y, pred, labels=[0, 1], average="weighted", zero_division=0)),
+        "precision_0": float(precision_score(y, pred, pos_label=0, zero_division=0)),
+        "recall_0": float(recall_score(y, pred, pos_label=0, zero_division=0)),
+        "f1_0": float(f1_score(y, pred, labels=[0], average="macro", zero_division=0)),
+        "precision_1": float(precision_score(y, pred, pos_label=1, zero_division=0)),
+        "recall_1": float(recall_score(y, pred, pos_label=1, zero_division=0)),
+        "f1_1": float(f1_score(y, pred, labels=[1], average="macro", zero_division=0)),
+        "specificity": float(recall_score(y, pred, pos_label=0, zero_division=0)),
+        "cohen_kappa": float(cohen_kappa_score(y, pred, labels=[0, 1])),
         "prevalence_1": float(np.mean(y == 1)),
         "confusion_00": int(np.sum((y == 0) & (pred == 0))),
         "confusion_01": int(np.sum((y == 0) & (pred == 1))),
@@ -37,6 +54,14 @@ def classification_metrics(y, pred, prob=None):
         p = np.clip(np.asarray(prob, dtype=float), 1e-7, 1 - 1e-7)
         row["brier"] = float(brier_score_loss(y, p))
         row["log_loss"] = float(log_loss(y, p, labels=[0, 1]))
+        row["roc_auc"] = float(roc_auc_score(y, p)) if np.unique(y).size == 2 else np.nan
+        row["pr_average_precision"] = float(average_precision_score(y, p)) if np.unique(y).size == 2 else np.nan
+        bins = np.linspace(0.0, 1.0, 11)
+        bin_ids = np.digitize(p, bins[1:-1], right=False)
+        row["ece_10bin"] = float(sum(
+            np.mean(bin_ids == b) * abs(np.mean(p[bin_ids == b]) - np.mean(y[bin_ids == b]))
+            for b in range(10) if np.any(bin_ids == b)
+        ))
     return row
 
 
@@ -52,18 +77,24 @@ def main():
     test = predictions.loc[predictions.split == "test"].copy()
     old_metrics = pd.read_csv(args.metrics)
     overall = []
+    grouped_test = []
     for model, outputs in MODEL_OUTPUTS.items():
         for target, (p_col, pred_col) in outputs.items():
             y_col = TARGETS.get(target, "y_majority")
             for root in ("ALL", "WIN", "IND"):
                 root_mask = np.ones(len(test), dtype=bool) if root == "ALL" else test.ticker.str.startswith(root).to_numpy()
-                valid = root_mask & test[y_col].notna().to_numpy()
-                if not valid.any():
-                    continue
-                y = test.loc[valid, y_col].astype(int).to_numpy()
-                p = test.loc[valid, p_col].to_numpy(dtype=float)
-                pred = (p >= 0.5).astype(int) if pred_col is None else test.loc[valid, pred_col].astype(int).to_numpy()
-                overall.append({"split": "test", "model": model, "target": target, "root": root, "test_block": "overall", **classification_metrics(y, pred, None if model == "causal_5m_momentum" else p)})
+                for block in ("overall", 1, 2, 3):
+                    block_mask = np.ones(len(test), dtype=bool) if block == "overall" else test.test_block.eq(block).to_numpy()
+                    valid = root_mask & block_mask & test[y_col].notna().to_numpy()
+                    if not valid.any():
+                        continue
+                    y = test.loc[valid, y_col].astype(int).to_numpy()
+                    p = test.loc[valid, p_col].to_numpy(dtype=float)
+                    pred = (p >= 0.5).astype(int) if pred_col is None else test.loc[valid, pred_col].astype(int).to_numpy()
+                    row = {"split": "test", "model": model, "target": target, "root": root, "test_block": block, **classification_metrics(y, pred, None if model == "causal_5m_momentum" else p)}
+                    grouped_test.append(row)
+                    if block == "overall":
+                        overall.append(row)
 
     for model, p_col in (("soft_score_mlp", "p_soft"), ("soft_score_training_mean", "p_soft_constant")):
         valid_soft = test.y_soft.notna()
@@ -74,10 +105,10 @@ def main():
             p = test.loc[valid, p_col].to_numpy(dtype=float)
             overall.append({"split": "test", "model": model, "target": "mean_score", "root": root, "test_block": "overall", "n": int(valid.sum()), "mae": float(mean_absolute_error(y, p)), "mse": float(mean_squared_error(y, p))})
 
-    # The frozen runner already emitted the three block rows. Add only the
-    # missing pooled rows, calculated from the exact saved test predictions.
-    old_metrics = old_metrics.loc[~((old_metrics.split == "test") & (old_metrics.test_block.astype(str) == "overall"))]
-    metrics = pd.concat([old_metrics, pd.DataFrame(overall)], ignore_index=True)
+    # Rebuild all test aggregates, including fixed blocks, from the exact saved
+    # one-pass predictions. Validation rows from the frozen runner are retained.
+    old_metrics = old_metrics.loc[old_metrics.split != "test"]
+    metrics = pd.concat([old_metrics, pd.DataFrame(grouped_test)], ignore_index=True)
     metrics.to_csv(args.metrics, index=False)
 
     contract_rows = []
@@ -106,6 +137,9 @@ def main():
         "method": "recomputed_from_saved_one_pass_predictions",
         "model_refit_or_rerun": False,
         "rows_added": len(overall),
+        "test_group_rows": len(grouped_test),
+        "supplementary_metrics": ["accuracy", "precision_recall_f1_per_class", "weighted_f1", "specificity", "cohen_kappa", "roc_auc", "pr_average_precision", "ece_10bin"],
+        "auc_probability_source": "saved model scores; omitted for hard-label momentum baseline and continuous mean_score regression target",
         "contract_level_rows": len(contract_metrics),
         "contract_level_path": str(args.contract_metrics),
     }
@@ -144,13 +178,19 @@ def main():
     for target, values in primary.items():
         ci = run["paired_test_mcc_block_bootstrap"][target]["ci95"]
         report.append(f"| {target} | {values['n_common']} | {values['independent_mcc']:.4f} | {values['shared_mcc']:.4f} | {values['observed_difference_independent_minus_shared']:.4f} | [{ci[0]:.4f}, {ci[1]:.4f}] |")
-    report += ["", "The confidence intervals include zero for all three paired differences. Independent and shared MLPs therefore show no clear separation on this test sample.", "", "## Pooled test metrics (both roots)", "", "| Model | Target | n | MCC | Balanced accuracy | Macro F1 | Brier | Log loss | MAE | MSE |", "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    report += ["", "The confidence intervals include zero for all three paired differences. Independent and shared MLPs therefore show no clear separation on this test sample.", "", "## Primary overall metrics (both roots)", "", "| Model | Target | n | MCC | Balanced accuracy | Macro F1 | Brier | Log loss | MAE | MSE |", "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
     pooled = pd.DataFrame(overall)
     pooled = pooled.loc[pooled.root == "ALL"].sort_values(["target", "model"])
     for _, row in pooled.iterrows():
         def fmt(column):
             return "—" if column not in row or pd.isna(row[column]) else f"{row[column]:.4f}"
         report.append(f"| {row.model} | {row.target} | {int(row.n)} | {fmt('mcc')} | {fmt('balanced_accuracy')} | {fmt('macro_f1')} | {fmt('brier')} | {fmt('log_loss')} | {fmt('mae')} | {fmt('mse')} |")
+    report += ["", "## Supplementary classification metrics", "", "These metrics were computed from the saved one-pass predictions after the primary evaluation. They were not used to refit models, choose models, or tune thresholds. Binary classification metrics use the frozen 0.5 threshold. ROC-AUC uses continuous saved scores; PR-AUC is reported as average precision (AP). ECE uses 10 fixed-width probability bins.", "", "| Model | Target | n | Accuracy | Precision (class 1) | Recall (class 1) | F1 macro | ROC-AUC | PR-AUC (AP) | Specificity | Cohen kappa | ECE |", "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    for _, row in pooled.iterrows():
+        report.append(f"| {row.model} | {row.target} | {int(row.n)} | {fmt('accuracy')} | {fmt('precision_1')} | {fmt('recall_1')} | {fmt('macro_f1')} | {fmt('roc_auc')} | {fmt('pr_average_precision')} | {fmt('specificity')} | {fmt('cohen_kappa')} | {fmt('ece_10bin')} |")
+    report += ["", "## Existing and regression metrics", "", "The complete CSV also retains MCC, balanced accuracy, class-wise precision/recall/F1, prevalence, all four confusion-matrix cells, Brier score, log loss, ECE, MAE, and MSE. MAE/MSE apply to the continuous `mean_score` target; threshold-based classification and AUC metrics do not apply to it.", "", "## Confusion matrices for primary models", "", "Each cell is shown as `actual 0/1 × predicted 0/1`: TN, FP, FN, TP.", "", "| Target | Model | TN | FP | FN | TP |", "|---|---|---:|---:|---:|---:|"]
+    for _, row in pooled.loc[pooled.target.isin(TARGETS) & pooled.model.isin(["independent_mlp", "shared_multitask_mlp", "hist_gradient_boosting"])].sort_values(["target", "model"]).iterrows():
+        report.append(f"| {row.target} | {row.model} | {int(row.confusion_00)} | {int(row.confusion_01)} | {int(row.confusion_10)} | {int(row.confusion_11)} |")
     report += ["", "## Primary models by root", "", "| Target | Root | Model | n | MCC | Balanced accuracy | Macro F1 |", "|---|---|---|---:|---:|---:|---:|"]
     root_rows = pd.DataFrame(overall)
     root_rows = root_rows.loc[root_rows.root.isin(["WIN", "IND"]) & root_rows.target.isin(TARGETS) & root_rows.model.isin(["independent_mlp", "shared_multitask_mlp", "hist_gradient_boosting"])]
