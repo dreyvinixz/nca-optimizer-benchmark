@@ -1,6 +1,6 @@
 # Plano de tarefas — estudo multi-escala B0
 
-**Status geral:** Fases 0–6 concluídas; Fase 7 descartada pelo critério condicional; manuscrito interno e pacote reproduzível preparados. O teste final foi aberto uma vez sob pré-registro. Seleção de periódico e revisão editorial específica permanecem pendentes.
+**Status geral:** Fases 0–6 concluídas; Fase 7 descartada pelo critério condicional; rascunho interno e pacote reproduzível preparados. O teste final foi aberto uma vez sob pré-registro. *Journal of Forecasting* é o alvo provisório; dados de autoria e autorização de dados ainda impedem um pacote de submissão final.
 **Branch:** `feat/one-minute-labels-clean`  
 **Roadmap científico:** [ROADMAP_ONE_MINUTE_LABELS.md](ROADMAP_ONE_MINUTE_LABELS.md)
 
@@ -168,7 +168,9 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 - [x] Explicitar ausência de avaliação executável de lucro, escopo temporal jan–jun/2026, dados internos e cobertura insuficiente de B1/B2/Fuzzy.
 - [x] Revisar alegações, vazamento, dependência por sessão, comparações múltiplas e limites de disponibilidade.
 - [x] Reproduzir as tabelas a partir das predições finais salvas com `scripts/summarize_final_test.py`; o script suplementar não retreina nem reavalia modelos.
-- [ ] Selecionar periódico e concluir revisão final de anonimização e requisitos editoriais específicos. Não há periódico escolhido nem submissão autorizada.
+- [x] Escolher um alvo de trabalho provisório com base em escopo e requisitos oficiais; ver [journal_target_assessment.md](reports/journal_target_assessment.md).
+- [x] Preparar [title_page_template.md](manuscript/title_page_template.md) com os campos exigidos sem inventar autores, vínculos, ORCID, financiamento ou declarações.
+- [ ] Confirmar periódico-alvo, autoria, ORCID, declarações de financiamento/conflito e autorização do titular dos dados; só então fechar o pacote editorial final.
 
 **Entregáveis:** manuscrito e pacote mínimo de reprodução/documentação compatível com o status interno dos dados.  
 **Saída da fase:** nenhuma afirmação numérica sem rastreabilidade e todas as limitações materiais declaradas.
@@ -177,6 +179,6 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 
 - [x] Fases 0–6 concluídas com critérios de saída atendidos.
 - [x] Fase 7 explicitamente descartada com justificativa.
-- [x] Rascunho interno da Fase 8 preparado e reproduzido a partir dos artefatos documentados; revisão de submissão permanece pendente de escolha do periódico.
+- [x] Rascunho interno da Fase 8 preparado e reproduzido a partir dos artefatos documentados; avaliação do alvo editorial registrada.
 - [x] Repositório contém código, configurações, documentação e resumos pequenos; dados e saídas pesadas permanecem externos/temporários.
 - [x] `git status` revisado para confirmar que nenhum banco, predição completa, checkpoint ou cache foi incluído no commit; uma alteração alheia no CSV da auditoria foi preservada sem staging.

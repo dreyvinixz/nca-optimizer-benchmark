@@ -228,8 +228,10 @@ independente que justificasse pré-treino ou adaptação. Ver
 artigo e a trilha dos resultados estão em
 [`manuscript/multiscale_b0_label_prediction_draft.md`](manuscript/multiscale_b0_label_prediction_draft.md)
 e [`reports/final_test.md`](reports/final_test.md). O manuscrito NCA anterior
-permanece fora deste escopo. Periódico e requisitos editoriais ainda não foram
-selecionados.
+permanece fora deste escopo. *Journal of Forecasting* foi escolhido como alvo
+provisório e avaliado em [`reports/journal_target_assessment.md`](reports/journal_target_assessment.md);
+autoria e autorização de dados ainda precisam ser confirmadas antes de fechar
+um pacote editorial ou qualquer submissão.
 
 ## Perguntas que o estudo não responderá sem novos dados
 

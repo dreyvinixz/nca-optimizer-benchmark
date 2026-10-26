@@ -4,7 +4,9 @@
 
 **Data status:** internal BovDB data; not cleared for public release.
 
-**Target journal:** not selected. This draft is not formatted or ready for submission.
+**Working target journal:** *Journal of Forecasting* (Wiley; provisional, not submitted).
+**Running title:** Intraday Label Forecasting
+**Submission status:** internal draft; author details and data-owner clearance are outstanding.
 
 ## Abstract
 
@@ -16,7 +18,7 @@ We study whether completed one-minute OHLCV and activity features can reproduce 
 
 Intraday market studies often compare forecasts against labels constructed from price movement or a segmentation procedure. When a label is assigned retrospectively using subsequent observations, a model can be evaluated on whether information available at a timestamp predicts the label later attached to that timestamp. That task is distinct from observing a contemporaneous market state and from forecasting executable returns.
 
-This study examines three B0 label scales, 5, 10, and 15 minutes, aligned to one-minute candles. Its main comparison is between three independently trained binary classifiers and one shared representation with three output heads, following the general multi-task learning setup of sharing representations across related tasks [1]. We also compare simple and nonlinear baselines, a hard majority label, and a continuous vote-fraction target. The design uses a held-out chronological test period and treats trading sessions, rather than individual candles, as the unit for uncertainty estimation.
+This study examines three B0 label scales, 5, 10, and 15 minutes, aligned to one-minute candles. Its main comparison is between three independently trained binary classifiers and one shared representation with three output heads, following the general multi-task learning setup of sharing representations across related tasks (Caruana, 1997). We also compare simple and nonlinear baselines, a hard majority label, and a continuous vote-fraction target. The design uses a held-out chronological test period and treats trading sessions, rather than individual candles, as the unit for uncertainty estimation.
 
 The scope is deliberately narrow. The available local data support WIN and IND futures for the selected period. WDO, WSP, and ISP are absent from the local candle-and-label snapshot; lower-activity or sparse roots are excluded from the confirmatory sample. The study asks whether the input features reproduce B0 labels, not whether those labels are true market states.
 
@@ -44,7 +46,7 @@ We compute 11 inputs from the completed candle and past observed candles: log re
 
 ### 3.2 Temporal design and preprocessing
 
-Dates are ordered chronologically and assigned wholly to a single split, reflecting the temporal order required for evaluating time-series predictors [7]. The final models are fit using training dates; validation metrics are retained for development reporting and the final test is scored once under the frozen candidate set. Four expanding validation folds are used for development, each with ten successive validation sessions and no final-test dates. Standardization parameters are fit on the applicable training rows only. Training rows are not shuffled.
+Dates are ordered chronologically and assigned wholly to a single split, reflecting the temporal order required for evaluating time-series predictors (Bergmeir & Benítez, 2012). The final models are fit using training dates; validation metrics are retained for development reporting and the final test is scored once under the frozen candidate set. Four expanding validation folds are used for development, each with ten successive validation sessions and no final-test dates. Standardization parameters are fit on the applicable training rows only. Training rows are not shuffled.
 
 The frozen neural-network settings are seed 20261026, batch size 256, five epochs, two dense hidden layers of 32 and 16 ReLU units, dropout 0.1, and Adam with learning rate 0.001. Binary heads use sigmoid outputs and binary cross-entropy; the soft-score model uses a sigmoid output and mean squared error. The shared model has three masked binary heads. No hyperparameter search was conducted after the candidate set was frozen.
 
@@ -52,11 +54,11 @@ The frozen neural-network settings are seed 20261026, batch size 256, five epoch
 
 The evaluated candidates are: a most-frequent training-class classifier; a causal 5-minute momentum sign rule; logistic regression (`C=1`); histogram gradient boosting (learning rate 0.1, 50 iterations, at most 15 leaves, L2 regularization 1, no early stopping); independent MLPs for the three scales; a shared three-head MLP; an MLP for the hard majority label; and a soft-score MLP compared with the training-mean constant.
 
-For classification, we report MCC, balanced accuracy, macro F1, class prevalence, confusion counts, and (for probability-producing models) Brier score and log loss. MCC incorporates all four confusion-matrix cells [2]. The Brier score is a probability scoring rule [3]. Regression to `mean_score` is evaluated with MAE and MSE. Metrics are pooled over rows for descriptive model performance and repeated by root, fixed temporal block, and ticker contract. The three temporal blocks contain 8, 8, and 9 sessions. Candle rows are not treated as independent replicates for the primary inferential contrast.
+For classification, we report MCC, balanced accuracy, macro F1, class prevalence, confusion counts, and (for probability-producing models) Brier score and log loss. MCC incorporates all four confusion-matrix cells (Chicco & Jurman, 2020). The Brier score is a probability scoring rule (Brier, 1950). Regression to `mean_score` is evaluated with MAE and MSE. Metrics are pooled over rows for descriptive model performance and repeated by root, fixed temporal block, and ticker contract. The three temporal blocks contain 8, 8, and 9 sessions. Candle rows are not treated as independent replicates for the primary inferential contrast.
 
 ### 3.4 Paired inference
 
-The primary comparison is independent MLP versus shared MLP on the same rows with all three targets observed. On development folds, paired session-level MCC differences are summarized with a circular moving-block bootstrap of five sessions and 10,000 replicates, a fixed-length block resampling method for dependent observations [4, 5]. Two-sided Wilcoxon signed-rank tests across the three targets receive Holm correction [6]. These are development-only results.
+The primary comparison is independent MLP versus shared MLP on the same rows with all three targets observed. On development folds, paired session-level MCC differences are summarized with a circular moving-block bootstrap of five sessions and 10,000 replicates, a fixed-length block resampling method for dependent observations (Künsch, 1989; Politis & Romano, 1992). Two-sided Wilcoxon signed-rank tests across the three targets receive Holm correction (Holm, 1979). These are development-only results.
 
 On the final test, we report the pooled paired MCC difference and a circular five-session moving-block bootstrap interval using 10,000 replicates. We report no final-test p-values. Probability metrics describe reproduction of retrospective B0 labels and are not presented as calibrated probabilities of an independently observed market state.
 
@@ -98,17 +100,23 @@ First, B0 labels are retrospective and not independently validated. Their depend
 
 The source SQLite databases and derived row-level predictions are internal and are not included in this repository. The repository retains contracts, frozen evaluation configuration, scripts, manifests, and compact reports. Reproduction requires authorized access to the same source snapshot and environment. Source and label hashes, software versions, seed, run duration, test dates, and the one-pass evaluation output are recorded in `reports/final_test_metrics.json`. The pooled and subgroup summaries are regenerated from saved test predictions by `scripts/summarize_final_test.py`; this script does not refit a model.
 
+**Data availability statement (draft):** Source market and label databases are internal and are not publicly available in this repository. Any external access or release of derived data requires authorization from the data owner. The scripts, frozen contracts, and aggregate reports are retained in the project repository; their public release also requires repository-owner approval.
+
 ## 8. References and submission preparation
 
-1. Caruana, R. (1997). Multitask Learning. *Machine Learning*, 28, 41–75. https://doi.org/10.1023/A:1007379606734
-2. Chicco, D., & Jurman, G. (2020). The advantages of the Matthews correlation coefficient (MCC) over F1 score and accuracy in binary classification evaluation. *BMC Genomics*, 21, 6. https://doi.org/10.1186/s12864-019-6413-7
-3. Brier, G. W. (1950). Verification of forecasts expressed in terms of probability. *Monthly Weather Review*, 78(1), 1–3. https://doi.org/10.1175/1520-0493(1950)078%3C0001:VOFEIT%3E2.0.CO;2
-4. Künsch, H. R. (1989). The jackknife and the bootstrap for general stationary observations. *The Annals of Statistics*, 17(3), 1217–1241. https://doi.org/10.1214/aos/1176347265
-5. Politis, D. N., & Romano, J. P. (1992). A circular block-resampling procedure for stationary data. In *Exploring the Limits of Bootstrap* (pp. 263–270). Wiley.
-6. Holm, S. (1979). A simple sequentially rejective multiple test procedure. *Scandinavian Journal of Statistics*, 6, 65–70. https://doi.org/10.2307/4615733
-7. Bergmeir, C., & Benítez, J. M. (2012). On the use of cross-validation for time series predictor evaluation. *Information Sciences*, 191, 192–213. https://doi.org/10.1016/j.ins.2011.12.028
+Bergmeir, C., & Benítez, J. M. (2012). On the use of cross-validation for time series predictor evaluation. *Information Sciences, 191*, 192–213. https://doi.org/10.1016/j.ins.2011.12.028
 
-A target journal has not been selected; journal-specific formatting, anonymity, and data-sharing requirements remain to be completed after selection.
+Brier, G. W. (1950). Verification of forecasts expressed in terms of probability. *Monthly Weather Review, 78*(1), 1–3. https://doi.org/10.1175/1520-0493(1950)078%3C0001:VOFEIT%3E2.0.CO;2
+
+Caruana, R. (1997). Multitask learning. *Machine Learning, 28*, 41–75. https://doi.org/10.1023/A:1007379606734
+
+Chicco, D., & Jurman, G. (2020). The advantages of the Matthews correlation coefficient (MCC) over F1 score and accuracy in binary classification evaluation. *BMC Genomics, 21*, 6. https://doi.org/10.1186/s12864-019-6413-7
+
+Holm, S. (1979). A simple sequentially rejective multiple test procedure. *Scandinavian Journal of Statistics, 6*, 65–70. https://doi.org/10.2307/4615733
+
+Künsch, H. R. (1989). The jackknife and the bootstrap for general stationary observations. *The Annals of Statistics, 17*(3), 1217–1241. https://doi.org/10.1214/aos/1176347265
+
+Politis, D. N., & Romano, J. P. (1992). A circular block-resampling procedure for stationary data. In R. LePage & L. Billard (Eds.), *Exploring the limits of bootstrap* (pp. 263–270). Wiley.
 
 ## Artifact map
 
@@ -117,6 +125,8 @@ A target journal has not been selected; journal-specific formatting, anonymity, 
 - Frozen final evaluation: `config/final_evaluation.yaml`
 - Final model evaluation script: `scripts/run_final_evaluation.py`
 - Final subgroup summary script: `scripts/summarize_final_test.py`
+- Journal assessment and target requirements: `reports/journal_target_assessment.md`
+- Incomplete author-information template: `manuscript/title_page_template.md`
 - Development inference: `reports/development_inference.md`
 - Final test results: `reports/final_test.md`, `reports/final_test_metrics.csv`, `reports/final_test_contract_metrics.csv`, and `reports/final_test_metrics.json`
 - Feature and leakage contract audit: `reports/leakage_audit.md`

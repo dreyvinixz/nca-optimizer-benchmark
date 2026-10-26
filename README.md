@@ -14,6 +14,12 @@ an extension, and an internal manuscript draft is in `manuscript/`. The cache
 and row-level predictions are local/ignored; compact summaries, source hashes,
 coverage, splits, and leakage checks are recorded in `reports/`.
 
+The provisional manuscript target is the *Journal of Forecasting*. The draft
+and target requirements are documented, but author details and data-owner
+clearance are still required before a final editorial package can be prepared.
+See [the target assessment](reports/journal_target_assessment.md) and
+[the title-page template](manuscript/title_page_template.md).
+
 The test has already been opened. Do not rerun it for model or hyperparameter
 selection. The original frozen run and the non-refitting summary command are
 shown below for provenance:
