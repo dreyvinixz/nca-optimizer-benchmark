@@ -1,39 +1,30 @@
-# Local environments
+# Local environments and caches
 .venv/
 .venv_wsl/
 .venv_transcricao/
 venv/
 __pycache__/
-*.pyc
+*.py[cod]
 
 # Local secrets
 .env
 .env.*
 !.env.example
 
-# Legacy experiments are reference material and should not be required by the clean pipeline.
+# Local legacy and generated artifacts
 experiments/
-
-# Runtime caches and temporary files
-.pytest_cache/
-.mypy_cache/
-logs/experiments/*.log
-
-# Local WhatsApp transcription artifacts
+outputs/
+output/
+tmp/
+logs/
+checkpoints/
 saida_transcricao/
-WhatsApp Ptt*.ogg
-
-# Large generated model artifacts
+article/figures/*.png
+cuda/*.so
 *.h5
 *.pkl
-*.so
-
-# Reproducible generated benchmark outputs
-outputs/metrics/*.csv
-outputs/metrics/convergence/*.csv
-outputs/predictions/*.csv
-outputs/tables/*.csv
-outputs/reports/*.md
-outputs/statistical_tests/*.csv
-outputs/figures/*.png
-article/figures/*.png
+*.sqlite
+*.db
+*.parquet
+*.feather
+data/
