@@ -1,7 +1,7 @@
 # Roadmap — multi-escala e incerteza dos rótulos intradiários
 
 **Status:** planejamento; treinamento deste estudo ainda não iniciado  
-**Branch:** `feat/one-minute-multitask-study`  
+**Branch:** `feat/one-minute-labels-clean`
 **Atualizado:** 2026-10-26
 
 ## Objetivo científico
@@ -28,12 +28,18 @@ um modelo aprendeu a direção real do mercado. O manuscrito NCA existente para
   datas/contratos cobertos será conferida antes do split.
 - Os campos SIDEWAYS usam janelas centradas e são retrospectivos. Não serão
   preditores nem parte da alegação causal.
-- O B4 v3.1-internal.3 é um artefato interno, não uma publicação pública.
-  B1/B2/Fuzzy não cobrem atualmente o painel inteiro e não entram na análise
-  principal até que sejam regenerados e auditados em todo o período.
+- O banco de rótulos B4-v1 é um artefato interno, não uma publicação pública.
+  Seu metadado `label_run` registra o gerador `B4-unsuppressed-B0+SIDEWAYS-features-v1`
+  e a origem `bovdb-v3.1-internal.2.sqlite`. B1/B2/Fuzzy não cobrem atualmente
+  o painel inteiro e não entram na análise principal até que sejam regenerados
+  e auditados em todo o período.
 - A contagem de candles não substitui a contagem de pregões independentes.
   Relatar incerteza por sessão/bloco temporal e por raiz, não por linha como se
   todas fossem independentes.
+- Os dois SQLite estão disponíveis localmente em `data/`: `bovdb-labels-B4-v1.sqlite`
+  (744 MB) e `bovdb-v3.1-internal.2.sqlite` (429 MB). O B4 contém 1.255.202
+  linhas em cada tabela de rótulos e identifica o segundo arquivo como sua base
+  de origem. O SHA-256 da base local confere com `source_sha256` no B4.
 
 ## Preservação de espaço e ambiente autorizado
 
@@ -42,28 +48,34 @@ um modelo aprendeu a direção real do mercado. O manuscrito NCA existente para
   checkout nem copiar `.venv_wsl`.
 - Reutilizar `/mnt/c/mysystems/projects/nca-optimizer-benchmark/.venv_wsl`
   por meio de `source scripts/wsl_cuda_env.sh`.
-- Ler a base diretamente do BovDB existente, configurando o caminho local por
-  variável de ambiente, por exemplo:
-  `BOVDB_B4_DB=/mnt/c/mysystems/services/bovdb/bovdb-pipeline/rotulos/data/bovdb-labels-B4-v1.sqlite`.
-  Não copiar o SQLite de 744 MB para este repositório.
-- A checagem de caminho confirmou que o venv WSL e o SQLite estão acessíveis
-  pelo Ubuntu. A visibilidade atual da GPU pelo TensorFlow ainda precisa ser
-  revalidada antes do treino; o registro antigo de `docs/gpu_wsl_setup.md`
-  contém versão de driver anterior à observada no Windows.
-- Não versionar dados, bases derivadas, predições completas, checkpoints ou
-  caches pesados. Antes do primeiro treino, definir um diretório temporário,
-  verificar espaço livre e adicionar regras Git para os artefatos novos.
-  Manter no repositório apenas código, configuração e resumos pequenos e
-  rastreáveis.
+- Usar os arquivos locais existentes, sem modificar os bancos de origem. No WSL,
+  definir `BOVDB_B4_DB=/mnt/c/mysystems/projects/nca-optimizer-benchmark/data/bovdb-labels-B4-v1.sqlite`
+  e `BOVDB_SOURCE_DB=/mnt/c/mysystems/projects/nca-optimizer-benchmark/data/bovdb-v3.1-internal.2.sqlite`.
+- Os bancos estão sob `data/`, ignorada pelo Git. Mantê-los fora de commits;
+  não criar uma segunda cópia nem converter os originais nesta etapa. Consultas
+  devem ser somente leitura.
+- Antes de converter ou exportar, medir o tempo das consultas representativas.
+  Se leituras analíticas repetidas forem o gargalo, avaliar um cache derivado
+  em Parquet após congelar o contrato dos dados. Se o gargalo for o carregamento
+  em batches, avaliar arrays memmap ou TFRecord no piloto. Registrar tamanho e
+  tempo de leitura/escrita e manter a origem SQLite intacta.
+- Reutilizar `/mnt/c/mysystems/projects/nca-optimizer-benchmark/.venv_wsl` e
+  carregar as bibliotecas CUDA com `source scripts/wsl_cuda_env.sh`. O venv e os
+  bancos são acessíveis pelo Ubuntu, mas a visibilidade atual da GPU pelo
+  TensorFlow ainda precisa ser revalidada antes do treino.
+- Não versionar dados, caches derivados, predições completas, checkpoints ou
+  caches pesados. Antes do primeiro treino, definir um diretório temporário e
+  verificar espaço livre. Manter no repositório apenas código, configuração e
+  resumos pequenos e rastreáveis.
 
 ## Fases e critérios de saída
 
 | Fase | Trabalho | Critério para avançar |
 |---|---|---|
-| 0. Ambiente e proveniência | Confirmar branch, WSL, versão do Python/TensorFlow/CUDA, GPU visível, espaço livre, caminho externo e hashes do manifesto/base. | Leitura somente; nenhuma cópia da base; ambiente existente funcional. |
+| 0. Ambiente e proveniência | Confirmar branch, WSL, versão do Python/TensorFlow/CUDA, GPU visível, espaço livre, caminhos locais e hashes; conferir o hash da base de origem contra os metadados B4. | Leitura somente; bancos locais íntegros; ambiente existente funcional. |
 | 1. Auditoria dos rótulos | Em leitura somente, medir cobertura/nulos, prevalência, durações, mudanças de classe e concordância entre 5/10/15m por raiz e pregão; conferir `trend_mean` contra voto majoritário. | Tabelas de auditoria reproduzíveis e inconsistências documentadas. |
 | 2. Contrato dos dados | Fixar universo futuro, regra de contratos/vencimento, timestamp de previsão, política de minutos ausentes e colunas permitidas. Excluir SIDEWAYS centrado. | Especificação congelada em YAML antes de consultar resultados de teste. |
-| 3. Features causais e splits | Construir entradas exclusivamente com OHLCV/atividade disponível até o instante da decisão; escalar dentro do treino; separar por datas em walk-forward/expanding; purgar amostras cujos alvos/fronteiras cruzem cortes. | Auditoria de vazamento e split por data/instrumento aprovada. |
+| 3. Features causais e splits | Definir e construir indicadores causais de OHLCV/atividade disponíveis até a decisão; escalar dentro do treino; separar por datas em walk-forward/expanding; purgar amostras cujos alvos/fronteiras cruzem cortes. | Auditoria de vazamento e split por data/instrumento aprovada. |
 | 4. Baselines | Avaliar persistência/maioria, Elastic Net ou regressão logística, LightGBM/XGBoost e um MLP/TCN compacto. Primeiro comparar os três alvos individualmente e maioria, sem busca grande. | Métricas temporais por alvo/root/bloco e tempo/VRAM do piloto. |
 | 5. Multi-escala e discordância | Comparar: (a) três modelos independentes; (b) encoder compartilhado com três cabeças e perda mascarada para alvos ausentes; (c) alvo de maioria; (d) alvo suave derivado da fração de votos. Relatar também abstention/coverage pela discordância. | Comparação pareada nas mesmas datas, entradas, sementes e orçamento; sem tratar votos como probabilidades verdadeiras. |
 | 6. Generalização e inferência | Repetir nos blocos temporais e raízes acordados; estimar intervalos por sessão/bloco; corrigir comparações múltiplas; reportar calibração quando houver probabilidades. | Conclusões limitadas ao período/universo efetivamente testados. |
@@ -75,8 +87,11 @@ um modelo aprendeu a direção real do mercado. O manuscrito NCA existente para
 ### Entradas e alvo
 
 Cada amostra representa um candle elegível de um contrato e pregão. As
-entradas serão calculadas com janelas retrospectivas; nenhuma feature derivada
-de B4 será usada. As três saídas supervisionadas são os vetores B0 de 5/10/15m.
+entradas serão indicadores causais derivados de OHLCV/atividade, calculados
+com janelas retrospectivas; nenhuma feature derivada de B4 será usada. A lista
+de indicadores, fórmulas, lookbacks e aquecimento será decidida após a auditoria
+e congelada no contrato dos dados antes de consultar o teste. As três saídas
+supervisionadas são os vetores B0 de 5/10/15m.
 Alvos nulos ficam mascarados por cabeça na perda multitarefa; a comparação
 comum também reportará uma interseção de linhas em que os três alvos existam.
 
