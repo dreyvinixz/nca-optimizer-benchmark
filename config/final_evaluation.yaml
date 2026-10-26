@@ -1,0 +1,79 @@
+study: b0_multiscale_intraday
+evaluation_version: 1
+status: preregistered_before_final_test
+development_protocol_sha256: 8310b1249c717eececc8ffb1e31cc108bfedd2108537b31e5cddbe3c0d503111
+data_contract_sha256: 36d1603d84dc661bc9fcb353a281bd942519f8ab47ea7b880ff6bc915a494aa3
+data_manifest: data/derived/win_ind_features_v1.manifest.json
+data_filter:
+  universe: [WIN, IND]
+  complete_features_only: true
+  feature_imputation: none
+  train_rows: split_train_only
+  validation_rows: split_validation_only
+  test_rows: split_test_only
+  target_masks: per_target; common_intersection_for_paired_multi_scale_scores
+final_test:
+  first_date: '2026-05-26'
+  last_date: '2026-06-30'
+  sessions: 25
+  blocks:
+    - {block: 1, start: '2026-05-26', end: '2026-06-05', sessions: 8}
+    - {block: 2, start: '2026-06-08', end: '2026-06-17', sessions: 8}
+    - {block: 3, start: '2026-06-18', end: '2026-06-30', sessions: 9}
+candidate_models:
+  freeze_from_pretest_cv: true
+  hyperparameter_search_after_freeze: false
+  models:
+    majority_constant: {kind: most_frequent_train_class}
+    causal_5m_momentum: {kind: sign, feature: log_return_5m, threshold: 0}
+    logistic_regression: {kind: independent_per_target, C: 1.0, max_iter: 250, scaler: StandardScaler}
+    hist_gradient_boosting: {kind: independent_per_target, learning_rate: 0.1, max_iter: 50, max_leaf_nodes: 15, l2_regularization: 1.0, early_stopping: false}
+    independent_mlp: {kind: one_binary_model_per_target, layers: [32, 16], dropout: 0.1, epochs: 5, batch_size: 256, scaler: StandardScaler}
+    shared_multitask_mlp: {kind: shared_encoder_three_binary_heads, layers: [32, 16], dropout: 0.1, epochs: 5, batch_size: 256, scaler: StandardScaler, null_targets: masked_loss}
+    majority_mlp: {kind: binary_mlp_on_common_intersection, layers: [32, 16], dropout: 0.1, epochs: 5, batch_size: 256, scaler: StandardScaler}
+    soft_score_mlp: {kind: regression_mlp_on_common_intersection, loss: mean_squared_error, layers: [32, 16], dropout: 0.1, epochs: 5, batch_size: 256, scaler: StandardScaler}
+    soft_score_training_mean: {kind: constant, statistic: mean_score_train_mean}
+training:
+  seed: 20261026
+  shuffle: false
+  decision_threshold: 0.5
+  scaler_fit_scope: training_rows_only
+primary_paired_contrast:
+  models: [independent_mlp, shared_multitask_mlp]
+  targets: [trend_5m, trend_10m, trend_15m]
+  sample: all_three_targets_non_null
+  primary_metric: MCC
+  secondary_metrics: [balanced_accuracy, macro_f1, coverage]
+development_inference:
+  input_predictions: tmp/phase5_multiscale_predictions.parquet
+  unit: trading_session
+  paired_session_metric: MCC
+  test: Wilcoxon_signed_rank_two_sided
+  correction: Holm_across_three_primary_targets
+  confidence_interval:
+    method: circular_moving_block_bootstrap_of_paired_session_differences
+    block_length_sessions: 5
+    replicates: 10000
+    confidence: 0.95
+    seed: 20261026
+final_test_inference:
+  report: overall_by_root_and_three_fixed_time_blocks
+  uncertainty: circular_moving_block_bootstrap_by_session_for_paired_primary_contrast
+  block_length_sessions: 5
+  replicates: 10000
+  confidence: 0.95
+  seed: 20261026
+  report_p_values: false
+probability_metrics:
+  for: models_with_sigmoid_or_probability_outputs
+  metrics: [brier_score, log_loss]
+  calibration_adjustment: none
+  interpretation: probability_of_reproducing_the_retrospective_B0_label_only
+reporting:
+  primary: [MCC, balanced_accuracy, macro_f1]
+  include_prevalence_coverage_confusion_matrix: true
+  candles_are_independent_units: false
+  report_negative_findings_and_exclusions: true
+  never_call_b0_independent_ground_truth: true
+  no_profitability_claim: true
+  test_metrics_opened_before_this_config_is_committed: false

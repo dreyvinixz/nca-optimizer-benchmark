@@ -1,0 +1,61 @@
+{
+  "status": "development_only_no_test",
+  "targets": [
+    {
+      "target": "trend_5m",
+      "sessions": 40,
+      "sessions_with_both_classes": 40,
+      "mean_session_mcc_difference": 0.00024205545162485215,
+      "median_session_mcc_difference": 0.0025879249146780747,
+      "positive_session_differences": 22,
+      "wilcoxon_p_unadjusted": 0.510137524718191,
+      "bootstrap_ci95_block5": [
+        -0.007081493318303339,
+        0.006891379698943468
+      ],
+      "independent_brier": 0.16440758109092712,
+      "shared_brier": 0.1654164344072342,
+      "independent_log_loss": 0.48912879824638367,
+      "shared_log_loss": 0.49251052737236023,
+      "wilcoxon_p_holm_3_targets": 1.0
+    },
+    {
+      "target": "trend_10m",
+      "sessions": 40,
+      "sessions_with_both_classes": 40,
+      "mean_session_mcc_difference": -0.00046163585443220745,
+      "median_session_mcc_difference": -0.00042427577339337885,
+      "positive_session_differences": 19,
+      "wilcoxon_p_unadjusted": 0.9892757193241231,
+      "bootstrap_ci95_block5": [
+        -0.003783612206200935,
+        0.002942265476793105
+      ],
+      "independent_brier": 0.1785975992679596,
+      "shared_brier": 0.1783258616924286,
+      "independent_log_loss": 0.5271497368812561,
+      "shared_log_loss": 0.5267544984817505,
+      "wilcoxon_p_holm_3_targets": 1.0
+    },
+    {
+      "target": "trend_15m",
+      "sessions": 40,
+      "sessions_with_both_classes": 40,
+      "mean_session_mcc_difference": -0.0031217005787634263,
+      "median_session_mcc_difference": -0.0009091138014918065,
+      "positive_session_differences": 17,
+      "wilcoxon_p_unadjusted": 0.3933589978863322,
+      "bootstrap_ci95_block5": [
+        -0.009604226675526137,
+        0.0030565891504334723
+      ],
+      "independent_brier": 0.18211255967617035,
+      "shared_brier": 0.18146103620529175,
+      "independent_log_loss": 0.538188636302948,
+      "shared_log_loss": 0.5367323160171509,
+      "wilcoxon_p_holm_3_targets": 1.0
+    }
+  ],
+  "holm_family": 3,
+  "date_count": 40
+}
