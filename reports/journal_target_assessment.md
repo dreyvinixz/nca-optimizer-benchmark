@@ -1,7 +1,8 @@
 # Provisional journal target assessment
 
-**Reviewed:** 2026-10-26  
-**Working target:** *Journal of Forecasting* (Wiley), regular research article track.  
+**Reviewed:** 2026-10-26
+
+**Working target:** *Journal of Forecasting* (Wiley), regular research article track.
 **Status:** provisional internal choice; no submission has been made.
 
 ## Fit rationale
