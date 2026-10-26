@@ -1,0 +1,62 @@
+study: b0_multiscale_intraday
+protocol_version: 1
+status: frozen_before_model_metrics
+hypothesis: >-
+  Test whether causal one-minute OHLCV/activity features can predict same-candle
+  retrospective B0 labels at 5m, 10m, and 15m, and compare separate with
+  multi-scale supervision on identical chronological samples.
+alignment:
+  x_key: [ticker, date, time]
+  y_key: [ticker, date, time]
+  shift: none
+  prediction_time: after close of the timestamped one-minute bar
+  interpretation: label prediction, not causal market-state or trading prediction
+universe:
+  primary_roots: [WIN, IND]
+  exploratory_roots: []
+  contract_series_are_independent: true
+  all_contracts_on_a_date_share_split: true
+features:
+  contract: config/data_contract.yaml
+  train_only_scaling: true
+  preprocessing_fit_scope: training_rows_of_each_fold_only
+  incomplete_feature_rows: excluded_before_fit_and_evaluation
+  feature_imputation: none; do_not_fit_any_transform_on_validation_or_test
+  shuffled_rows: false
+targets:
+  heads: [trend_5m, trend_10m, trend_15m]
+  null_policy: masked_loss_per_head
+  common_intersection: all_three_heads_non_null
+  majority_target: trend_mean.trend_label_on_common_intersection
+  soft_target: trend_mean.mean_score_on_common_intersection
+  soft_target_interpretation: deterministic fraction of B0 votes, not true probability
+temporal_validation:
+  grouping_unit: trading_date
+  ordering: ascending_date
+  split: [train, validation, test]
+  proportions: [0.60, 0.20, 0.20]
+  rounding: floor_train_and_validation; remainder_test
+  all_instruments_same_date_same_split: true
+  no_random_shuffle: true
+  expanding_folds:
+    count: 4
+    validation_block_sessions: 10
+    minimum_initial_training_sessions: 47
+    scope: first_80_percent_of_dates_only; never_include_test_dates
+    fit: train_on_all_dates_before_validation_block
+  final_selection: fit_on_train; select_on_validation; report_once_on_test
+  boundary_purge: >-
+    Labels are session-local in B4. Before fitting at a cutoff, retain training
+    targets only when their segment_end_time is present and the segment ends
+    within that training session. Never let a row or target cross a date split.
+  test_access: no model or hyperparameter choice based on test metrics
+metrics:
+  primary: [MCC, balanced_accuracy, macro_f1]
+  secondary: [coverage, prevalence, confusion_matrix]
+  uncertainty_unit: trading_session_or_temporal_block
+  candles_as_independent_uncertainty_units: false
+reproducibility:
+  seed: 20261026
+  max_search_candidates: 12
+  preserve_large_artifacts_outside_git: true
+  results_must_record: [config_hash, source_hashes, software_versions, seed, split_dates, runtime]

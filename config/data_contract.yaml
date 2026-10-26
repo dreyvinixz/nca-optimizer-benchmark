@@ -1,0 +1,99 @@
+study: b0_multiscale_intraday
+version: 1
+sources:
+  market_db: data/bovdb-v3.1-internal.2.sqlite
+  labels_db: data/bovdb-labels-B4-v1.sqlite
+  market_table: price1
+  label_tables: [trend_5m, trend_10m, trend_15m, trend_mean]
+universe:
+  primary_roots: [WIN, IND]
+  exploratory_roots: []
+  excluded_roots:
+    WDO: no price1 candles or B4 labels in the local snapshot
+    WSP: absent from ticker catalog, price1, and B4
+    ISP: absent from ticker catalog, price1, and B4
+    CCMF: materially lower activity; excluded from the confirmatory sample
+    BGIG: materially lower activity; excluded from the confirmatory sample
+    EURF: only 4 observed sessions
+    WEUF: only 4 observed sessions
+    SJCF: only 13 observed sessions and sparse minute rows
+  rationale: >-
+    WIN and IND have the highest median daily contract quantity and trade count
+    among roots present in the local data. Selection uses the observed snapshot,
+    not a claim of complete market coverage.
+sample_key: [ticker, date, time]
+contract_policy:
+  identity: ticker
+  continuous_series: false
+  overlapping_expiries: keep each contract as a separate sample series
+  feature_state: reset at each ticker and session; never carry across expiries or sessions
+  split_group: date; every root and contract on a date uses the same split
+time:
+  timezone: America/Sao_Paulo
+  bar_timestamp: start of one-minute interval
+  feature_availability: after that interval closes; row t may use its own completed OHLCV bar
+  target_alignment: same ticker, date, and bar timestamp; no row/day shift
+  session_window_from_label_generator: ['09:00:00', '18:00:00']
+missing_data:
+  no_synthetic_minutes: true
+  no_forward_fill: true
+  rolling_windows_require_consecutive_observed_minutes: true
+  gaps_reset_feature_windows: true
+  null_targets: retain per-head masks; do not impute
+  incomplete_feature_windows: keep_in_cache_but_exclude_from_model_rows
+  feature_imputation: none
+  duplicate_keys: fail extraction
+labels:
+  targets: [trend_5m.trend_label, trend_10m.trend_label, trend_15m.trend_label]
+  common_target: trend_mean.trend_label
+  soft_target: trend_mean.mean_score
+  target_semantics: retrospective B0 regime labels; not contemporaneously observable truth
+  segment_end_fields: [segment_end_time, segment_end_type]
+  segment_end_usage: leakage audit only; never model input
+features:
+  allowed_source_columns: [open, high, low, close, volume, business, amount_stock]
+  generated:
+    - log_return_1m
+    - log_return_5m
+    - log_return_15m
+    - candle_body_fraction
+    - candle_range_fraction
+    - realized_volatility_5m
+    - realized_volatility_15m
+    - realized_volatility_30m
+    - log_volume
+    - log_business
+    - log_amount_stock
+  definitions:
+    log_return_1m: log(close_t / close_t_minus_1_observed_minute)
+    log_return_5m: log(close_t / close_t_minus_5_observed_minutes)
+    log_return_15m: log(close_t / close_t_minus_15_observed_minutes)
+    candle_body_fraction: (close - open) / close
+    candle_range_fraction: (high - low) / close
+    realized_volatility: population_standard_deviation_of_1m_log_returns_over_5_15_or_30_rows
+    log_volume: log1p(max(volume, 0))
+    log_business: log1p(max(business, 0))
+    log_amount_stock: log1p(max(amount_stock, 0))
+  window_rules:
+    return_lags: [1, 5, 15]
+    realized_volatility_lookbacks: [5, 15, 30]
+    warmup: full_window_required; undefined_values_remain_null
+    continuity: every_1m_log_return_window_must_stay_in_one_consecutive_observed_minute_segment
+  forbidden:
+    - average
+    - trend_label
+    - trend_name
+    - segment_end_time
+    - segment_end_type
+    - sideways_flag
+    - sideways_er
+    - sideways_slope_atr
+    - sideways_net_atr
+    - sideways_range_atr
+    - mean_score
+    - valid_timeframes
+    - any field calculated from future bars
+provenance:
+  reuse_phase1_label_audit: true
+  regenerate_existing_labels: false
+  audit_new_labels_only_if_source_expands: true

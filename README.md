@@ -7,6 +7,16 @@ data constraints, validation protocol, and phase exit criteria are in
 
 The actionable phase and task checklist is in [task.md](task.md).
 
-The training study has not started. Keep source code, configuration, and small
-traceable summaries here; use the existing WSL environment and external BovDB
-source described in the roadmap.
+The training study has not started. The contracts and first feature cache are
+now defined. The cache is local/ignored, while its hash, coverage, split dates,
+and leakage checks are recorded in the report manifest. To rebuild it in the
+existing WSL environment:
+
+```bash
+source scripts/wsl_cuda_env.sh
+.venv_wsl/bin/python scripts/build_features.py
+.venv_wsl/bin/python scripts/audit_leakage.py
+```
+
+Keep source code, configuration, and small traceable summaries here; use the
+external BovDB sources described in the roadmap without modifying them.

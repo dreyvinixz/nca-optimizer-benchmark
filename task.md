@@ -1,6 +1,6 @@
 # Plano de tarefas — estudo multi-escala B0
 
-**Status geral:** planejamento; nenhum treinamento deste estudo foi iniciado.  
+**Status geral:** contrato congelado; Fases 2–3 documentadas e auditadas; nenhum treinamento deste estudo foi iniciado.
 **Branch:** `feat/one-minute-labels-clean`  
 **Roadmap científico:** [ROADMAP_ONE_MINUTE_LABELS.md](ROADMAP_ONE_MINUTE_LABELS.md)
 
@@ -55,35 +55,40 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 
 **Objetivo:** congelar as decisões de amostragem antes de consultar resultados de teste.
 
-- [ ] Aprovar universo principal de futuros e lista de raízes BovDB incluídas/excluídas com justificativa.
-- [ ] Definir tratamento de contratos, vencimentos, rolagens e eventuais sobreposições de contratos.
-- [ ] Definir chave única da amostra e instante em que a previsão seria tomada.
-- [ ] Fixar política para minutos ausentes, candles incompletos, duplicatas e pregões parciais.
-- [ ] Definir alvos individuais, máscara por alvo, interseção comum e regra do alvo de maioria.
-- [ ] Definir uso de `mean_score` como alvo suave/resumo determinístico; não interpretá-lo como probabilidade verdadeira.
-- [ ] Listar colunas permitidas e proibidas; excluir SIDEWAYS centrado, campos derivados de B4 e qualquer informação posterior à decisão.
-- [ ] Definir população, período, exclusões e política de dados faltantes.
-- [ ] Escrever e revisar `config/data_contract.yaml` e `config/experiment_protocol.yaml`.
-- [ ] Congelar os arquivos de protocolo em commit antes de abrir/usar métricas de teste.
+- [x] Selecionar universo pela mediana diária de `amount_stock`, número de negócios e sessões observadas: WIN/IND no núcleo; demais raízes fora do estudo confirmatório atual.
+- [x] Excluir WDO, WSP e ISP: não há candles `price1` nem rótulos B4 para essas raízes na fotografia local; CCMF/BGIG também ficam fora do universo confirmatório por liquidez menor.
+- [x] Definir contratos como séries independentes por ticker, sem costura/ajuste contínuo; estados de feature reiniciam por contrato e pregão. Contratos do mesmo pregão ficam no mesmo split.
+- [x] Definir chave `(ticker,date,time)`, decisão após o fechamento do candle de um minuto e pareamento do rótulo B0 no mesmo timestamp, sem shift.
+- [x] Registrar que previsão da próxima sessão não faz parte da hipótese atual; se virar hipótese futura, exigirá contrato separado por próximo pregão/horário.
+- [x] Registrar que B0 é retrospectivo; treino só pode usar rótulos depois de concluído o pregão, e o resultado é previsão de rótulo, não sinal causal de mercado.
+- [x] Fixar política: sem minutos sintéticos ou forward-fill; lacunas reiniciam janelas; duplicatas falham; janelas limitadas a 09:00–18:00; rótulos nulos são mascarados por cabeça.
+- [x] Reutilizar a auditoria B4 concluída na Fase 1 para os registros já presentes; não regenerar nem repetir a auditoria global ao selecionar raízes. Para novos símbolos incluídos, auditar apenas os rótulos novos.
+- [x] Definir alvos individuais, máscara por alvo, interseção comum e regra do alvo de maioria.
+- [x] Definir `mean_score` como alvo suave determinístico da fração de votos, sem interpretá-lo como probabilidade verdadeira.
+- [x] Listar colunas/indicadores permitidos e proibidos; excluir SIDEWAYS, endpoints e qualquer coluna derivada de B4 das entradas.
+- [x] Definir população confirmatória local: WIN/IND, 2026-01-02 a 2026-06-30, com exclusões/limites documentados nos relatórios.
+- [x] Escrever e revisar `config/data_contract.yaml` e `config/experiment_protocol.yaml`.
+- [x] Congelar os arquivos de protocolo em commit antes de abrir/usar métricas de teste; nenhum resultado de modelo ou métrica de teste foi consultado.
 
-**Entregáveis:** contrato de dados e protocolo versionados, com proveniência e justificativas.  
+**Entregáveis:** [scripts/audit_futures_liquidity.py](scripts/audit_futures_liquidity.py), [relatório de liquidez](reports/futures_liquidity.md), contrato de dados e protocolo versionados, com proveniência e justificativas.
 **Saída da fase:** decisões analíticas pré-registradas e revisadas.
 
 ## Fase 3 — Features causais e splits temporais
 
 **Objetivo:** construir entradas sem vazamento e validação cronológica comparável.
 
-- [ ] Inspecionar o gerador B4 e a semântica das colunas para determinar fronteiras/segmentos dos alvos.
-- [ ] Especificar janelas retrospectivas de OHLCV/atividade disponíveis até o instante da decisão.
-- [ ] Definir um conjunto inicial enxuto de indicadores causais (por exemplo, retornos, corpo/amplitude do candle, volatilidade móvel e atividade/volume), suas fórmulas, lookbacks e aquecimento.
-- [ ] Implementar e auditar indicadores sem usar rótulos, SIDEWAYS ou campos derivados de B4 como entrada.
-- [ ] Medir consultas SQLite representativas; só então decidir se um cache derivado Parquet é útil para extração repetida.
-- [ ] Determinar purge/embargo com base na janela de features e na fronteira/segmento do alvo.
-- [ ] Definir folds walk-forward/expanding por pregão, com datas idênticas entre alvos e modelos.
-- [ ] Implementar escalonamento e imputação ajustados somente no conjunto de treino de cada fold.
-- [ ] Separar explicitamente treino, validação e teste; impedir shuffle e sobreposição temporal indevida.
-- [ ] Criar auditorias automáticas de colunas, timestamps, chaves, fronteiras, purge e uso de dados futuros.
-- [ ] Verificar por amostragem manual as datas e instrumentos de cada corte.
+- [x] Inspecionar o gerador B4: rótulos são atribuídos ex post até `segment_end_time`; B4 é limitado a uma sessão.
+- [x] Especificar janelas retrospectivas de OHLCV/atividade disponíveis após o fechamento do candle da linha.
+- [x] Definir retornos de 1/5/15 linhas consecutivas, corpo/amplitude, volatilidade populacional de 5/15/30 retornos e logs de volume/negócios/quantidade, com aquecimento completo.
+- [x] Implementar e auditar indicadores sem usar rótulos, SIDEWAYS ou campos derivados de B4 como entradas.
+- [x] Medir a extração após corrigir afinidade SQLite em `(id_ticker,date,time)`; cache Parquet seletivo de 12,6 MB criado para WIN/IND.
+- [x] Implementar o pareamento B0 no mesmo `(ticker,date,time)`; nenhuma linha/dia seguinte é usada.
+- [x] Confirmar por auditoria que os endpoints não atravessam o pregão, portanto nenhum segmento B4 cruza as datas de corte; janelas de features reiniciam em gaps/contratos/pregões.
+- [x] Definir quatro folds expanding por pregão, somente no período de desenvolvimento e sem datas do teste.
+- [ ] Implementar escalonamento ajustado somente no treino de cada fold; linhas com janela de feature incompleta são excluídas, sem imputação.
+- [x] Separar treino/validação/teste cronologicamente, por data comum a todos os instrumentos e sem shuffle.
+- [x] Criar auditorias automáticas de colunas, chaves, fronteiras, endpoints, gaps e datas de folds.
+- [x] Conferir as datas de corte/folds e a cobertura por ticker em `reports/leakage_audit.md`.
 
 **Entregáveis:** código/configuração de features e splits, manifesto dos folds e `reports/leakage_audit.md`.  
 **Saída da fase:** auditoria de vazamento aprovada e cortes congelados antes do treinamento.
