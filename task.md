@@ -8,14 +8,14 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 
 ## Regras de execução
 
-- [ ] Usar o checkout atual e o WSL2 existente; não criar outro clone/checkout nem copiar `.venv_wsl`.
-- [ ] Ler em modo somente leitura os SQLite locais `data/bovdb-labels-B4-v1.sqlite` e `data/bovdb-v3.1-internal.2.sqlite`; mantê-los ignorados pelo Git e não alterar/converter as origens.
-- [ ] Só criar cache derivado (Parquet, memmap ou TFRecord) após medir o gargalo e congelar o contrato dos dados; registrar custo e tamanho.
-- [ ] Manter a auditoria inicial em leitura somente e registrar hash/proveniência dos insumos.
-- [ ] Não versionar dados, bases derivadas, predições completas, checkpoints ou caches pesados.
-- [ ] Registrar configurações, seeds, versões, orçamento, logs e resumos pequenos suficientes para reproduzir cada resultado.
-- [ ] Tratar os alvos B0 como referências relativas: sem referência independente, não declarar ground truth, direção real do mercado, incerteza epistêmica ou lucro executável.
-- [ ] Manter o manuscrito NCA anterior de 5 minutos separado deste estudo.
+- [x] Usar o checkout atual e o WSL2 existente; não criar outro clone/checkout nem copiar `.venv_wsl`.
+- [x] Ler em modo somente leitura os SQLite locais `data/bovdb-labels-B4-v1.sqlite` e `data/bovdb-v3.1-internal.2.sqlite`; mantê-los ignorados pelo Git e não alterar/converter as origens.
+- [x] Só criar cache derivado (Parquet) após medir o gargalo e congelar o contrato dos dados; registrar custo e tamanho.
+- [x] Manter a auditoria inicial em leitura somente e registrar hash/proveniência dos insumos.
+- [x] Não versionar dados, bases derivadas, predições completas, checkpoints ou caches pesados.
+- [x] Registrar configurações, seeds, versões, orçamento, logs e resumos pequenos suficientes para reproduzir cada resultado.
+- [x] Tratar os alvos B0 como referências relativas: sem referência independente, não declarar ground truth, direção real do mercado, incerteza epistêmica ou lucro executável.
+- [x] Manter o manuscrito NCA anterior de 5 minutos separado deste estudo.
 
 ## Fase 0 — Ambiente e proveniência
 
@@ -178,5 +178,5 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 - [x] Fases 0–6 concluídas com critérios de saída atendidos.
 - [x] Fase 7 explicitamente descartada com justificativa.
 - [x] Rascunho interno da Fase 8 preparado e reproduzido a partir dos artefatos documentados; revisão de submissão permanece pendente de escolha do periódico.
-- [ ] Repositório contém código, configurações, documentação e resumos pequenos; dados e saídas pesadas permanecem externos/temporários.
+- [x] Repositório contém código, configurações, documentação e resumos pequenos; dados e saídas pesadas permanecem externos/temporários.
 - [x] `git status` revisado para confirmar que nenhum banco, predição completa, checkpoint ou cache foi incluído no commit; uma alteração alheia no CSV da auditoria foi preservada sem staging.
