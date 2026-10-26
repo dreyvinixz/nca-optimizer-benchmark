@@ -1,0 +1,268 @@
+{
+  "status": "completed_pretest_validation_only",
+  "device": "/GPU:0",
+  "visible_gpus": [
+    "/physical_device:GPU:0"
+  ],
+  "test_start_excluded": "2026-05-26",
+  "usable_pretest_rows": 87448,
+  "targets": {
+    "trend_5m": "y5",
+    "trend_10m": "y10",
+    "trend_15m": "y15",
+    "majority": "y_majority"
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "target": "trend_5m",
+      "train_rows": 45659,
+      "validation_rows": 10435,
+      "fit_predict_seconds": 9.7138,
+      "epoch_seconds": [
+        5.0911,
+        0.4448,
+        0.4264,
+        0.4605,
+        0.4583
+      ]
+    },
+    {
+      "fold": 1,
+      "target": "trend_10m",
+      "train_rows": 45520,
+      "validation_rows": 10433,
+      "fit_predict_seconds": 6.2981,
+      "epoch_seconds": [
+        3.7361,
+        0.427,
+        0.4415,
+        0.4395,
+        0.4647
+      ]
+    },
+    {
+      "fold": 1,
+      "target": "trend_15m",
+      "train_rows": 45544,
+      "validation_rows": 10399,
+      "fit_predict_seconds": 6.6295,
+      "epoch_seconds": [
+        3.9489,
+        0.4561,
+        0.4745,
+        0.4757,
+        0.4728
+      ]
+    },
+    {
+      "fold": 1,
+      "target": "majority",
+      "train_rows": 45460,
+      "validation_rows": 10394,
+      "fit_predict_seconds": 6.8565,
+      "epoch_seconds": [
+        3.6797,
+        0.5533,
+        0.5311,
+        0.5648,
+        0.5632
+      ]
+    },
+    {
+      "fold": 2,
+      "target": "trend_5m",
+      "train_rows": 56094,
+      "validation_rows": 9100,
+      "fit_predict_seconds": 7.3363,
+      "epoch_seconds": [
+        3.8094,
+        0.7488,
+        0.6539,
+        0.6679,
+        0.6126
+      ]
+    },
+    {
+      "fold": 2,
+      "target": "trend_10m",
+      "train_rows": 55953,
+      "validation_rows": 9088,
+      "fit_predict_seconds": 8.317,
+      "epoch_seconds": [
+        4.7274,
+        0.6926,
+        0.6353,
+        0.6637,
+        0.6231
+      ]
+    },
+    {
+      "fold": 2,
+      "target": "trend_15m",
+      "train_rows": 55943,
+      "validation_rows": 9066,
+      "fit_predict_seconds": 8.4638,
+      "epoch_seconds": [
+        4.5404,
+        0.6909,
+        0.6628,
+        0.6672,
+        0.7615
+      ]
+    },
+    {
+      "fold": 2,
+      "target": "majority",
+      "train_rows": 55854,
+      "validation_rows": 9064,
+      "fit_predict_seconds": 8.2851,
+      "epoch_seconds": [
+        4.5969,
+        0.6545,
+        0.6477,
+        0.6813,
+        0.685
+      ]
+    },
+    {
+      "fold": 3,
+      "target": "trend_5m",
+      "train_rows": 65194,
+      "validation_rows": 9595,
+      "fit_predict_seconds": 8.8416,
+      "epoch_seconds": [
+        4.8836,
+        0.7733,
+        0.7727,
+        0.7218,
+        0.6619
+      ]
+    },
+    {
+      "fold": 3,
+      "target": "trend_10m",
+      "train_rows": 65041,
+      "validation_rows": 9560,
+      "fit_predict_seconds": 8.3371,
+      "epoch_seconds": [
+        4.6991,
+        0.782,
+        0.6892,
+        0.637,
+        0.6728
+      ]
+    },
+    {
+      "fold": 3,
+      "target": "trend_15m",
+      "train_rows": 65009,
+      "validation_rows": 9536,
+      "fit_predict_seconds": 7.6383,
+      "epoch_seconds": [
+        3.9613,
+        0.6718,
+        0.6487,
+        0.6675,
+        0.8727
+      ]
+    },
+    {
+      "fold": 3,
+      "target": "majority",
+      "train_rows": 64918,
+      "validation_rows": 9524,
+      "fit_predict_seconds": 7.2849,
+      "epoch_seconds": [
+        3.8793,
+        0.6186,
+        0.6818,
+        0.6346,
+        0.6473
+      ]
+    },
+    {
+      "fold": 4,
+      "target": "trend_5m",
+      "train_rows": 74789,
+      "validation_rows": 7269,
+      "fit_predict_seconds": 7.848,
+      "epoch_seconds": [
+        3.9213,
+        0.7611,
+        0.7502,
+        0.7403,
+        0.7922
+      ]
+    },
+    {
+      "fold": 4,
+      "target": "trend_10m",
+      "train_rows": 74601,
+      "validation_rows": 7261,
+      "fit_predict_seconds": 7.753,
+      "epoch_seconds": [
+        4.0267,
+        0.6929,
+        0.7529,
+        0.7338,
+        0.74
+      ]
+    },
+    {
+      "fold": 4,
+      "target": "trend_15m",
+      "train_rows": 74545,
+      "validation_rows": 7243,
+      "fit_predict_seconds": 7.7943,
+      "epoch_seconds": [
+        3.9595,
+        0.7525,
+        0.746,
+        0.7374,
+        0.7846
+      ]
+    },
+    {
+      "fold": 4,
+      "target": "majority",
+      "train_rows": 74442,
+      "validation_rows": 7235,
+      "fit_predict_seconds": 8.0323,
+      "epoch_seconds": [
+        4.2951,
+        0.7213,
+        0.7529,
+        0.7093,
+        0.7287
+      ]
+    }
+  ],
+  "architecture": [
+    11,
+    32,
+    16,
+    1
+  ],
+  "dropout": 0.1,
+  "batch_size": 256,
+  "epochs": 5,
+  "shuffle": false,
+  "base_seed": 20261026,
+  "mean_epoch_seconds": 1.3651,
+  "total_model_fit_predict_seconds": 125.43,
+  "runtime_seconds": 131.57,
+  "peak_rss_kib": 1933892,
+  "gpu_memory_info_bytes": {
+    "current": 244736,
+    "peak": 71439616
+  },
+  "tensorflow": "2.21.0",
+  "contract_hash": "36d1603d84dc661bc9fcb353a281bd942519f8ab47ea7b880ff6bc915a494aa3",
+  "protocol_hash": "8310b1249c717eececc8ffb1e31cc108bfedd2108537b31e5cddbe3c0d503111",
+  "source_sha256": {
+    "market": "32cadf06387ae172edc804804fe762ef26f9f0928424ee83ce9e37a848389eab",
+    "labels": "2d8c18c8d1a46be788ee2810a9caba043c2413102e4ee4f5c9927646037ce4c8"
+  },
+  "metrics_file": "reports/mlp_cv_summary.csv"
+}

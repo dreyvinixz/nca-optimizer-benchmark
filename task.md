@@ -1,6 +1,6 @@
 # Plano de tarefas — estudo multi-escala B0
 
-**Status geral:** contrato congelado; Fases 2–3 documentadas e auditadas; nenhum treinamento deste estudo foi iniciado.
+**Status geral:** contrato congelado; auditoria da Fase 3 aprovada; baselines de CPU iniciados, sem consultar métricas do teste.
 **Branch:** `feat/one-minute-labels-clean`  
 **Roadmap científico:** [ROADMAP_ONE_MINUTE_LABELS.md](ROADMAP_ONE_MINUTE_LABELS.md)
 
@@ -85,7 +85,7 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 - [x] Implementar o pareamento B0 no mesmo `(ticker,date,time)`; nenhuma linha/dia seguinte é usada.
 - [x] Confirmar por auditoria que os endpoints não atravessam o pregão, portanto nenhum segmento B4 cruza as datas de corte; janelas de features reiniciam em gaps/contratos/pregões.
 - [x] Definir quatro folds expanding por pregão, somente no período de desenvolvimento e sem datas do teste.
-- [ ] Implementar escalonamento ajustado somente no treino de cada fold; linhas com janela de feature incompleta são excluídas, sem imputação.
+- [x] Ajustar `StandardScaler` somente nos dados de treino de cada fold, dentro do pipeline; excluir janelas de feature incompletas, sem imputação.
 - [x] Separar treino/validação/teste cronologicamente, por data comum a todos os instrumentos e sem shuffle.
 - [x] Criar auditorias automáticas de colunas, chaves, fronteiras, endpoints, gaps e datas de folds.
 - [x] Conferir as datas de corte/folds e a cobertura por ticker em `reports/leakage_audit.md`.
@@ -97,16 +97,16 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 
 **Objetivo:** medir custo local e estabelecer referências simples antes da comparação multitarefa.
 
-- [ ] Configurar diretório temporário de execução e limite de disco; garantir que artefatos grandes não sejam versionados.
-- [ ] Rodar piloto curto com uma raiz, janela limitada, batch pequeno e orçamento fixo.
-- [ ] Registrar tempo por época, throughput, RAM, pico de VRAM e estabilidade da GPU.
-- [ ] Ajustar o tamanho do modelo/batch ao limite da GTX 1650 Max-Q de 4 GB.
-- [ ] Implementar baseline de persistência e baseline de classe majoritária calculados sem informação futura.
-- [ ] Implementar regressão logística/Elastic Net.
-- [ ] Implementar baseline de árvore (LightGBM ou XGBoost) no CPU, se viável no ambiente disponível.
-- [ ] Implementar um MLP ou TCN compacto; não iniciar busca ampla de hiperparâmetros.
-- [ ] Avaliar separadamente os três alvos e o alvo de maioria nos mesmos folds.
-- [ ] Registrar MCC, balanced accuracy, macro-F1, prevalência, cobertura, matriz de confusão e custos de execução.
+- [x] Manter métricas compactas em `reports/` e o cache de dados em `data/derived/` ignorado pelo Git; não salvar checkpoints/predições volumosas.
+- [x] Rodar piloto curto de CPU em quatro folds expanding e duas raízes, com features completas.
+- [x] Registrar custo do MLP/GPU (tempo por época, throughput, RAM, pico de VRAM e estabilidade) em [mlp_pilot.md](reports/mlp_pilot.md) e no JSON do CV.
+- [x] Revalidar a GTX 1650 Max-Q de 4 GB e dimensionar piloto em batch 256/MLP 11–32–16–1; o pico permaneceu bem abaixo da VRAM disponível.
+- [x] Implementar classe majoritária e momentum causal; persistência do rótulo anterior foi excluída porque o B4 não registra o horário de confirmação/observabilidade.
+- [x] Implementar baseline de regressão logística com padronização ajustada só no treino de cada fold.
+- [x] Implementar baseline de árvore CPU com `HistGradientBoostingClassifier` do scikit-learn; LightGBM/XGBoost não estão instalados.
+- [x] Implementar e avaliar um MLP compacto nos quatro folds; sem busca ampla de hiperparâmetros.
+- [x] Avaliar separadamente os três alvos e o alvo de maioria nos mesmos quatro folds de validação.
+- [x] Registrar MCC, balanced accuracy, macro-F1, prevalência, cobertura, matrizes de confusão e custo em [baseline_cv.md](reports/baseline_cv.md) e CSV.
 
 **Entregáveis:** configuração do piloto, logs e tabela resumida de custo/desempenho por modelo e alvo.  
 **Saída da fase:** orçamento de execução e baselines reproduzíveis aprovados.

@@ -1,0 +1,69 @@
+{
+  "status": "completed_pretest_capacity_pilot",
+  "device": "/GPU:0",
+  "visible_gpus": [
+    "/physical_device:GPU:0"
+  ],
+  "root": "WIN",
+  "target": "trend_5m",
+  "fold": {
+    "fold": 1,
+    "train_dates": [
+      "2026-01-02",
+      "2026-03-11"
+    ],
+    "validation_dates": [
+      "2026-03-12",
+      "2026-03-25"
+    ],
+    "train_sessions": 47,
+    "validation_sessions": 10
+  },
+  "train_rows": 29119,
+  "validation_rows": 6382,
+  "features": [
+    "log_return_1m",
+    "log_return_5m",
+    "log_return_15m",
+    "candle_body_fraction",
+    "candle_range_fraction",
+    "realized_volatility_5m",
+    "realized_volatility_15m",
+    "realized_volatility_30m",
+    "log_volume",
+    "log_business",
+    "log_amount_stock"
+  ],
+  "scaler": "StandardScaler fit on pilot training rows only",
+  "architecture": [
+    11,
+    32,
+    16,
+    1
+  ],
+  "dropout": 0.1,
+  "batch_size": 256,
+  "epochs": 5,
+  "shuffle": false,
+  "seed": 20261026,
+  "epoch_seconds": [
+    6.6353,
+    0.4183,
+    0.4155,
+    0.4114,
+    0.4121
+  ],
+  "samples_per_second": 17557.28,
+  "total_seconds_including_compile_eval": 10.92,
+  "validation_loss": 0.48750513792037964,
+  "validation_binary_accuracy": 0.7489815354347229,
+  "gpu_memory_info_bytes": {
+    "current": 19968,
+    "peak": 69723648
+  },
+  "peak_rss_kib": 1453312,
+  "tensorflow": "2.21.0",
+  "contract_hash": "36d1603d84dc661bc9fcb353a281bd942519f8ab47ea7b880ff6bc915a494aa3",
+  "protocol_hash": "8310b1249c717eececc8ffb1e31cc108bfedd2108537b31e5cddbe3c0d503111",
+  "test_start_excluded": "2026-05-26"
+}

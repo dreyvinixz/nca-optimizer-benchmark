@@ -1,0 +1,100 @@
+{
+  "status": "completed_pretest_validation_only",
+  "test_start_date_excluded": "2026-05-26",
+  "rows_loaded_before_test_filter": "Parquet reader applies date filter; only returned pre-test rows used",
+  "usable_pretest_rows": 87448,
+  "usable_features": [
+    "log_return_1m",
+    "log_return_5m",
+    "log_return_15m",
+    "candle_body_fraction",
+    "candle_range_fraction",
+    "realized_volatility_5m",
+    "realized_volatility_15m",
+    "realized_volatility_30m",
+    "log_volume",
+    "log_business",
+    "log_amount_stock"
+  ],
+  "targets": {
+    "trend_5m": "y5",
+    "trend_10m": "y10",
+    "trend_15m": "y15",
+    "majority": "y_majority"
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "train_dates": [
+        "2026-01-02",
+        "2026-03-11"
+      ],
+      "validation_dates": [
+        "2026-03-12",
+        "2026-03-25"
+      ],
+      "train_ready_rows": 45767,
+      "validation_ready_rows": 10444
+    },
+    {
+      "fold": 2,
+      "train_dates": [
+        "2026-01-02",
+        "2026-03-25"
+      ],
+      "validation_dates": [
+        "2026-03-26",
+        "2026-04-09"
+      ],
+      "train_ready_rows": 56211,
+      "validation_ready_rows": 9110
+    },
+    {
+      "fold": 3,
+      "train_dates": [
+        "2026-01-02",
+        "2026-04-09"
+      ],
+      "validation_dates": [
+        "2026-04-10",
+        "2026-04-24"
+      ],
+      "train_ready_rows": 65321,
+      "validation_ready_rows": 9610
+    },
+    {
+      "fold": 4,
+      "train_dates": [
+        "2026-01-02",
+        "2026-04-24"
+      ],
+      "validation_dates": [
+        "2026-04-27",
+        "2026-05-11"
+      ],
+      "train_ready_rows": 74931,
+      "validation_ready_rows": 7279
+    }
+  ],
+  "candidate_models": [
+    "majority",
+    "logistic_regression",
+    "hist_gradient_boosting",
+    "causal_5m_momentum"
+  ],
+  "persistence_baseline": "omitted because B4 has no confirmation timestamp establishing past-label availability",
+  "metrics_file": "reports/baseline_cv_summary.csv",
+  "report_file": "reports/baseline_cv.md",
+  "runtime_seconds": 17.15,
+  "peak_rss_kib": 482008,
+  "python": "3.12.13",
+  "pandas": "2.3.3",
+  "numpy": "2.4.6",
+  "scikit_learn": "1.9.0",
+  "contract_hash": "36d1603d84dc661bc9fcb353a281bd942519f8ab47ea7b880ff6bc915a494aa3",
+  "protocol_hash": "8310b1249c717eececc8ffb1e31cc108bfedd2108537b31e5cddbe3c0d503111",
+  "source_sha256": {
+    "market": "32cadf06387ae172edc804804fe762ef26f9f0928424ee83ce9e37a848389eab",
+    "labels": "2d8c18c8d1a46be788ee2810a9caba043c2413102e4ee4f5c9927646037ce4c8"
+  }
+}
