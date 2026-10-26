@@ -1,6 +1,6 @@
 # Plano de tarefas — estudo multi-escala B0
 
-**Status geral:** contrato congelado; auditoria da Fase 3 aprovada; baselines de CPU iniciados, sem consultar métricas do teste.
+**Status geral:** Fases 2–5 concluídas em desenvolvimento; preparação de generalização/inferência em andamento; métricas do teste final ainda não consultadas.
 **Branch:** `feat/one-minute-labels-clean`  
 **Roadmap científico:** [ROADMAP_ONE_MINUTE_LABELS.md](ROADMAP_ONE_MINUTE_LABELS.md)
 
@@ -115,16 +115,16 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 
 **Objetivo:** comparar estratégias pareadas nas mesmas amostras e cortes.
 
-- [ ] Fixar seeds, orçamento de busca/treino e critérios de seleção sem olhar o teste.
-- [ ] Treinar três modelos independentes, um por escala.
-- [ ] Treinar encoder compartilhado com cabeças 5/10/15m e perda mascarada para alvos nulos.
-- [ ] Treinar comparação com alvo duro de maioria.
-- [ ] Treinar comparação com alvo suave derivado da fração de votos/`mean_score`.
-- [ ] Calcular número de votos, concordância e discordância entre escalas nas linhas elegíveis.
-- [ ] Avaliar abstention seletiva por nível de discordância, sempre reportando cobertura junto com desempenho.
-- [ ] Comparar modelos na interseção comum de linhas e também reportar cobertura por cabeça quando alvos forem ausentes.
-- [ ] Preservar igualdade de datas, entradas, seeds e orçamento entre comparações pareadas.
-- [ ] Registrar predições e checkpoints somente no diretório temporário definido; guardar no repositório apenas resumos pequenos necessários.
+- [x] Fixar seed 20261026, cinco épocas, batch 256, arquitetura 11–32–16–1 e sem busca; nenhuma métrica do teste foi consultada.
+- [x] Treinar três modelos independentes, um por escala, nos quatro folds.
+- [x] Treinar encoder compartilhado com três cabeças 5/10/15m e pesos/máscaras para rótulos nulos.
+- [x] Treinar comparação com alvo duro de maioria.
+- [x] Treinar regressão para `mean_score` e comparar com baseline da média do treino.
+- [x] Registrar votos positivos, unanimidade e discordância entre escalas nas predições temporárias.
+- [x] Medir aceitação seletiva por unanimidade das três saídas preditas, sempre junto com cobertura; tabelas de estratos pelo rótulo B0 ficam marcadas como descritivas, indisponíveis na inferência.
+- [x] Comparar arquiteturas na interseção comum e reportar cobertura por cabeça quando há rótulos ausentes.
+- [x] Usar os mesmos folds/datas/features/orçamento entre modelos pareados; seeds determinísticas registradas.
+- [x] Manter predições em `tmp/` (ignorado pelo Git) e versionar somente tabelas/relatórios pequenos.
 
 **Entregáveis:** configurações, logs, tabela comparativa pareada e resumo de cobertura/discordância.  
 **Saída da fase:** comparação completa sem apresentar votos como probabilidades ou verdade independente.

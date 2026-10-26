@@ -1,0 +1,197 @@
+{
+  "status": "completed_pretest_multiscale_cv",
+  "device": "/GPU:0",
+  "visible_gpus": [
+    "/physical_device:GPU:0"
+  ],
+  "test_start_excluded": "2026-05-26",
+  "prediction_rows": 36443,
+  "predictions_path": "tmp/phase5_multiscale_predictions.parquet",
+  "prediction_bytes": 1676438,
+  "training_runs": [
+    {
+      "fold": 1,
+      "model": "independent",
+      "target": "trend_5m",
+      "train_rows": 45659,
+      "fit_predict_seconds": 7.446
+    },
+    {
+      "fold": 1,
+      "model": "independent",
+      "target": "trend_10m",
+      "train_rows": 45520,
+      "fit_predict_seconds": 7.202
+    },
+    {
+      "fold": 1,
+      "model": "independent",
+      "target": "trend_15m",
+      "train_rows": 45544,
+      "fit_predict_seconds": 6.299
+    },
+    {
+      "fold": 1,
+      "model": "shared_multitask",
+      "target": "three_heads",
+      "train_rows": 45767,
+      "fit_predict_seconds": 9.96
+    },
+    {
+      "fold": 1,
+      "model": "majority_target",
+      "target": "majority",
+      "train_rows": 45460,
+      "fit_predict_seconds": 6.478
+    },
+    {
+      "fold": 1,
+      "model": "soft_score_regression",
+      "target": "mean_score",
+      "train_rows": 45460,
+      "fit_predict_seconds": 5.546
+    },
+    {
+      "fold": 2,
+      "model": "independent",
+      "target": "trend_5m",
+      "train_rows": 56094,
+      "fit_predict_seconds": 6.766
+    },
+    {
+      "fold": 2,
+      "model": "independent",
+      "target": "trend_10m",
+      "train_rows": 55953,
+      "fit_predict_seconds": 6.436
+    },
+    {
+      "fold": 2,
+      "model": "independent",
+      "target": "trend_15m",
+      "train_rows": 55943,
+      "fit_predict_seconds": 6.551
+    },
+    {
+      "fold": 2,
+      "model": "shared_multitask",
+      "target": "three_heads",
+      "train_rows": 56211,
+      "fit_predict_seconds": 12.18
+    },
+    {
+      "fold": 2,
+      "model": "majority_target",
+      "target": "majority",
+      "train_rows": 55854,
+      "fit_predict_seconds": 8.432
+    },
+    {
+      "fold": 2,
+      "model": "soft_score_regression",
+      "target": "mean_score",
+      "train_rows": 55854,
+      "fit_predict_seconds": 7.188
+    },
+    {
+      "fold": 3,
+      "model": "independent",
+      "target": "trend_5m",
+      "train_rows": 65194,
+      "fit_predict_seconds": 8.685
+    },
+    {
+      "fold": 3,
+      "model": "independent",
+      "target": "trend_10m",
+      "train_rows": 65041,
+      "fit_predict_seconds": 8.763
+    },
+    {
+      "fold": 3,
+      "model": "independent",
+      "target": "trend_15m",
+      "train_rows": 65009,
+      "fit_predict_seconds": 7.678
+    },
+    {
+      "fold": 3,
+      "model": "shared_multitask",
+      "target": "three_heads",
+      "train_rows": 65321,
+      "fit_predict_seconds": 10.712
+    },
+    {
+      "fold": 3,
+      "model": "majority_target",
+      "target": "majority",
+      "train_rows": 64918,
+      "fit_predict_seconds": 7.45
+    },
+    {
+      "fold": 3,
+      "model": "soft_score_regression",
+      "target": "mean_score",
+      "train_rows": 64918,
+      "fit_predict_seconds": 6.47
+    },
+    {
+      "fold": 4,
+      "model": "independent",
+      "target": "trend_5m",
+      "train_rows": 74789,
+      "fit_predict_seconds": 7.653
+    },
+    {
+      "fold": 4,
+      "model": "independent",
+      "target": "trend_10m",
+      "train_rows": 74601,
+      "fit_predict_seconds": 7.424
+    },
+    {
+      "fold": 4,
+      "model": "independent",
+      "target": "trend_15m",
+      "train_rows": 74545,
+      "fit_predict_seconds": 7.501
+    },
+    {
+      "fold": 4,
+      "model": "shared_multitask",
+      "target": "three_heads",
+      "train_rows": 74931,
+      "fit_predict_seconds": 11.555
+    },
+    {
+      "fold": 4,
+      "model": "majority_target",
+      "target": "majority",
+      "train_rows": 74442,
+      "fit_predict_seconds": 7.936
+    },
+    {
+      "fold": 4,
+      "model": "soft_score_regression",
+      "target": "mean_score",
+      "train_rows": 74442,
+      "fit_predict_seconds": 7.176
+    }
+  ],
+  "runtime_seconds": 203.13,
+  "peak_rss_kib": 2251012,
+  "gpu_memory_info_bytes": {
+    "current": 388352,
+    "peak": 73044992
+  },
+  "seed": 20261026,
+  "epochs": 5,
+  "batch_size": 256,
+  "test_metrics_opened": false,
+  "contract_hash": "36d1603d84dc661bc9fcb353a281bd942519f8ab47ea7b880ff6bc915a494aa3",
+  "protocol_hash": "8310b1249c717eececc8ffb1e31cc108bfedd2108537b31e5cddbe3c0d503111",
+  "source_sha256": {
+    "market": "32cadf06387ae172edc804804fe762ef26f9f0928424ee83ce9e37a848389eab",
+    "labels": "2d8c18c8d1a46be788ee2810a9caba043c2413102e4ee4f5c9927646037ce4c8"
+  }
+}
