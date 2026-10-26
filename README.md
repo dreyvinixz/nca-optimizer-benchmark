@@ -7,16 +7,16 @@ data constraints, validation protocol, and phase exit criteria are in
 
 The actionable phase and task checklist is in [task.md](task.md).
 
-Fases 0–6 are complete. The frozen final evaluation ran once over 25 test
+Fases 0–8 are complete as an internal research delivery. The frozen final evaluation ran once over 25 test
 sessions; the main paired independent-versus-shared MLP intervals include zero
 at all three label scales. The conditional extension phase was closed without
 an extension, and an internal manuscript draft is in `manuscript/`. The cache
 and row-level predictions are local/ignored; compact summaries, source hashes,
 coverage, splits, and leakage checks are recorded in `reports/`.
 
-The provisional manuscript target is the *Journal of Forecasting*. The draft
-and target requirements are documented, but author details and data-owner
-clearance are still required before a final editorial package can be prepared.
+The working manuscript target is the *Journal of Forecasting*. Its requirements
+were reviewed; no external submission is part of this delivery. A later
+submission would need confirmed author details and data-owner clearance.
 See [the target assessment](reports/journal_target_assessment.md) and
 [the title-page template](manuscript/title_page_template.md).
 

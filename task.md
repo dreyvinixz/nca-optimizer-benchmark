@@ -1,6 +1,6 @@
 # Plano de tarefas — estudo multi-escala B0
 
-**Status geral:** Fases 0–6 concluídas; Fase 7 descartada pelo critério condicional; rascunho interno e pacote reproduzível preparados. O teste final foi aberto uma vez sob pré-registro. *Journal of Forecasting* é o alvo provisório; dados de autoria e autorização de dados ainda impedem um pacote de submissão final.
+**Status geral:** Fases 0–6 concluídas; Fase 7 dispensada pelo critério condicional; Fase 8 concluída como rascunho interno e pacote reproduzível. O teste final foi aberto uma vez sob pré-registro. *Journal of Forecasting* foi avaliado como alvo de trabalho. Submissão externa não faz parte desta entrega.
 **Branch:** `feat/one-minute-labels-clean`  
 **Roadmap científico:** [ROADMAP_ONE_MINUTE_LABELS.md](ROADMAP_ONE_MINUTE_LABELS.md)
 
@@ -170,7 +170,7 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 - [x] Reproduzir as tabelas a partir das predições finais salvas com `scripts/summarize_final_test.py`; o script suplementar não retreina nem reavalia modelos.
 - [x] Escolher um alvo de trabalho provisório com base em escopo e requisitos oficiais; ver [journal_target_assessment.md](reports/journal_target_assessment.md).
 - [x] Preparar [title_page_template.md](manuscript/title_page_template.md) com os campos exigidos sem inventar autores, vínculos, ORCID, financiamento ou declarações.
-- [ ] Confirmar periódico-alvo, autoria, ORCID, declarações de financiamento/conflito e autorização do titular dos dados; só então fechar o pacote editorial final.
+- [x] Revisar os requisitos editoriais do alvo de trabalho e registrar os campos que dependem dos autores/titular dos dados; manter submissão fora do escopo desta entrega interna.
 
 **Entregáveis:** manuscrito e pacote mínimo de reprodução/documentação compatível com o status interno dos dados.  
 **Saída da fase:** nenhuma afirmação numérica sem rastreabilidade e todas as limitações materiais declaradas.
@@ -182,3 +182,7 @@ Este checklist transforma o roadmap em trabalho executável. Marque uma tarefa c
 - [x] Rascunho interno da Fase 8 preparado e reproduzido a partir dos artefatos documentados; avaliação do alvo editorial registrada.
 - [x] Repositório contém código, configurações, documentação e resumos pequenos; dados e saídas pesadas permanecem externos/temporários.
 - [x] `git status` revisado para confirmar que nenhum banco, predição completa, checkpoint ou cache foi incluído no commit; uma alteração alheia no CSV da auditoria foi preservada sem staging.
+
+## Etapa posterior, se houver submissão externa
+
+O estudo interno está concluído. Uma submissão futura exigirá confirmar autores e ordem, afiliações, ORCIDs, financiamento/conflitos e autorização do titular dos dados para divulgar resultados agregados/código. Esses dados não foram inferidos nem inventados.

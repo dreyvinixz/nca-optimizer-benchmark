@@ -1,6 +1,6 @@
 # Roadmap — multi-escala e incerteza dos rótulos intradiários
 
-**Status:** Fases 0–6 executadas; Fase 7 não executada pelo critério condicional; rascunho interno da Fase 8 preparado. O teste final foi aberto uma vez sob pré-registro.
+**Status:** Fases 0–6 concluídas; Fase 7 dispensada pelo critério condicional; Fase 8 concluída como rascunho interno e pacote reproduzível. O teste final foi aberto uma vez sob pré-registro.
 **Branch:** `feat/one-minute-labels-clean`
 **Atualizado:** 2026-10-26
 
@@ -228,10 +228,10 @@ independente que justificasse pré-treino ou adaptação. Ver
 artigo e a trilha dos resultados estão em
 [`manuscript/multiscale_b0_label_prediction_draft.md`](manuscript/multiscale_b0_label_prediction_draft.md)
 e [`reports/final_test.md`](reports/final_test.md). O manuscrito NCA anterior
-permanece fora deste escopo. *Journal of Forecasting* foi escolhido como alvo
-provisório e avaliado em [`reports/journal_target_assessment.md`](reports/journal_target_assessment.md);
-autoria e autorização de dados ainda precisam ser confirmadas antes de fechar
-um pacote editorial ou qualquer submissão.
+permanece fora deste escopo. *Journal of Forecasting* foi avaliado como alvo de
+trabalho em [`reports/journal_target_assessment.md`](reports/journal_target_assessment.md).
+Submissão externa não faz parte desta entrega; autoria e autorização do titular
+dos dados devem ser confirmadas antes de qualquer publicação.
 
 ## Perguntas que o estudo não responderá sem novos dados
 
